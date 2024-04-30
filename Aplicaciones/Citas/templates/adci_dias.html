@@ -1,0 +1,206 @@
+{% extends 'adci_plantilla.html' %}
+{% block usci_contenido %}
+<div class="col-lg-8 d-flex align-items-strech">
+  <div class="card w-100">
+    <div class="card-body">
+      <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+        <div class="mb-3 mb-sm-0">
+          <h5 class="card-title fw-semibold">Agrega un día</h5>
+        </div>
+      </div>
+      <form action="/agg_adci/" method="POST" id="vldt_dias">
+        {% csrf_token %}
+        <div class="">
+          <label for="exampleInputEmail1" class="form-label">Día de la semana</label>
+          <select name="id_cita" id="id_cita" class="form-control" required>
+              <option value=""> Selecciona el día de la semana</option>
+              {% for nombre in nombres %}
+              <option value="{{ nombre.id }}">{{ nombre.nombre }}</option>
+              {% endfor %}
+          </select>
+        </div>
+        <br>
+        <div class="col-lg-4">
+          <label for="exampleInputEmail1" class="form-label">Fecha</label>
+          <input type="date" class="form-control" id="fechaCita" name="fechaCita" aria-describedby="emailHelp" required>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-outline-primary rounded-pill m-2">Guardar</button>
+        <button type="reset" name="button" class="btn btn-outline-danger rounded-pill m-2">Cancelar</button>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="col-lg-4">
+  <div class="row">
+    <div class="col-lg-12">
+      <!-- Yearly Breakup -->
+      <div class="card overflow-hidden">
+        <div class="card-body p-4">
+          <h5 class="card-title mb-9 fw-semibold">Días Registrados</h5>
+          <div class="row align-items-center">
+            <div class="col-8">
+              <table id="tbl_dias" class="table text-nowrap mb-0 align-middle">
+                <thead class="text-dark fs-4">
+                  <tr>
+                    <th class="border-bottom-0">
+                      <h6 class="fw-semibold mb-0">Día</h6>
+                    </th>
+                    <th class="border-bottom-0">
+                      <h6 class="fw-semibold mb-0">Fecha</h6>
+                    </th>
+                    <th class="border-bottom-0">
+                      <h6 class="fw-semibold mb-0">Acción</h6>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for dia in dias %}
+                    <tr>
+                        <td>{{ dia.dia }}</td>
+                        <td>{{ dia.fechaCita }}</td>
+                        <td>
+                            <a href="javascript:void(0)" onclick="del_adci('/del_adci/{{ dia.id }}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+
+
+<!-- VALIDACIONES -->
+<script type="text/javascript">
+  // Definir el método fechaNoPasada
+  $.validator.addMethod("fechaNoPasada", function(value, element) {
+    var selectedDate = new Date(value);
+    var currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+
+    return selectedDate >= currentDate;
+  }, "No se pueden seleccionar fechas pasadas.");
+
+  $.validator.addMethod("fechaCorrespondeDia", function(value, element) {
+    var selectedDate = new Date(value);
+    var selectedDayIndex = selectedDate.getDay(); // Obtener el índice del día de la semana (0 para Domingo, 1 para Lunes, ..., 6 para Sábado)
+
+    // Obtener el día de la semana seleccionado en el campo id_cita
+    var selectedDay = $("#id_cita option:selected").text().toUpperCase(); // Obtener el texto de la opción seleccionada y convertirlo a mayúsculas
+
+    // Mapeo de los días de la semana en español a sus índices (0 para Domingo, 1 para Lunes, ..., 6 para Sábado)
+    var daysOfWeek = {
+        "DOMINGO": 6,
+        "LUNES": 0,
+        "MARTES": 1,
+        "MIERCOLES": 2,
+        "JUEVES": 3,
+        "VIERNES": 4,
+        "SÁBADO": 5
+    };
+
+    // Validar que la fecha coincida con el día de la semana especificado
+    return selectedDayIndex === daysOfWeek[selectedDay]; // Devuelve true si el día de la fecha seleccionada coincide con el día especificado en id_cita
+}, "La fecha seleccionada no corresponde al día de la semana especificado.");
+
+  // Configurar la validación del formulario
+  $(document).ready(function() {
+    $("#vldt_dias").validate({
+      rules: {
+        "id_cita": {
+          required: true,
+        },
+        "fechaCita": {
+          required: true,
+          fechaNoPasada: true,
+          fechaCorrespondeDia: true
+        }
+      },
+      messages: {
+        "id_cita": {
+          required: "Debe ingresar el día de la semana.",
+        },
+        "fechaCita": {
+          required: "Debe ingresar la fecha a configurar.",
+          fechaNoPasada: "No se pueden seleccionar fechas pasadas.",
+          fechaCorrespondeDia: "La fecha no coincide con el día seleccionado."
+        }
+      }
+    });
+  });
+</script>
+
+
+
+
+<!-- MENSAJE DE ELMINICACIÓN DE DATOS -->
+<script type="text/javascript">
+        function del_adci(url){
+          iziToast.question({
+              timeout: 15000,
+              close: true,
+              overlay: true,
+              displayMode: 'once',
+              id: 'question',
+              zindex: 999,
+              title: 'CONFIRMACIÓN',
+              message: '¿Está seguro de eliminar el <b>día </b> seleccionado?',
+              position: 'center',
+              buttons: [
+                  ['<button><b>SI</b></button>', function (instance, toast) {
+                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                      window.location.href=url;
+                  }, true],
+                  ['<button>NO</button>', function (instance, toast) {
+
+                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+
+                  }],
+              ]
+          });
+        }
+
+
+{% if messages %}
+    {% for message in messages %}
+        iziToast.success({
+            title: 'Éxito',
+            message: '{{ message }}',
+            position: 'topRight',
+        });
+    {% endfor %}
+{% endif %}
+  </script>
+
+
+
+
+<!-- CONFIGURACCIÓN DE TABLA -->
+<script type="text/javascript">
+  $(document).ready(function() {
+      $('#tbl_dias').DataTable( {
+          dom: 'frtip',
+          language: {
+              url: "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+          },
+          initComplete: function () {
+              $('.dataTables_filter input[type="search"]').addClass('form-control');
+          },
+          pageLength: 6,
+          drawCallback: function(settings) {
+              // Aplicar las clases a los botones de paginación después de cada redibujo
+              $('.paginate_button').addClass('btn btn-outline-primary');
+          }
+      });
+  });
+</script>
+
+{% endblock %}

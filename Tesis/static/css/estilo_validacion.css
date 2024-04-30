@@ -1,0 +1,11 @@
+label.error{
+  color:#ff6c4c;
+  }
+
+input.error, textarea.error{
+    border: 1px solid #ff6c4c;
+}
+
+select.error.form-control{
+    border: 1px solid #ff6c4c;
+}

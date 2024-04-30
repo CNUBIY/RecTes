@@ -1,0 +1,239 @@
+{% extends 'adci_plantilla.html' %}
+{% block usci_contenido %}
+
+<div class="col-lg-7">
+  <div class="row">
+    <div class="col-lg-12">
+      <!-- Yearly Breakup -->
+      <div class="card overflow-hidden">
+        <div class="card-body p-4">
+          <h5 class="card-title mb-9 fw-semibold">Registro Horarios General</h5>
+          <div class="row align-items-center">
+            <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
+              <thead class="text-dark fs-4">
+                <tr>
+                  <th class="border-bottom-0">
+                    <h6 class="fw-semibold mb-0">Fecha</h6>
+                  </th>
+                  <th class="border-bottom-0">
+                    <h6 class="fw-semibold mb-0">Hora de Atención</h6>
+                  </th>
+                  <th class="border-bottom-0">
+                    <h6 class="fw-semibold mb-0">Estado</h6>
+                  </th>
+                  <th class="border-bottom-0">
+                    <h6 class="fw-semibold mb-0">Acción</h6>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for horario in horarios %}
+                  <tr>
+                      <td>{{ horario.diaH }}</td>
+                      <td>{{ horario.horario }}</td>
+                      <td>
+                        {% if horario.estado %}
+                        <span class="text-danger">Ocupado</span>
+                        {% else %}
+                        <span class="text-success">Disponible</span>
+                        {% endif %}
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                        data-id="{{ horario.id }}" data-diah="{{ horario.diaH.id }}" data-horario="{{ horario.horario.id }}">
+                        <i class="fas fa-edit"></i>
+                        </button>
+
+
+                          <a href="javascript:void(0)" onclick="del_adci('/del_adci/{{ dia.id }}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
+                      </td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-lg-5 d-flex align-items-strech">
+  <div class="card w-100">
+    <div class="card-body">
+      <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+        <div class="mb-3 mb-sm-0">
+          <h5 class="card-title fw-semibold">Crear Agenda de Citas</h5>
+        </div>
+
+      </div>
+      <form action="/aggagenda_adci/" method="POST" id="vldt_dias">
+        {% csrf_token %}
+        <div class="">
+          <label for="exampleInputEmail1" class="form-label">Día de la semana</label>
+          <select name="id_dia" id="id_dia" class="form-control" required>
+              <option value="">Selecciona el día de las citas</option>
+              {% for dia in dias %}
+              <option value="{{ dia.id }}">{{ dia.dia.nombre }}-{{dia.fechaCita}}</option>
+              {% endfor %}
+          </select>
+        </div>
+        <br>
+        <div class="">
+          <label class="form-label">Horarios</label>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="seleccionarTodos">
+            <label class="form-check-label" for="seleccionarTodos"><b>Seleccionar Todos</b></label>
+          </div>
+          {% for hora in horas %}
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="id_hora" id="id_hora_{{ hora.id }}" value="{{ hora.id }}">
+            <label class="form-check-label" for="id_hora_{{ hora.id }}">
+              {{ hora.horaInicio }} - {{ hora.horaFinal }}
+            </label>
+          </div>
+          {% endfor %}
+        </div>
+        <!-- SCRIPT SELECCIONAR TODOS -->
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            const seleccionarTodos = document.getElementById('seleccionarTodos');
+            const checkboxes = document.querySelectorAll('input[name="id_hora"]');
+
+            seleccionarTodos.addEventListener('change', function() {
+              checkboxes.forEach((checkbox) => {
+                checkbox.checked = seleccionarTodos.checked;
+              });
+            });
+
+            checkboxes.forEach((checkbox) => {
+              checkbox.addEventListener('change', function() {
+                if (!this.checked) {
+                  seleccionarTodos.checked = false;
+                } else {
+                  seleccionarTodos.checked = [...checkboxes].every((cb) => cb.checked);
+                }
+              });
+            });
+          });
+        </script>
+
+
+        <button type="submit" class="btn btn-outline-primary rounded-pill m-2">Guardar</button>
+        <button type="reset" name="button" class="btn btn-outline-danger rounded-pill m-2">Cancelar</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<br><br><br><br>
+
+<!-- MODAL DE EDICIÓN DE HORARIO -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editar Horario</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/procesarActualizacionHorario/" method="POST" id="vldt_edidias">
+          {% csrf_token %}
+          <input type="hidden" name="data_id" id="modalId" value="{{horario.id}}">
+          <div class="">
+            <label for="exampleInputEmail1" class="form-label">Día de la semana</label>
+            <select name="id_dia" id="modalIdDia" class="form-control" required>
+              <option value="">Selecciona el día de las citas</option>
+              {% for dia in dias %}
+              <option value="{{ dia.id }}" data-fecha="{{ dia.fechaCita }}">{{ dia.dia.nombre }}-{{dia.fechaCita}}</option>
+              {% endfor %}
+            </select>
+
+          </div>
+          <br>
+          <div class="">
+            <label class="form-label">Horarios</label>
+            {% for hora in horas %}
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="id_hora" id="id_hora_{{ hora.id }}" value="{{ hora.id }}">
+              <label class="form-check-label" for="id_hora_{{ hora.id }}">
+                {{ hora.horaInicio }} - {{ hora.horaFinal }}
+              </label>
+            </div>
+            {% endfor %}
+          </div>
+
+
+          <!-- SCRIPT PARA LLAMAR LA INFORMACIÓN -->
+          <script type="text/javascript">
+            var exampleModal = document.getElementById('exampleModal');
+            exampleModal.addEventListener('show.bs.modal', function (event) {
+              var button = event.relatedTarget;
+              var id = button.getAttribute('data-id');
+              var diah = button.getAttribute('data-diah');
+              var horario = button.getAttribute('data-horario');
+              var form = document.getElementById('vldt_edidias');
+
+              var modalId = exampleModal.querySelector('#modalId');
+              var modalIdDia = exampleModal.querySelector('#modalIdDia');
+              var horarioRadios = exampleModal.querySelectorAll('input[type="radio"][name="id_hora"]');
+
+              modalId.value = id;
+              form.action = "procesarActualizacionHorario/" + id + "/";
+
+              Array.from(modalIdDia.options).forEach(option => {
+                option.selected = option.value === diah;
+              });
+
+              horarioRadios.forEach(radio => {
+                radio.checked = radio.value === horario;
+              });
+
+              console.log("ID:", id);
+              console.log("Día (diah):", diah);
+              console.log("Horario:", horario);
+            });
+          </script>
+
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="saveChangesButton">Guardar Cambios</button>
+        <script type="text/javascript">
+          //Envía el formulario del Modal
+           document.addEventListener("DOMContentLoaded", function() {
+           var saveButton = document.getElementById('saveChangesButton');
+           var form = document.getElementById('vldt_edidias');
+
+           saveButton.addEventListener('click', function() {
+             form.submit(); // Envía el formulario
+           });
+         });
+        </script>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIGURACCIÓN DE TABLA -->
+<script type="text/javascript">
+  $(document).ready(function() {
+      $('#tbl_horarios').DataTable( {
+          dom: 'frtip',
+          language: {
+              url: "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+          },
+          initComplete: function () {
+              $('.dataTables_filter input[type="search"]').addClass('form-control');
+          },
+          pageLength: 6,
+          drawCallback: function(settings) {
+              // Aplicar las clases a los botones de paginación después de cada redibujo
+              $('.paginate_button').addClass('btn btn-outline-primary');
+          }
+      });
+  });
+</script>
+{% endblock %}
