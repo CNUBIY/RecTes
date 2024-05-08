@@ -12,6 +12,7 @@ class HorasDia(models.Model):
 
 class DiaHorario (models.Model):
     id = models.AutoField(primary_key=True)
+    diaH=models.DateField(null=True, blank=True)
     horario=models.ForeignKey(HorasDia, null=True, blank=True, on_delete=models.PROTECT)
     estado = models.BooleanField(default=False)
 
