@@ -69,15 +69,10 @@
       </div>
       <form action="/aggagenda_adci/" method="POST" id="vldt_dias">
         {% csrf_token %}
-        <div class="">
-          <label for="exampleInputEmail1" class="form-label">Día de la semana</label>
-          <select name="id_dia" id="id_dia" class="form-control" required>
-              <option value="">Selecciona el día de las citas</option>
-              {% for dia in dias %}
-              <option value="{{ dia.id }}">{{ dia.dia.nombre }}-{{dia.fechaCita}}</option>
-              {% endfor %}
-          </select>
-        </div>
+        <div class="mb-3">
+          <label for="diaH" class="form-label">Fecha</label>
+          <input type="date" class="form-control" name="diaH"id="diaH" aria-describedby="dateHelp">
+          </div>
         <br>
         <div class="">
           <label class="form-label">Horarios</label>
