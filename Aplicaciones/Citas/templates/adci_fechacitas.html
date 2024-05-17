@@ -7,7 +7,7 @@
       <!-- Yearly Breakup -->
       <div class="card overflow-hidden">
         <div class="card-body p-4">
-          <h5 class="card-title mb-9 fw-semibold">Registro Horarios General</h5>
+          <h5 class="card-title mb-9 fw-semibold">Registro Horarios General</h5> <button type="button" class="btn btn-primary" name="button">Agregar Semana</button><br><br>
           <div class="row align-items-center">
             <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
               <thead class="text-dark fs-4">
@@ -115,7 +115,21 @@
 
 
         <button type="submit" class="btn btn-outline-primary rounded-pill m-2">Guardar</button>
-        <button type="reset" name="button" class="btn btn-outline-danger rounded-pill m-2">Cancelar</button>
+        <button type="reset" name="button" class="btn btn-outline-danger rounded-pill m-2">Cancelar</button><br><br>
+
+        <button type="button" class="btn btn-outline-success" id="crearSemanaButton" name="button">Crear Semana</button>
+
+        <script type="text/javascript">
+          document.addEventListener('DOMContentLoaded',function(){
+            const crearSemanaButton = document.getElementById('crearSemanaButton');
+            const form = document.getElementById('vldt_dias');
+
+            crearSemanaButton.addEventListener('click',function(){
+              form.action ='/aggsem_adci/';
+              form.submit ()
+            });
+          });
+        </script>
       </form>
     </div>
   </div>
@@ -135,16 +149,10 @@
         <form action="/procesarActualizacionHorario/" method="POST" id="vldt_edidias">
           {% csrf_token %}
           <input type="hidden" name="data_id" id="modalId" value="{{horario.id}}">
-          <div class="">
-            <label for="exampleInputEmail1" class="form-label">Día de la semana</label>
-            <select name="id_dia" id="modalIdDia" class="form-control" required>
-              <option value="">Selecciona el día de las citas</option>
-              {% for dia in dias %}
-              <option value="{{ dia.id }}" data-fecha="{{ dia.fechaCita }}">{{ dia.dia.nombre }}-{{dia.fechaCita}}</option>
-              {% endfor %}
-            </select>
-
-          </div>
+            <div class="mb-3">
+              <label for="diaH" class="form-label">Fecha</label>
+              <input type="date" class="form-control" name="diaH"id="diaH" aria-describedby="dateHelp">
+            </div>
           <br>
           <div class="">
             <label class="form-label">Horarios</label>

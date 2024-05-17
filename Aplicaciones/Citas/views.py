@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import DiaHorario,HorasDia
 from django.contrib import messages
+from datetime import datetime, timedelta
 # Create your views here.
 
 #Página Informativa INICIO
@@ -45,19 +46,48 @@ def aggagenda_adci(request):
         estado=False,
         )
     return redirect('/adci_fechacitas')
-#
-# def procesarActualizacionHorario(request,id):
-#     id=request.POST["data_id"]
-#     id_dia=request.POST["id_dia"]
-#     diaSelec=CitaDia.objects.get(id=id_dia)
-#     id_hora=request.POST["id_hora"]
-#     horaSelec=HorasDia.objects.get(id=id_hora)
-#
-#     horario=DiaHorario.objects.get(id=id)
-#     horario.diah=diaSelec
-#     horario.horario=horaSelec
-#     horario.estado=False
-#     horario.save()
-#     return redirect('/adci_fechacitas')
+
+def aggsem_adci(request):
+    id_hora = request.POST.getlist("id_hora")
+
+    # Obtener la fecha actual
+    diaH_date = datetime.now().date()
+
+    # Calcular los días hábiles restantes hasta el viernes
+    current_weekday = diaH_date.weekday()
+    days_until_friday = 4 - current_weekday  # 4 es viernes
+
+    # Si el día actual es sábado (5) o domingo (6), ajustar a lunes de la próxima semana
+    if current_weekday > 4:
+        days_until_friday += 7 - current_weekday  # Ajustar a lunes de la próxima semana
+        diaH_date = diaH_date + timedelta(days=(7 - current_weekday))  # Mover al próximo lunes
+
+    # Crear registros para cada día hábil desde el día actual hasta el viernes
+    for day in range(days_until_friday + 1):
+        current_date = diaH_date + timedelta(days=day)
+        if current_date.weekday() > 4:
+            continue  # Ignorar sábados y domingos
+        for hora_id in id_hora:
+            horaSelec = HorasDia.objects.get(id=hora_id)
+            DiaHorario.objects.create(
+                diaH=current_date,
+                horario=horaSelec,
+                estado=False,
+            )
+
+    return redirect('/adci_fechacitas')
+
+def procesarActualizacionHorario(request,id):
+    id=request.POST["data_id"]
+    diaH=request.POST["diaH"]
+    id_hora=request.POST["id_hora"]
+    horaSelec=HorasDia.objects.get(id=id_hora)
+
+    horario=DiaHorario.objects.get(id=id)
+    horario.diaH=diaH
+    horario.horario=horaSelec
+    horario.estado=False
+    horario.save()
+    return redirect('/adci_fechacitas')
 
 #Página HORARIOS Administrador FINAL
