@@ -77,6 +77,11 @@ def aggsem_adci(request):
 
     return redirect('/adci_fechacitas')
 
+def delete_adci(request,id):
+    eliminarDiaHorario=DiaHorario.objects.get(id=id)
+    eliminarDiaHorario.delete()
+    return redirect('/adci_fechacitas')
+
 def procesarActualizacionHorario(request,id):
     id=request.POST["data_id"]
     diaH=request.POST["diaH"]

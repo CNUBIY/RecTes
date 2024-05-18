@@ -7,7 +7,7 @@
       <!-- Yearly Breakup -->
       <div class="card overflow-hidden">
         <div class="card-body p-4">
-          <h5 class="card-title mb-9 fw-semibold">Registro Horarios General</h5> <button type="button" class="btn btn-primary" name="button">Agregar Semana</button><br><br>
+          <h5 class="card-title mb-9 fw-semibold">Registro Horarios General</h5><br><br>
           <div class="row align-items-center">
             <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
               <thead class="text-dark fs-4">
@@ -45,7 +45,7 @@
                         </button>
 
 
-                          <a href="javascript:void(0)" onclick="del_adci('/del_adci/{{ dia.id }}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
+                          <a href="javascript:void(0)" onclick="delete_adci('/delete_adci/{{ horario.id }}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
                       </td>
                   </tr>
                   {% endfor %}
@@ -239,4 +239,41 @@
       });
   });
 </script>
+<script type="text/javascript">
+        function delete_adci(url){
+          iziToast.question({
+              timeout: 15000,
+              close: true,
+              overlay: true,
+              displayMode: 'once',
+              id: 'question',
+              zindex: 999,
+              title: 'CONFIRMACIÓN',
+              message: '¿Está seguro de eliminar la <b>cita </b> seleccionada?',
+              position: 'center',
+              buttons: [
+                  ['<button><b>SI</b></button>', function (instance, toast) {
+                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                      window.location.href=url;
+                  }, true],
+                  ['<button>NO</button>', function (instance, toast) {
+
+                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+
+                  }],
+              ]
+          });
+        }
+
+
+{% if messages %}
+    {% for message in messages %}
+        iziToast.success({
+            title: 'Éxito',
+            message: '{{ message }}',
+            position: 'topRight',
+        });
+    {% endfor %}
+{% endif %}
+  </script>
 {% endblock %}
