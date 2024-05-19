@@ -7,7 +7,7 @@
       <!-- Yearly Breakup -->
       <div class="card overflow-hidden">
         <div class="card-body p-4">
-          <h5 class="card-title mb-9 fw-semibold">Registro Horarios General</h5><br><br>
+          <h5 class="card-title mb-9 fw-semibold">Registro Horarios General</h5><br>
           <div class="row align-items-center">
             <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
               <thead class="text-dark fs-4">
@@ -40,11 +40,9 @@
                       </td>
                       <td>
                         <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                        data-id="{{ horario.id }}" data-diah="{{ horario.diaH.id }}" data-horario="{{ horario.horario.id }}">
-                        <i class="fas fa-edit"></i>
+                          data-id="{{ horario.id }}" data-diah="{{ horario.diaH|date:"Y-m-d" }}" data-horario="{{ horario.horario.id }}">
+                           <i class="fas fa-edit"></i>
                         </button>
-
-
                           <a href="javascript:void(0)" onclick="delete_adci('/delete_adci/{{ horario.id }}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
                       </td>
                   </tr>
@@ -178,18 +176,16 @@
               var form = document.getElementById('vldt_edidias');
 
               var modalId = exampleModal.querySelector('#modalId');
-              var modalIdDia = exampleModal.querySelector('#modalIdDia');
+              var modalDiaH = exampleModal.querySelector('#diaH');
               var horarioRadios = exampleModal.querySelectorAll('input[type="radio"][name="id_hora"]');
 
               modalId.value = id;
               form.action = "procesarActualizacionHorario/" + id + "/";
 
-              Array.from(modalIdDia.options).forEach(option => {
-                option.selected = option.value === diah;
-              });
+              modalDiaH.value = diah;  // Asignar la fecha al input de tipo date
 
               horarioRadios.forEach(radio => {
-                radio.checked = radio.value === horario;
+                radio.checked = radio.value === horario;  // Seleccionar el radio button correspondiente
               });
 
               console.log("ID:", id);
@@ -205,13 +201,13 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
         <button type="button" class="btn btn-primary" id="saveChangesButton">Guardar Cambios</button>
         <script type="text/javascript">
-          //Envía el formulario del Modal
+
            document.addEventListener("DOMContentLoaded", function() {
            var saveButton = document.getElementById('saveChangesButton');
            var form = document.getElementById('vldt_edidias');
 
            saveButton.addEventListener('click', function() {
-             form.submit(); // Envía el formulario
+             form.submit();
            });
          });
         </script>
@@ -239,6 +235,8 @@
       });
   });
 </script>
+
+<!-- MENSAJE DE CONFIRMACIÓN ELIMINAR DIAHORARIO -->
 <script type="text/javascript">
         function delete_adci(url){
           iziToast.question({

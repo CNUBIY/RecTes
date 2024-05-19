@@ -7,6 +7,8 @@ urlpatterns=[
     #PERFIL USUARIOS
     path('usci_inicio/',views.usci_inicio),
     #PERFIL ADMIN
+    path('adci_perfil/',views.adci_perfil),
+    #GENERAL ADMIN
     path('adci_inicio/',views.adci_inicio),
     #HORARIOS ADMIN
     path('adci_fechacitas/',views.adci_fechacitas),

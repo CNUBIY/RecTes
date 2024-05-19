@@ -16,7 +16,10 @@ def usci_inicio (request):
     return render(request,'usci_inicio.html')
 #Página Inicio Usuarios-Citas FINAL
 
-
+#Página PERFIL Inicio
+def adci_perfil(request):
+    return render(request,'adci_perfil.html')
+#Página PERFIL final
 
 #Página Inicio Administrador-Citas GENERAL INICIO
 def adci_inicio (request):
@@ -59,8 +62,11 @@ def aggsem_adci(request):
 
     # Si el día actual es sábado (5) o domingo (6), ajustar a lunes de la próxima semana
     if current_weekday > 4:
-        days_until_friday += 7 - current_weekday  # Ajustar a lunes de la próxima semana
-        diaH_date = diaH_date + timedelta(days=(7 - current_weekday))  # Mover al próximo lunes
+        days_until_monday = 7 - current_weekday  # Ajustar a lunes de la próxima semana
+        diaH_date = diaH_date + timedelta(days=days_until_monday)  # Mover al próximo lunes
+        current_weekday= diaH_date.weekday()
+
+    days_until_friday= 4 - current_weekday
 
     # Crear registros para cada día hábil desde el día actual hasta el viernes
     for day in range(days_until_friday + 1):
