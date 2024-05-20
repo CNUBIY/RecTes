@@ -8,36 +8,30 @@
           <h5 class="card-title fw-semibold">Administración de Citas</h5>
         </div>
       </div>
-      <table class="table text-nowrap mb-0 align-middle table-hover">
-        <thead class="text-dark fs-4">
-          <tr>
-            <th class="border-bottom-0">
-              <h6 class="fw-semibold mb-0">LUNES</h6>
-            </th>
-            <th class="border-bottom-0">
-              <h6 class="fw-semibold mb-0">MARTES</h6>
-            </th>
-            <th class="border-bottom-0">
-              <h6 class="fw-semibold mb-0">MIERCOLES</h6>
-            </th>
-            <th class="border-bottom-0">
-              <h6 class="fw-semibold mb-0">JUEVES</h6>
-            </th>
-            <th class="border-bottom-0">
-              <h6 class="fw-semibold mb-0">VIERNES</h6>
-            </th>
-          </tr>
-        </thead>
-        <tbody class="table-group-divider">
-            <tr>
-              <th>hola</th>
-              <th>hola</th>
-              <th>hola</th>
-              <th>hola</th>
-              <th>hola</th>
-            </tr>
-        </tbody>
-      </table>
+      <table class="table text-nowrap mb-0 align-middle table-primary">
+              <thead class="text-dark fs-4">
+                <tr>
+                  {% for dia in dias_semana %}
+                  <th class="border-bottom-0"><h6 class="fw-semibold mb-0">{{ dia|upper }}</h6></th>
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody class="table-group-divider">
+                <tr>
+                  {% for i in indices_dias_semana %}
+                  <td>
+                    {% if horarios_por_dia.i %}
+                      {% for horario in horarios_por_dia.i %}
+                        <span class="fw-normal">{{ horario.diaH }} {{ horario.horario.horaInicio }} - {{ horario.horario.horaFinal }}</span><br>
+                      {% endfor %}
+                    {% else %}
+                      <span class="fw-normal">Sin datos</span>
+                    {% endif %}
+                  </td>
+                  {% endfor %}
+                </tr>
+              </tbody>
+          </table>
     </div>
   </div>
 </div>
