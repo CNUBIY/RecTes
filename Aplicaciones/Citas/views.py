@@ -25,20 +25,20 @@ def adci_perfil(request):
 def adci_inicio(request):
     horariobdd = DiaHorario.objects.all().order_by('diaH', 'horario__horaInicio')
 
-    # Organizar los horarios por día de la semana
-    horarios_por_dia = {i: [] for i in range(1, 6)}  # 1: lunes, 2: martes, ..., 5: viernes
+    # Organizar los horarios por día de la semana usando listas
+    horarios_por_dia = [[] for _ in range(5)]  # lunes a viernes
 
     for horario in horariobdd:
         dia_semana = horario.diaH.isoweekday()
-        if dia_semana in horarios_por_dia:
-            horarios_por_dia[dia_semana].append(horario)
+        if 1 <= dia_semana <= 5:
+            horarios_por_dia[dia_semana - 1].append(horario)
 
-    # Crear una lista de días de la semana y sus índices para usar en el template
     dias_semana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']
-    indices_dias_semana = range(1, 6)
 
-    return render(request, 'adci_inicio.html', {'horarios_por_dia': horarios_por_dia, 'dias_semana': dias_semana, 'indices_dias_semana': indices_dias_semana})
-
+    return render(request, 'adci_inicio.html', {
+        'horarios_por_dia': horarios_por_dia,
+        'dias_semana': dias_semana,
+    })
 
 #Página Inicio Administrador-Citas GENERAL FINAL
 
