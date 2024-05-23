@@ -17,8 +17,8 @@
           </tr>
         </thead>
         <tbody class="table-group-divider">
-          {% for horarios in horarios_por_dia %}
           <tr>
+            {% for horarios in horarios_por_dia %}
             {% if horarios %}
             <td>
                 {% for horario in horarios %}
@@ -30,8 +30,8 @@
 
             </td>
             {% endif %}
+            {% endfor %}
           </tr>
-          {% endfor %}
         </tbody>
       </table>
     </div>
