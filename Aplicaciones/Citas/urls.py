@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+# from .views import DiaHorarioList
 
 urlpatterns=[
     #INDEX
@@ -10,6 +11,7 @@ urlpatterns=[
     path('adci_perfil/',views.adci_perfil),
     #GENERAL ADMIN
     path('adci_inicio/',views.adci_inicio),
+    #path('api/horarios/', DiaHorarioList.as_view(), name='api_horarios'),
     #HORARIOS ADMIN
     path('adci_fechacitas/',views.adci_fechacitas),
     path('aggagenda_adci/',views.aggagenda_adci),

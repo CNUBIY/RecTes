@@ -8,32 +8,9 @@
           <h5 class="card-title fw-semibold">Administración de Citas</h5>
         </div>
       </div>
-      <table class="table text-nowrap mb-0 align-middle table-primary table-bordered">
-        <thead class="text-dark fs-4">
-          <tr>
-            {% for dia in dias_semana %}
-            <th class="border-bottom-0"><h6 class="fw-semibold mb-0">{{ dia|upper }}</h6></th>
-            {% endfor %}
-          </tr>
-        </thead>
-        <tbody class="table-group-divider">
-          <tr>
-            {% for horarios in horarios_por_dia %}
-            {% if horarios %}
-            <td>
-                {% for horario in horarios %}
-                  <span class="fw-normal">{{ horario.diaH }} </span><br>
-                  <span class="fw-normal">{{ horario.horario.horaInicio }} - {{ horario.horario.horaFinal }}</span><br>
-                {% endfor %}
-              {% else %}
-                <span class="fw-normal">Sin datos</span>
+      <div id="calendar" >
 
-            </td>
-            {% endif %}
-            {% endfor %}
-          </tr>
-        </tbody>
-      </table>
+      </div>
     </div>
   </div>
 </div>
@@ -184,5 +161,37 @@
 </div>
 </div>
 
+
+<!-- CALENDARIO -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridWeek',
+          locale: 'es',
+          headerToolbar: {
+              left: 'title',
+              right: ''
+          },
+          events: [
+            {% for horario in horarios %}
+              {
+                title: "{{ horario.diaH|date:'Y-m-d' }} - {{ horario.horario.horaInicio|time:'H:i:s' }} a {{ horario.horario.horaFinal|time:'H:i:s' }}",
+                start: "{{ horario.diaH|date:'Y-m-d' }}T{{ horario.horario.horaInicio|time:'H:i:s' }}",
+                end: "{{ horario.diaH|date:'Y-m-d' }}T{{ horario.horario.horaFinal|time:'H:i:s' }}",
+                classNames: 'custom-event'
+              },
+            {% endfor %}
+          ],
+          eventDidMount: function(info) {
+              // Aplicar estilos en línea para ajustar el texto al ancho del evento
+              info.el.style.whiteSpace = 'normal';
+          }
+      });
+
+      calendar.render();
+  });
+
+</script>
 
 {% endblock %}

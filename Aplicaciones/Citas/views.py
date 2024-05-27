@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import DiaHorario,HorasDia
 from django.contrib import messages
 from datetime import datetime, timedelta
+
 # Create your views here.
 
 #Página Informativa INICIO
@@ -23,22 +24,14 @@ def adci_perfil(request):
 
 #Página Inicio Administrador-Citas GENERAL INICIO
 def adci_inicio(request):
-    horariobdd = DiaHorario.objects.all().order_by('diaH', 'horario__horaInicio')
+    horariobdd = DiaHorario.objects.all()
+    return render(request, 'adci_inicio.html', {'horarios':horariobdd})
 
-    # Organizar los horarios por día de la semana usando listas
-    horarios_por_dia = [[] for _ in range(5)]  # lunes a viernes
-
-    for horario in horariobdd:
-        dia_semana = horario.diaH.isoweekday()
-        if 1 <= dia_semana <= 5:
-            horarios_por_dia[dia_semana - 1].append(horario)
-
-    dias_semana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']
-
-    return render(request, 'adci_inicio.html', {
-        'horarios_por_dia': horarios_por_dia,
-        'dias_semana': dias_semana,
-    })
+# class DiaHorarioList(APIView):
+#     def get(self, request):
+#         horarios = DiaHorario.objects.all()
+#         serializer = DiaHorarioSerializer(horarios, many=True)
+#         return Response(serializer.data)
 
 #Página Inicio Administrador-Citas GENERAL FINAL
 
