@@ -1,19 +1,22 @@
 from django.urls import path
 from . import views
-# from .views import DiaHorarioList
+
 
 urlpatterns=[
     #INDEX
     path('',views.index),
-    #PERFIL USUARIOS
+    #LOGIN USUARIOS
     path('usci_login/',views.usci_login),
+    #REGISTER USUARIOS
+    path('usci_reg/',views.usci_reg),
+    #GENERAL ADMIN
     path('usci_inicio/',views.usci_inicio),
+    #PERIL ADMIN
     path('usci_perfil/',views.usci_perfil),
     #PERFIL ADMIN
     path('adci_perfil/',views.adci_perfil),
     #GENERAL ADMIN
     path('adci_inicio/',views.adci_inicio),
-    #path('api/horarios/', DiaHorarioList.as_view(), name='api_horarios'),
     #HORARIOS ADMIN
     path('adci_fechacitas/',views.adci_fechacitas),
     path('aggagenda_adci/',views.aggagenda_adci),

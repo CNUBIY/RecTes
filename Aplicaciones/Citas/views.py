@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from .models import DiaHorario,HorasDia
+from django.contrib.auth.hashers import check_password
+from .models import DiaHorario,HorasDia, UsuarioCli, GenerosCli
 from django.contrib import messages
 from datetime import datetime, timedelta
-
 # Create your views here.
 
 #Página Informativa INICIO
@@ -17,9 +17,38 @@ def usci_inicio (request):
     return render(request,'usci_inicio.html')
 #Página Inicio Usuarios-Citas FINAL
 
+#Página REGISTER usuarios INICIO
+
+def usci_reg(request):
+    userbdd=UsuarioCli.objects.all()
+    genbdd=GenerosCli.objects.all()
+    return render(request,'usci_register.html',{'usuarios':userbdd,'generos':genbdd})
+
+#Página INICIO usuario FINAL
+
 #Página LOGIN usarios INICIO
 def usci_login(request):
-    return render(request,'usci_login.html')
+
+    if request.method == 'POST':
+        correo_us = request.POST.get('correo_us')
+        pass_us = request.POST.get('pass_us')
+
+        mensaje_error = {}
+
+        try:
+            usuario = UsuarioCli.objects.get(correo_us=correo_us)
+            if pass_us != usuario.pass_us:
+                mensaje_error['pass_us'] = 'Contraseña incorrecta'
+        except UsuarioCli.DoesNotExist:
+            mensaje_error['correo_us'] = 'Correo no encontrado'
+
+        if mensaje_error:
+            return render(request, 'usci_login.html', {'mensaje_error': mensaje_error})
+
+        return redirect('/usci_inicio')
+
+    return render(request, 'usci_login.html')
+
 #Página LOGIN usarios FINAL
 
 #Página PERFIL usuarios-citas Inicio
@@ -36,12 +65,6 @@ def adci_perfil(request):
 def adci_inicio(request):
     horariobdd = DiaHorario.objects.all()
     return render(request, 'adci_inicio.html', {'horarios':horariobdd})
-
-# class DiaHorarioList(APIView):
-#     def get(self, request):
-#         horarios = DiaHorario.objects.all()
-#         serializer = DiaHorarioSerializer(horarios, many=True)
-#         return Response(serializer.data)
 
 #Página Inicio Administrador-Citas GENERAL FINAL
 

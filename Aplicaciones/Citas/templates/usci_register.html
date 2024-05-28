@@ -1,0 +1,125 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registrarse</title>
+  <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
+  <link rel="stylesheet" href="{% static 'css/styles.min.css' %}" />
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+  <!-- jQuery Validate -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+  <link rel="stylesheet" href="{% static 'css/estilo_validacion.css' %}" />
+</head>
+
+<body>
+  <!--  Body Wrapper -->
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+    data-sidebar-position="fixed" data-header-position="fixed">
+    <div
+      class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+      <div class="d-flex align-items-center justify-content-center w-100">
+        <div class="row justify-content-center w-100">
+          <div class="col-md-8 col-lg-6 col-xxl-3">
+            <div class="card mb-0">
+              <div class="card-body">
+                <a href="./index.html" class="text-nowrap logo-img text-center d-block py-3 w-100">
+                  <img src="{% static 'images/logos/dark-logo.svg' %}" width="180" alt="">
+                </a>
+                <p class="text-center">Tu Centro Médico Favorito</p>
+                <form id="reg_val" action="" method="post">
+                  {% csrf_token %}
+                  <div class="mb-3">
+                    <label for="exampleInputtext1" class="form-label">Nombre:</label>
+                    <input type="text" class="form-control" name="nombre_us" id="nombre_us" aria-describedby="textHelp">
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputtext1" class="form-label">Apellido:</label>
+                    <input type="text" class="form-control" name="apellido_us" id="apellido_us" aria-describedby="textHelp">
+                  </div>
+                  <div class="mb-3">
+                    <label for="disabledSelect" class="form-label">Género:</label>
+                    <select id="id_gen" name="id_gen" class="form-select">
+                      <option>Escoge un género</option>
+                      {% for genero in generos %}
+                      <option value="{{ genero.id }}">{{ genero.nombre_gen }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Correo:</label>
+                    <input type="email" class="form-control" name="correo_us" id="correo_us" aria-describedby="emailHelp">
+                  </div>
+                  <div class="mb-4">
+                    <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" name="pass_us" id="pass_us">
+                  </div>
+                  <div class="mb-4">
+                    <label for="exampleInputPassword1" class="form-label">Confirmar contraseña</label>
+                    <input type="password" class="form-control" name="confpass_us" id="confpass_us">
+                  </div>
+                  <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" name="button">Registrarse</button>
+                  <div class="d-flex align-items-center justify-content-center">
+                    <p class="fs-4 mb-0 fw-bold">Ya tienes una cuenta?</p>
+                    <a class="text-primary fw-bold ms-2" href="/usci_login/">Iniciar Sesión</a>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+<script type="text/javascript">
+  $("#reg_val").validate({
+    rules:{
+      "nombre_us":{
+        required:true
+      },
+      "apellido_us":{
+        required:true
+      },
+      "id_gen":{
+        required:true
+      },
+      "correo_us":{
+        required:true
+      },
+      "pass_us":{
+        required:true
+      },
+      "confpass_us":{
+        required:true
+      }
+    },
+    messages:{
+      "nombre_us":{
+        required:"Debe registrar su nombre"
+      },
+      "apellido_us":{
+        required:"Debe registrar su apellido"
+      },
+      "id_gen":{
+        required:"Debe seleccionar su género"
+      },
+      "correo_us":{
+        required:"Debe registrar su correo"
+      },
+      "pass_us":{
+        required:"Debe registrar una contraseña"
+      },
+      "confpass_us":{
+        required:"Debe confirmar su contraseña"
+      }
+    }
+  });
+
+
+</script>
+
+</html>

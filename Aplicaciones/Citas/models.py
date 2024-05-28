@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 
 # Create your models here.
@@ -8,16 +9,18 @@ class GenerosCli (models.Model):
     def __str__(self):
         return f"- {self.nombre_gen}"
 
-class UsuarioCli (models.Model):
-    id=models.AutoField(primary_key=True)
-    nombre_us=models.CharField(max_length=150)
-    apellido_us=models.CharField(max_length=150)
-    correo_us=models.CharField(max_length=150)
-    telf_us=models.CharField(max_length=10)
-    gen_us=models.ForeignKey(GenerosCli, null=True, blank=True, on_delete=models.PROTECT)
+class UsuarioCli(models.Model):
+    id = models.AutoField(primary_key=True)
+    nombre_us = models.CharField(max_length=150)
+    apellido_us = models.CharField(max_length=150)
+    correo_us = models.CharField(max_length=150)
+    telf_us = models.CharField(null=True, blank=True, max_length=10)
+    pass_us = models.CharField(null=True, blank=True, max_length=150)
+    gen_us = models.ForeignKey(GenerosCli, null=True, blank=True, on_delete=models.PROTECT)
 
     def __str__(self):
         return f"{self.apellido_us} {self.nombre_us} - {self.correo_us}"
+
 
 class HorasDia(models.Model):
     id=models.AutoField(primary_key=True)
