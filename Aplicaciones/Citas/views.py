@@ -17,10 +17,20 @@ def usci_inicio (request):
     return render(request,'usci_inicio.html')
 #Página Inicio Usuarios-Citas FINAL
 
-#Página PERFIL Inicio
+#Página LOGIN usarios INICIO
+def usci_login(request):
+    return render(request,'usci_login.html')
+#Página LOGIN usarios FINAL
+
+#Página PERFIL usuarios-citas Inicio
+def usci_perfil(request):
+    return render(request,'usci_perfil.html')
+#Página PERFIL usuarios-citas final
+
+#Página PERFIL admin Inicio
 def adci_perfil(request):
     return render(request,'adci_perfil.html')
-#Página PERFIL final
+#Página PERFIL admin final
 
 #Página Inicio Administrador-Citas GENERAL INICIO
 def adci_inicio(request):

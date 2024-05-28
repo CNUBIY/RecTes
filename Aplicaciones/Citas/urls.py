@@ -6,7 +6,9 @@ urlpatterns=[
     #INDEX
     path('',views.index),
     #PERFIL USUARIOS
+    path('usci_login/',views.usci_login),
     path('usci_inicio/',views.usci_inicio),
+    path('usci_perfil/',views.usci_perfil),
     #PERFIL ADMIN
     path('adci_perfil/',views.adci_perfil),
     #GENERAL ADMIN

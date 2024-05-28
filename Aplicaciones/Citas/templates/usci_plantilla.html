@@ -5,10 +5,48 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Modernize Free</title>
+  <title>Centro Médico Infantil Juvenil</title>
+
+
   <!-- ICONO PÁGINA -->
   <link rel="shortcut icon" type="image/png" href="{% static 'images/logos/favicon.png' %}" />
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+  <!-- jQuery Validate -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+
+  <!-- BOOTSTRAP IMPORT -->
   <link rel="stylesheet" href="{% static 'css/styles.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/estilo_validacion.css' %}" />
+
+  <!-- fontawesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- IziToast -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<!-- DataTables JS -->
+
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+
+<!-- Validaciones en JS -->
+    <script src="{% static 'js/validarform.js' %}"></script>
+
+
+<!-- FullCalendar -->
+    <script src="{% static 'libs/fullcalendar/dist/index.global.min.js' %}"></script>
+    <script src="{% static 'libs/fullcalendar/packages/bootstrap5/index.global.min.js' %}"></script>
+
 </head>
 
 <body>
@@ -20,7 +58,7 @@
       <!-- Sidebar scroll-->
       <div>
         <div class="brand-logo d-flex align-items-center justify-content-between">
-          <a href="/usci_inicio/" class="text-nowrap logo-img">
+          <a href="/adci_inicio/" class="text-nowrap logo-img">
             <img src="{% static 'images/logos/dark-logo.svg' %}" width="180" alt="" />
           </a>
           <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
@@ -32,42 +70,34 @@
           <ul id="sidebarnav">
             <li class="nav-small-cap">
               <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">Home</span>
+              <span class="hide-menu">Inicio</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./index.html" aria-expanded="false">
+              <a class="sidebar-link" href="/usci_perfil/" aria-expanded="false">
                 <span>
                   <i class="ti ti-layout-dashboard"></i>
                 </span>
-                <span class="hide-menu">Dashboard</span>
+                <span class="hide-menu">Perfil</span>
               </a>
             </li>
             <li class="nav-small-cap">
               <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">UI COMPONENTS</span>
+              <span class="hide-menu">Acciones Generales</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./ui-buttons.html" aria-expanded="false">
+              <a class="sidebar-link" href="/usci_inicio/" aria-expanded="false">
                 <span>
                   <i class="ti ti-article"></i>
                 </span>
-                <span class="hide-menu">Buttons</span>
+                <span class="hide-menu">General</span>
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./ui-alerts.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-alert-circle"></i>
-                </span>
-                <span class="hide-menu">Alerts</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="./ui-card.html" aria-expanded="false">
+              <a class="sidebar-link" href="#" aria-expanded="false">
                 <span>
                   <i class="ti ti-cards"></i>
                 </span>
-                <span class="hide-menu">Card</span>
+                <span class="hide-menu">Horarios</span>
               </a>
             </li>
             <li class="sidebar-item">
@@ -204,7 +234,8 @@
       </div>
     </div>
   </div>
-  <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
+  <!-- <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script> -->
+  <script src="{% static 'js/extras.js' %}"></script>
   <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'js/sidebarmenu.js' %}"></script>
   <script src="{% static 'js/app.min.js' %}"></script>
@@ -212,5 +243,27 @@
   <script src="{% static 'libs/simplebar/dist/simplebar.js' %}"></script>
   <script src="{% static 'js/dashboard.js' %}"></script>
 </body>
+{% if messages %}
+        {% for mensaje in messages %}
 
+
+            <script type="text/javascript">
+                {% if "eliminado" in mensaje %}
+                    iziToast.success({
+                        title: 'ELIMINADO',
+                        message: '{{ mensaje }}',
+                        position: 'topRight',
+                    });
+                {% elif "guardado" in mensaje %}
+                    iziToast.success({
+                        title: 'Éxito',
+                        message: '{{ mensaje }}',
+                        position: 'topRight',
+                    });
+                {% endif %}
+            </script>
+
+
+        {% endfor %}
+    {% endif %}
 </html>
