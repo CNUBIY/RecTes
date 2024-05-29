@@ -103,6 +103,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Este backend es para la autenticación basada en el modelo de usuario
+    #'Aplicaciones.Citas.backends.EmailBackend',
 ]
 
 # Internationalization

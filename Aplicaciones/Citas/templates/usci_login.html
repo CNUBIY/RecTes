@@ -31,6 +31,9 @@
                 <p class="text-center">Tu Centro Médico Favorito</p>
                 <form id="log_val" action="" method="post">
                     {% csrf_token %}
+                    {% if mensaje_error.error_login %}
+                         <p class="text-danger">{{ mensaje_error.error_login }}</p>
+                     {% endif %}
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Correo Electrónico</label>
                         <input type="email" class="form-control {% if mensaje_error.correo_us %}error{% endif %}" id="correo_us" name="correo_us" aria-describedby="emailHelp">

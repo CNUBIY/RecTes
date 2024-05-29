@@ -86,7 +86,7 @@ def usci_login(request):
 #Página LOGIN usarios FINAL
 
 #Página Inicio Usuarios-Citas INICIO
-
+@login_required
 def usci_inicio (request):
     return render(request,'usci_inicio.html')
 #Página Inicio Usuarios-Citas FINAL
