@@ -33,7 +33,7 @@
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Correo Electrónico</label>
-                        <input type="email" class="form-control {% if mensaje_error.correo_us %}error{% endif %}" id="correo_us" name="correo_us" aria-describedby="emailHelp" autocomplete="off">
+                        <input type="email" class="form-control {% if mensaje_error.correo_us %}error{% endif %}" id="correo_us" name="correo_us" aria-describedby="emailHelp">
                         <div class="error-message"></div>
                         {% if mensaje_error.correo_us %}
                         <p class="text-danger">{{ mensaje_error.correo_us }}</p>

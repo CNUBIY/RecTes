@@ -214,7 +214,7 @@
                       <i class="ti ti-list-check fs-6"></i>
                       <p class="mb-0 fs-3">My Task</p>
                     </a>
-                    <a href="./authentication-login.html" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                    <a href="/" class="btn btn-outline-primary mx-3 mt-2 d-block">Cerrar Sesión</a>
                   </div>
                 </div>
               </li>
@@ -261,6 +261,16 @@
                         position: 'topRight',
                     });
                 {% endif %}
+                {% if messages %}
+                {% for message in messages %}
+                    iziToast.success({
+                       timeout: 15000,
+                        title: 'BIENVENIDO A MEDIKID',
+                        message: '{{ message }}',
+                        position: 'topRight',
+                    });
+                    {% endfor %}
+                    {% endif %}
             </script>
 
 

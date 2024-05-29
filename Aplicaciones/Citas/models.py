@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
+from django.contrib.auth.hashers import make_password
 
 # Create your models here.
 class GenerosCli (models.Model):
@@ -15,7 +16,7 @@ class UsuarioCli(models.Model):
     apellido_us = models.CharField(max_length=150)
     correo_us = models.CharField(max_length=150)
     telf_us = models.CharField(null=True, blank=True, max_length=10)
-    pass_us = models.CharField(null=True, blank=True, max_length=150)
+    pass_us = models.CharField(max_length=300)
     gen_us = models.ForeignKey(GenerosCli, null=True, blank=True, on_delete=models.PROTECT)
 
     def __str__(self):

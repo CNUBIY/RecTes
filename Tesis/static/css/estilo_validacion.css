@@ -9,7 +9,6 @@ input.error, textarea.error{
 select.error.form-control{
     border: 1px solid #ff6c4c;
 }
-
-.custom-event {
-    white-space: justify;
+select.error.form-select{
+    border: 1px solid #ff6c4c;
 }

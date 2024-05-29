@@ -29,7 +29,7 @@
                   <img src="{% static 'images/logos/dark-logo.svg' %}" width="180" alt="">
                 </a>
                 <p class="text-center">Tu Centro Médico Favorito</p>
-                <form id="reg_val" action="" method="post">
+                <form id="reg_val" action="/usci_addreg/" method="post">
                   {% csrf_token %}
                   <div class="mb-3">
                     <label for="exampleInputtext1" class="form-label">Nombre:</label>
@@ -42,11 +42,12 @@
                   <div class="mb-3">
                     <label for="disabledSelect" class="form-label">Género:</label>
                     <select id="id_gen" name="id_gen" class="form-select">
-                      <option>Escoge un género</option>
+                      <option value="">Escoge un género</option>
                       {% for genero in generos %}
                       <option value="{{ genero.id }}">{{ genero.nombre_gen }}</option>
                       {% endfor %}
                     </select>
+
                   </div>
                   <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Correo:</label>
@@ -76,48 +77,102 @@
   <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
 </body>
 <script type="text/javascript">
-  $("#reg_val").validate({
-    rules:{
-      "nombre_us":{
-        required:true
+  // Asegurar contraseña fuerte
+  $.validator.addMethod("strongPassword", function(value, element) {
+    return this.optional(element) ||
+      value.length >= 8 &&
+      /[a-z]/.test(value) &&
+      /[A-Z]/.test(value) &&
+      /[0-9]/.test(value) &&
+      /[@$!%*?&#]/.test(value);
+    }, "La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un carácter especial.");
+
+  // Evitar correos repetitivos
+  // $.validator.addMethod("emailExists", function(value, element) {
+  //
+  //     return new Promise(function(resolve, reject) {
+  //         $.ajax({
+  //             type: "GET",
+  //             url: "/check-email/",
+  //             data: {
+  //                 "correo_us": value
+  //             },
+  //             success: function(data) {
+  //                 resolve(!data.exists);
+  //             },
+  //             error: function() {
+  //                 resolve(false);
+  //             }
+  //         });
+  //     });
+  // }, "El correo ya está en uso.");
+
+      $.validator.addMethod("emailExists", function(value, element) {
+        let response;
+        $.ajax({
+          type: "GET",
+          url: "/check-email/",
+          data: {
+            "correo_us": value
+          },
+          // async: false,
+          success: function(data) {
+            response = !data.exists;
+          }
+        });
+        return response;
+      }, "El correo ya está en uso.");
+
+
+    $("#reg_val").validate({
+      rules: {
+        "nombre_us": {
+          required: true
+        },
+        "apellido_us": {
+          required: true
+        },
+        "id_gen": {
+          required: true
+        },
+        "correo_us": {
+          required: true,
+          email: true,
+          emailExists: true
+        },
+        "pass_us": {
+          required: true,
+          strongPassword: true
+        },
+        "confpass_us": {
+          required: true,
+          equalTo: "#pass_us"
+        }
       },
-      "apellido_us":{
-        required:true
-      },
-      "id_gen":{
-        required:true
-      },
-      "correo_us":{
-        required:true
-      },
-      "pass_us":{
-        required:true
-      },
-      "confpass_us":{
-        required:true
+      messages: {
+        "nombre_us": {
+          required: "Debe registrar su nombre"
+        },
+        "apellido_us": {
+          required: "Debe registrar su apellido"
+        },
+        "id_gen": {
+          required: "Debe seleccionar su género"
+        },
+        "correo_us": {
+          required: "Debe registrar su correo",
+          email: "Debe ingresar un correo electrónico válido"
+        },
+        "pass_us": {
+          required: "Debe registrar una contraseña"
+        },
+        "confpass_us": {
+          required: "Debe confirmar su contraseña",
+          equalTo: "Las contraseñas no coinciden"
+        }
       }
-    },
-    messages:{
-      "nombre_us":{
-        required:"Debe registrar su nombre"
-      },
-      "apellido_us":{
-        required:"Debe registrar su apellido"
-      },
-      "id_gen":{
-        required:"Debe seleccionar su género"
-      },
-      "correo_us":{
-        required:"Debe registrar su correo"
-      },
-      "pass_us":{
-        required:"Debe registrar una contraseña"
-      },
-      "confpass_us":{
-        required:"Debe confirmar su contraseña"
-      }
-    }
-  });
+    });
+
 
 
 </script>

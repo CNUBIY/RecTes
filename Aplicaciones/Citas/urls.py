@@ -9,9 +9,11 @@ urlpatterns=[
     path('usci_login/',views.usci_login),
     #REGISTER USUARIOS
     path('usci_reg/',views.usci_reg),
-    #GENERAL ADMIN
-    path('usci_inicio/',views.usci_inicio),
-    #PERIL ADMIN
+    path('usci_addreg/',views.usci_addreg),
+    path('check-email/', views.check_email_exists, name='check_email_exists'),
+    #GENERAL USUARIO
+    path('usci_inicio/',views.usci_inicio, name='usci_inicio'),
+    #PERIL USUARIO
     path('usci_perfil/',views.usci_perfil),
     #PERFIL ADMIN
     path('adci_perfil/',views.adci_perfil),

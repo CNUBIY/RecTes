@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
 from .models import DiaHorario,HorasDia, UsuarioCli, GenerosCli
 from django.contrib import messages
 from datetime import datetime, timedelta
+from django.http import JsonResponse
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 #Página Informativa INICIO
@@ -12,10 +15,6 @@ def index (request):
 
 #Página Informativa FINAL
 
-#Página Inicio Usuarios-Citas INICIO
-def usci_inicio (request):
-    return render(request,'usci_inicio.html')
-#Página Inicio Usuarios-Citas FINAL
 
 #Página REGISTER usuarios INICIO
 
@@ -24,11 +23,38 @@ def usci_reg(request):
     genbdd=GenerosCli.objects.all()
     return render(request,'usci_register.html',{'usuarios':userbdd,'generos':genbdd})
 
+def usci_addreg(request):
+    id_gen=request.POST["id_gen"]
+    genselect=GenerosCli.objects.get(id=id_gen)
+    nombre_us=request.POST["nombre_us"]
+    apellido_us=request.POST["apellido_us"]
+    correo_us=request.POST["correo_us"]
+    pass_us=request.POST["pass_us"]
+
+    hashed_password = make_password(pass_us)
+    newuser=UsuarioCli.objects.create(
+        gen_us=genselect,
+        nombre_us=nombre_us,
+        apellido_us=apellido_us,
+        correo_us=correo_us,
+        pass_us=hashed_password,
+    )
+    messages.success(request, 'Registro exitoso')
+    return redirect('/usci_inicio')
+
+def check_email_exists(request):
+    email = request.GET.get('correo_us', None)
+    if UsuarioCli.objects.filter(correo_us=email).exists():
+        return JsonResponse({'exists': True})
+    else:
+        return JsonResponse({'exists': False})
+
 #Página INICIO usuario FINAL
 
 #Página LOGIN usarios INICIO
-def usci_login(request):
 
+
+def usci_login(request):
     if request.method == 'POST':
         correo_us = request.POST.get('correo_us')
         pass_us = request.POST.get('pass_us')
@@ -37,7 +63,7 @@ def usci_login(request):
 
         try:
             usuario = UsuarioCli.objects.get(correo_us=correo_us)
-            if pass_us != usuario.pass_us:
+            if not check_password(pass_us, usuario.pass_us):
                 mensaje_error['pass_us'] = 'Contraseña incorrecta'
         except UsuarioCli.DoesNotExist:
             mensaje_error['correo_us'] = 'Correo no encontrado'
@@ -45,11 +71,26 @@ def usci_login(request):
         if mensaje_error:
             return render(request, 'usci_login.html', {'mensaje_error': mensaje_error})
 
-        return redirect('/usci_inicio')
+        user = authenticate(request, correo_us=correo_us, password=pass_us)
+        if user is not None:
+            login(request, user)
+            return redirect('/usci_inicio')  # Redirigir al usuario a la página de inicio
+        else:
+            mensaje_error['error_login'] = 'Credenciales de inicio de sesión incorrectas'
+            return render(request, 'usci_login.html', {'mensaje_error': mensaje_error})
 
     return render(request, 'usci_login.html')
 
+
+
 #Página LOGIN usarios FINAL
+
+#Página Inicio Usuarios-Citas INICIO
+
+def usci_inicio (request):
+    return render(request,'usci_inicio.html')
+#Página Inicio Usuarios-Citas FINAL
+
 
 #Página PERFIL usuarios-citas Inicio
 def usci_perfil(request):
