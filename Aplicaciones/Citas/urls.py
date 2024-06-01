@@ -19,6 +19,8 @@ urlpatterns=[
     path('adci_perfil/',views.adci_perfil),
     #GENERAL ADMIN
     path('adci_inicio/',views.adci_inicio),
+    path('adci_inicio/procesarActualizacionHorarioIn/<int:id>/', views.procesarActualizacionHorarioIn, name='procesarActualizacionHorarioIn'),
+    path('delete_adciIn/<id>/',views.delete_adciIn),
     #HORARIOS ADMIN
     path('adci_fechacitas/',views.adci_fechacitas),
     path('aggagenda_adci/',views.aggagenda_adci),

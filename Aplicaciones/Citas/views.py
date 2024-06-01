@@ -105,7 +105,26 @@ def adci_perfil(request):
 #Página Inicio Administrador-Citas GENERAL INICIO
 def adci_inicio(request):
     horariobdd = DiaHorario.objects.all()
-    return render(request, 'adci_inicio.html', {'horarios':horariobdd})
+    horabdd=HorasDia.objects.all()
+    return render(request, 'adci_inicio.html', {'horarios':horariobdd,'horas':horabdd})
+
+def procesarActualizacionHorarioIn(request,id):
+    id=request.POST["modalId"]
+    diaH=request.POST["diaH"]
+    id_hora=request.POST["id_hora"]
+    horaSelec=HorasDia.objects.get(id=id_hora)
+
+    horario=DiaHorario.objects.get(id=id)
+    horario.diaH=diaH
+    horario.horario=horaSelec
+    horario.estado=False
+    horario.save()
+    return redirect('/adci_inicio')
+
+def delete_adciIn(request,id):
+    eliminarDiaHorario=DiaHorario.objects.get(id=id)
+    eliminarDiaHorario.delete()
+    return redirect('/adci_inicio')
 
 #Página Inicio Administrador-Citas GENERAL FINAL
 

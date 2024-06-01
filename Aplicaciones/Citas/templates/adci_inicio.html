@@ -5,8 +5,8 @@
     <div class="card-body">
       <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
         <div class="mb-3 mb-sm-0">
-          <h5 class="card-title fw-semibold">Administración de Citas</h5>
-          <a href="#">Crear Semana</a>
+          <h5 class="card-title fw-semibold">Administración de Citas</h5><br>
+          <a href="#" class="btn btn-outline-success">Crear Semana</a>
         </div>
       </div>
       <div id="calendar" >
@@ -161,17 +161,76 @@
   </div>
 </div>
 </div>
-<!-- MODAL VISTYA CALENDAR -->
+<!-- MODAL VISTA CALENDAR cita no escogida-->
 <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="eventModalLabel">Detalles del evento</h5>
+        <h5 class="modal-title" id="eventModalLabel">Información de Cita</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/procesarActualizacionHorario/" method="POST" id="vldt_edidias">
+          {% csrf_token %}
+          <input type="hidden" name="modalId" id="modalId" value="{{horario.id}}">
+          <div class="mb-3">
+            <label for="diaH" class="form-label">Fecha</label>
+            <input type="date" class="form-control" name="diaH" id="diaH" aria-describedby="dateHelp">
+          </div>
+          <br>
+          <div class="">
+            <label class="form-label">Horarios</label>
+            {% for hora in horas %}
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="id_hora" id="id_hora_{{ hora.id }}" value="{{ hora.id }}">
+              <label class="form-check-label" for="id_hora_{{ hora.id }}">
+                {{ hora.horaInicio }} - {{ hora.horaFinal }}
+              </label>
+            </div>
+            {% endfor %}
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-outline-warning rounded-pill" id="saveChangesButton" disabled><i class="fas fa-edit"></i></button>
+        <script type="text/javascript">
+          document.addEventListener("DOMContentLoaded", function() {
+            var saveButton = document.getElementById('saveChangesButton');
+            var form = document.getElementById('vldt_edidias');
+            var editButton = document.getElementById('saveChangesButton'); // Agrega esta línea para definir editButton
+
+            form.addEventListener('input', function() {
+                editButton.disabled = false;
+            });
+
+            saveButton.addEventListener('click', function() {
+              form.submit();
+            });
+
+            $('#eventModal').on('hidden.bs.modal', function () {
+              editButton.disabled = true;
+            });
+          });
+        </script>
+        <button type="button" class="btn btn-outline-danger rounded-pill" id="deleteDateButton"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL VISTA CALENDAR cita escogida-->
+<div class="modal fade" id="eventModalocu" tabindex="-1" aria-labelledby="eventModalLabelOcu" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eventModalLabelOcu">Detalles del evento cita escogida</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
       <div class="modal-body">
-        <p id="modalEventTitle"></p>
-        <p id="modalEventTime"></p>
+        <p id="modalEventTitleOcu"></p>
+        <p id="modalEventTimeOcu"></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
@@ -188,107 +247,155 @@
     background-color: #d9534f !important; /* Rojo más oscuro pero suave */
     border-color: #d9534f !important; /* Cambia también el borde del evento si es necesario */
   }
-
 </style>
 <!-- CALENDARIO -->
-<!-- <script>
-  document.addEventListener('DOMContentLoaded', function() {
-      var calendarEl = document.getElementById('calendar');
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'timeGridWeek',
-          locale: 'es',
-          headerToolbar: {
-              left: 'prev,next',
-              center:'title',
-              right: 'prev,next'
-          },
-          slotLabelFormat: {
-              hour: '2-digit',
-              minute: '2-digit',
-              hour12: false
-          },
-          slotMinTime: '06:00:00', // Hora de inicio de la grilla de tiempo
-          slotMaxTime: '22:00:00', // Hora de fin de la grilla de tiempo
-          allDaySlot: false,
-          hiddenDays: [ 0, 6 ],
-          dayHeaderContent: function(arg) {
-                return { html: '<span class="custom-day-header">' + arg.text + '</span>' };
-            },
-          events: [
-            {% for horario in horarios %}
-              {
-                title: "{{ horario.diaH|date:'Y-m-d'}}",
-                start: "{{ horario.diaH|date:'Y-m-d' }}T{{ horario.horario.horaInicio|time:'H:i:s' }}",
-                end: "{{ horario.diaH|date:'Y-m-d' }}T{{ horario.horario.horaFinal|time:'H:i:s' }}",
-                classNames: getEventClass("{{ horario.estado }}"),
-              },
-            {% endfor %}
-          ],
-          eventDidMount: function(info) {
-              info.el.style.whiteSpace = 'normal';
-          }
-      });
-
-      calendar.render();
-
-      function getEventClass(eventState) {
-          return eventState === "True" ? "event-true" : "";
-        }
-  });
-
-
-</script> -->
-
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-      var calendarEl = document.getElementById('calendar');
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'timeGridWeek',
-          locale: 'es',
-          headerToolbar: {
-              left: 'prev,next',
-              center: 'title',
-              right: 'prev,next'
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'timeGridWeek',
+      locale: 'es',
+      headerToolbar: {
+        left: 'prev,next',
+        center: 'title',
+        right: 'prev,next'
+      },
+      slotLabelFormat: {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      },
+      slotMinTime: '06:00:00',
+      slotMaxTime: '22:00:00',
+      allDaySlot: false,
+      hiddenDays: [0, 6],
+      dayHeaderContent: function(arg) {
+        return { html: '<span class="custom-day-header">' + arg.text + '</span>' };
+      },
+      events: [
+        {% for horario in horarios %}
+          {
+            title: "{{ horario.diaH|date:'Y-m-d' }}",
+            start: "{{ horario.diaH|date:'Y-m-d' }}T{{ horario.horario.horaInicio|time:'H:i:s' }}",
+            end: "{{ horario.diaH|date:'Y-m-d' }}T{{ horario.horario.horaFinal|time:'H:i:s' }}",
+            classNames: getEventClass("{{ horario.estado }}"),
+            extendedProps: {
+              id: "{{ horario.id }}",
+              diaH: "{{ horario.diaH|date:'Y-m-d' }}",
+              horario: "{{ horario.horario.id }}",
+              estado: "{{ horario.estado }}"
+            }
           },
-          slotLabelFormat: {
-              hour: '2-digit',
-              minute: '2-digit',
-              hour12: false
-          },
-          slotMinTime: '06:00:00', // Hora de inicio de la grilla de tiempo
-          slotMaxTime: '22:00:00', // Hora de fin de la grilla de tiempo
-          allDaySlot: false,
-          hiddenDays: [0, 6],
-          dayHeaderContent: function(arg) {
-              return { html: '<span class="custom-day-header">' + arg.text + '</span>' };
-          },
-          events: [
-            {% for horario in horarios %}
-              {
-                title: "{{ horario.diaH|date:'Y-m-d' }}",
-                start: "{{ horario.diaH|date:'Y-m-d' }}T{{ horario.horario.horaInicio|time:'H:i:s' }}",
-                end: "{{ horario.diaH|date:'Y-m-d' }}T{{ horario.horario.horaFinal|time:'H:i:s' }}",
-                classNames: getEventClass("{{ horario.estado }}"),
-              },
-            {% endfor %}
-          ],
-          eventClick: function(info) {
-              $('#eventModal').modal('show');
-              document.getElementById('modalEventTitle').textContent = info.event.title;
-              document.getElementById('modalEventTime').textContent = 'From ' + info.event.start.toLocaleString() + ' to ' + info.event.end.toLocaleString();
-          },
-          eventDidMount: function(info) {
-              info.el.style.whiteSpace = 'normal';
-          }
-      });
+        {% endfor %}
+      ],
+      eventClick: function(info) {
+        var estado = info.event.extendedProps.estado === "True";
+        if (estado) {
+          $('#eventModalocu').modal('show');
+          document.getElementById('modalEventTitleOcu').textContent = info.event.title;
+          document.getElementById('modalEventTimeOcu').textContent = 'From ' + info.event.start.toLocaleString() + ' to ' + info.event.end.toLocaleString();
+        } else {
+          $('#eventModal').modal('show');
+          var modalId = document.getElementById('modalId');
+          var modalDiaH = document.getElementById('diaH');
+          var form = document.getElementById('vldt_edidias');
 
-      calendar.render();
+          modalId.value = info.event.extendedProps.id;
+          modalDiaH.value = info.event.extendedProps.diaH;
 
-      function getEventClass(eventState) {
-          return eventState === "True" ? "event-true" : "";
+          form.action = "procesarActualizacionHorarioIn/" + info.event.extendedProps.id + "/";
+
+          // var editButton = document.getElementById('saveChangesButton');
+          // editButton.addEventListener('click', function() {
+          //   procesarActualizacionHorarioIn("procesarActualizacionHorarioIn/" + info.event.extendedProps.id + "/");
+          // });
+
+          var deleteButton = document.getElementById('deleteDateButton');
+          deleteButton.addEventListener('click', function() {
+            delete_adciIn("/delete_adciIn/" + info.event.extendedProps.id + "/");
+          });
+
+          var horario = info.event.extendedProps.horario;
+          var horarioRadios = document.querySelectorAll('input[type="radio"][name="id_hora"]');
+          horarioRadios.forEach(function(radio) {
+            radio.checked = (radio.value == horario);
+          });
+        }
+      },
+      eventDidMount: function(info) {
+        info.el.style.whiteSpace = 'normal';
       }
+    });
+
+    calendar.render();
+
+    function getEventClass(eventState) {
+      return eventState === "True" ? "event-true" : "";
+    }
   });
 </script>
 
+<!-- MENSAJE DE CONFIRMACIÓN ELIMINAR DIAHORARIO -->
+<script type="text/javascript">
+        function delete_adciIn(url){
+          iziToast.question({
+              timeout: 15000,
+              close: true,
+              overlay: true,
+              displayMode: 'once',
+              id: 'question',
+              zindex: 9999,
+              title: 'CONFIRMACIÓN',
+              message: '¿Está seguro de eliminar la <b>cita </b> seleccionada?',
+              position: 'center',
+              buttons: [
+                  ['<button><b>SI</b></button>', function (instance, toast) {
+                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                      window.location.href=url;
+                  }, true],
+                  ['<button>NO</button>', function (instance, toast) {
+
+                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+
+                  }],
+              ]
+          });
+        }
+        function procesarActualizacionHorarioIn(url){
+          iziToast.question({
+              timeout: 15000,
+              close: true,
+              overlay: true,
+              displayMode: 'once',
+              id: 'question',
+              zindex: 9999,
+              title: 'CONFIRMACIÓN',
+              message: '¿Está seguro de editar la <b>cita </b> seleccionada (Por favor verifique la información)?',
+              position: 'center',
+              buttons: [
+                  ['<button><b>SI</b></button>', function (instance, toast) {
+                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                      window.location.href=url;
+                  }, true],
+                  ['<button>NO</button>', function (instance, toast) {
+
+                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+
+                  }],
+              ]
+          });
+        }
+
+
+{% if messages %}
+    {% for message in messages %}
+        iziToast.success({
+            title: 'Éxito',
+            message: '{{ message }}',
+            position: 'topRight',
+        });
+    {% endfor %}
+{% endif %}
+  </script>
 
 {% endblock %}
