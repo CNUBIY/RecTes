@@ -50,10 +50,11 @@
                       </td>
                       <td>
                         <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                          data-id="{{ cita.id }}" data-diah="{{ cita.fech_da|date:'Y-m-d' }}" data-horario="{{ cita.time_da|time:'h:i' }}" data-nom="{{cita.nom_da}}" data-telf={{cita.telf_da}}>
+                          data-id="{{ cita.id }}" data-diah="{{ cita.fech_da|date:'Y-m-d' }}" data-horario="{{ cita.time_da|time:'h:i' }}" data-nom="{{cita.nom_da}}" data-telf={{cita.telf_da}}
+                          data-cortesia="{{cita.cort_da}}">
                            <i class="fas fa-edit"></i>
                         </button>
-                          <a href="javascript:void(0)" onclick="delete_adci('/delete_adci/{{ horario.id }}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
+                          <a href="javascript:void(0)" onclick="delete_adci('/delete_adci/{{ cita.id }}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
                       </td>
                   </tr>
                   {% endfor %}
@@ -134,9 +135,13 @@
             <div class="mb-3">
               <label for="time_da" class="form-label">Horario</label>
               <input type="time" class="form-control" name="time_da"id="time_da">
-              </div>
+            </div>
+            <label for="time_da" class="form-label">¿Cita de Cortesía?</label>
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" name="cort_da" id="cort_da">
+              <label class="form-check-label" for="exampleCheck1">Confirmar</label>
+            </div>
           <br>
-
           <!-- SCRIPT PARA LLAMAR LA INFORMACIÓN -->
           <script type="text/javascript">
             var exampleModal = document.getElementById('exampleModal');
@@ -147,6 +152,7 @@
               var horario = button.getAttribute('data-horario');
               var nomDa = button.getAttribute('data-nom');
               var telfDa = button.getAttribute('data-telf');
+              var cortesia = button.getAttribute('data-cortesia') === "True"; // Convierte a booleano
 
               var form = document.getElementById('vldt_edidias');
 
@@ -155,6 +161,7 @@
               var modalNomDa = exampleModal.querySelector('#nom_da');
               var modalTelfDa = exampleModal.querySelector('#telf_da');
               var modalTimeDa = exampleModal.querySelector('#time_da');
+              var modalCortDa = exampleModal.querySelector('#cort_da');
 
               modalId.value = id;
               form.action = "./procesarActualizacionHorario/" + id + "/";
@@ -163,14 +170,14 @@
               modalTelfDa.value = telfDa;  // Asignar el teléfono/celular
               modalFechDa.value = fech_da;  // Asignar la fecha al input de tipo date
               modalTimeDa.value = horario; // Asignar el horario al input de tipo time
+              modalCortDa.checked = cortesia; // Marcar o desmarcar el checkbox
             });
           </script>
-
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary" id="saveChangesButton">Guardar Cambios</button>
+        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-outline-success" id="saveChangesButton"><i class="fas fa-edit" title="Guardar Cambios"></i></button>
         <script type="text/javascript">
 
            document.addEventListener("DOMContentLoaded", function() {

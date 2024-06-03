@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 # Create your views here.
 
 #Página Informativa INICIO
@@ -107,20 +107,32 @@ def adci_perfil(request):
 def adci_inicio(request):
     horariobdd = DiaHorario.objects.all()
     horabdd=HorasDia.objects.all()
-    return render(request, 'adci_inicio.html', {'horarios':horariobdd,'horas':horabdd})
+    citabdd=CitaSol.objects.all()
+    return render(request, 'adci_inicio.html', {'horarios':horariobdd,'horas':horabdd,'citas':citabdd})
 
 def procesarActualizacionHorarioIn(request,id):
-    id=request.POST["modalId"]
-    diaH=request.POST["diaH"]
-    id_hora=request.POST["id_hora"]
-    horaSelec=HorasDia.objects.get(id=id_hora)
+    if request.method == 'POST':
+        try:
+            id = request.POST["id"]
+            nom_da = request.POST["nom_da"]
+            telf_da = request.POST["telf_da"]
+            fech_da = request.POST["fech_da"]
+            time_da = request.POST["time_da"]
 
-    horario=DiaHorario.objects.get(id=id)
-    horario.diaH=diaH
-    horario.horario=horaSelec
-    horario.estado=False
-    horario.save()
-    return redirect('/adci_inicio')
+            # Procesar la actualización de la cita con los valores obtenidos
+            cita = get_object_or_404(CitaSol, pk=id)
+            cita.nom_da = nom_da
+            cita.telf_da = telf_da
+            cita.fech_da = fech_da
+            cita.time_da = time_da
+            cita.save()
+
+            return redirect('/adci_inicio')
+        except MultiValueDictKeyError as e:
+            # Manejo de error cuando no se encuentra un campo esperado en request.POST
+            return HttpResponseBadRequest(f"Missing parameter: {e}")
+    else:
+        return redirect('/error_p')
 
 def delete_adciIn(request,id):
     eliminarDiaHorario=DiaHorario.objects.get(id=id)
@@ -143,7 +155,7 @@ def aggagenda_adci(request):
     telf_da=request.POST["telf_da"]
     fech_da=request.POST["fech_da"]
     time_da=request.POST["time_da"]
-    cort_da = request.POST.get("cort_da", False)
+    cort_da = request.POST.get("cort_da") == "on"
 
     nuevoHorarioDia = CitaSol.objects.create(
     fech_da=fech_da,
@@ -157,7 +169,7 @@ def aggagenda_adci(request):
 
 
 def delete_adci(request,id):
-    eliminarDiaHorario=DiaHorario.objects.get(id=id)
+    eliminarDiaHorario=CitaSol.objects.get(id=id)
     eliminarDiaHorario.delete()
     return redirect('/adci_fechacitas')
 
@@ -170,7 +182,7 @@ def procesarActualizacionHorario(request, id):
             time_da = request.POST["time_da"]
 
             # Procesar la actualización de la cita con los valores obtenidos
-            cita = get_object_or_404(DiaHorario, pk=id)
+            cita = get_object_or_404(CitaSol, pk=id)
             cita.nom_da = nom_da
             cita.telf_da = telf_da
             cita.fech_da = fech_da

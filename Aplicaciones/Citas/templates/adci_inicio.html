@@ -6,7 +6,6 @@
       <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
         <div class="mb-3 mb-sm-0">
           <h5 class="card-title fw-semibold">Administración de Citas</h5><br>
-          <a href="#" class="btn btn-outline-success">Crear Semana</a>
         </div>
       </div>
       <div id="calendar" >
@@ -174,25 +173,25 @@
           {% csrf_token %}
           <input type="hidden" name="modalId" id="modalId" value="{{horario.id}}">
           <div class="mb-3">
-            <label for="diaH" class="form-label">Fecha</label>
-            <input type="date" class="form-control" name="diaH" id="diaH" aria-describedby="dateHelp">
+            <label for="nom_da" class="form-label">Nombre</label>
+            <input type="text" class="form-control" name="nom_da" id="nom_da" aria-describedby="dateHelp">
           </div>
-          <br>
-          <div class="">
-            <label class="form-label">Horarios</label>
-            {% for hora in horas %}
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="id_hora" id="id_hora_{{ hora.id }}" value="{{ hora.id }}">
-              <label class="form-check-label" for="id_hora_{{ hora.id }}">
-                {{ hora.horaInicio }} - {{ hora.horaFinal }}
-              </label>
-            </div>
-            {% endfor %}
+          <div class="mb-3">
+            <label for="telf_da" class="form-label">Contacto</label>
+            <input type="text" class="form-control" name="telf_da" id="telf_da" aria-describedby="dateHelp">
+          </div>
+          <div class="mb-3">
+            <label for="fech_da" class="form-label">Fecha</label>
+            <input type="date" class="form-control" name="fech_da" id="fech_da" aria-describedby="dateHelp">
+          </div>
+          <div class="mb-3">
+            <label for="time_da" class="form-label">Horario</label>
+            <input type="time" class="form-control" name="time_da" id="time_da" aria-describedby="dateHelp">
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
         <button type="button" class="btn btn-outline-warning rounded-pill" id="saveChangesButton" disabled><i class="fas fa-edit"></i></button>
         <script type="text/javascript">
           document.addEventListener("DOMContentLoaded", function() {
@@ -247,6 +246,11 @@
     background-color: #d9534f !important; /* Rojo más oscuro pero suave */
     border-color: #d9534f !important; /* Cambia también el borde del evento si es necesario */
   }
+  .event-false {
+    background-color: #ffc107 !important; /* Amarillo de Bootstrap */
+    border-color: #ffc107 !important; /* Cambia también el borde del evento si es necesario */
+    color: #212529 !important; /* Color de texto oscuro para buena legibilidad */
+  }
 </style>
 <!-- CALENDARIO -->
 <script>
@@ -273,17 +277,18 @@
         return { html: '<span class="custom-day-header">' + arg.text + '</span>' };
       },
       events: [
-        {% for horario in horarios %}
+        {% for cita in citas %}
           {
-            title: "{{ horario.diaH|date:'Y-m-d' }}",
-            start: "{{ horario.diaH|date:'Y-m-d' }}T{{ horario.horario.horaInicio|time:'H:i:s' }}",
-            end: "{{ horario.diaH|date:'Y-m-d' }}T{{ horario.horario.horaFinal|time:'H:i:s' }}",
-            classNames: getEventClass("{{ horario.estado }}"),
+            title: "{{ cita.nom_da }}",
+            start: "{{ cita.fech_da|date:'Y-m-d' }}T{{ cita.time_da|time:'H:i:s' }}",
+            end: "{{ cita.fech_da|date:'Y-m-d' }}T{{ cita.time_da|time:'H:i:s' }}",
+            classNames: getEventClass("{{ cita.est_da }}"),
             extendedProps: {
-              id: "{{ horario.id }}",
-              diaH: "{{ horario.diaH|date:'Y-m-d' }}",
-              horario: "{{ horario.horario.id }}",
-              estado: "{{ horario.estado }}"
+              id: "{{ cita.id }}",
+              diaH: "{{ cita.fech_da|date:'Y-m-d' }}",
+              nom_da: "{{cita.nom_da}}",
+              time_da:"{{cita.time_da}}",
+              telf_da:"{{cita.telf_da}}"
             }
           },
         {% endfor %}
@@ -297,11 +302,18 @@
         } else {
           $('#eventModal').modal('show');
           var modalId = document.getElementById('modalId');
-          var modalDiaH = document.getElementById('diaH');
+          var modalDiaH = document.getElementById('fech_da');
+          var modalNom = document.getElementById('nom_da');
+          var modalTim = document.getElementById('time_da');
+          var modalTelf = document.getElementById('telf_da');
           var form = document.getElementById('vldt_edidias');
 
           modalId.value = info.event.extendedProps.id;
           modalDiaH.value = info.event.extendedProps.diaH;
+          modalNom.value = info.event.extendedProps.nom_da;
+          modalTim.value = info.event.extendedProps.time_da;
+          modalTelf.value = info.event.extendedProps.telf_da;
+
 
           form.action = "procesarActualizacionHorarioIn/" + info.event.extendedProps.id + "/";
 
@@ -314,12 +326,6 @@
           deleteButton.addEventListener('click', function() {
             delete_adciIn("/delete_adciIn/" + info.event.extendedProps.id + "/");
           });
-
-          var horario = info.event.extendedProps.horario;
-          var horarioRadios = document.querySelectorAll('input[type="radio"][name="id_hora"]');
-          horarioRadios.forEach(function(radio) {
-            radio.checked = (radio.value == horario);
-          });
         }
       },
       eventDidMount: function(info) {
@@ -330,7 +336,7 @@
     calendar.render();
 
     function getEventClass(eventState) {
-      return eventState === "True" ? "event-true" : "";
+      return eventState === "True" ? "event-true" : "event-false";
     }
   });
 </script>
