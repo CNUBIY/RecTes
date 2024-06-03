@@ -45,9 +45,13 @@ class CitaSol(models.Model):
     id=models.AutoField(primary_key=True)
     fech_da=models.DateField()
     time_da=models.TimeField()
+    cort_da=models.BooleanField(default=False)
+    nom_da=models.CharField(max_length=150)
+    telf_da=models.CharField(max_length=10)
+    est_da=models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.fech_da}-{self.time_da}"
+        return f"{self.nom_da}: {self.fech_da} | {self.time_da}"
 
 
 

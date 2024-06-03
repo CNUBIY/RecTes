@@ -1,0 +1,74 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inicia Sesión</title>
+  <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
+  <link rel="stylesheet" href="{% static 'css/styles.min.css' %}" />
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+  <!-- jQuery Validate -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+  <link rel="stylesheet" href="{% static 'css/estilo_validacion.css' %}" />
+</head>
+
+<body>
+  <!--  Body Wrapper -->
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+    data-sidebar-position="fixed" data-header-position="fixed">
+    <div
+      class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+      <div class="d-flex align-items-center justify-content-center w-100">
+        <div class="row justify-content-center w-100">
+          <div class="col-md-8 col-lg-6 col-xxl-3">
+            <div class="card mb-0">
+              <div class="card-body">
+                <a href="/" class="text-nowrap logo-img text-center d-block py-3 w-100">
+                  <img src="{% static 'images/logos/dark-logo.svg' %}" width="180" alt="">
+                </a>
+                <p class="text-center">Tu Centro Médico Favorito</p>
+                <h2 class="text-center text-danger"><b>Error de Solicitud, verifique su sesión por favor</b></h2>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+
+
+<script>
+    $(document).ready(function() {
+        $("#log_val").validate({
+            rules: {
+                "correo_us": {
+                    required: true,
+                    email:true,
+                },
+                "pass_us": {
+                    required: true
+                }
+            },
+            messages: {
+                "correo_us": {
+                    required: "Debe ingresar el correo",
+                    email:"Ingrese un correo válido"
+                },
+                "pass_us": {
+                    required: "Debe ingresar la contraseña"
+                }
+            },
+            errorPlacement: function(error, element) {
+                // Insertar el mensaje de error debajo del elemento
+                error.appendTo(element.parent().find('.error-message'));
+            }
+        });
+    });
+</script>
+
+</html>
