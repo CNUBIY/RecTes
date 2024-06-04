@@ -13,9 +13,10 @@
           <h5 class="card-title fw-semibold">Administración de Citas</h5>
         </div>
         <div class="ml-auto">
-          <button type="button" class="btn btn-outline-success rounded-pill" data-bs-toggle="modal" data-bs-target="#eventModal3" title="Añadir Cita">
+          <a href="/adci_fechacitas/" class="btn btn-outline-success rounded-pill" title="Añadir Cita"><i class="fa-solid fa-calendar-plus"></i></a>
+          <!-- <button type="button" class="btn btn-outline-success rounded-pill" data-bs-toggle="modal" data-bs-target="#eventModal3" title="Añadir Cita">
             <i class="fa-solid fa-calendar-plus"></i>
-          </button>
+          </button> -->
         </div>
       </div>
       <div id="calendar" >
@@ -100,60 +101,24 @@
   <div class="card w-100">
     <div class="card-body p-4">
       <div class="mb-4">
-        <h5 class="card-title fw-semibold">Recent Transactions</h5>
+        <h5 class="card-title fw-semibold">Citas de Mañana</h5>
       </div>
       <ul class="timeline-widget mb-0 position-relative mb-n5">
+        {% for cita in citas %}
         <li class="timeline-item d-flex position-relative overflow-hidden">
-          <div class="timeline-time text-dark flex-shrink-0 text-end">09:30</div>
-          <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-            <span class="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
-            <span class="timeline-badge-border d-block flex-shrink-0"></span>
+          <div class="timeline-time text-dark flex-shrink-0 text-end">
+            {% if cita.time_da.hour < 12 %}
+                {{ cita.time_da|time:"h:i" }} AM
+            {% else %}
+                {{ cita.time_da|time:"h:i" }} PM
+            {% endif %}
           </div>
-          <div class="timeline-desc fs-3 text-dark mt-n1">Payment received from John Doe of $385.90</div>
-        </li>
-        <li class="timeline-item d-flex position-relative overflow-hidden">
-          <div class="timeline-time text-dark flex-shrink-0 text-end">10:00 am</div>
-          <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-            <span class="timeline-badge border-2 border border-info flex-shrink-0 my-8"></span>
-            <span class="timeline-badge-border d-block flex-shrink-0"></span>
-          </div>
-          <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">New sale recorded <a
-              href="javascript:void(0)" class="text-primary d-block fw-normal">#ML-3467</a>
-          </div>
-        </li>
-        <li class="timeline-item d-flex position-relative overflow-hidden">
-          <div class="timeline-time text-dark flex-shrink-0 text-end">12:00 am</div>
-          <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-            <span class="timeline-badge border-2 border border-success flex-shrink-0 my-8"></span>
-            <span class="timeline-badge-border d-block flex-shrink-0"></span>
-          </div>
-          <div class="timeline-desc fs-3 text-dark mt-n1">Payment was made of $64.95 to Michael</div>
-        </li>
-        <li class="timeline-item d-flex position-relative overflow-hidden">
-          <div class="timeline-time text-dark flex-shrink-0 text-end">09:30 am</div>
           <div class="timeline-badge-wrap d-flex flex-column align-items-center">
             <span class="timeline-badge border-2 border border-warning flex-shrink-0 my-8"></span>
             <span class="timeline-badge-border d-block flex-shrink-0"></span>
           </div>
-          <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">New sale recorded <a
-              href="javascript:void(0)" class="text-primary d-block fw-normal">#ML-3467</a>
-          </div>
-        </li>
-        <li class="timeline-item d-flex position-relative overflow-hidden">
-          <div class="timeline-time text-dark flex-shrink-0 text-end">09:30 am</div>
-          <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-            <span class="timeline-badge border-2 border border-danger flex-shrink-0 my-8"></span>
-            <span class="timeline-badge-border d-block flex-shrink-0"></span>
-          </div>
-          <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">New arrival recorded
-          </div>
-        </li>
-        <li class="timeline-item d-flex position-relative overflow-hidden">
-          <div class="timeline-time text-dark flex-shrink-0 text-end">12:00 am</div>
-          <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-            <span class="timeline-badge border-2 border border-success flex-shrink-0 my-8"></span>
-          </div>
-          <div class="timeline-desc fs-3 text-dark mt-n1">Payment Done</div>
+          <div class="timeline-desc fs-3 text-dark mt-n1"><a href="#" >{{cita.nom_da}} - {{cita.fech_da}}</a></div>
+        {% endfor %}
         </li>
       </ul>
     </div>
@@ -162,9 +127,54 @@
 <div class="col-lg-8 d-flex align-items-stretch">
   <div class="card w-100">
     <div class="card-body p-4">
-      <h5 class="card-title fw-semibold mb-4">Recent Transactions</h5>
+      <h5 class="card-title fw-semibold mb-4">Citas de Hoy</h5>
       <div class="table-responsive">
-
+        <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
+          <thead class="text-dark fs-4">
+            <tr>
+              <th class="border-bottom-0 text-center">
+                <h6 class="fw-semibold mb-0">Fecha</h6>
+              </th>
+              <th class="border-bottom-0 text-center">
+                <h6 class="fw-semibold mb-0">Horario</h6>
+              </th>
+              <th class="border-bottom-0 text-center">
+                <h6 class="fw-semibold mb-0">Solicitante</h6>
+              </th>
+              <th class="border-bottom-0 text-center">
+                <h6 class="fw-semibold mb-0">Estado</h6>
+              </th>
+              <th class="border-bottom-0 text-center">
+                <h6 class="fw-semibold mb-0 text-center">Acción</h6>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for cita in citas %}
+              <tr>
+                  <td>{{ cita.fech_da }}</td>
+                  <td>
+                      {% if cita.time_da.hour < 12 %}
+                          {{ cita.time_da|time:"h:i" }} AM
+                      {% else %}
+                          {{ cita.time_da|time:"h:i" }} PM
+                      {% endif %}
+                  </td>
+                  <td>{{cita.nom_da}}</td>
+                  <td>
+                    {% if cita.est_da %}
+                    <span class="text-info">Realizados</span>
+                    {% else %}
+                    <span class="text-warning">En espera</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    <a href="/adci_inicio/addcont_adci/{{cita.id}}" class="btn btn-outline-success rounded-pill">Realizar Cobro</a>
+                  </td>
+              </tr>
+              {% endfor %}
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -335,8 +345,8 @@
 
   }
   .sin-servicio {
-    background-color: #dc3545 !important; /* Rojo de Bootstrap */
-    border-color: #dc3545 !important; /* Borde Rojo de Bootstrap */
+    background-color: #ec5b3b !important; /* Rojo de Bootstrap */
+    border-color: #ec5b3b !important; /* Borde Rojo de Bootstrap */
   }
 </style>
 <!-- CALENDARIO -->
@@ -387,7 +397,7 @@
           endTime: '16:00:00',
           daysOfWeek: [1, 2, 3, 4, 5,6], // Lunes a viernes
           rendering: 'background',
-          classNames: 'sin-servicio'
+          classNames: 'sin-servicio ff6543'
         }
       ],
       eventClick: function(info) {

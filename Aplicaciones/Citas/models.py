@@ -53,8 +53,16 @@ class CitaSol(models.Model):
     def __str__(self):
         return f"{self.nom_da}: {self.fech_da} | {self.time_da}"
 
+class FactCitas(models.Model):
+    id=models.AutoField(primary_key=True)
+    idfac=models.CharField(max_length=150)
+    descfac=models.CharField(max_length=150)
+    valfac=models.DecimalField(max_digits=5, decimal_places=2)
+    obsfac=models.CharField(max_length=150)
+    fechfac=models.ForeignKey(CitaSol, on_delete=models.PROTECT)
 
-
+    def __str__(self):
+        return f"{self.idfac}-{self.fechfac}"
 
 
 class UsuarioCli(models.Model):

@@ -184,7 +184,7 @@ def aggagenda_adci(request):
     cort_da=cort_da,
     est_da=False,
     )
-    return redirect('/adci_fechacitas')
+    return redirect('/adci_inicio')
 
 
 def delete_adci(request,id):
@@ -218,6 +218,16 @@ def procesarActualizacionHorario(request, id):
         return redirect('/error_p')
 
 #Página HORARIOS Administrador FINAL
+
+
+#Página CONTABILIDAD Administrador INICIO|
+
+def addcont_adci(request, id):
+    citabdd=CitaSol.objects.all()
+    return render(request,'adci_addcont.html',{'citas':citabdd})
+
+
+#Página CONTABILIDAD Administrador FINAl|
 
 
 #Página error Inicio
