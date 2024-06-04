@@ -110,14 +110,32 @@ def adci_inicio(request):
     citabdd=CitaSol.objects.all()
     return render(request, 'adci_inicio.html', {'horarios':horariobdd,'horas':horabdd,'citas':citabdd})
 
+def aggin_adci(request):
+    nom_da=request.POST["nom_da"]
+    telf_da=request.POST["telf_da"]
+    fech_da=request.POST["fech_da"]
+    time_da=request.POST["time_da"]
+    cort_da = request.POST.get("cort_da") == "on"
+
+    nuevoHorarioDia = CitaSol.objects.create(
+    fech_da=fech_da,
+    telf_da=telf_da,
+    nom_da=nom_da,
+    time_da=time_da,
+    cort_da=cort_da,
+    est_da=False,
+    )
+    return redirect('/adci_inicio')
+
 def procesarActualizacionHorarioIn(request,id):
     if request.method == 'POST':
         try:
-            id = request.POST["id"]
             nom_da = request.POST["nom_da"]
             telf_da = request.POST["telf_da"]
             fech_da = request.POST["fech_da"]
             time_da = request.POST["time_da"]
+            cort_da = request.POST.get("cort_da") == "on"
+
 
             # Procesar la actualización de la cita con los valores obtenidos
             cita = get_object_or_404(CitaSol, pk=id)
@@ -125,6 +143,7 @@ def procesarActualizacionHorarioIn(request,id):
             cita.telf_da = telf_da
             cita.fech_da = fech_da
             cita.time_da = time_da
+            cita.cort_da = cort_da
             cita.save()
 
             return redirect('/adci_inicio')
@@ -135,7 +154,7 @@ def procesarActualizacionHorarioIn(request,id):
         return redirect('/error_p')
 
 def delete_adciIn(request,id):
-    eliminarDiaHorario=DiaHorario.objects.get(id=id)
+    eliminarDiaHorario=CitaSol.objects.get(id=id)
     eliminarDiaHorario.delete()
     return redirect('/adci_inicio')
 
@@ -180,6 +199,7 @@ def procesarActualizacionHorario(request, id):
             telf_da = request.POST["telf_da"]
             fech_da = request.POST["fech_da"]
             time_da = request.POST["time_da"]
+            cort_da = request.POST.get("cort_da") == "on"
 
             # Procesar la actualización de la cita con los valores obtenidos
             cita = get_object_or_404(CitaSol, pk=id)
@@ -187,6 +207,7 @@ def procesarActualizacionHorario(request, id):
             cita.telf_da = telf_da
             cita.fech_da = fech_da
             cita.time_da = time_da
+            cita.cort_da = cort_da
             cita.save()
 
             return redirect('/adci_fechacitas')

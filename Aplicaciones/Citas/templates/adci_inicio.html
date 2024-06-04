@@ -1,11 +1,21 @@
 {% extends 'adci_plantilla.html' %}
 {% block usci_contenido %}
+<style>
+  .fa-calendar-plus {
+    font-size: 20px; /* Ajusta el tamaño del ícono */
+  }
+</style>
 <div class="col-lg-9 d-flex align-items-strech">
   <div class="card w-100">
     <div class="card-body">
       <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
         <div class="mb-3 mb-sm-0">
-          <h5 class="card-title fw-semibold">Administración de Citas</h5><br>
+          <h5 class="card-title fw-semibold">Administración de Citas</h5>
+        </div>
+        <div class="ml-auto">
+          <button type="button" class="btn btn-outline-success rounded-pill" data-bs-toggle="modal" data-bs-target="#eventModal3" title="Añadir Cita">
+            <i class="fa-solid fa-calendar-plus"></i>
+          </button>
         </div>
       </div>
       <div id="calendar" >
@@ -160,6 +170,70 @@
   </div>
 </div>
 </div>
+<!-- MODAL AÑADIR CITA -->
+<!-- <div class="modal fade" id="eventModal3" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eventModalLabel">Crear Cita</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/aggin_adci/" method="POST" id="vldt_dias">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="nom_da" class="form-label">Nombre del Cliente</label>
+            <input type="text" class="form-control" name="nom_da"id="nom_da" placeholder="Ingrese el nombre del representante">
+          </div>
+          <div class="mb-3">
+            <label for="telf_da" class="form-label">Telf/Celular</label>
+            <input type="text" class="form-control" name="telf_da"id="telf_da" placeholder="Ingrese el número de contacto">
+          </div>
+          <div class="mb-3">
+            <label for="fech_da" class="form-label">Fecha</label>
+            <input type="date" class="form-control" name="fech_da"id="fech_da" aria-describedby="dateHelp">
+            </div>
+          <div class="mb-3">
+            <label for="time_da" class="form-label">Horario</label>
+            <input type="time" class="form-control" name="time_da"id="time_da">
+            </div>
+          <label for="time_da" class="form-label">¿Cita de Cortesía?</label>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" name="cort_da" id="cort_da">
+            <label class="form-check-label" for="exampleCheck1">Confirmar</label>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-outline-success" id="saveChangesButton3" disabled>Guardar</button>
+        <script type="text/javascript">
+          document.addEventListener("DOMContentLoaded", function() {
+            var saveButton3 = document.getElementById('saveChangesButton3');
+            var form = document.getElementById('vldt_dias');
+            var editButton3 = document.getElementById('saveChangesButton3'); // Agrega esta línea para definir editButton
+
+            form.addEventListener('input', function() {
+                editButton3.disabled = false;
+            });
+
+            saveButton3.addEventListener('click', function() {
+              form.action="aggin_adci/"
+              form.submit();
+            });
+
+            $('#eventModal3').on('hidden.bs.modal', function () {
+              editButton3.disabled = true;
+            });
+          });
+        </script>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
 <!-- MODAL VISTA CALENDAR cita no escogida-->
 <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -187,6 +261,11 @@
           <div class="mb-3">
             <label for="time_da" class="form-label">Horario</label>
             <input type="time" class="form-control" name="time_da" id="time_da" aria-describedby="dateHelp">
+          </div>
+          <label for="time_da" class="form-label">¿Cita de Cortesía?</label>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" name="cort_da" id="cort_da">
+            <label class="form-check-label" for="exampleCheck1">Confirmar</label>
           </div>
         </form>
       </div>
@@ -249,7 +328,15 @@
   .event-false {
     background-color: #ffc107 !important; /* Amarillo de Bootstrap */
     border-color: #ffc107 !important; /* Cambia también el borde del evento si es necesario */
-    color: #212529 !important; /* Color de texto oscuro para buena legibilidad */
+  }
+  .event-cort {
+    background-color: #28a745 !important; /* Verde de Bootstrap */
+    border-color: #28a745 !important; /* Cambia también el borde del evento si es necesario */
+
+  }
+  .sin-servicio {
+    background-color: #dc3545 !important; /* Rojo de Bootstrap */
+    border-color: #dc3545 !important; /* Borde Rojo de Bootstrap */
   }
 </style>
 <!-- CALENDARIO -->
@@ -269,10 +356,10 @@
         minute: '2-digit',
         hour12: false
       },
-      slotMinTime: '06:00:00',
-      slotMaxTime: '22:00:00',
+      slotMinTime: '08:00:00',
+      slotMaxTime: '20:00:00',
       allDaySlot: false,
-      hiddenDays: [0, 6],
+      hiddenDays: [0],
       dayHeaderContent: function(arg) {
         return { html: '<span class="custom-day-header">' + arg.text + '</span>' };
       },
@@ -282,16 +369,26 @@
             title: "{{ cita.nom_da }}",
             start: "{{ cita.fech_da|date:'Y-m-d' }}T{{ cita.time_da|time:'H:i:s' }}",
             end: "{{ cita.fech_da|date:'Y-m-d' }}T{{ cita.time_da|time:'H:i:s' }}",
-            classNames: getEventClass("{{ cita.est_da }}"),
+            classNames: getEventClass("{{ cita.cort_da }}", "{{ cita.est_da }}"),
             extendedProps: {
               id: "{{ cita.id }}",
               diaH: "{{ cita.fech_da|date:'Y-m-d' }}",
               nom_da: "{{cita.nom_da}}",
               time_da:"{{cita.time_da}}",
-              telf_da:"{{cita.telf_da}}"
+              telf_da:"{{cita.telf_da}}",
+              cortesia: "{{ cita.cort_da }}",
+              estado: "{{ cita.est_da }}"
             }
           },
         {% endfor %}
+        {
+          title: "Sin servicio",
+          startTime: '13:00:00',
+          endTime: '16:00:00',
+          daysOfWeek: [1, 2, 3, 4, 5,6], // Lunes a viernes
+          rendering: 'background',
+          classNames: 'sin-servicio'
+        }
       ],
       eventClick: function(info) {
         var estado = info.event.extendedProps.estado === "True";
@@ -306,6 +403,7 @@
           var modalNom = document.getElementById('nom_da');
           var modalTim = document.getElementById('time_da');
           var modalTelf = document.getElementById('telf_da');
+          var cortesiaCheckbox = document.getElementById('cort_da');
           var form = document.getElementById('vldt_edidias');
 
           modalId.value = info.event.extendedProps.id;
@@ -313,14 +411,9 @@
           modalNom.value = info.event.extendedProps.nom_da;
           modalTim.value = info.event.extendedProps.time_da;
           modalTelf.value = info.event.extendedProps.telf_da;
-
+          cortesiaCheckbox.checked = info.event.extendedProps.cortesia === "True";
 
           form.action = "procesarActualizacionHorarioIn/" + info.event.extendedProps.id + "/";
-
-          // var editButton = document.getElementById('saveChangesButton');
-          // editButton.addEventListener('click', function() {
-          //   procesarActualizacionHorarioIn("procesarActualizacionHorarioIn/" + info.event.extendedProps.id + "/");
-          // });
 
           var deleteButton = document.getElementById('deleteDateButton');
           deleteButton.addEventListener('click', function() {
@@ -335,11 +428,18 @@
 
     calendar.render();
 
-    function getEventClass(eventState) {
-      return eventState === "True" ? "event-true" : "event-false";
+    function getEventClass(cortesia, estado) {
+      if (cortesia === "True") {
+        return "event-cort";
+      } else if (estado === "True") {
+        return "event-true";
+      } else {
+        return "event-false";
+      }
     }
   });
 </script>
+
 
 <!-- MENSAJE DE CONFIRMACIÓN ELIMINAR DIAHORARIO -->
 <script type="text/javascript">

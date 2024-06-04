@@ -177,17 +177,25 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-outline-success" id="saveChangesButton"><i class="fas fa-edit" title="Guardar Cambios"></i></button>
+        <button type="button" class="btn btn-outline-success" id="saveChangesButton" disabled><i class="fas fa-edit" title="Guardar Cambios"></i></button>
         <script type="text/javascript">
+          document.addEventListener("DOMContentLoaded", function() {
+            var saveButton = document.getElementById('saveChangesButton');
+            var form = document.getElementById('vldt_edidias');
+            var editButton = document.getElementById('saveChangesButton'); // Agrega esta línea para definir editButton
 
-           document.addEventListener("DOMContentLoaded", function() {
-           var saveButton = document.getElementById('saveChangesButton');
-           var form = document.getElementById('vldt_edidias');
+            form.addEventListener('input', function() {
+                editButton.disabled = false;
+            });
 
-           saveButton.addEventListener('click', function() {
-             form.submit();
-           });
-         });
+            saveButton.addEventListener('click', function() {
+              form.submit();
+            });
+
+            $('#exampleModal').on('hidden.bs.modal', function () {
+              editButton.disabled = true;
+            });
+          });
         </script>
       </div>
     </div>
