@@ -113,7 +113,7 @@ def adci_inicio(request):
     else:
         mañana = hoy + timedelta(days=1)
 
-    citas_hoy = CitaSol.objects.filter(fech_da=hoy)
+    citas_hoy = CitaSol.objects.filter(fech_da=hoy, cort_da=False)
     citas_mañana = CitaSol.objects.filter(fech_da=mañana)
     todas_citas = CitaSol.objects.all()
 
@@ -236,6 +236,10 @@ def procesarActualizacionHorario(request, id):
 
 
 #Página CONTABILIDAD Administrador INICIO|
+def cont_inicio(request):
+    factbdd=FactCitas.objects.all()
+    citabdd=CitaSol.objects.all()
+    return render(request,'cont_inicio.html',{'facturas':factbdd,'citas':citabdd})
 
 def addcont_adci(request, id):
     citabdd=get_object_or_404(CitaSol,id=id)
@@ -251,7 +255,7 @@ def aggcont_adci(request):
         valfac = request.POST["valfac"]
         obsfac = request.POST["obsfac"]
 
-        # Guardar en el modelo FactCitas
+
         nueva_factura = FactCitas.objects.create(
             fechfac=CitaSol.objects.get(id=id_fech),  # Asociar la factura con la cita
             idfac=idfac,
@@ -267,7 +271,7 @@ def aggcont_adci(request):
 
         return redirect('/adci_inicio')
 
-    return redirect('/adci_inicio')  # Asegúrate de especificar el nombre de tu template
+    return redirect('/adci_inicio')
 
 #Página CONTABILIDAD Administrador FINAl|
 
