@@ -22,7 +22,9 @@ urlpatterns=[
     path('adci_inicio/aggin_adci/',views.aggin_adci),
     path('adci_inicio/procesarActualizacionHorarioIn/<int:id>/', views.procesarActualizacionHorarioIn, name='procesarActualizacionHorarioIn'),
     path('delete_adciIn/<id>/',views.delete_adciIn),
+    #CONTABILIDAD
     path('adci_inicio/addcont_adci/<id>',views.addcont_adci, name='addcont_adci'),
+    path('adci_inicio/aggcont_adci/', views.aggcont_adci, name='aggcont_adci'),
     #HORARIOS ADMIN
     path('adci_fechacitas/',views.adci_fechacitas),
     path('aggagenda_adci/',views.aggagenda_adci),

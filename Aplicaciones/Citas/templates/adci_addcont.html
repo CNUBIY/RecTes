@@ -7,59 +7,38 @@
       <!-- TABLA -->
       <div class="card overflow-hidden">
         <div class="card-body p-4">
-          <h5 class="card-title mb-9 fw-semibold">Citas Creadas</h5><br>
+          <h5 class="card-title mb-9 fw-semibold">Proceso de Comprobante</h5><br>
           <div class="row align-items-center">
-            <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
-              <thead class="text-dark fs-4">
-                <tr>
-                  <th class="border-bottom-0">
-                    <h6 class="fw-semibold mb-0">Fecha</h6>
-                  </th>
-                  <th class="border-bottom-0">
-                    <h6 class="fw-semibold mb-0">Horario</h6>
-                  </th>
-                  <th class="border-bottom-0">
-                    <h6 class="fw-semibold mb-0">Solicitante</h6>
-                  </th>
-                  <th class="border-bottom-0">
-                    <h6 class="fw-semibold mb-0">Estado</h6>
-                  </th>
-                  <th class="border-bottom-0">
-                    <h6 class="fw-semibold mb-0">Acción</h6>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for cita in citas %}
-                  <tr>
-                      <td>{{ cita.fech_da }}</td>
-                      <td>
-                          {% if cita.time_da.hour < 12 %}
-                              {{ cita.time_da|time:"h:i" }} AM
-                          {% else %}
-                              {{ cita.time_da|time:"h:i" }} PM
-                          {% endif %}
-                      </td>
-                      <td>{{cita.nom_da}}</td>
-                      <td>
-                        {% if cita.est_da %}
-                        <span class="text-info">Realizados</span>
-                        {% else %}
-                        <span class="text-warning">En espera</span>
-                        {% endif %}
-                      </td>
-                      <td>
-                        <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                          data-id="{{ cita.id }}" data-diah="{{ cita.fech_da|date:'Y-m-d' }}" data-horario="{{ cita.time_da|time:'h:i' }}" data-nom="{{cita.nom_da}}" data-telf={{cita.telf_da}}
-                          data-cortesia="{{cita.cort_da}}">
-                           <i class="fas fa-edit"></i>
-                        </button>
-                          <a href="javascript:void(0)" onclick="delete_adci('/delete_adci/{{ cita.id }}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
-                      </td>
-                  </tr>
-                  {% endfor %}
-              </tbody>
-            </table>
+            <form action="/adci_inicio/aggcont_adci/" method="POST" id="vldt_cont">
+              {% csrf_token %}
+              <input type="hidden" name="id_fech" id="id_fech" value="{{cita.id}}">
+              <div class="mb-3">
+                <label for="idfac" class="form-label">ID de Pago</label>
+                <input type="text" class="form-control" name="idfac"id="idfac" placeholder="Ingrese el código de pago">
+              </div>
+              <div class="mb-3">
+                <label for="descfac" class="form-label">Descripción</label>
+                <select class="form-select" name="descfac" id="descfac">
+                  <option value="">Escoga su descripción</option>
+                  <option value="Consulta">Consulta</option>
+                  <option value="Vacuna">Vacuna</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="valfac" class="form-label">Valor</label>
+                <input type="text" class="form-control" name="valfac"id="valfac" placeholder="$$$">
+              </div>
+              <div class="mb-3">
+                <label for="obsfac" class="form-label">Observación</label>
+                <select class="form-select" name="obsfac" id="obsfac">
+                  <option value="">Escoga su observación</option>
+                  <option value="Servicios">Servicios</option>
+                  <option value="Bienes">Bienes</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-outline-success  m-2">Guardar</button>
+              <button type="reset" name="button" class="btn btn-outline-danger  m-2">Cancelar</button><br><br>
+            </form>
           </div>
         </div>
       </div>
@@ -74,7 +53,6 @@
         <div class="mb-3 mb-sm-0">
           <h5 class="card-title fw-semibold">Crear Citas</h5>
         </div>
-
       </div>
       <form action="/aggagenda_adci/" method="POST" id="vldt_dias">
         {% csrf_token %}

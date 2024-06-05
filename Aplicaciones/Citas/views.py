@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.hashers import check_password, make_password
-from .models import DiaHorario,HorasDia, UsuarioCli, GenerosCli, CitaSol
+from .models import DiaHorario,HorasDia, UsuarioCli, GenerosCli, CitaSol, FactCitas
 from django.contrib import messages
 from datetime import datetime, timedelta
 from django.http import JsonResponse
@@ -105,10 +105,25 @@ def adci_perfil(request):
 
 #Página Inicio Administrador-Citas GENERAL INICIO
 def adci_inicio(request):
-    horariobdd = DiaHorario.objects.all()
-    horabdd=HorasDia.objects.all()
-    citabdd=CitaSol.objects.all()
-    return render(request, 'adci_inicio.html', {'horarios':horariobdd,'horas':horabdd,'citas':citabdd})
+    hoy = datetime.now().date()
+    dia_semana = hoy.weekday()  # 0 = Lunes, 6 = Domingo
+
+    if dia_semana == 5:  # Si hoy es sábado
+        mañana = hoy + timedelta(days=2)  # Muestra el lunes
+    else:
+        mañana = hoy + timedelta(days=1)
+
+    citas_hoy = CitaSol.objects.filter(fech_da=hoy)
+    citas_mañana = CitaSol.objects.filter(fech_da=mañana)
+    todas_citas = CitaSol.objects.all()
+
+    context = {
+        'citas_hoy': citas_hoy,
+        'citas_mañana': citas_mañana,
+        'citas': todas_citas,
+    }
+
+    return render(request, 'adci_inicio.html', context)
 
 def aggin_adci(request):
     nom_da=request.POST["nom_da"]
@@ -223,9 +238,36 @@ def procesarActualizacionHorario(request, id):
 #Página CONTABILIDAD Administrador INICIO|
 
 def addcont_adci(request, id):
-    citabdd=CitaSol.objects.all()
-    return render(request,'adci_addcont.html',{'citas':citabdd})
+    citabdd=get_object_or_404(CitaSol,id=id)
+    factbdd=FactCitas.objects.all()
+    return render(request,'adci_addcont.html',{'cita':citabdd,'facts':factbdd})
 
+
+def aggcont_adci(request):
+    if request.method == 'POST':
+        id_fech = request.POST["id_fech"]
+        idfac = request.POST["idfac"]
+        descfac = request.POST["descfac"]
+        valfac = request.POST["valfac"]
+        obsfac = request.POST["obsfac"]
+
+        # Guardar en el modelo FactCitas
+        nueva_factura = FactCitas.objects.create(
+            fechfac=CitaSol.objects.get(id=id_fech),  # Asociar la factura con la cita
+            idfac=idfac,
+            descfac=descfac,
+            valfac=valfac,
+            obsfac=obsfac,
+        )
+
+        # Cambiar est_da a True en CitaSol
+        cita = get_object_or_404(CitaSol, id=id_fech)
+        cita.est_da = True
+        cita.save()
+
+        return redirect('/adci_inicio')
+
+    return redirect('/adci_inicio')  # Asegúrate de especificar el nombre de tu template
 
 #Página CONTABILIDAD Administrador FINAl|
 
