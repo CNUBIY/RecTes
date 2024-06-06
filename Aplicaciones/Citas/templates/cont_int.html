@@ -8,8 +8,9 @@
           <h5 class="card-title fw-semibold">Cantidades</h5>
         </div>
         <h4>HOLA</h4>
-        <div class="mt-auto">
-          <a href="#" class="btn btn-outline-success">Seguimiento Interno</a>
+        <div class="mt-auto d-flex">
+          <input type="text" name="" value="" class="form-control" placeholder="Caja">
+          <a href="#" class="btn btn-outline-success"><i class="fa-solid fa-pen-clip"></i></a>
         </div>
       </div>
     </div>
@@ -21,37 +22,44 @@
         <h5 class="card-title fw-semibold mb-4">Seguimiento de Citas</h5>
         <div class="table-responsive">
           <table id="tbl_cont" class="table text-nowrap mb-0 align-middle table-bordered">
-            <thead class="text-dark fs-4">
-              <tr>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">Fecha</h6>
-                </th>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">Horario</h6>
-                </th>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">Atendidos</h6>
-                </th>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">Ventas</h6>
-                </th>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">Pacientes de Cortesía</h6>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for fact in facturas %}
-                <tr>
-                  <td>{{ fact.fechfac.fech_da }}</td>
-                  <td class="table-warning">{{ fact.idfac }}</td>
-                  <td>{{ fact.descfac }}</td>
-                  <td>{{ fact.valfac }} $</td>
-                  <td>{{ fact.obsfac }}</td>
-                </tr>
-              {% endfor %}
-            </tbody>
+              <thead class="text-dark fs-4">
+                  <tr>
+                      <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">Fecha</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">Horario</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">Atendidos</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">Tot. Ventas</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">Pacientes de Cortesía</h6>
+                      </th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for fecha, datos in citas_por_fecha.items %}
+                      <tr>
+                          <td rowspan="2">{{ fecha }}</td>
+                          <td class="table-success">Matutina</td>
+                          <td>{{ datos.matutina.atendidos }}</td>
+                          <td>{{ datos.matutina.ventas }} $</td>
+                          <td>{{ datos.matutina.cortesias }}</td>
+                      </tr>
+                      <tr>
+                          <td class="table-info">Vespertina</td>
+                          <td>{{ datos.vespertina.atendidos }}</td>
+                          <td>{{ datos.vespertina.ventas }} $</td>
+                          <td>{{ datos.vespertina.cortesias }}</td>
+                      </tr>
+                  {% endfor %}
+              </tbody>
           </table>
+
         </div>
       </div>
     </div>

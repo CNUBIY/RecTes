@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.hashers import check_password, make_password
 from .models import DiaHorario,HorasDia, UsuarioCli, GenerosCli, CitaSol, FactCitas
 from django.contrib import messages
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
+from collections import defaultdict
 # Create your views here.
 
 #Página Informativa INICIO
@@ -247,9 +248,31 @@ def addcont_adci(request, id):
     return render(request,'adci_addcont.html',{'cita':citabdd,'facts':factbdd})
 
 def cont_int(request):
-    citabdd=CitaSol.objects.all()
-    factbdd=FactCitas.objects.all()
-    return render(request,'cont_int.html',{'citas':citabdd,'facts':FactCitas})
+    citabdd = CitaSol.objects.all()  # Obtener todas las citas
+    factbdd = FactCitas.objects.all()
+
+    citas_por_fecha = defaultdict(lambda: {
+        'matutina': {'atendidos': 0, 'ventas': 0, 'cortesias': 0},
+        'vespertina': {'atendidos': 0, 'ventas': 0, 'cortesias': 0}
+    })
+
+    for cita in citabdd:
+        turno = 'matutina' if cita.time_da < time(12) else 'vespertina'
+        if cita.cort_da:
+            citas_por_fecha[cita.fech_da][turno]['cortesias'] += 1
+        if cita.est_da:
+            citas_por_fecha[cita.fech_da][turno]['atendidos'] += 1
+
+    for fact in factbdd:
+        if fact.fechfac.est_da:  # Solo considerar las citas con est_da=True
+            turno = 'matutina' if fact.fechfac.time_da < time(12) else 'vespertina'
+            citas_por_fecha[fact.fechfac.fech_da][turno]['ventas'] += fact.valfac
+
+    context = {
+        'citas_por_fecha': dict(citas_por_fecha)  # Convertir defaultdict a dict
+    }
+
+    return render(request, 'cont_int.html', context)
 
 
 def aggcont_adci(request):
