@@ -114,9 +114,10 @@ def adci_inicio(request):
     else:
         mañana = hoy + timedelta(days=1)
 
-    citas_hoy = CitaSol.objects.filter(fech_da=hoy, cort_da=False)
-    citas_mañana = CitaSol.objects.filter(fech_da=mañana)
-    todas_citas = CitaSol.objects.all()
+    # Ordenar las citas por el campo 'time_da'
+    citas_hoy = CitaSol.objects.filter(fech_da=hoy, cort_da=False).order_by('time_da')
+    citas_mañana = CitaSol.objects.filter(fech_da=mañana).order_by('time_da')
+    todas_citas = CitaSol.objects.all().order_by('fech_da', 'time_da')
 
     context = {
         'citas_hoy': citas_hoy,
@@ -232,6 +233,15 @@ def procesarActualizacionHorario(request, id):
             return HttpResponseBadRequest(f"Missing parameter: {e}")
     else:
         return redirect('/error_p')
+
+def check_appointment(request):
+    if request.method == 'POST':
+        fecha = request.POST.get('fech_da')
+        hora = request.POST.get('time_da')
+
+        exists = CitaSol.objects.filter(fech_da=fecha, time_da=hora).exists()
+
+        return JsonResponse({'exists': exists})
 
 #Página HORARIOS Administrador FINAL
 

@@ -32,6 +32,7 @@ urlpatterns=[
     path('aggagenda_adci/',views.aggagenda_adci),
     path('delete_adci/<id>',views.delete_adci),
     path('adci_fechacitas/procesarActualizacionHorario/<int:id>/', views.procesarActualizacionHorario, name='procesarActualizacionHorario'),
+    path('check_appointment/', views.check_appointment, name='check_appointment'),
     #ERRORES
     path('error_p/',views.error_p),
 ]

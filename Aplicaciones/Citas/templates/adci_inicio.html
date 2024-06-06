@@ -169,8 +169,12 @@
                     <span class="text-warning">En espera</span>
                     {% endif %}
                   </td>
-                  <td>
-                    <a href="/adci_inicio/addcont_adci/{{cita.id}}" class="btn btn-outline-success rounded-pill">Realizar Cobro</a>
+                  <td class="text-center">
+                    {% if not cita.est_da %}
+                      <a href="/adci_inicio/addcont_adci/{{ cita.id }}" class="btn btn-outline-success rounded-pill">Realizar Cobro</a>
+                    {% else %}
+                      <a href="#" class="btn btn-outline-success rounded-pill disabled" aria-disabled="true">Realizar Cobro</a>
+                    {% endif %}
                   </td>
               </tr>
               {% endfor %}

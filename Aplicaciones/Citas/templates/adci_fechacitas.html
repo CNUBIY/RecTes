@@ -49,12 +49,16 @@
                         {% endif %}
                       </td>
                       <td>
+                        {% if cita.est_da %}
+                        <span class="text-center">Sin Acciones</span>
+                        {% else %}
                         <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal"
                           data-id="{{ cita.id }}" data-diah="{{ cita.fech_da|date:'Y-m-d' }}" data-horario="{{ cita.time_da|time:'h:i' }}" data-nom="{{cita.nom_da}}" data-telf={{cita.telf_da}}
                           data-cortesia="{{cita.cort_da}}">
                            <i class="fas fa-edit"></i>
                         </button>
                           <a href="javascript:void(0)" onclick="delete_adci('/delete_adci/{{ cita.id }}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
+                        {% endif %}
                       </td>
                   </tr>
                   {% endfor %}
@@ -80,27 +84,33 @@
         {% csrf_token %}
         <div class="mb-3">
           <label for="nom_da" class="form-label">Nombre del Cliente</label>
-          <input type="text" class="form-control" name="nom_da"id="nom_da" placeholder="Ingrese el nombre del representante">
+          <input type="text" class="form-control" name="nom_da" id="nom_da" placeholder="Ingrese el nombre del representante">
+          <div class="error-message"></div>
         </div>
         <div class="mb-3">
           <label for="telf_da" class="form-label">Telf/Celular</label>
-          <input type="text" class="form-control" name="telf_da"id="telf_da" placeholder="Ingrese el número de contacto">
+          <input type="text" class="form-control" name="telf_da" id="telf_da" placeholder="Ingrese el número de contacto">
+          <div class="error-message"></div>
         </div>
         <div class="mb-3">
           <label for="fech_da" class="form-label">Fecha</label>
-          <input type="date" class="form-control" name="fech_da"id="fech_da" aria-describedby="dateHelp">
-          </div>
+          <input type="date" class="form-control" name="fech_da" id="fech_da" aria-describedby="dateHelp">
+          <div class="error-message"></div>
+        </div>
         <div class="mb-3">
           <label for="time_da" class="form-label">Horario</label>
-          <input type="time" class="form-control" name="time_da"id="time_da">
-          </div>
-        <label for="time_da" class="form-label">¿Cita de Cortesía?</label>
+          <input type="time" class="form-control" name="time_da" id="time_da">
+          <div class="error-message"></div>
+        </div>
+        <label for="cort_da" class="form-label">¿Cita de Cortesía?</label>
         <div class="mb-3 form-check">
           <input type="checkbox" class="form-check-input" name="cort_da" id="cort_da">
-          <label class="form-check-label" for="exampleCheck1">Confirmar</label>
+          <label class="form-check-label" for="cort_da">Confirmar</label>
+          <div class="error-message"></div>
         </div>
         <button type="submit" class="btn btn-outline-primary rounded-pill m-2">Guardar</button>
-        <button type="reset" name="button" class="btn btn-outline-danger rounded-pill m-2">Cancelar</button><br><br>
+        <button type="reset" name="button" class="btn btn-outline-danger rounded-pill m-2">Cancelar</button>
+        <br><br>
       </form>
     </div>
   </div>
@@ -260,5 +270,42 @@
         });
     {% endfor %}
 {% endif %}
+  </script>
+  <script>
+    $(document).ready(function() {
+      $("#vldt_dias").validate({
+        rules: {
+          nom_da: {
+            required: true,
+          },
+          telf_da: {
+            required: true,
+          },
+          fech_da: {
+            required: true,
+          },
+          time_da: {
+            required: true,
+          }
+        },
+        messages: {
+          nom_da: {
+            required: "Debe ingresar el nombre del cliente",
+          },
+          telf_da: {
+            required: "Debe ingresar el contacto del cliente",
+          },
+          fech_da: {
+            required: "Debe ingresar la fecha de la cita",
+          },
+          time_da: {
+            required: "Debe ingresar el horario de la cita",
+          }
+        },
+        errorPlacement: function(error, element) {
+          error.appendTo(element.parent().find('.error-message'));
+        }
+      });
+    });
   </script>
 {% endblock %}
