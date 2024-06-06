@@ -246,6 +246,11 @@ def addcont_adci(request, id):
     factbdd=FactCitas.objects.all()
     return render(request,'adci_addcont.html',{'cita':citabdd,'facts':factbdd})
 
+def cont_int(request):
+    citabdd=CitaSol.objects.all()
+    factbdd=FactCitas.objects.all()
+    return render(request,'cont_int.html',{'citas':citabdd,'facts':FactCitas})
+
 
 def aggcont_adci(request):
     if request.method == 'POST':
