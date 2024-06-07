@@ -132,19 +132,19 @@
           <input type="hidden" name="data_id" id="modalId" value="{{cita.id}}">
           <div class="mb-3">
             <label for="nom_da" class="form-label">Nombre del Cliente</label>
-            <input type="text" class="form-control" name="nom_da"id="nom_da" value="{{cita.nom_da}}" placeholder="Ingrese el nombre del representante">
+            <input type="text" class="form-control" name="nom_da"id="nom_da" value="{{cita.nom_da}}" placeholder="Ingrese el nombre del representante" required>
           </div>
           <div class="mb-3">
             <label for="telf_da" class="form-label">Contacto</label>
-            <input type="text" class="form-control" name="telf_da"id="telf_da" value="{{cita.telf_da}}" placeholder="Ingrese un número de Contacto">
+            <input type="text" class="form-control" name="telf_da"id="telf_da" value="{{cita.telf_da}}" placeholder="Ingrese un número de Contacto" required>
           </div>
             <div class="mb-3">
               <label for="fech_da" class="form-label">Fecha</label>
-              <input type="date" class="form-control" name="fech_da"id="fech_da" aria-describedby="dateHelp">
+              <input type="date" class="form-control" name="fech_da"id="fech_da" aria-describedby="dateHelp" required>
             </div>
             <div class="mb-3">
               <label for="time_da" class="form-label">Horario</label>
-              <input type="time" class="form-control" name="time_da"id="time_da">
+              <input type="time" class="form-control" name="time_da"id="time_da" required>
             </div>
             <label for="time_da" class="form-label">¿Cita de Cortesía?</label>
             <div class="mb-3 form-check">
@@ -272,40 +272,100 @@
 {% endif %}
   </script>
   <script>
-    $(document).ready(function() {
-      $("#vldt_dias").validate({
-        rules: {
-          nom_da: {
-            required: true,
-          },
-          telf_da: {
-            required: true,
-          },
-          fech_da: {
-            required: true,
-          },
-          time_da: {
-            required: true,
-          }
-        },
-        messages: {
-          nom_da: {
-            required: "Debe ingresar el nombre del cliente",
-          },
-          telf_da: {
-            required: "Debe ingresar el contacto del cliente",
-          },
-          fech_da: {
-            required: "Debe ingresar la fecha de la cita",
-          },
-          time_da: {
-            required: "Debe ingresar el horario de la cita",
-          }
-        },
-        errorPlacement: function(error, element) {
-          error.appendTo(element.parent().find('.error-message'));
-        }
+      $(document).ready(function() {
+          $.validator.addMethod("appointmentExists", function(value, element) {
+              if ($("#fech_da").val() && $("#time_da").val()) {
+                  let response = false;
+                  $.ajax({
+                      type: "POST",
+                      url: "{% url 'check_appointment' %}",
+                      data: {
+                          "fech_da": $("#fech_da").val(),
+                          "time_da": $("#time_da").val(),
+                          "csrfmiddlewaretoken": "{{ csrf_token }}"
+                      },
+                      async: false,
+                      success: function(data) {
+                          response = !data.exists;
+                      }
+                  });
+                  return response;
+              }
+              return true;
+          }, "Esta fecha y hora ya están reservadas.");
+          $.validator.addMethod("validServiceTime", function(value, element) {
+              if (value) {
+                  var time = value.split(':');
+                  var hours = parseInt(time[0], 10);
+                  var minutes = parseInt(time[1], 10);
+
+                  if ((hours >= 8 && hours < 13) || (hours >= 16 && hours < 20) || (hours == 13 && minutes == 0) || (hours == 20 && minutes == 0)) {
+                      return true;
+                  } else {
+                      return false;
+                  }
+              }
+              return true;
+          }, "El horario debe estar entre 8am-1pm o 4pm-8pm.");
+
+          $("#vldt_dias, #vldt_edidias").validate({
+              rules: {
+                  nom_da: {
+                      required: true,
+                  },
+                  telf_da: {
+                      required: true,
+                  },
+                  fech_da: {
+                      required: true,
+                      appointmentExists: true
+                  },
+                  time_da: {
+                      required: true,
+                      appointmentExists: true,
+                      validServiceTime: true
+                  }
+              },
+              messages: {
+                  nom_da: {
+                      required: "Debe ingresar el nombre del cliente",
+                  },
+                  telf_da: {
+                      required: "Debe ingresar el contacto del cliente",
+                  },
+                  fech_da: {
+                      required: "Debe ingresar la fecha de la cita",
+                      appointmentExists: "Esta fecha y hora ya están reservadas."
+                  },
+                  time_da: {
+                      required: "Debe ingresar el horario de la cita",
+                      appointmentExists: "Esta fecha y hora ya están reservadas.",
+                      validServiceTime: "Horario no permitido."
+                  }
+              },
+              errorPlacement: function(error, element) {
+                  error.appendTo(element.parent().find('.error-message'));
+              },
+
+              onkeyup: function(element) {
+                  $(element).valid();
+              },
+
+              onfocusout: function(element) {
+                  $(element).valid();
+              }
+          });
+
+          $("#fech_da, #time_da").change(function() {
+              if ($("#fech_da").val() && $("#time_da").val()) {
+                  $("#vldt_dias, #vldt_edidias").validate().element("#fech_da");
+                  $("#vldt_dias, #vldt_edidias").validate().element("#time_da");
+              }
+          });
       });
-    });
   </script>
+
+
+
+
 {% endblock %}
