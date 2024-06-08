@@ -244,36 +244,28 @@
   <script src="{% static 'js/dashboard.js' %}"></script>
 </body>
 {% if messages %}
-        {% for mensaje in messages %}
-
-
-            <script type="text/javascript">
-                {% if "eliminado" in mensaje %}
-                    iziToast.success({
-                        title: 'ELIMINADO',
-                        message: '{{ mensaje }}',
-                        position: 'topRight',
-                    });
-                {% elif "guardado" in mensaje %}
-                    iziToast.success({
-                        title: 'Éxito',
-                        message: '{{ mensaje }}',
-                        position: 'topRight',
-                    });
-                {% endif %}
-                {% if messages %}
-                {% for message in messages %}
-                    iziToast.success({
-                       timeout: 15000,
-                        title: 'BIENVENIDO A MEDIKID',
-                        message: '{{ message }}',
-                        position: 'topRight',
-                    });
-                    {% endfor %}
-                    {% endif %}
-            </script>
-
-
-        {% endfor %}
-    {% endif %}
+    {% for mensaje in messages %}
+        <script type="text/javascript">
+            {% if "eliminado" in mensaje %}
+                iziToast.error({
+                    title: 'Cancelado',
+                    message: '{{ mensaje }}',
+                    position: 'topRight',
+                });
+            {% elif "guardado" in mensaje %}
+                iziToast.success({
+                    title: 'Éxito',
+                    message: '{{ mensaje }}',
+                    position: 'topRight',
+                });
+            {% else %}
+                iziToast.error({
+                    title: 'Error',
+                    message: '{{ mensaje }}',
+                    position: 'topRight',
+                });
+            {% endif %}
+        </script>
+    {% endfor %}
+{% endif %}
 </html>

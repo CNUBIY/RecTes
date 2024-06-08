@@ -87,6 +87,46 @@
           <input type="text" class="form-control" name="nom_da" id="nom_da" placeholder="Ingrese el nombre del representante">
           <div class="error-message"></div>
         </div>
+
+        <!-- VALIDACIÓN SOLO LETRAS -->
+        <script type="text/javascript">
+          $(document).ready(function() {
+              // Validación para permitir solo letras y tildes en el campo de nombre
+              $('#nom_da').on('input', function() {
+                  var regex = /^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$/;
+                  var inputText = $(this).val();
+                  if (!regex.test(inputText)) {
+                      $(this).val(inputText.slice(0, -1));
+                  }
+
+                  // Validación para permitir solo cuatro palabras en el campo de nombre
+                  var inputTextTrimmed = inputText.trim();
+                  var words = inputTextTrimmed.split(/\s+/);
+                  if (words.length > 4) {
+                      $(this).val(words.slice(0, 4).join(' '));
+                  }
+              });
+          });
+
+          $(document).ready(function() {
+            // Validación para permitir solo letras y tildes en el campo de nombre
+            $('#nom_da, #exampleModal #nom_da').on('input', function() {
+                var regex = /^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$/;
+                var inputText = $(this).val();
+                if (!regex.test(inputText)) {
+                    $(this).val(inputText.slice(0, -1));
+                }
+
+                // Validación para permitir solo cuatro palabras en el campo de nombre
+                var inputTextTrimmed = inputText.trim();
+                var words = inputTextTrimmed.split(/\s+/);
+                if (words.length > 4) {
+                    $(this).val(words.slice(0, 4).join(' '));
+                }
+            });
+        });
+        </script>
+
         <div class="mb-3">
           <label for="telf_da" class="form-label">Telf/Celular</label>
           <input type="text" class="form-control" name="telf_da" id="telf_da" placeholder="Ingrese el número de contacto">
@@ -127,33 +167,50 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="/procesarActualizacionHorario/" method="POST" id="vldt_edidias">
+        <form action="./procesarActualizacionHorario/{{cita.id}}" method="POST" id="vldt_edidias">
           {% csrf_token %}
           <input type="hidden" name="data_id" id="modalId" value="{{cita.id}}">
           <div class="mb-3">
-            <label for="nom_da" class="form-label">Nombre del Cliente</label>
-            <input type="text" class="form-control" name="nom_da"id="nom_da" value="{{cita.nom_da}}" placeholder="Ingrese el nombre del representante" required>
+            <label for="modal_nom_da" class="form-label">Nombre del Cliente</label>
+            <input type="text" class="form-control" name="nom_da" id="nom_da" placeholder="Ingrese el nombre del representante" required>
+            <div class="error-message"></div>
           </div>
           <div class="mb-3">
-            <label for="telf_da" class="form-label">Contacto</label>
-            <input type="text" class="form-control" name="telf_da"id="telf_da" value="{{cita.telf_da}}" placeholder="Ingrese un número de Contacto" required>
+            <label for="modal_telf_da" class="form-label">Contacto</label>
+            <input type="text" class="form-control" name="telf_da" id="telf_da" placeholder="Ingrese un número de Contacto" required>
+            <div class="error-message"></div>
           </div>
-            <div class="mb-3">
-              <label for="fech_da" class="form-label">Fecha</label>
-              <input type="date" class="form-control" name="fech_da"id="fech_da" aria-describedby="dateHelp" required>
-            </div>
-            <div class="mb-3">
-              <label for="time_da" class="form-label">Horario</label>
-              <input type="time" class="form-control" name="time_da"id="time_da" required>
-            </div>
-            <label for="time_da" class="form-label">¿Cita de Cortesía?</label>
-            <div class="mb-3 form-check">
-              <input type="checkbox" class="form-check-input" name="cort_da" id="cort_da">
-              <label class="form-check-label" for="exampleCheck1">Confirmar</label>
-            </div>
+          <div class="mb-3">
+            <label for="modal_fech_da" class="form-label">Fecha</label>
+            <input type="date" class="form-control" name="fech_da" id="fech_da" aria-describedby="dateHelp" required>
+            <div class="error-message"></div>
+          </div>
+          <div class="mb-3">
+            <label for="modal_time_da" class="form-label">Horario</label>
+            <input type="time" class="form-control" name="time_da" id="time_da" required>
+            <div class="error-message"></div>
+          </div>
+          <label for="modal_cort_da" class="form-label">¿Cita de Cortesía?</label>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" name="cort_da" id="cort_da">
+            <label class="form-check-label" for="modal_cort_da">Confirmar</label>
+            <div class="error-message"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-outline-success" id="saveChangesButton"><i class="fas fa-edit" title="Guardar Cambios"></i></button>
+
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
           <br>
           <!-- SCRIPT PARA LLAMAR LA INFORMACIÓN -->
           <script type="text/javascript">
+
             var exampleModal = document.getElementById('exampleModal');
             exampleModal.addEventListener('show.bs.modal', function (event) {
               var button = event.relatedTarget;
@@ -174,7 +231,7 @@
               var modalCortDa = exampleModal.querySelector('#cort_da');
 
               modalId.value = id;
-              form.action = "./procesarActualizacionHorario/" + id + "/";
+             form.action = "./procesarActualizacionHorario/" + id + "/";
 
               modalNomDa.value = nomDa;  // Asignar el nombre del cliente
               modalTelfDa.value = telfDa;  // Asignar el teléfono/celular
@@ -182,35 +239,32 @@
               modalTimeDa.value = horario; // Asignar el horario al input de tipo time
               modalCortDa.checked = cortesia; // Marcar o desmarcar el checkbox
             });
+
+
           </script>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-outline-success" id="saveChangesButton" disabled><i class="fas fa-edit" title="Guardar Cambios"></i></button>
-        <script type="text/javascript">
-          document.addEventListener("DOMContentLoaded", function() {
-            var saveButton = document.getElementById('saveChangesButton');
-            var form = document.getElementById('vldt_edidias');
-            var editButton = document.getElementById('saveChangesButton'); // Agrega esta línea para definir editButton
 
-            form.addEventListener('input', function() {
-                editButton.disabled = false;
-            });
+          <script type="text/javascript">
+            $(document).ready(function() {
+              // Función para establecer la fecha mínima en los inputs de tipo date
+              function setMinDate(input) {
+                var today = new Date();
+                var day = String(today.getDate()).padStart(2, '0');
+                var month = String(today.getMonth() + 1).padStart(2, '0'); // Enero es 0
+                var year = today.getFullYear();
 
-            saveButton.addEventListener('click', function() {
-              form.submit();
-            });
+                var minDate = year + '-' + month + '-' + day;
 
-            $('#exampleModal').on('hidden.bs.modal', function () {
-              editButton.disabled = true;
+                input.setAttribute('min', minDate);
+              }
+
+              // Llamar a la función para establecer el min date en el input de tipo date del formulario de creación
+              setMinDate(document.getElementById('fech_da'));
+
+              // Llamar a la función para establecer el min date en el input de tipo date del formulario de edición (modal)
+              setMinDate(document.getElementById('exampleModal').querySelector('#fech_da'));
             });
-          });
-        </script>
-      </div>
-    </div>
-  </div>
-</div>
+          </script>
+
 
 <!-- CONFIGURACCIÓN DE TABLA -->
 <script type="text/javascript">
@@ -271,7 +325,10 @@
     {% endfor %}
 {% endif %}
   </script>
-  <script>
+
+
+
+  <script type="text/javascript">
       $(document).ready(function() {
           $.validator.addMethod("appointmentExists", function(value, element) {
               if ($("#fech_da").val() && $("#time_da").val()) {
@@ -293,12 +350,21 @@
               }
               return true;
           }, "Esta fecha y hora ya están reservadas.");
+
           $.validator.addMethod("validServiceTime", function(value, element) {
               if (value) {
-                  var time = value.split(':');
-                  var hours = parseInt(time[0], 10);
-                  var minutes = parseInt(time[1], 10);
+                  var selectedDateTime = new Date($("#fech_da").val() + " " + value);
+                  var currentDateTime = new Date();
 
+                  // Verificar si la fecha y hora seleccionada es anterior a la fecha y hora actual
+                  if (selectedDateTime < currentDateTime) {
+                      return false;
+                  }
+
+                  var hours = selectedDateTime.getHours();
+                  var minutes = selectedDateTime.getMinutes();
+
+                  // Restricciones de horario
                   if ((hours >= 8 && hours < 13) || (hours >= 16 && hours < 20) || (hours == 13 && minutes == 0) || (hours == 20 && minutes == 0)) {
                       return true;
                   } else {
@@ -308,7 +374,8 @@
               return true;
           }, "El horario debe estar entre 8am-1pm o 4pm-8pm.");
 
-          $("#vldt_dias, #vldt_edidias").validate({
+          // Validación para el formulario de creación
+          $("#vldt_dias").validate({
               rules: {
                   nom_da: {
                       required: true,
@@ -346,14 +413,70 @@
               errorPlacement: function(error, element) {
                   error.appendTo(element.parent().find('.error-message'));
               },
-
               onkeyup: function(element) {
                   $(element).valid();
               },
-
               onfocusout: function(element) {
                   $(element).valid();
               }
+          });
+
+          // Validación para el formulario de edición (modal)
+          function initializeModalValidation() {
+              $("#vldt_edidias").validate({
+                  rules: {
+                      nom_da: {
+                          required: true,
+                      },
+                      telf_da: {
+                          required: true,
+                      },
+                      fech_da: {
+                          required: true,
+                          appointmentExists: true
+                      },
+                      time_da: {
+                          required: true,
+                          appointmentExists: true,
+                          validServiceTime: true
+                      }
+                  },
+                  // Mensajes de error
+                  messages: {
+                      nom_da: {
+                          required: "Debe ingresar el nombre del cliente",
+                      },
+                      telf_da: {
+                          required: "Debe ingresar el contacto del cliente",
+                      },
+                      fech_da: {
+                          required: "Debe ingresar la fecha de la cita",
+                          appointmentExists: "Esta fecha y hora ya están reservadas."
+                      },
+                      time_da: {
+                          required: "Debe ingresar el horario de la cita",
+                          appointmentExists: "Esta fecha y hora ya están reservadas.",
+                          validServiceTime: "Horario no permitido."
+                      }
+                  },
+                  // Colocar los mensajes de error en el lugar correcto
+                  errorPlacement: function(error, element) {
+                      error.appendTo(element.parent().find('.error-message'));
+                  },
+                  // Validar en tiempo real al escribir o al perder el foco
+                  onkeyup: function(element) {
+                      $(element).valid();
+                  },
+                  onfocusout: function(element) {
+                      $(element).valid();
+                  }
+              });
+          }
+
+
+          // Inicializar validación del modal cuando se muestre
+          $('#exampleModal').on('shown.bs.modal', function () {
+              initializeModalValidation();
           });
 
           $("#fech_da, #time_da").change(function() {
@@ -363,9 +486,32 @@
               }
           });
       });
+
+      $(document).ready(function() {
+    // Función para deshabilitar el botón de guardar cambios
+    function disableSaveButton() {
+        $('#saveChangesButton').prop('disabled', true);
+    }
+
+    // Función para habilitar el botón de guardar cambios
+    function enableSaveButton() {
+        $('#saveChangesButton').prop('disabled', false);
+    }
+
+    // Deshabilitar el botón de guardar cambios al cargar la página
+    disableSaveButton();
+
+    // Detectar cambios en el formulario dentro del modal
+    $('#exampleModal form').on('input', function() {
+        enableSaveButton();
+    });
+
+    // Deshabilitar el botón de guardar cambios al cerrar el modal
+    $('#exampleModal').on('hidden.bs.modal', function () {
+        disableSaveButton();
+    });
+});
   </script>
-
-
 
 
 {% endblock %}

@@ -218,21 +218,32 @@ def procesarActualizacionHorario(request, id):
             time_da = request.POST["time_da"]
             cort_da = request.POST.get("cort_da") == "on"
 
-            # Procesar la actualización de la cita con los valores obtenidos
-            cita = get_object_or_404(CitaSol, pk=id)
-            cita.nom_da = nom_da
-            cita.telf_da = telf_da
-            cita.fech_da = fech_da
-            cita.time_da = time_da
-            cita.cort_da = cort_da
-            cita.save()
+            # Verificar si la fecha y hora ya están registradas en otra cita
+            citas_existentes = CitaSol.objects.exclude(pk=id).filter(fech_da=fech_da, time_da=time_da)
+            if citas_existentes.exists():
+                # Mostrar mensaje de error si la cita ya existe
+                messages.error(request, "No puede seleccionar una fecha y hora ya registrada.")
+                return redirect('/adci_fechacitas')
+            else:
+                # Procesar la actualización de la cita con los valores obtenidos
+                cita = get_object_or_404(CitaSol, pk=id)
+                cita.nom_da = nom_da
+                cita.telf_da = telf_da
+                cita.fech_da = fech_da
+                cita.time_da = time_da
+                cita.cort_da = cort_da
+                cita.save()
 
-            return redirect('/adci_fechacitas')
+                # Agregar mensaje de éxito si la actualización fue exitosa
+                messages.success(request, "Cita actualizada correctamente.")
+                return redirect('/adci_fechacitas')
         except MultiValueDictKeyError as e:
             # Manejo de error cuando no se encuentra un campo esperado en request.POST
             return HttpResponseBadRequest(f"Missing parameter: {e}")
     else:
         return redirect('/error_p')
+
+
 
 def check_appointment(request):
     if request.method == 'POST':
