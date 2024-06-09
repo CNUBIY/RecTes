@@ -25,16 +25,15 @@
           <h5 class="card-title fw-semibold">Crear Citas</h5>
         </div>
       </div>
-      <form action="/adci_inicio/aggcont_adci/" method="POST" id="vldt_cont">
+      <form action="./aggcont_vac/" method="POST" id="vldt_cont">
         {% csrf_token %}
-        <input type="hidden" name="id_fech" id="id_fech" value="{{cita.id}}">
         <div class="mb-3">
           <label for="idfac" class="form-label">ID de Pago</label>
           <input type="text" class="form-control" name="idfac"id="idfac" placeholder="Ingrese el código de pago">
         </div>
         <div class="mb-3">
           <label for="descfac" class="form-label">Descripción</label>
-          <input type="text" class="form-control" name="obsfac"id="obsfac" value="Vacuna" disabled>
+          <input type="text" class="form-control" name="descfac"id="descfac" value="Vacuna">
         </div>
         <div class="mb-3">
           <label for="valfac" class="form-label">Valor</label>
@@ -42,7 +41,7 @@
         </div>
         <div class="mb-3">
           <label for="obsfac" class="form-label">Observación</label>
-          <input type="text" class="form-control" name="obsfac"id="obsfac" value="Bienes" disabled>
+          <input type="text" class="form-control" name="obsfac"id="obsfac" value="Bienes">
         </div>
         <button type="submit" class="btn btn-outline-success  m-2">Guardar</button>
         <a href="/adci_inicio/" class="btn btn-outline-danger">Cancelar</a><br><br>
