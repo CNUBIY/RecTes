@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns=[
     #INDEX
-    path('',views.index),
+    path('',views.index, name='index'),
     #LOGIN USUARIOS
     path('usci_login/',views.usci_login),
     #REGISTER USUARIOS
