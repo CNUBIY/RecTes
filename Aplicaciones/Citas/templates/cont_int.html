@@ -21,55 +21,43 @@
       <div class="card-body p-4">
         <h5 class="card-title fw-semibold mb-4">Seguimiento de Citas</h5>
         <div class="table-responsive">
-          <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
-            <thead class="text-dark fs-4">
-              <tr>
-                <th class="border-bottom-0 text-center">
-                  <h6 class="fw-semibold mb-0">Fecha</h6>
-                </th>
-                <th class="border-bottom-0 text-center">
-                  <h6 class="fw-semibold mb-0">Horario</h6>
-                </th>
-                <th class="border-bottom-0 text-center">
-                  <h6 class="fw-semibold mb-0">Solicitante</h6>
-                </th>
-                <th class="border-bottom-0 text-center">
-                  <h6 class="fw-semibold mb-0">Estado</h6>
-                </th>
-                <th class="border-bottom-0 text-center">
-                  <h6 class="fw-semibold mb-0 text-center">Acción</h6>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for cita in citas_hoy %}
-                <tr>
-                  <td>{{ cita.fech_da }}</td>
-                  <td>
-                    {% if cita.time_da.hour < 12 %}
-                      {{ cita.time_da|time:"h:i" }} AM
-                    {% else %}
-                      {{ cita.time_da|time:"h:i" }} PM
-                    {% endif %}
-                  </td>
-                  <td>{{ cita.nom_da }}</td>
-                  <td>
-                    {% if cita.est_da %}
-                      <span class="text-info">Realizados</span>
-                    {% else %}
-                      <span class="text-warning">En espera</span>
-                    {% endif %}
-                  </td>
-                  <td class="text-center">
-                    {% if not cita.est_da %}
-                      <a href="/adci_inicio/addcont_adci/{{ cita.id }}" class="btn btn-outline-success rounded-pill">Realizar Cobro</a>
-                    {% else %}
-                      <a href="#" class="btn btn-outline-success rounded-pill disabled" aria-disabled="true">Realizar Cobro</a>
-                    {% endif %}
-                  </td>
-                </tr>
-              {% endfor %}
-            </tbody>
+          <table id="tbl_cont" class="table text-nowrap mb-0 align-middle table-bordered">
+              <thead class="text-dark fs-4">
+                  <tr>
+                      <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">Fecha</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">Horario</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">Atendidos</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">Tot. Ventas</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">Pacientes de Cortesía</h6>
+                      </th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for fecha, datos in citas_por_fecha.items %}
+                      <tr>
+                          <td rowspan="2">{{ fecha }}</td>
+                          <td class="table-success">Matutina</td>
+                          <td>{{ datos.matutina.atendidos }}</td>
+                          <td>{{ datos.matutina.ventas }} $</td>
+                          <td>{{ datos.matutina.cortesias }}</td>
+                      </tr>
+                      <tr>
+                          <td class="table-info">Vespertina</td>
+                          <td>{{ datos.vespertina.atendidos }}</td>
+                          <td>{{ datos.vespertina.ventas }} $</td>
+                          <td>{{ datos.vespertina.cortesias }}</td>
+                      </tr>
+                  {% endfor %}
+              </tbody>
           </table>
 
         </div>

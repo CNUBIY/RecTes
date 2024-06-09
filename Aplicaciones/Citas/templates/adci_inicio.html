@@ -196,54 +196,52 @@
       </div>
       <div class="modal-body">
         <form action="/procesarActualizacionHorario/" method="POST" id="vldt_edidias">
-          {% csrf_token %}
-          <input type="hidden" name="modalId" id="modalId" value="{{horario.id}}">
-          <div class="mb-3">
-            <label for="nom_da_eventModal" class="form-label">Nombre</label>
-            <input type="text" class="form-control" name="nom_da" id="nom_da_eventModal" aria-describedby="dateHelp">
-          </div>
-          <div class="mb-3">
-            <label for="telf_da_eventModal" class="form-label">Contacto</label>
-            <input type="text" class="form-control" name="telf_da" id="telf_da_eventModal" aria-describedby="dateHelp">
-          </div>
-          <div class="mb-3">
-            <label for="fech_da_eventModal" class="form-label">Fecha</label>
-            <input type="date" class="form-control" name="fech_da" id="fech_da_eventModal" aria-describedby="dateHelp">
-          </div>
-          <div class="mb-3">
-            <label for="time_da_eventModal" class="form-label">Horario</label>
-            <input type="time" class="form-control" name="time_da" id="time_da_eventModal" aria-describedby="dateHelp">
-          </div>
-          <label for="time_da_eventModal" class="form-label">¿Cita de Cortesía?</label>
-          <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" name="cort_da" id="cort_da_eventModal">
-            <label class="form-check-label" for="exampleCheck1">Confirmar</label>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-outline-warning rounded-pill" id="saveChangesButton" disabled><i class="fas fa-edit"></i></button>
-        <script type="text/javascript">
-          document.addEventListener("DOMContentLoaded", function() {
-            var saveButton = document.getElementById('saveChangesButton');
-            var form = document.getElementById('vldt_edidias');
-            var editButton = document.getElementById('saveChangesButton'); // Agrega esta línea para definir editButton
+         {% csrf_token %}
+         <input type="hidden" name="modalId" id="modalId" value="{{horario.id}}">
+         <div class="mb-3">
+           <label for="nom_da_eventModal" class="form-label">Nombre</label>
+           <input type="text" class="form-control" name="nom_da" id="nom_da_eventModal" aria-describedby="dateHelp">
+           <div class="error-message"></div>
+         </div>
+         <div class="mb-3">
+           <label for="telf_da_eventModal" class="form-label">Contacto</label>
+           <input type="text" class="form-control" name="telf_da" id="telf_da_eventModal" aria-describedby="dateHelp">
+           <div class="error-message"></div>
+         </div>
+         <div class="mb-3">
+           <label for="fech_da_eventModal" class="form-label">Fecha</label>
+           <input type="date" class="form-control" name="fech_da" id="fech_da_eventModal" aria-describedby="dateHelp">
+           <div class="error-message"></div>
+         </div>
+         <div class="mb-3">
+           <label for="time_da_eventModal" class="form-label">Horario</label>
+           <input type="time" class="form-control" name="time_da" id="time_da_eventModal" aria-describedby="dateHelp">
+           <div class="error-message"></div>
+         </div>
+         <label for="cort_da_eventModal" class="form-label">¿Cita de Cortesía?</label>
+         <div class="mb-3 form-check">
+           <input type="checkbox" class="form-check-input" name="cort_da" id="cort_da_eventModal">
+           <label class="form-check-label" for="cort_da_eventModal">Confirmar</label>
+         </div>
+         <div class="modal-footer">
+           <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+           <button type="submit" class="btn btn-outline-warning rounded-pill" id="saveChangesButton2" disabled><i class="fas fa-edit"></i></button>
+           <script type="text/javascript">
+             document.addEventListener("DOMContentLoaded", function() {
+               var form = document.getElementById('vldt_edidias');
+               var editButton = document.getElementById('saveChangesButton2'); // Agrega esta línea para definir editButton
 
-            form.addEventListener('input', function() {
-                editButton.disabled = false;
-            });
-
-            saveButton.addEventListener('click', function() {
-              form.submit();
-            });
-
-            $('#eventModal').on('hidden.bs.modal', function () {
-              editButton.disabled = true;
-            });
-          });
-        </script>
-        <button type="button" class="btn btn-outline-danger rounded-pill" id="deleteDateButton"><i class="fas fa-trash"></i></button>
+               form.addEventListener('input', function() {
+                   editButton.disabled = false;
+               });
+               $('#eventModal').on('hidden.bs.modal', function () {
+                 editButton.disabled = true;
+               });
+             });
+           </script>
+           <button type="button" class="btn btn-outline-danger rounded-pill" id="deleteDateButton"><i class="fas fa-trash"></i></button>
+         </div>
+       </form>
       </div>
     </div>
   </div>
@@ -261,22 +259,26 @@
       <div class="modal-body">
         <form action="/procesarActualizacionHorario/" method="POST" id="vldt_edidias_ocu">
           {% csrf_token %}
-          <input type="hidden" name="modalId" id="modalId" value="{{horario.id}}">
+          <input type="hidden" name="modalId" id="modalIdOcu" value="">
           <div class="mb-3">
-            <label for="nom_da_eventModalOcu" class="form-label" >Nombre</label>
+            <label for="nom_da_eventModalOcu" class="form-label">Nombre</label>
             <input type="text" class="form-control" name="nom_da" id="nom_da_eventModalOcu" aria-describedby="dateHelp" readonly>
           </div>
           <div class="mb-3">
-            <label for="telf_da_eventModalOcu" class="form-label" >Contacto</label>
+            <label for="telf_da_eventModalOcu" class="form-label">Contacto</label>
             <input type="text" class="form-control" name="telf_da" id="telf_da_eventModalOcu" aria-describedby="dateHelp" readonly>
           </div>
           <div class="mb-3">
-            <label for="fech_da_eventModalOcu" class="form-label" >Fecha</label>
+            <label for="fech_da_eventModalOcu" class="form-label">Fecha</label>
             <input type="date" class="form-control" name="fech_da" id="fech_da_eventModalOcu" aria-describedby="dateHelp" readonly>
           </div>
           <div class="mb-3">
-            <label for="time_da_eventModalOcu" class="form-label" >Horario</label>
+            <label for="time_da_eventModalOcu" class="form-label">Horario</label>
             <input type="time" class="form-control" name="time_da" id="time_da_eventModalOcu" aria-describedby="dateHelp" readonly>
+          </div>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" name="cort_da" id="cort_da_eventModalOcu" disabled>
+            <label class="form-check-label" for="cort_da_eventModalOcu">¿Cita de Cortesía?</label>
           </div>
         </form>
       </div>
@@ -312,122 +314,246 @@
 <!-- CALENDARIO -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-  var calendarEl = document.getElementById('calendar');
-  var calendar = new FullCalendar.Calendar(calendarEl, {
-    initialView: 'timeGridWeek',
-    locale: 'es',
-    headerToolbar: {
-      left: 'prev,next',
-      center: 'title',
-      right: 'prev,next'
-    },
-    slotLabelFormat: {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false
-    },
-    slotMinTime: '08:00:00',
-    slotMaxTime: '20:00:00',
-    allDaySlot: false,
-    hiddenDays: [0],
-    dayHeaderContent: function(arg) {
-      return { html: '<span class="custom-day-header">' + arg.text + '</span>' };
-    },
-    events: [
-      {% for cita in citas %}
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'timeGridWeek',
+      locale: 'es',
+      headerToolbar: {
+        left: 'prev,next',
+        center: 'title',
+        right: 'prev,next'
+      },
+      slotLabelFormat: {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      },
+      slotMinTime: '08:00:00',
+      slotMaxTime: '20:00:00',
+      allDaySlot: false,
+      hiddenDays: [0],
+      dayHeaderContent: function(arg) {
+        return { html: '<span class="custom-day-header">' + arg.text + '</span>' };
+      },
+      events: [
+        {% for cita in citas %}
+          {
+            title: "{{ cita.nom_da }}",
+            start: "{{ cita.fech_da|date:'Y-m-d' }}T{{ cita.time_da|time:'H:i:s' }}",
+            end: "{{ cita.fech_da|date:'Y-m-d' }}T{{ cita.time_da|time:'H:i:s' }}",
+            classNames: getEventClass("{{ cita.cort_da }}", "{{ cita.est_da }}"),
+            extendedProps: {
+              id: "{{ cita.id }}",
+              diaH: "{{ cita.fech_da|date:'Y-m-d' }}",
+              nom_da: "{{ cita.nom_da }}",
+              time_da: "{{ cita.time_da }}",
+              telf_da: "{{ cita.telf_da }}",
+              cortesia: "{{ cita.cort_da }}",
+              estado: "{{ cita.est_da }}"
+            }
+          },
+        {% endfor %}
         {
-          title: "{{ cita.nom_da }}",
-          start: "{{ cita.fech_da|date:'Y-m-d' }}T{{ cita.time_da|time:'H:i:s' }}",
-          end: "{{ cita.fech_da|date:'Y-m-d' }}T{{ cita.time_da|time:'H:i:s' }}",
-          classNames: getEventClass("{{ cita.cort_da }}", "{{ cita.est_da }}"),
-          extendedProps: {
-            id: "{{ cita.id }}",
-            diaH: "{{ cita.fech_da|date:'Y-m-d' }}",
-            nom_da: "{{cita.nom_da}}",
-            time_da:"{{cita.time_da}}",
-            telf_da:"{{cita.telf_da}}",
-            cortesia: "{{ cita.cort_da }}",
-            estado: "{{ cita.est_da }}"
-          }
-        },
-      {% endfor %}
-      {
-        title: "Sin servicio",
-        startTime: '13:00:00',
-        endTime: '16:00:00',
-        daysOfWeek: [1, 2, 3, 4, 5, 6], // Lunes a viernes
-        rendering: 'background',
-        classNames: 'sin-servicio ff6543'
-      }
-    ],
-    eventClick: function(info) {
-      // Verificar si el evento tiene la clase 'sin-servicio'
-      if (info.event.classNames.includes('sin-servicio')) {
-        return; // No hacer nada si el evento es "Sin servicio"
-      }
+          title: "Sin servicio",
+          startTime: '13:00:00',
+          endTime: '16:00:00',
+          daysOfWeek: [1, 2, 3, 4, 5, 6], // Lunes a viernes
+          rendering: 'background',
+          classNames: 'sin-servicio ff6543'
+        }
+      ],
+      eventClick: function(info) {
+        // Verificar si el evento tiene la clase 'sin-servicio'
+        if (info.event.classNames.includes('sin-servicio')) {
+          return; // No hacer nada si el evento es "Sin servicio"
+        }
 
-      var estado = info.event.extendedProps.estado === "True";
-      var cortesia = info.event.extendedProps.cortesia === "True";
-      if (estado || cortesia) {
-        $('#eventModalocu').modal('show');
-        var modalId = document.getElementById('modalId');
-        var modalDiaH = document.getElementById('fech_da_eventModalOcu');
-        var modalNom = document.getElementById('nom_da_eventModalOcu');
-        var modalTim = document.getElementById('time_da_eventModalOcu');
-        var modalTelf = document.getElementById('telf_da_eventModalOcu');
-        var cortesiaCheckbox = document.getElementById('cort_da_eventModalOcu');
-        var form = document.getElementById('vldt_edidias_ocu');
+        var estado = info.event.extendedProps.estado === "True";
+        var cortesia = info.event.extendedProps.cortesia === "True";
+        if (estado || cortesia) {
+          $('#eventModalocu').modal('show');
+          document.getElementById('modalIdOcu').value = info.event.extendedProps.id;
+          document.getElementById('fech_da_eventModalOcu').value = info.event.extendedProps.diaH;
+          document.getElementById('nom_da_eventModalOcu').value = info.event.extendedProps.nom_da;
+          document.getElementById('time_da_eventModalOcu').value = info.event.extendedProps.time_da;
+          document.getElementById('telf_da_eventModalOcu').value = info.event.extendedProps.telf_da;
+          document.getElementById('cort_da_eventModalOcu').checked = cortesia;
+        } else {
+          $('#eventModal').modal('show');
+          document.getElementById('modalId').value = info.event.extendedProps.id;
+          document.getElementById('fech_da_eventModal').value = info.event.extendedProps.diaH;
+          document.getElementById('nom_da_eventModal').value = info.event.extendedProps.nom_da;
+          document.getElementById('time_da_eventModal').value = info.event.extendedProps.time_da;
+          document.getElementById('telf_da_eventModal').value = info.event.extendedProps.telf_da;
+          document.getElementById('cort_da_eventModal').checked = false;
 
-        modalId.value = info.event.extendedProps.id;
-        modalDiaH.value = info.event.extendedProps.diaH;
-        modalNom.value = info.event.extendedProps.nom_da;
-        modalTim.value = info.event.extendedProps.time_da;
-        modalTelf.value = info.event.extendedProps.telf_da;
-        cortesiaCheckbox.checked = cortesia;
+          document.getElementById('vldt_edidias').action = "procesarActualizacionHorarioIn/" + info.event.extendedProps.id + "/";
+
+          var deleteButton = document.getElementById('deleteDateButton');
+          deleteButton.removeEventListener('click', handleDeleteClick); // Remove previous listener
+          deleteButton.addEventListener('click', handleDeleteClick.bind(null, info.event.extendedProps.id));
+        }
+      },
+      eventDidMount: function(info) {
+        info.el.style.whiteSpace = 'normal';
+      }
+    });
+
+    calendar.render();
+
+    function getEventClass(cortesia, estado) {
+      if (cortesia === "True") {
+        return "event-cort";
+      } else if (estado === "True") {
+        return "";
       } else {
-        $('#eventModal').modal('show');
-        var modalId = document.getElementById('modalId');
-        var modalDiaH = document.getElementById('fech_da_eventModal');
-        var modalNom = document.getElementById('nom_da_eventModal');
-        var modalTim = document.getElementById('time_da_eventModal');
-        var modalTelf = document.getElementById('telf_da_eventModal');
-        var cortesiaCheckbox = document.getElementById('cort_da_eventModal');
-        var form = document.getElementById('vldt_edidias');
-
-        modalId.value = info.event.extendedProps.id;
-        modalDiaH.value = info.event.extendedProps.diaH;
-        modalNom.value = info.event.extendedProps.nom_da;
-        modalTim.value = info.event.extendedProps.time_da;
-        modalTelf.value = info.event.extendedProps.telf_da;
-        cortesiaCheckbox.checked = false;
-
-        form.action = "procesarActualizacionHorarioIn/" + info.event.extendedProps.id + "/";
-
-        var deleteButton = document.getElementById('deleteDateButton');
-        deleteButton.addEventListener('click', function() {
-          delete_adciIn("/delete_adciIn/" + info.event.extendedProps.id + "/");
-        });
+        return "event-false";
       }
-    },
-    eventDidMount: function(info) {
-      info.el.style.whiteSpace = 'normal';
     }
+
+    function handleDeleteClick(eventId) {
+      delete_adciIn("/delete_adciIn/" + eventId + "/");
+    }
+
+    function validateForm() {
+      var isValid = true;
+      var requiredFields = ['nom_da_eventModal', 'telf_da_eventModal', 'fech_da_eventModal', 'time_da_eventModal'];
+      requiredFields.forEach(function(fieldId) {
+        var field = document.getElementById(fieldId);
+        if (!field.value) {
+          isValid = false;
+        }
+      });
+      return isValid;
+    }
+
+    var saveButton = document.getElementById('saveChangesButton');
+    var form = document.getElementById('vldt_edidias');
+    var editButton = document.getElementById('saveChangesButton'); // Agrega esta línea para definir editButton
+
+    form.addEventListener('input', function() {
+      editButton.disabled = !validateForm();
+    });
+
+    $('#eventModal').on('hidden.bs.modal', function () {
+      editButton.disabled = true;
+    });
+
   });
-
-  calendar.render();
-
-  function getEventClass(cortesia, estado) {
-    if (cortesia === "True") {
-      return "event-cort";
-    } else if (estado === "True") {
-      return "";
-    } else {
-      return "event-false";
-    }
-  }
-});
 </script>
 
+<!-- JQUERYVALIDATE -->
+<script type="text/javascript">
+  $(document).ready(function() {
+    $.validator.addMethod("appointmentExists", function(value, element) {
+      if ($("#fech_da_eventModal").val() && $("#time_da_eventModal").val()) {
+        let response = false;
+        $.ajax({
+          type: "POST",
+          url: "{% url 'check_appointment' %}",
+          data: {
+            "fech_da": $("#fech_da_eventModal").val(),
+            "time_da": $("#time_da_eventModal").val(),
+            "csrfmiddlewaretoken": "{{ csrf_token }}"
+          },
+          async: false,
+          success: function(data) {
+            response = !data.exists;
+          }
+        });
+        return response;
+      }
+      return true;
+    }, "Esta fecha y hora ya están reservadas.");
+
+    $.validator.addMethod("validServiceTime", function(value, element) {
+      if (value) {
+        var selectedDateTime = new Date($("#fech_da_eventModal").val() + " " + value);
+        var currentDateTime = new Date();
+
+        // Verificar si la fecha y hora seleccionada es anterior a la fecha y hora actual
+        if (selectedDateTime < currentDateTime) {
+          return false;
+        }
+
+        var hours = selectedDateTime.getHours();
+        var minutes = selectedDateTime.getMinutes();
+
+        // Restricciones de horario
+        if ((hours >= 8 && hours < 13) || (hours >= 16 && hours < 20) || (hours == 13 && minutes == 0) || (hours == 20 && minutes == 0)) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      return true;
+    }, "El horario debe estar entre 8am-1pm o 4pm-8pm.");
+
+    // Validación para el formulario de edición (modal)
+    function initializeModalValidation() {
+      $("#vldt_edidias").validate({
+        rules: {
+          nom_da: {
+            required: true,
+          },
+          telf_da: {
+            required: true,
+          },
+          fech_da: {
+            required: true,
+            appointmentExists: true
+          },
+          time_da: {
+            required: true,
+            appointmentExists: true,
+            validServiceTime: true
+          }
+        },
+        // Mensajes de error
+        messages: {
+          nom_da: {
+            required: "Debe ingresar el nombre del cliente",
+          },
+          telf_da: {
+            required: "Debe ingresar el contacto del cliente",
+          },
+          fech_da: {
+            required: "Debe ingresar la fecha de la cita",
+            appointmentExists: "Esta fecha y hora ya están reservadas."
+          },
+          time_da: {
+            required: "Debe ingresar el horario de la cita",
+            appointmentExists: "Esta fecha y hora ya están reservadas.",
+            validServiceTime: "Horario no permitido."
+          }
+        },
+        // Colocar los mensajes de error en el lugar correcto
+        errorPlacement: function(error, element) {
+          error.appendTo(element.parent().find('.error-message'));
+        },
+        // Validar en tiempo real al escribir o al perder el foco
+        onkeyup: function(element) {
+          $(element).valid();
+        },
+        onfocusout: function(element) {
+          $(element).valid();
+        }
+      });
+    }
+
+    // Inicializar validación del modal cuando se muestre
+    $('#eventModal').on('shown.bs.modal', function () {
+      initializeModalValidation();
+    });
+
+    $("#fech_da_eventModal, #time_da_eventModal").change(function() {
+      if ($("#fech_da_eventModal").val() && $("#time_da_eventModal").val()) {
+        $("#vldt_edidias").validate().element("#fech_da_eventModal");
+        $("#vldt_edidias").validate().element("#time_da_eventModal");
+      }
+    });
+  });
+</script>
 <!-- MENSAJE DE CONFIRMACIÓN ELIMINAR DIAHORARIO -->
 <script type="text/javascript">
         function delete_adciIn(url){
