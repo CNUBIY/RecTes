@@ -27,6 +27,7 @@ urlpatterns=[
     path('adci_inicio/cont_inicio/cont_int/',views.cont_int),
     path('adci_inicio/addcont_adci/<id>',views.addcont_adci, name='addcont_adci'),
     path('adci_inicio/aggcont_adci/', views.aggcont_adci, name='aggcont_adci'),
+    path('adci_inicio/cont_vac/',views.cont_vac, name='cont_vac'),
     #HORARIOS ADMIN
     path('adci_fechacitas/',views.adci_fechacitas),
     path('aggagenda_adci/',views.aggagenda_adci),

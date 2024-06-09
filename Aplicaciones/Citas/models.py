@@ -59,7 +59,7 @@ class FactCitas(models.Model):
     descfac=models.CharField(max_length=150)
     valfac=models.DecimalField(max_digits=5, decimal_places=2)
     obsfac=models.CharField(max_length=150)
-    fechfac=models.ForeignKey(CitaSol, on_delete=models.PROTECT)
+    fechfac=models.ForeignKey(CitaSol,null=True, blank=True, on_delete=models.PROTECT)
 
     def __str__(self):
         return f"{self.idfac}-{self.fechfac}"

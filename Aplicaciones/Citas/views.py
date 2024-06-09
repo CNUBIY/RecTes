@@ -322,6 +322,10 @@ def aggcont_adci(request):
 
     return redirect('/adci_inicio')
 
+def cont_vac(request):
+    factbdd=FactCitas.objects.all()
+    return render(request,'add_vac.html')
+
 #Página CONTABILIDAD Administrador FINAl|
 
 
