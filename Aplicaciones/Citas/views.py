@@ -4,10 +4,11 @@ from .models import DiaHorario,HorasDia, UsuarioCli, GenerosCli, CitaSol, FactCi
 from django.contrib import messages
 from datetime import datetime, timedelta, time
 from django.http import JsonResponse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from collections import defaultdict
+from django.contrib.auth.models import User
 # Create your views here.
 
 #Página Informativa INICIO
@@ -19,70 +20,42 @@ def index (request):
 
 
 #Página REGISTER usuarios INICIO
+def register(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
 
-def usci_reg(request):
-    userbdd=UsuarioCli.objects.all()
-    genbdd=GenerosCli.objects.all()
-    return render(request,'usci_register.html',{'usuarios':userbdd,'generos':genbdd})
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'Este usuario/correo ya está registrado')
+        else:
+            user = User.objects.create_user(username=username, password=password)  # Añadir el correo electrónico aquí
+            user.save()
+            messages.success(request, 'Cuenta creada exitosamente')
+            return redirect('/login')
+    return render(request, 'usci_register.html')
 
-def usci_addreg(request):
-    id_gen=request.POST["id_gen"]
-    genselect=GenerosCli.objects.get(id=id_gen)
-    nombre_us=request.POST["nombre_us"]
-    apellido_us=request.POST["apellido_us"]
-    correo_us=request.POST["correo_us"]
-    pass_us=request.POST["pass_us"]
-
-    hashed_password = make_password(pass_us)
-    newuser=UsuarioCli.objects.create(
-        gen_us=genselect,
-        nombre_us=nombre_us,
-        apellido_us=apellido_us,
-        correo_us=correo_us,
-        pass_us=hashed_password,
-    )
-    messages.success(request, 'Registro exitoso')
-    return redirect('/usci_inicio')
-
-def check_email_exists(request):
-    email = request.GET.get('correo_us', None)
-    if UsuarioCli.objects.filter(correo_us=email).exists():
-        return JsonResponse({'exists': True})
-    else:
-        return JsonResponse({'exists': False})
 
 #Página INICIO usuario FINAL
 
 #Página LOGIN usarios INICIO
 
-
-def usci_login(request):
+def user_login(request):
     if request.method == 'POST':
-        correo_us = request.POST.get('correo_us')
-        pass_us = request.POST.get('pass_us')
+        username = request.POST['username']
+        password = request.POST['password']
 
-        mensaje_error = {}
-
-        try:
-            usuario = UsuarioCli.objects.get(correo_us=correo_us)
-            if not check_password(pass_us, usuario.pass_us):
-                mensaje_error['pass_us'] = 'Contraseña incorrecta'
-        except UsuarioCli.DoesNotExist:
-            mensaje_error['correo_us'] = 'Correo no encontrado'
-
-        if mensaje_error:
-            return render(request, 'usci_login.html', {'mensaje_error': mensaje_error})
-
-        user = authenticate(request, correo_us=correo_us, password=pass_us)
+        user= authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)
-            return redirect('/usci_inicio')  # Redirigir al usuario a la página de inicio
+            login(request,user)
+            return redirect("/adci_inicio")
         else:
-            mensaje_error['error_login'] = 'Credenciales de inicio de sesión incorrectas'
-            return render(request, 'usci_login.html', {'mensaje_error': mensaje_error})
-
+            messages.error(request, 'Contraseña/Correo Incorrectos')
     return render(request, 'usci_login.html')
 
+
+def user_logout(request):
+    logout (request)
+    return redirect('/')
 
 
 #Página LOGIN usarios FINAL
@@ -100,11 +73,13 @@ def usci_perfil(request):
 #Página PERFIL usuarios-citas final
 
 #Página PERFIL admin Inicio
+@login_required
 def adci_perfil(request):
     return render(request,'adci_perfil.html')
 #Página PERFIL admin final
 
 #Página Inicio Administrador-Citas GENERAL INICIO
+@login_required
 def adci_inicio(request):
     hoy = datetime.now().date()
     dia_semana = hoy.weekday()  # 0 = Lunes, 6 = Domingo
@@ -127,6 +102,7 @@ def adci_inicio(request):
 
     return render(request, 'adci_inicio.html', context)
 
+@login_required
 def aggin_adci(request):
     nom_da=request.POST["nom_da"]
     telf_da=request.POST["telf_da"]
@@ -144,6 +120,7 @@ def aggin_adci(request):
     )
     return redirect('/adci_inicio')
 
+@login_required
 def procesarActualizacionHorarioIn(request,id):
     if request.method == 'POST':
         try:
@@ -170,6 +147,7 @@ def procesarActualizacionHorarioIn(request,id):
     else:
         return redirect('/error_p')
 
+@login_required
 def delete_adciIn(request,id):
     eliminarDiaHorario=CitaSol.objects.get(id=id)
     eliminarDiaHorario.delete()
@@ -180,12 +158,14 @@ def delete_adciIn(request,id):
 
 #Página HORARIOS Administrador Inicio
 
+@login_required
 def adci_fechacitas (request):
     horariobdd=DiaHorario.objects.all()
     horabdd=HorasDia.objects.all()
     citabdd=CitaSol.objects.all()
     return render(request,'adci_fechacitas.html',{'horarios':horariobdd,'horas':horabdd,'citas':citabdd})
 
+@login_required
 def aggagenda_adci(request):
     nom_da=request.POST["nom_da"]
     telf_da=request.POST["telf_da"]
@@ -203,12 +183,13 @@ def aggagenda_adci(request):
     )
     return redirect('/adci_inicio')
 
-
+@login_required
 def delete_adci(request,id):
     eliminarDiaHorario=CitaSol.objects.get(id=id)
     eliminarDiaHorario.delete()
     return redirect('/adci_fechacitas')
 
+@login_required
 def procesarActualizacionHorario(request, id):
     if request.method == 'POST':
         try:
@@ -244,7 +225,7 @@ def procesarActualizacionHorario(request, id):
         return redirect('/error_p')
 
 
-
+@login_required
 def check_appointment(request):
     if request.method == 'POST':
         fecha = request.POST.get('fech_da')
@@ -258,16 +239,19 @@ def check_appointment(request):
 
 
 #Página CONTABILIDAD Administrador INICIO|
+@login_required
 def cont_inicio(request):
     factbdd=FactCitas.objects.all()
     citabdd=CitaSol.objects.all()
     return render(request,'cont_inicio.html',{'facturas':factbdd,'citas':citabdd})
 
+@login_required
 def addcont_adci(request, id):
     citabdd=get_object_or_404(CitaSol,id=id)
     factbdd=FactCitas.objects.all()
     return render(request,'adci_addcont.html',{'cita':citabdd,'facts':factbdd})
 
+@login_required
 def cont_int(request):
     citabdd = CitaSol.objects.all()  # Obtener todas las citas
     factbdd = FactCitas.objects.all()
@@ -296,6 +280,7 @@ def cont_int(request):
     return render(request, 'cont_int.html', context)
 
 
+@login_required
 def aggcont_adci(request):
     if request.method == 'POST':
         id_fech = request.POST["id_fech"]
@@ -322,10 +307,13 @@ def aggcont_adci(request):
 
     return redirect('/adci_inicio')
 
+@login_required
 def cont_vac(request):
     factbdd=FactCitas.objects.all()
     return render(request,'add_vac.html')
 
+
+@login_required
 def aggcont_vac(request):
     if request.method == "POST":
         idfac = request.POST.get("idfac")

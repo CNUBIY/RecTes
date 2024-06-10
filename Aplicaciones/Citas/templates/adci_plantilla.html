@@ -75,7 +75,7 @@
               <span class="hide-menu">Inicio</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="/adci_perfil/" aria-expanded="false">
+              <a class="sidebar-link" href="{% url 'adci_perfil' %}" aria-expanded="false">
                 <span>
                   <i class="ti ti-layout-dashboard"></i>
                 </span>
@@ -218,7 +218,7 @@
                       <i class="ti ti-list-check fs-6"></i>
                       <p class="mb-0 fs-3">My Task</p>
                     </a>
-                    <a href="./authentication-login.html" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                    <a href="{% url 'logout' %}" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
               </li>

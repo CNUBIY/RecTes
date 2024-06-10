@@ -42,6 +42,9 @@ INSTALLED_APPS = [
 
 ]
 
+LOGIN_REDIRECT_URL = 'index'
+LOGIN_REDIRECT_URL = 'adci_inicio'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

@@ -1,24 +1,18 @@
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
 
 
 urlpatterns=[
     #INDEX
     path('',views.index, name='index'),
-    #LOGIN USUARIOS
-    path('usci_login/',views.usci_login),
-    #REGISTER USUARIOS
-    path('usci_reg/',views.usci_reg),
-    path('usci_addreg/',views.usci_addreg),
-    path('check-email/', views.check_email_exists, name='check_email_exists'),
-    #GENERAL USUARIO
-    path('usci_inicio/',views.usci_inicio, name='usci_inicio'),
-    #PERIL USUARIO
-    path('usci_perfil/',views.usci_perfil),
-    #PERFIL ADMIN
-    path('adci_perfil/',views.adci_perfil),
+    #LOGIN ADMIN
+    path('register/', views.register, name='register'),
+    path('login/', views.user_login, name='login'),
+    path('logout/',views.user_logout, name='logout'),
     #GENERAL ADMIN
-    path('adci_inicio/',views.adci_inicio),
+    path('adci_inicio/',views.adci_inicio, name='adci_inicio'),
+    path('adci_inicio/adci_perfil/',views.adci_perfil, name='adci_perfil'),
     path('adci_inicio/aggin_adci/',views.aggin_adci),
     path('adci_inicio/procesarActualizacionHorarioIn/<int:id>/', views.procesarActualizacionHorarioIn, name='procesarActualizacionHorarioIn'),
     path('delete_adciIn/<id>/',views.delete_adciIn),

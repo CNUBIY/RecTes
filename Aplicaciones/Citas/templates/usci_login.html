@@ -12,6 +12,11 @@
   <!-- jQuery Validate -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
   <link rel="stylesheet" href="{% static 'css/estilo_validacion.css' %}" />
+
+  <!-- IziToast -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 </head>
 
 <body>
@@ -31,12 +36,10 @@
                 <p class="text-center">Tu Centro Médico Favorito</p>
                 <form id="log_val" action="" method="post">
                     {% csrf_token %}
-                    {% if mensaje_error.error_login %}
-                         <p class="text-danger">{{ mensaje_error.error_login }}</p>
-                     {% endif %}
+
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Correo Electrónico</label>
-                        <input type="email" class="form-control {% if mensaje_error.correo_us %}error{% endif %}" id="correo_us" name="correo_us" aria-describedby="emailHelp">
+                        <input type="email" class="form-control {% if mensaje_error.correo_us %}error{% endif %}" id="username" name="username" aria-describedby="emailHelp">
                         <div class="error-message"></div>
                         {% if mensaje_error.correo_us %}
                         <p class="text-danger">{{ mensaje_error.correo_us }}</p>
@@ -45,7 +48,7 @@
                     </div>
                     <div class="mb-4">
                         <label for="exampleInputPassword1" class="form-label">Contraseña</label>
-                        <input type="password" class="form-control {% if mensaje_error.pass_us %}error{% endif %}" name="pass_us" id="pass_us" autocomplete="off">
+                        <input type="password" class="form-control {% if mensaje_error.pass_us %}error{% endif %}" name="password" id="password" autocomplete="off">
                         <div class="error-message"></div>
                         {% if mensaje_error.pass_us %}
                              <p class="text-danger">{{ mensaje_error.pass_us }}</p>
@@ -57,7 +60,7 @@
                     <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" name="button">Iniciar Sesión</button>
                     <div class="d-flex align-items-center justify-content-center">
                       <p class="fs-4 mb-0 fw-bold">No tienes cuenta?</p>
-                      <a class="text-primary fw-bold ms-2" href="/usci_reg/">Registrate</a>
+                      <a class="text-primary fw-bold ms-2" href="/register/">Registrate</a>
                     </div>
                   </form>
               </div>
@@ -71,6 +74,31 @@
   <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
 </body>
 
+{% if messages %}
+    {% for mensaje in messages %}
+        <script type="text/javascript">
+            {% if "eliminado" in mensaje %}
+                iziToast.error({
+                    title: 'Cancelado',
+                    message: '{{ mensaje }}',
+                    position: 'topRight',
+                });
+            {% elif "guardado" in mensaje %}
+                iziToast.success({
+                    title: 'Éxito',
+                    message: '{{ mensaje }}',
+                    position: 'topRight',
+                });
+            {% else %}
+                iziToast.error({
+                    title: 'Error',
+                    message: '{{ mensaje }}',
+                    position: 'topRight',
+                });
+            {% endif %}
+        </script>
+    {% endfor %}
+{% endif %}
 
 <script>
     $(document).ready(function() {

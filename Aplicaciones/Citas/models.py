@@ -11,6 +11,7 @@ class GenerosCli (models.Model):
         return f"- {self.nombre_gen}"
 
 
+
 class MadreCita(models.Model):
     id= models.AutoField(primary_key=True)
     nom_mom=models.CharField(max_length=150)
@@ -67,15 +68,12 @@ class FactCitas(models.Model):
 
 class UsuarioCli(models.Model):
     id = models.AutoField(primary_key=True)
-    nombre_us = models.CharField(max_length=150)
-    apellido_us = models.CharField(max_length=150)
-    correo_us = models.CharField(max_length=150)
-    telf_us = models.CharField(null=True, blank=True, max_length=10)
-    pass_us = models.CharField(max_length=300)
-    gen_us = models.ForeignKey(GenerosCli, null=True, blank=True, on_delete=models.PROTECT)
+    nombre_cli = models.CharField(max_length=150)
+    correo_cli = models.CharField(max_length=150)
+    pass_cli = models.CharField(max_length=300)
 
     def __str__(self):
-        return f"{self.apellido_us} {self.nombre_us} - {self.correo_us}"
+        return f"{self.nombre_cli} - {self.correo_cli}"
 
 
 class HorasDia(models.Model):
