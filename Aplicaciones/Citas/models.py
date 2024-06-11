@@ -3,14 +3,6 @@ from django.db import models
 from django.contrib.auth.hashers import make_password
 
 # Create your models here.
-class GenerosCli (models.Model):
-    id=models.AutoField(primary_key=True)
-    nombre_gen=models.CharField(max_length=150)
-
-    def __str__(self):
-        return f"- {self.nombre_gen}"
-
-
 
 class MadreCita(models.Model):
     id= models.AutoField(primary_key=True)

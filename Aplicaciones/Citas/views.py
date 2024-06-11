@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.hashers import check_password, make_password
-from .models import DiaHorario,HorasDia, UsuarioCli, GenerosCli, CitaSol, FactCitas
+from .models import DiaHorario,HorasDia, UsuarioCli, CitaSol, FactCitas
 from django.contrib import messages
 from datetime import datetime, timedelta, time
 from django.http import JsonResponse

@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from Aplicaciones.Citas.middleware import login_required as custom_login_required
+from .models import Patient
 # Create your views here.
 
 
@@ -42,4 +43,5 @@ def user_logout(request):
 
 @login_required
 def doc_inicio (request):
-    return render(request,'general/doc_inicio.html')
+    histobdd=Patient.objects.all()
+    return render(request,'general/doc_inicio.html',{'historiales':histobdd})
