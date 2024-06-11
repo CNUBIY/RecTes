@@ -351,16 +351,9 @@
               return true;
           }, "Esta fecha y hora ya están reservadas.");
 
-          $.validator.addMethod("validServiceTime", function(value, element) {
+          $.validator.addMethod("validServiceTimeRange", function(value, element) {
               if (value) {
                   var selectedDateTime = new Date($("#fech_da").val() + " " + value);
-                  var currentDateTime = new Date();
-
-                  // Verificar si la fecha y hora seleccionada es anterior a la fecha y hora actual
-                  if (selectedDateTime < currentDateTime) {
-                      return false;
-                  }
-
                   var hours = selectedDateTime.getHours();
                   var minutes = selectedDateTime.getMinutes();
 
@@ -373,6 +366,19 @@
               }
               return true;
           }, "El horario debe estar entre 8am-1pm o 4pm-8pm.");
+
+          $.validator.addMethod("notInPast", function(value, element) {
+              if ($("#fech_da").val() && value) {
+                  var selectedDateTime = new Date($("#fech_da").val() + " " + value);
+                  var currentDateTime = new Date();
+
+                  // Verificar si la fecha y hora seleccionada es anterior a la fecha y hora actual
+                  if (selectedDateTime < currentDateTime) {
+                      return false;
+                  }
+              }
+              return true;
+          }, "No puedes seleccionar una hora pasada para la fecha de hoy.");
 
           // Validación para el formulario de creación
           $("#vldt_dias").validate({
@@ -390,7 +396,8 @@
                   time_da: {
                       required: true,
                       appointmentExists: true,
-                      validServiceTime: true
+                      validServiceTimeRange: true,
+                      notInPast: true
                   }
               },
               messages: {
@@ -407,7 +414,8 @@
                   time_da: {
                       required: "Debe ingresar el horario de la cita",
                       appointmentExists: "Esta fecha y hora ya están reservadas.",
-                      validServiceTime: "Horario no permitido."
+                      validServiceTimeRange: "El horario debe estar entre 8am-1pm o 4pm-8pm.",
+                      notInPast: "No puedes seleccionar una hora pasada para la fecha de hoy."
                   }
               },
               errorPlacement: function(error, element) {
@@ -433,12 +441,11 @@
                       },
                       fech_da: {
                           required: true,
-                          appointmentExists: true
                       },
                       time_da: {
                           required: true,
-                          appointmentExists: true,
-                          validServiceTime: true
+                          validServiceTimeRange: true,
+                          notInPast: true
                       }
                   },
                   // Mensajes de error
@@ -450,13 +457,12 @@
                           required: "Debe ingresar el contacto del cliente",
                       },
                       fech_da: {
-                          required: "Debe ingresar la fecha de la cita",
-                          appointmentExists: "Esta fecha y hora ya están reservadas."
+                          required: "Debe ingresar la fecha de la cita"
                       },
                       time_da: {
                           required: "Debe ingresar el horario de la cita",
-                          appointmentExists: "Esta fecha y hora ya están reservadas.",
-                          validServiceTime: "Horario no permitido."
+                          validServiceTimeRange: "El horario debe estar entre 8am-1pm o 4pm-8pm.",
+                          notInPast: "No puedes seleccionar una hora pasada para la fecha de hoy."
                       }
                   },
                   // Colocar los mensajes de error en el lugar correcto
@@ -473,7 +479,6 @@
               });
           }
 
-
           // Inicializar validación del modal cuando se muestre
           $('#exampleModal').on('shown.bs.modal', function () {
               initializeModalValidation();
@@ -481,37 +486,44 @@
 
           $("#fech_da, #time_da").change(function() {
               if ($("#fech_da").val() && $("#time_da").val()) {
-                  $("#vldt_dias, #vldt_edidias").validate().element("#fech_da");
-                  $("#vldt_dias, #vldt_edidias").validate().element("#time_da");
+                  $("#vldt_dias").validate().element("#fech_da");
+                  $("#vldt_dias").validate().element("#time_da");
+
+                  if ($("#vldt_edidias").length) {
+                      $("#vldt_edidias").validate().element("#fech_da");
+                      $("#vldt_edidias").validate().element("#time_da");
+                  }
               }
           });
       });
 
       $(document).ready(function() {
-    // Función para deshabilitar el botón de guardar cambios
-    function disableSaveButton() {
-        $('#saveChangesButton').prop('disabled', true);
-    }
+          // Función para deshabilitar el botón de guardar cambios
+          function disableSaveButton() {
+              $('#saveChangesButton').prop('disabled', true);
+          }
 
-    // Función para habilitar el botón de guardar cambios
-    function enableSaveButton() {
-        $('#saveChangesButton').prop('disabled', false);
-    }
+          // Función para habilitar el botón de guardar cambios
+          function enableSaveButton() {
+              $('#saveChangesButton').prop('disabled', false);
+          }
 
-    // Deshabilitar el botón de guardar cambios al cargar la página
-    disableSaveButton();
+          // Deshabilitar el botón de guardar cambios al cargar la página
+          disableSaveButton();
 
-    // Detectar cambios en el formulario dentro del modal
-    $('#exampleModal form').on('input', function() {
-        enableSaveButton();
-    });
+          // Detectar cambios en el formulario dentro del modal
+          $('#exampleModal form').on('input', function() {
+              enableSaveButton();
+          });
 
-    // Deshabilitar el botón de guardar cambios al cerrar el modal
-    $('#exampleModal').on('hidden.bs.modal', function () {
-        disableSaveButton();
-    });
-});
+          // Deshabilitar el botón de guardar cambios al cerrar el modal
+          $('#exampleModal').on('hidden.bs.modal', function () {
+              disableSaveButton();
+          });
+      });
   </script>
+
+
 
 
 {% endblock %}
