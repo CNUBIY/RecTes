@@ -29,7 +29,7 @@ class AutoLogout:
     def process_view(self, request, view_func, view_args, view_kwargs):
         # Redirigir a página de error si el usuario no está autenticado y la vista requiere login
         if not request.user.is_authenticated and hasattr(view_func, 'login_required'):
-            return redirect('error_p')  # Redirige a la vista de error
+            return redirect('login')  # Redirige a la vista de error
 
 def login_required(view_func):
     view_func.login_required = True

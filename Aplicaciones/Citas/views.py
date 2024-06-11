@@ -77,6 +77,7 @@ def usci_inicio (request):
 
 #Página PERFIL admin Inicio
 @login_required
+@custom_login_required
 def adci_perfil(request):
     return render(request,'adci_perfil.html')
 #Página PERFIL admin final
@@ -107,6 +108,7 @@ def adci_inicio(request):
     return render(request, 'adci_inicio.html', context)
 
 @login_required
+@custom_login_required
 def aggin_adci(request):
     nom_da=request.POST["nom_da"]
     telf_da=request.POST["telf_da"]
@@ -125,6 +127,7 @@ def aggin_adci(request):
     return redirect('/adci_inicio')
 
 @login_required
+@custom_login_required
 def procesarActualizacionHorarioIn(request,id):
     if request.method == 'POST':
         try:
@@ -152,6 +155,7 @@ def procesarActualizacionHorarioIn(request,id):
         return redirect('/error_p')
 
 @login_required
+@custom_login_required
 def delete_adciIn(request,id):
     eliminarDiaHorario=CitaSol.objects.get(id=id)
     eliminarDiaHorario.delete()
@@ -163,6 +167,7 @@ def delete_adciIn(request,id):
 #Página HORARIOS Administrador Inicio
 
 @login_required
+@custom_login_required
 def adci_fechacitas (request):
     horariobdd=DiaHorario.objects.all()
     horabdd=HorasDia.objects.all()
@@ -170,6 +175,7 @@ def adci_fechacitas (request):
     return render(request,'adci_fechacitas.html',{'horarios':horariobdd,'horas':horabdd,'citas':citabdd})
 
 @login_required
+@custom_login_required
 def aggagenda_adci(request):
     nom_da=request.POST["nom_da"]
     telf_da=request.POST["telf_da"]
@@ -188,12 +194,14 @@ def aggagenda_adci(request):
     return redirect('/adci_inicio')
 
 @login_required
+@custom_login_required
 def delete_adci(request,id):
     eliminarDiaHorario=CitaSol.objects.get(id=id)
     eliminarDiaHorario.delete()
     return redirect('/adci_fechacitas')
 
 @login_required
+@custom_login_required
 def procesarActualizacionHorario(request, id):
     if request.method == 'POST':
         try:
@@ -230,6 +238,7 @@ def procesarActualizacionHorario(request, id):
 
 
 @login_required
+@custom_login_required
 def check_appointment(request):
     if request.method == 'POST':
         fecha = request.POST.get('fech_da')
@@ -244,18 +253,21 @@ def check_appointment(request):
 
 #Página CONTABILIDAD Administrador INICIO|
 @login_required
+@custom_login_required
 def cont_inicio(request):
     factbdd=FactCitas.objects.all()
     citabdd=CitaSol.objects.all()
     return render(request,'cont_inicio.html',{'facturas':factbdd,'citas':citabdd})
 
 @login_required
+@custom_login_required
 def addcont_adci(request, id):
     citabdd=get_object_or_404(CitaSol,id=id)
     factbdd=FactCitas.objects.all()
     return render(request,'adci_addcont.html',{'cita':citabdd,'facts':factbdd})
 
 @login_required
+@custom_login_required
 def cont_int(request):
     citabdd = CitaSol.objects.all()  # Obtener todas las citas
     factbdd = FactCitas.objects.all()
@@ -285,6 +297,7 @@ def cont_int(request):
 
 
 @login_required
+@custom_login_required
 def aggcont_adci(request):
     if request.method == 'POST':
         id_fech = request.POST["id_fech"]
@@ -312,12 +325,14 @@ def aggcont_adci(request):
     return redirect('/adci_inicio')
 
 @login_required
+@custom_login_required
 def cont_vac(request):
     factbdd=FactCitas.objects.all()
     return render(request,'add_vac.html')
 
 
 @login_required
+@custom_login_required
 def aggcont_vac(request):
     if request.method == "POST":
         idfac = request.POST.get("idfac")
