@@ -23,13 +23,15 @@ def index (request):
 
 
 #Página REGISTER usuarios INICIO
+@login_required
+@custom_login_required
 def register(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
 
         if User.objects.filter(username=username).exists():
-            messages.error(request, 'Este usuario/correo ya está registrado')
+            messages.error(request, 'Este correo ya está registrado')
         else:
             user = User.objects.create_user(username=username, password=password)  # Añadir el correo electrónico aquí
             user.save()
@@ -43,6 +45,8 @@ def register(request):
 #Página LOGIN usarios INICIO
 
 def user_login(request):
+    if request.user.is_authenticated:
+        logout(request)
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']

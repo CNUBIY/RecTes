@@ -9,10 +9,11 @@
   <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
   <link rel="stylesheet" href="{% static 'css/styles.min.css' %}" />
   <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
   <!-- jQuery Validate -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
   <link rel="stylesheet" href="{% static 'css/estilo_validacion.css' %}" />
-
   <!-- IziToast -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -30,21 +31,12 @@
           <div class="col-md-8 col-lg-6 col-xxl-3">
             <div class="card mb-0">
               <div class="card-body">
-                <a href="./index.html" class="text-nowrap logo-img text-center d-block py-3 w-100">
+                <a href="/" class="text-nowrap logo-img text-center d-block py-3 w-100">
                   <img src="{% static 'images/logos/dark-logo.svg' %}" width="180" alt="">
                 </a>
                 <p class="text-center">Tu Centro Médico Favorito</p>
                 <form id="reg_val"  method="post">
                   {% csrf_token %}
-                  <!-- <div class="mb-3">
-                    <label for="disabledSelect" class="form-label">Género:</label>
-                    <select id="id_gen" name="id_gen" class="form-select">
-                      <option value="">Escoge un género</option>
-                      {% for genero in generos %}
-                      <option value="{{ genero.id }}">{{ genero.nombre_gen }}</option>
-                      {% endfor %}
-                    </select>
-                  </div> -->
                   <div class="mb-3">
                     <label for="username" class="form-label">Correo:</label>
                     <input type="email" class="form-control" name="username" id="username" aria-describedby="emailHelp">
@@ -53,10 +45,14 @@
                     <label for="password" class="form-label">Contraseña</label>
                     <input type="password" class="form-control" name="password" id="password">
                   </div>
+                  <div class="mb-4">
+                    <label for="confpassword" class="form-label">Confirmar Contraseña</label>
+                    <input type="password" class="form-control" name="confpassword" id="confpassword">
+                  </div>
                   <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" name="button">Registrarse</button>
                   <div class="d-flex align-items-center justify-content-center">
                     <p class="fs-4 mb-0 fw-bold">Ya tienes una cuenta?</p>
-                    <a class="text-primary fw-bold ms-2" href="/usci_login/">Iniciar Sesión</a>
+                    <a class="text-primary fw-bold ms-2" href="/login/">Iniciar Sesión</a>
                   </div>
                 </form>
               </div>
@@ -79,94 +75,39 @@
       /[@$!%*?&#]/.test(value);
     }, "La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un carácter especial.");
 
-  // Evitar correos repetitivos
-  // $.validator.addMethod("emailExists", function(value, element) {
-  //
-  //     return new Promise(function(resolve, reject) {
-  //         $.ajax({
-  //             type: "GET",
-  //             url: "/check-email/",
-  //             data: {
-  //                 "correo_us": value
-  //             },
-  //             success: function(data) {
-  //                 resolve(!data.exists);
-  //             },
-  //             error: function() {
-  //                 resolve(false);
-  //             }
-  //         });
-  //     });
-  // }, "El correo ya está en uso.");
-
-      $.validator.addMethod("emailExists", function(value, element) {
-        let response;
-        $.ajax({
-          type: "GET",
-          url: "/check-email/",
-          data: {
-            "correo_us": value
-          },
-          // async: false,
-          success: function(data) {
-            response = !data.exists;
-          }
-        });
-        return response;
-      }, "El correo ya está en uso.");
-
-
     $("#reg_val").validate({
       rules: {
-        "nombre_us": {
-          required: true
-        },
-        "apellido_us": {
-          required: true
-        },
-        "id_gen": {
-          required: true
-        },
-        "correo_us": {
+        "username": {
           required: true,
-          email: true,
-          emailExists: true
+          email: true
         },
-        "pass_us": {
+        "password": {
           required: true,
           strongPassword: true
         },
-        "confpass_us": {
+        "confpassword": {
           required: true,
-          equalTo: "#pass_us"
+          equalTo: "#password"
         }
       },
       messages: {
-        "nombre_us": {
-          required: "Debe registrar su nombre"
-        },
-        "apellido_us": {
-          required: "Debe registrar su apellido"
-        },
-        "id_gen": {
-          required: "Debe seleccionar su género"
-        },
-        "correo_us": {
+        "username": {
           required: "Debe registrar su correo",
           email: "Debe ingresar un correo electrónico válido"
         },
-        "pass_us": {
+        "password": {
           required: "Debe registrar una contraseña"
         },
-        "confpass_us": {
+        "confpassword": {
           required: "Debe confirmar su contraseña",
           equalTo: "Las contraseñas no coinciden"
         }
       }
     });
 
-
 </script>
+
+
 {% if messages %}
     {% for mensaje in messages %}
         <script type="text/javascript">
