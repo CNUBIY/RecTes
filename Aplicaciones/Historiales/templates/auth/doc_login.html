@@ -1,0 +1,130 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inicia Sesión</title>
+  <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
+  <link rel="stylesheet" href="{% static 'css/styles.min.css' %}" />
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+  <!-- jQuery Validate -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+  <link rel="stylesheet" href="{% static 'css/estilo_validacion.css' %}" />
+
+  <!-- IziToast -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</head>
+
+<body>
+  <!--  Body Wrapper -->
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+    data-sidebar-position="fixed" data-header-position="fixed">
+    <div
+      class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+      <div class="d-flex align-items-center justify-content-center w-100">
+        <div class="row justify-content-center w-100">
+          <div class="col-md-8 col-lg-6 col-xxl-3">
+            <div class="card mb-0">
+              <div class="card-body">
+                <a href="./index.html" class="text-nowrap logo-img text-center d-block py-3 w-100">
+                  <img src="{% static 'images/logos/dark-logo.svg' %}" width="180" alt="">
+                </a>
+                <p class="text-center">Tu Centro Médico Favorito</p>
+                <form id="log_val" action="" method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Correo Electrónico</label>
+                        <input type="email" class="form-control {% if mensaje_error.correo_us %}error{% endif %}" id="username" name="username" aria-describedby="emailHelp">
+                        <div class="error-message"></div>
+                        {% if mensaje_error.correo_us %}
+                        <p class="text-danger">{{ mensaje_error.correo_us }}</p>
+                        {% endif %}
+
+                    </div>
+                    <div class="mb-4">
+                        <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control {% if mensaje_error.pass_us %}error{% endif %}" name="password" id="password" autocomplete="off">
+                        <div class="error-message"></div>
+                        {% if mensaje_error.pass_us %}
+                             <p class="text-danger">{{ mensaje_error.pass_us }}</p>
+                         {% endif %}
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                      <a class="text-primary fw-bold" href="./index.html">Olvidaste tu contraseña?</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" name="button">Iniciar Sesión</button>
+                    <div class="d-flex align-items-center justify-content-center">
+                      <p class="fs-4 mb-0 fw-bold">No socialices tu información con ningún externo</p>
+                    </div>
+                  </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+
+{% if messages %}
+    {% for mensaje in messages %}
+        <script type="text/javascript">
+            {% if "eliminado" in mensaje %}
+                iziToast.error({
+                    title: 'Cancelado',
+                    message: '{{ mensaje }}',
+                    position: 'topRight',
+                });
+            {% elif "guardado" in mensaje %}
+                iziToast.success({
+                    title: 'Éxito',
+                    message: '{{ mensaje }}',
+                    position: 'topRight',
+                });
+            {% else %}
+                iziToast.error({
+                    title: 'Error',
+                    message: '{{ mensaje }}',
+                    position: 'topRight',
+                });
+            {% endif %}
+        </script>
+    {% endfor %}
+{% endif %}
+
+<script>
+    $(document).ready(function() {
+        $("#log_val").validate({
+            rules: {
+                "correo_us": {
+                    required: true,
+                    email:true,
+                },
+                "pass_us": {
+                    required: true
+                }
+            },
+            messages: {
+                "correo_us": {
+                    required: "Debe ingresar el correo",
+                    email:"Ingrese un correo válido"
+                },
+                "pass_us": {
+                    required: "Debe ingresar la contraseña"
+                }
+            },
+            errorPlacement: function(error, element) {
+                // Insertar el mensaje de error debajo del elemento
+                error.appendTo(element.parent().find('.error-message'));
+            }
+        });
+    });
+</script>
+
+</html>
