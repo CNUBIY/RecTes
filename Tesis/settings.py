@@ -42,8 +42,9 @@ INSTALLED_APPS = [
 
 ]
 
-LOGIN_REDIRECT_URL = 'index'
-LOGIN_REDIRECT_URL = 'adci_inicio'
+SESSION_COOKIE_AGE = 3600
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_SAVE_EVERY_REQUEST = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -53,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'Aplicaciones.Citas.middleware.AutoLogout',
 ]
 
 ROOT_URLCONF = 'Tesis.urls'

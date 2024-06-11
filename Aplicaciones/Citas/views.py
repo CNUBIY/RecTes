@@ -9,6 +9,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from collections import defaultdict
 from django.contrib.auth.models import User
+from django.utils import timezone
+from django.utils.decorators import method_decorator
+from Aplicaciones.Citas.middleware import login_required as custom_login_required
 # Create your views here.
 
 #Página Informativa INICIO
@@ -44,9 +47,10 @@ def user_login(request):
         username = request.POST['username']
         password = request.POST['password']
 
-        user= authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request,user)
+            login(request, user)
+            request.session['last_activity'] = timezone.now().isoformat()  # Convertir a cadena
             return redirect("/adci_inicio")
         else:
             messages.error(request, 'Contraseña/Correo Incorrectos')
@@ -68,8 +72,7 @@ def usci_inicio (request):
 
 
 #Página PERFIL usuarios-citas Inicio
-def usci_perfil(request):
-    return render(request,'usci_perfil.html')
+
 #Página PERFIL usuarios-citas final
 
 #Página PERFIL admin Inicio
@@ -80,6 +83,7 @@ def adci_perfil(request):
 
 #Página Inicio Administrador-Citas GENERAL INICIO
 @login_required
+@custom_login_required
 def adci_inicio(request):
     hoy = datetime.now().date()
     dia_semana = hoy.weekday()  # 0 = Lunes, 6 = Domingo

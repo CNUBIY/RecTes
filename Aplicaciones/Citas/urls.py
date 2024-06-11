@@ -30,5 +30,5 @@ urlpatterns=[
     path('adci_fechacitas/procesarActualizacionHorario/<int:id>/', views.procesarActualizacionHorario, name='procesarActualizacionHorario'),
     path('check_appointment/', views.check_appointment, name='check_appointment'),
     #ERRORES
-    path('error_p/',views.error_p),
+    path('error_p/',views.error_p, name='error_p'),
 ]

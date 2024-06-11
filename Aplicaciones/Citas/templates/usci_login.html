@@ -36,7 +36,6 @@
                 <p class="text-center">Tu Centro Médico Favorito</p>
                 <form id="log_val" action="" method="post">
                     {% csrf_token %}
-
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Correo Electrónico</label>
                         <input type="email" class="form-control {% if mensaje_error.correo_us %}error{% endif %}" id="username" name="username" aria-describedby="emailHelp">
@@ -59,8 +58,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" name="button">Iniciar Sesión</button>
                     <div class="d-flex align-items-center justify-content-center">
-                      <p class="fs-4 mb-0 fw-bold">No tienes cuenta?</p>
-                      <a class="text-primary fw-bold ms-2" href="/register/">Registrate</a>
+                      <p class="fs-4 mb-0 fw-bold">No socialices tu información con ningún externo</p>
                     </div>
                   </form>
               </div>
