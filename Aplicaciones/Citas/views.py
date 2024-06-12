@@ -221,19 +221,32 @@ def procesarActualizacionHorario(request, id):
                 # Mostrar mensaje de error si la cita ya existe
                 messages.error(request, "No puede seleccionar una fecha y hora ya registrada.")
                 return redirect('/adci_fechacitas')
-            else:
-                # Procesar la actualización de la cita con los valores obtenidos
-                cita = get_object_or_404(CitaSol, pk=id)
-                cita.nom_da = nom_da
-                cita.telf_da = telf_da
-                cita.fech_da = fech_da
-                cita.time_da = time_da
-                cita.cort_da = cort_da
-                cita.save()
 
-                # Agregar mensaje de éxito si la actualización fue exitosa
-                messages.success(request, "Cita actualizada correctamente.")
+            # Validar que la hora no sea en el pasado para la fecha actual
+            current_datetime = datetime.now()
+            selected_datetime = datetime.strptime(f"{fech_da} {time_da}", "%Y-%m-%d %H:%M")
+            if fech_da == current_datetime.strftime("%Y-%m-%d") and selected_datetime.time() < current_datetime.time():
+                messages.error(request, "No puedes seleccionar una hora pasada para la fecha de hoy.")
                 return redirect('/adci_fechacitas')
+
+            # Validar que el horario esté dentro de los rangos permitidos
+            selected_time = selected_datetime.time()
+            if not ((8 <= selected_time.hour < 13) or (16 <= selected_time.hour < 20) or (selected_time.hour == 13 and selected_time.minute == 0) or (selected_time.hour == 20 and selected_time.minute == 0)):
+                messages.error(request, "El horario debe estar entre 8am-1pm o 4pm-8pm.")
+                return redirect('/adci_fechacitas')
+
+            # Procesar la actualización de la cita con los valores obtenidos
+            cita = get_object_or_404(CitaSol, pk=id)
+            cita.nom_da = nom_da
+            cita.telf_da = telf_da
+            cita.fech_da = fech_da
+            cita.time_da = time_da
+            cita.cort_da = cort_da
+            cita.save()
+
+            # Agregar mensaje de éxito si la actualización fue exitosa
+            messages.success(request, "Cita actualizada correctamente.")
+            return redirect('/adci_fechacitas')
         except MultiValueDictKeyError as e:
             # Manejo de error cuando no se encuentra un campo esperado en request.POST
             return HttpResponseBadRequest(f"Missing parameter: {e}")
