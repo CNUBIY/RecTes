@@ -42,10 +42,14 @@
                       </td>
                       <td>{{cita.nom_da}}</td>
                       <td>
-                        {% if cita.est_da %}
-                        <span class="text-info">Realizados</span>
+                        {% if cita.cort_da %}
+                          <span class="text-success">Cortesía</span>
                         {% else %}
-                        <span class="text-warning">En espera</span>
+                          {% if cita.est_da %}
+                            <span class="text-info">Realizados</span>
+                          {% else %}
+                            <span class="text-warning">En espera</span>
+                          {% endif %}
                         {% endif %}
                       </td>
                       <td>
