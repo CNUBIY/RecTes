@@ -445,51 +445,21 @@
 <!-- JQUERYVALIDATE -->
 <script type="text/javascript">
   $(document).ready(function() {
-    $.validator.addMethod("appointmentExists", function(value, element) {
-      if ($("#fech_da_eventModal").val() && $("#time_da_eventModal").val()) {
-        let response = false;
-        $.ajax({
-          type: "POST",
-          url: "{% url 'check_appointment' %}",
-          data: {
-            "fech_da": $("#fech_da_eventModal").val(),
-            "time_da": $("#time_da_eventModal").val(),
-            "csrfmiddlewaretoken": "{{ csrf_token }}"
-          },
-          async: false,
-          success: function(data) {
-            response = !data.exists;
-          }
-        });
-        return response;
-      }
-      return true;
-    }, "Esta fecha y hora ya están reservadas.");
 
-    $.validator.addMethod("validServiceTime", function(value, element) {
-      if (value) {
-        var selectedDateTime = new Date($("#fech_da_eventModal").val() + " " + value);
-        var currentDateTime = new Date();
+    function setMinDate(input) {
+      var today = new Date();
+      var day = String(today.getDate()).padStart(2, '0');
+      var month = String(today.getMonth() + 1).padStart(2, '0');
+      var year = today.getFullYear();
 
-        // Verificar si la fecha y hora seleccionada es anterior a la fecha y hora actual
-        if (selectedDateTime < currentDateTime) {
-          return false;
-        }
+      var minDate = year + '-' + month + '-' + day;
 
-        var hours = selectedDateTime.getHours();
-        var minutes = selectedDateTime.getMinutes();
+      input.setAttribute('min', minDate);
+    }
 
-        // Restricciones de horario
-        if ((hours >= 8 && hours < 13) || (hours >= 16 && hours < 20) || (hours == 13 && minutes == 0) || (hours == 20 && minutes == 0)) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-      return true;
-    }, "El horario debe estar entre 8am-1pm o 4pm-8pm.");
-
+    setMinDate(document.getElementById('eventModal').querySelector('#fech_da_eventModal'));
     // Validación para el formulario de edición (modal)
+    // Función para inicializar la validación del modal cuando se muestra
     function initializeModalValidation() {
       $("#vldt_edidias").validate({
         rules: {
@@ -501,15 +471,12 @@
           },
           fech_da: {
             required: true,
-            appointmentExists: true
+            date:true,
           },
           time_da: {
             required: true,
-            appointmentExists: true,
-            validServiceTime: true
           }
         },
-        // Mensajes de error
         messages: {
           nom_da: {
             required: "Debe ingresar el nombre del cliente",
@@ -519,19 +486,15 @@
           },
           fech_da: {
             required: "Debe ingresar la fecha de la cita",
-            appointmentExists: "Esta fecha y hora ya están reservadas."
+            date:"Ingrese una fecha válida"
           },
           time_da: {
             required: "Debe ingresar el horario de la cita",
-            appointmentExists: "Esta fecha y hora ya están reservadas.",
-            validServiceTime: "Horario no permitido."
           }
         },
-        // Colocar los mensajes de error en el lugar correcto
         errorPlacement: function(error, element) {
-          error.appendTo(element.parent().find('.error-message'));
+          element.parent().find('.error-message').html(error);
         },
-        // Validar en tiempo real al escribir o al perder el foco
         onkeyup: function(element) {
           $(element).valid();
         },
@@ -542,7 +505,7 @@
     }
 
     // Inicializar validación del modal cuando se muestre
-    $('#eventModal').on('shown.bs.modal', function () {
+    $('#eventModal').on('shown.bs.modal', function() {
       initializeModalValidation();
     });
 

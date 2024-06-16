@@ -111,11 +111,11 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="{% url 'cont_vac' %}" aria-expanded="false">
+              <a class="sidebar-link" href="{% url 'cont_int' %}" aria-expanded="false">
                 <span>
                   <i class="ti ti-typography"></i>
                 </span>
-                <span class="hide-menu">Vacunas</span>
+                <span class="hide-menu">Seguimiento Interno</span>
               </a>
             </li>
             <li class="nav-small-cap">
@@ -233,30 +233,25 @@
         <div class="row">
           {% block usci_contenido %}
             {% endblock %}
-
             {% if messages %}
-                {% for mensaje in messages %}
-                    <script type="text/javascript">
-                        {% if "eliminado" in mensaje %}
-                            iziToast.error({
-                                title: 'Cancelado',
-                                message: '{{ mensaje }}',
-                                position: 'topRight',
-                            });
-                        {% elif "guardado" in mensaje %}
-                            iziToast.success({
-                                title: 'Éxito',
-                                message: '{{ mensaje }}',
-                                position: 'topRight',
-                            });
-                        {% else %}
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        <script type="text/javascript">
                             iziToast.error({
                                 title: 'Error',
-                                message: '{{ mensaje }}',
+                                message: '{{ message }}',
                                 position: 'topRight',
                             });
-                        {% endif %}
-                    </script>
+                        </script>
+                    {% elif message.tags == 'success' %}
+                        <script type="text/javascript">
+                            iziToast.success({
+                                title: 'Éxito',
+                                message: '{{ message }}',
+                                position: 'topRight',
+                            });
+                        </script>
+                    {% endif %}
                 {% endfor %}
             {% endif %}
         <div class="py-6 px-6 text-center">
