@@ -29,7 +29,7 @@
                 {% for histo in historiales %}
                   <tr>
                     <td>
-                      <a href="#"><span class="text-info">{{histo.lastnPat}} {{histo.namePat}}</span></a>
+                      <a href="{% url 'doc_patient' histo.idPat %}"><span class="text-info">{{histo.lastnPat}} {{histo.namePat}}</span></a>
                     </td>
                     <td>{{histo.creation }}</td>
                     <td>{{histo.ciPat}}</td>

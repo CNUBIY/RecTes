@@ -41,7 +41,22 @@ def user_logout(request):
 
 #Página LOGIN usarios FINAL
 
+#Página Vista de Historiales INICIO
 @login_required
 def doc_inicio (request):
     histobdd=Patient.objects.all()
     return render(request,'general/doc_inicio.html',{'historiales':histobdd})
+#Página Vista de Historiales FINAl
+
+
+
+#Página PACIENTES Inicio
+
+@login_required
+@custom_login_required
+def doc_patient (request,idPat):
+    patbdd=Patient.objects.get(idPat=idPat)
+    return render(request, 'histo/patient.html',{'pacientes':patbdd})
+
+
+#Página PACIENTES FINAL
