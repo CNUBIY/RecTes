@@ -1,12 +1,17 @@
 {% extends 'doc_plantilla.html' %}
 {% block doc_contenido %}
-<div class="col-lg-8">
+<div class="col-lg-12">
   <div class="row">
     <div class="col-lg-12">
       <!-- Yearly Breakup -->
       <div class="card overflow-hidden">
         <div class="card-body p-4">
-          <h5 class="card-title mb-9 fw-semibold">Pacientes</h5><br>
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-9 fw-semibold">Historiales</h5>
+            <a href="#" class="btn btn-outline-success rounded-pill" title="Crear Historial">
+              <i class="fa fa-add"></i>
+            </a>
+          </div>
           <div class="row align-items-center">
             <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
               <thead class="text-dark fs-4">
@@ -47,90 +52,7 @@
   </div>
 </div>
 
-<div class="col-lg-4 align-items-strech">
-  <div class="card w-100">
-    <div class="card-body">
-      <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
-        <div class="mb-3 mb-sm-0">
-          <h5 class="card-title fw-semibold">Crear historial médico</h5>
-        </div>
 
-      </div>
-      <form action="/aggagenda_adci/" method="POST" id="vldt_dias">
-        {% csrf_token %}
-        <div class="mb-3">
-          <label for="nom_da" class="form-label">Nombre del Cliente</label>
-          <input type="text" class="form-control" name="nom_da" id="nom_da" placeholder="Ingrese el nombre del representante">
-          <div class="error-message"></div>
-        </div>
-
-        <!-- VALIDACIÓN SOLO LETRAS -->
-        <script type="text/javascript">
-          $(document).ready(function() {
-              // Validación para permitir solo letras y tildes en el campo de nombre
-              $('#nom_da').on('input', function() {
-                  var regex = /^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$/;
-                  var inputText = $(this).val();
-                  if (!regex.test(inputText)) {
-                      $(this).val(inputText.slice(0, -1));
-                  }
-
-                  // Validación para permitir solo cuatro palabras en el campo de nombre
-                  var inputTextTrimmed = inputText.trim();
-                  var words = inputTextTrimmed.split(/\s+/);
-                  if (words.length > 4) {
-                      $(this).val(words.slice(0, 4).join(' '));
-                  }
-              });
-          });
-
-          $(document).ready(function() {
-            // Validación para permitir solo letras y tildes en el campo de nombre
-            $('#nom_da, #exampleModal #nom_da').on('input', function() {
-                var regex = /^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$/;
-                var inputText = $(this).val();
-                if (!regex.test(inputText)) {
-                    $(this).val(inputText.slice(0, -1));
-                }
-
-                // Validación para permitir solo cuatro palabras en el campo de nombre
-                var inputTextTrimmed = inputText.trim();
-                var words = inputTextTrimmed.split(/\s+/);
-                if (words.length > 4) {
-                    $(this).val(words.slice(0, 4).join(' '));
-                }
-            });
-        });
-        </script>
-
-        <div class="mb-3">
-          <label for="telf_da" class="form-label">Telf/Celular</label>
-          <input type="text" class="form-control" name="telf_da" id="telf_da" placeholder="Ingrese el número de contacto">
-          <div class="error-message"></div>
-        </div>
-        <div class="mb-3">
-          <label for="fech_da" class="form-label">Fecha</label>
-          <input type="date" class="form-control" name="fech_da" id="fech_da" aria-describedby="dateHelp">
-          <div class="error-message"></div>
-        </div>
-        <div class="mb-3">
-          <label for="time_da" class="form-label">Horario</label>
-          <input type="time" class="form-control" name="time_da" id="time_da">
-          <div class="error-message"></div>
-        </div>
-        <label for="cort_da" class="form-label">¿Cita de Cortesía?</label>
-        <div class="mb-3 form-check">
-          <input type="checkbox" class="form-check-input" name="cort_da" id="cort_da">
-          <label class="form-check-label" for="cort_da">Confirmar</label>
-          <div class="error-message"></div>
-        </div>
-        <button type="submit" class="btn btn-outline-primary rounded-pill m-2">Guardar</button>
-        <button type="reset" name="button" class="btn btn-outline-danger rounded-pill m-2">Cancelar</button>
-        <br><br>
-      </form>
-    </div>
-  </div>
-</div>
 
 
 {% endblock %}
