@@ -7,9 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Centro Médico Infantil Juvenil</title>
 
-
+  <style>
+    .favicon {
+        width: 32px; /* Ancho deseado del ícono */
+        height: 32px; /* Alto deseado del ícono */
+    }
+  </style>
   <!-- ICONO PÁGINA -->
-  <link rel="shortcut icon" type="image/png" href="{% static 'images/logos/favicon.png' %}" />
+  <link rel="shortcut icon" type="image/png" href="{% static 'images/logo.png' %}" class="favicon">
 
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
@@ -260,6 +265,18 @@
       </div>
     </div>
   </div>
+
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          var notification = document.querySelector('.notification');
+          {% if mostrar_campanita %}
+              notification.style.display = 'block';
+          {% else %}
+              notification.style.display = 'none';
+          {% endif %}
+      });
+  </script>
+
   <!-- <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script> -->
   <script src="{% static 'js/extras.js' %}"></script>
   <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>

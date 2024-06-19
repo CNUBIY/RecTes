@@ -5,6 +5,16 @@
     font-size: 20px; /* Ajusta el tamaño del ícono */
   }
 </style>
+<!-- <script>
+    {% for cita in citas_proximas %}
+        iziToast.info({
+            title: 'Recordatorio de cita',
+            message: 'Mañana tienes una cita con {{ cita.nom_da }} - {{cita.telf_da}} a las {{ cita.time_da|time:"H:i" }} ',
+            position: 'topRight',
+            timeout: 180000,
+        });
+    {% endfor %}
+</script> -->
 <div class="col-lg-9 d-flex align-items-strech">
   <div class="card w-100">
     <div class="card-body">
@@ -102,8 +112,9 @@
       <div class="card-body p-4">
         <div class="mb-4">
           <h5 class="card-title fw-semibold">Citas de Mañana</h5>
+          <span id="fecha-siguiente">{{ mañana|date:"d/m/Y" }}</span>
         </div>
-        <ul class="timeline-widget mb-0 position-relative mb-n5">
+        <ul class="timeline-widget mb-0 position-relative mb-n5" id="citas-mañana-list">
           {% for cita in citas_mañana %}
           <li class="timeline-item d-flex position-relative overflow-hidden">
             <div class="timeline-time text-dark flex-shrink-0 text-end">
@@ -117,74 +128,83 @@
               <span class="timeline-badge border-2 border border-warning flex-shrink-0 my-8"></span>
               <span class="timeline-badge-border d-block flex-shrink-0"></span>
             </div>
-            <div class="timeline-desc fs-3 text-dark mt-n1"><a href="#" >{{cita.nom_da}} - {{cita.fech_da}}</a></div>
-          {% endfor %}
+            <div class="timeline-desc fs-3 text-dark mt-n1">
+              <a href="#" class="cita-link"
+                 data-nom="{{ cita.nom_da }}"
+                 data-telf="{{ cita.telf_da }}"
+                 data-hora="{{ cita.time_da|time:'H:i' }}">
+                 {{ cita.nom_da }} {{ cita.telf_da }}
+              </a>
+            </div>
           </li>
+          {% endfor %}
+          <br><br>
         </ul>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="col-lg-8 d-flex align-items-stretch">
-  <div class="card w-100">
-    <div class="card-body p-4">
-      <h5 class="card-title fw-semibold mb-4">Citas de Hoy</h5>
-      <div class="table-responsive">
-        <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
-          <thead class="text-dark fs-4">
-            <tr>
-              <th class="border-bottom-0 text-center">
-                <h6 class="fw-semibold mb-0">Fecha</h6>
-              </th>
-              <th class="border-bottom-0 text-center">
-                <h6 class="fw-semibold mb-0">Horario</h6>
-              </th>
-              <th class="border-bottom-0 text-center">
-                <h6 class="fw-semibold mb-0">Solicitante</h6>
-              </th>
-              <th class="border-bottom-0 text-center">
-                <h6 class="fw-semibold mb-0">Estado</h6>
-              </th>
-              <th class="border-bottom-0 text-center">
-                <h6 class="fw-semibold mb-0 text-center">Acción</h6>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for cita in citas_hoy %}
+  <div class="col-lg-8 d-flex align-items-stretch">
+    <div class="card w-100">
+      <div class="card-body p-4">
+        <h5 class="card-title fw-semibold mb-4">Citas de Hoy</h5>
+        <div class="table-responsive">
+          <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
+            <thead class="text-dark fs-4">
               <tr>
-                  <td>{{ cita.fech_da }}</td>
-                  <td>
-                      {% if cita.time_da.hour < 12 %}
-                          {{ cita.time_da|time:"h:i" }} AM
-                      {% else %}
-                          {{ cita.time_da|time:"h:i" }} PM
-                      {% endif %}
-                  </td>
-                  <td>{{cita.nom_da}}</td>
-                  <td>
-                    {% if cita.est_da %}
-                    <span class="text-info">Realizados</span>
-                    {% else %}
-                    <span class="text-warning">En espera</span>
-                    {% endif %}
-                  </td>
-                  <td class="text-center">
-                    {% if not cita.est_da %}
-                      <a href="/adci_inicio/addcont_adci/{{ cita.id }}" class="btn btn-outline-success rounded-pill">Realizar Cobro</a>
-                    {% else %}
-                      <a href="#" class="btn btn-outline-success rounded-pill disabled" aria-disabled="true">Realizar Cobro</a>
-                    {% endif %}
-                  </td>
+                <th class="border-bottom-0 text-center">
+                  <h6 class="fw-semibold mb-0">Fecha</h6>
+                </th>
+                <th class="border-bottom-0 text-center">
+                  <h6 class="fw-semibold mb-0">Horario</h6>
+                </th>
+                <th class="border-bottom-0 text-center">
+                  <h6 class="fw-semibold mb-0">Solicitante</h6>
+                </th>
+                <th class="border-bottom-0 text-center">
+                  <h6 class="fw-semibold mb-0">Estado</h6>
+                </th>
+                <th class="border-bottom-0 text-center">
+                  <h6 class="fw-semibold mb-0 text-center">Acción</h6>
+                </th>
               </tr>
+            </thead>
+            <tbody>
+              {% for cita in citas_hoy %}
+                <tr>
+                    <td>{{ cita.fech_da }}</td>
+                    <td>
+                        {% if cita.time_da.hour < 12 %}
+                            {{ cita.time_da|time:"h:i" }} AM
+                        {% else %}
+                            {{ cita.time_da|time:"h:i" }} PM
+                        {% endif %}
+                    </td>
+                    <td>{{ cita.nom_da }}</td>
+                    <td>
+                      {% if cita.est_da %}
+                      <span class="text-info">Realizados</span>
+                      {% else %}
+                      <span class="text-warning">En espera</span>
+                      {% endif %}
+                    </td>
+                    <td class="text-center">
+                      {% if not cita.est_da %}
+                        <a href="/adci_inicio/addcont_adci/{{ cita.id }}" class="btn btn-outline-success rounded-pill">Realizar Cobro</a>
+                      {% else %}
+                        <a href="#" class="btn btn-outline-success rounded-pill disabled" aria-disabled="true">Realizar Cobro</a>
+                      {% endif %}
+                    </td>
+                </tr>
               {% endfor %}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
 </div>
-</div>
+
 
 <!-- MODAL VISTA CALENDAR cita no escogida-->
 <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
@@ -314,6 +334,36 @@
 <!-- CALENDARIO -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    // Agregar un listener de clic a todos los enlaces con clase 'cita-link'
+       var citaLinks = document.querySelectorAll('.cita-link');
+
+       citaLinks.forEach(function (link) {
+           link.addEventListener('click', function (event) {
+               event.preventDefault(); // Evitar que el enlace se siga al hacer clic
+
+               var nom = this.getAttribute('data-nom');
+               var telf = this.getAttribute('data-telf');
+               var hora = this.getAttribute('data-hora');
+
+               // Mostrar el mensaje de iziToast con la información de la cita
+               iziToast.info({
+                   title: 'Recordatorio de cita',
+                   message: 'Mañana tienes una cita con ' + nom + ' - ' + telf + ' a las ' + hora,
+                   position: 'topRight',
+                   timeout: 180000
+               });
+           });
+       });
+
+    var hoy = new Date();
+    var mañana = new Date(hoy);
+    mañana.setDate(hoy.getDate() + 1);
+
+    var opcionesFecha = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    var fechaSiguiente = mañana.toLocaleDateString('es-ES', opcionesFecha);
+
+    document.getElementById('fecha-siguiente').textContent = fechaSiguiente;
+
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'timeGridWeek',

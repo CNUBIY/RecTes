@@ -39,7 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Aplicaciones.Citas',
     'Aplicaciones.Historiales',
-
+    # 'django.contrib.sites',
+    # 'allauth',
+    # 'allauth.account',
+    #
+    # # Optional -- requires install using `django-allauth[socialaccount]`.
+    # 'allauth.socialaccount',
+    # 'allauth.socialaccount.providers.google',
 ]
 
 SESSION_COOKIE_AGE = 3600
@@ -55,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'Aplicaciones.Citas.middleware.AutoLogout',
+    # "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'Tesis.urls'
@@ -70,6 +77,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # 'django.template.context_processors.request',
             ],
         },
     },
@@ -108,8 +116,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',  # Este backend es para la autenticación basada en el modelo de usuario
-    #'Aplicaciones.Citas.backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    # 'allauth.account.auth_backends.AuthenticationBackend',
+
 ]
 
 # Internationalization
