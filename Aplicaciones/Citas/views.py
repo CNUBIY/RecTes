@@ -336,7 +336,33 @@ def check_appointment(request):
 def cont_inicio(request):
     factbdd=FactCitas.objects.all()
     citabdd=CitaSol.objects.all()
-    return render(request,'cont_inicio.html',{'facturas':factbdd,'citas':citabdd})
+    total_anual = 0
+    total_primer_semestre = 0
+    total_segundo_semestre = 0
+
+    for fact in factbdd:
+        if fact.fechfac and fact.fechfac.est_da:
+            turno = 'matutina' if fact.fechfac.time_da < time(12) else 'vespertina'
+            citas_por_fecha[fact.fechfac.fech_da][turno]['ventas'] += fact.valfac
+
+            # Verificar si la fecha es del año actual
+            if fact.fechfac.fech_da.year == datetime.now().year:
+                total_anual += fact.valfac
+
+                # Calcular los totales semestrales
+                if 1 <= fact.fechfac.fech_da.month <= 6:
+                    total_primer_semestre += fact.valfac
+                elif 7 <= fact.fechfac.fech_da.month <= 12:
+                    total_segundo_semestre += fact.valfac
+
+    # Crear un diccionario para el total anual y los totales semestrales
+    totales = {
+        'total_anual': total_anual,
+        'total_primer_semestre': total_primer_semestre,
+        'total_segundo_semestre': total_segundo_semestre
+    }
+
+    return render(request,'cont_inicio.html',{'facturas':factbdd,'citas':citabdd, 'totales':totales})
 
 @login_required
 @custom_login_required
@@ -365,22 +391,35 @@ def cont_int(request):
         if cita.est_da:
             citas_por_fecha[cita.fech_da][turno]['atendidos'] += 1
 
-    total_anual = 0
-    for fact in factbdd:
-        if fact.fechfac and fact.fechfac.est_da:
-            turno = 'matutina' if fact.fechfac.time_da < time(12) else 'vespertina'
-            citas_por_fecha[fact.fechfac.fech_da][turno]['ventas'] += fact.valfac
-            if fact.fechfac.fech_da.year == datetime.now().year:  # Verificar si la fecha es del año actual
-                total_anual += fact.valfac
-
     # Ordenar citas_por_fecha por fech_da de más actual a más antigua
     citas_por_fecha_ordenadas = OrderedDict(
         sorted(citas_por_fecha.items(), key=lambda item: item[0], reverse=True)
     )
+    
+    total_anual = 0
+    total_primer_semestre = 0
+    total_segundo_semestre = 0
 
-    # Crear un diccionario para el total anual
+    for fact in factbdd:
+        if fact.fechfac and fact.fechfac.est_da:
+            turno = 'matutina' if fact.fechfac.time_da < time(12) else 'vespertina'
+            citas_por_fecha[fact.fechfac.fech_da][turno]['ventas'] += fact.valfac
+
+            # Verificar si la fecha es del año actual
+            if fact.fechfac.fech_da.year == datetime.now().year:
+                total_anual += fact.valfac
+
+                # Calcular los totales semestrales
+                if 1 <= fact.fechfac.fech_da.month <= 6:
+                    total_primer_semestre += fact.valfac
+                elif 7 <= fact.fechfac.fech_da.month <= 12:
+                    total_segundo_semestre += fact.valfac
+
+    # Crear un diccionario para el total anual y los totales semestrales
     totales = {
-        'total_anual': total_anual
+        'total_anual': total_anual,
+        'total_primer_semestre': total_primer_semestre,
+        'total_segundo_semestre': total_segundo_semestre
     }
 
     context = {
