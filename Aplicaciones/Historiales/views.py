@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from Aplicaciones.Citas.middleware import login_required as custom_login_required
-from .models import Patient
+from .models import Patient, Gender
 # Create your views here.
 
 
@@ -43,6 +43,7 @@ def user_logout(request):
 
 #Página Vista de Historiales INICIO
 @login_required
+@custom_login_required
 def doc_inicio (request):
     histobdd=Patient.objects.all()
     return render(request,'general/doc_inicio.html',{'historiales':histobdd})
@@ -60,3 +61,15 @@ def doc_patient (request,idPat):
 
 
 #Página PACIENTES FINAL
+
+
+
+#Página CREAR PACIENTE INICIO
+@login_required
+@custom_login_required
+def new_patient(request):
+    patbdd=Patient.objects.all()
+    genbdd=Gender.objects.all()
+    return render(request,'patients/new.html',{'pacientes':patbdd,'generos':genbdd})
+
+#Página CREAR PACIENTE FINAL
