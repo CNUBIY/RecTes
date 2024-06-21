@@ -8,8 +8,14 @@
   <title>Centro Médico Infantil Juvenil</title>
 
 
+  <style>
+    .favicon {
+        width: 32px; /* Ancho deseado del ícono */
+        height: 32px; /* Alto deseado del ícono */
+    }
+  </style>
   <!-- ICONO PÁGINA -->
-  <link rel="shortcut icon" type="image/png" href="{% static 'images/logos/favicon.png' %}" />
+  <link rel="shortcut icon" type="image/png" href="{% static 'images/logo.png' %}" class="favicon">
 
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
@@ -59,9 +65,10 @@
     <aside class="left-sidebar">
       <!-- Sidebar scroll-->
       <div>
+        <br>
         <div class="brand-logo d-flex align-items-center justify-content-between">
-          <a href="/adci_inicio/" class="text-nowrap logo-img">
-            <img src="{% static 'images/logos/dark-logo.svg' %}" width="180" alt="" />
+          <a href="{% url 'doc_inicio' %}" class="text-nowrap logo-img">
+            <img src="{% static 'images/logo.png' %}" width="165" alt="" />
           </a>
           <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
             <i class="ti ti-x fs-8"></i>

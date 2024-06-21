@@ -30,41 +30,40 @@
           <div class="col-md-8 col-lg-6 col-xxl-3">
             <div class="card mb-0">
               <div class="card-body">
-                <a href="./index.html" class="text-nowrap logo-img text-center d-block py-3 w-100">
-                  <img src="{% static 'images/logos/dark-logo.svg' %}" width="180" alt="">
-                </a>
-                <p class="text-center">Tu Centro Médico Favorito</p>
+                <div class="text-center">
+                  <a href="{% url 'index' %}" class="text-nowrap logo-img">
+                    <img src="{% static 'images/logo.png' %}" width="165" alt="" />
+                  </a>
+                  <p class="text-center">Tu Centro Médico Favorito</p>
+                </div>
                 <form id="log_val" action="" method="post">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Correo Electrónico</label>
-                        <input type="email" class="form-control {% if mensaje_error.correo_us %}error{% endif %}" id="username" name="username" aria-describedby="emailHelp">
-                        <div class="error-message"></div>
-                        {% if mensaje_error.correo_us %}
-                        <p class="text-danger">{{ mensaje_error.correo_us }}</p>
-                        {% endif %}
-
-                    </div>
-                    <div class="mb-4">
-                        <label for="exampleInputPassword1" class="form-label">Contraseña</label>
-                        <input type="password" class="form-control {% if mensaje_error.pass_us %}error{% endif %}" name="password" id="password" autocomplete="off">
-                        <div class="error-message"></div>
-                        {% if mensaje_error.pass_us %}
-                             <p class="text-danger">{{ mensaje_error.pass_us }}</p>
-                         {% endif %}
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between mb-4">
-                      <a class="text-primary fw-bold" href="./index.html">Olvidaste tu contraseña?</a>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" name="button">Iniciar Sesión</button>
-                    <div class="d-flex align-items-center justify-content-center">
-                      <p class="fs-4 mb-0 fw-bold">No socialices tu información con ningún externo</p>
-                    </div>
-                  </form>
+                  {% csrf_token %}
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Correo Electrónico</label>
+                    <input type="email" class="form-control {% if mensaje_error.correo_us %}error{% endif %}" id="username" name="username" aria-describedby="emailHelp">
+                    <div class="error-message"></div>
+                    {% if mensaje_error.correo_us %}
+                      <p class="text-danger">{{ mensaje_error.correo_us }}</p>
+                    {% endif %}
+                  </div>
+                  <div class="mb-4">
+                    <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control {% if mensaje_error.pass_us %}error{% endif %}" name="password" id="password" autocomplete="off">
+                    <div class="error-message"></div>
+                    {% if mensaje_error.pass_us %}
+                      <p class="text-danger">{{ mensaje_error.pass_us }}</p>
+                    {% endif %}
+                  </div>
+                  <div class="d-flex align-items-center justify-content-between mb-4">
+                    <a class="text-primary fw-bold" href="./index.html">Olvidaste tu contraseña?</a>
+                  </div>
+                  <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" name="button">Iniciar Sesión</button>
+                  <div class="d-flex align-items-center justify-content-center">
+                    <p class="fs-4 mb-0 fw-bold">No socialices tu información con ningún externo</p>
+                  </div>
+                </form>
               </div>
-            </div>
-          </div>
-        </div>
+
       </div>
     </div>
   </div>
