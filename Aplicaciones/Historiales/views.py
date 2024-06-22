@@ -70,6 +70,36 @@ def doc_patient (request,idPat):
 def new_patient(request):
     patbdd=Patient.objects.all()
     genbdd=Gender.objects.all()
+
+    if request.method == 'POST':
+        # try:
+        namePat = request.POST['namePat']
+        lastnPat = request.POST['lastnPat']
+        pldatePat = request.POST['pldatePat']
+        birthPat = request.POST['birthPat']
+        placePat = request.POST['placePat']
+        natiPat = request.POST['natiPat']
+        ciPat = request.POST['ciPat']
+        id_gen = request.POST['id_gen']
+        genselect = Gender.objects.get(id=id_gen)
+
+        new_pat = Patient.objects.create(
+            namePat=namePat,
+            lastnPat=lastnPat,
+            pldatePat=pldatePat,
+            birthPat=birthPat,
+            placePat=placePat,
+            natiPat=natiPat,
+            ciPat=ciPat,
+            genPat=genselect,
+        )
+        messages.success(request, "Paciente registrado correctamente.")
+        return redirect('doc_inicio')
+
+        # except Exception as e:
+        #     print(f"Error al procesar la solicitud: {str(e)}")
+        #     messages.error(request, "Ha ocurrido un error al procesar la solicitud.")
+
     return render(request,'patients/new.html',{'pacientes':patbdd,'generos':genbdd})
 
 #Página CREAR PACIENTE FINAL

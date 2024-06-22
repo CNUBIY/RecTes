@@ -234,28 +234,30 @@
             {% if messages %}
                 {% for mensaje in messages %}
                     <script type="text/javascript">
-                        {% if "eliminado" in mensaje %}
+                        var mensajeTexto = "{{ mensaje|escapejs }}";
+                        if (mensajeTexto.includes("eliminado")) {
                             iziToast.error({
                                 title: 'Cancelado',
-                                message: '{{ mensaje }}',
+                                message: mensajeTexto,
                                 position: 'topRight',
                             });
-                        {% elif "guardado" in mensaje %}
+                        } else if (mensajeTexto.includes("registrado")) {
                             iziToast.success({
                                 title: 'Éxito',
-                                message: '{{ mensaje }}',
+                                message: mensajeTexto,
                                 position: 'topRight',
                             });
-                        {% else %}
+                        } else {
                             iziToast.error({
                                 title: 'Error',
-                                message: '{{ mensaje }}',
+                                message: mensajeTexto,
                                 position: 'topRight',
                             });
-                        {% endif %}
+                        }
                     </script>
                 {% endfor %}
             {% endif %}
+
         <div class="py-6 px-6 text-center">
           <p class="mb-0 fs-4">Design and Developed by <a href="https://adminmart.com/" target="_blank" class="pe-1 text-primary text-decoration-underline">AdminMart.com</a> Distributed by <a href="https://themewagon.com">ThemeWagon</a></p>
         </div>
