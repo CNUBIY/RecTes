@@ -57,7 +57,8 @@ def doc_inicio (request):
 @custom_login_required
 def doc_patient (request,idPat):
     patbdd=Patient.objects.get(idPat=idPat)
-    return render(request, 'histo/patient.html',{'pacientes':patbdd})
+    genbdd=Gender.objects.all()
+    return render(request, 'histo/patient.html',{'pacientes':patbdd,'generos':genbdd})
 
 
 #Página PACIENTES FINAL
