@@ -230,7 +230,6 @@
         <div class="row">
           {% block doc_contenido %}
             {% endblock %}
-
             {% if messages %}
                 {% for mensaje in messages %}
                     <script type="text/javascript">
@@ -241,7 +240,7 @@
                                 message: mensajeTexto,
                                 position: 'topRight',
                             });
-                        } else if (mensajeTexto.includes("registrado")) {
+                        } else if (mensajeTexto.includes("registrado") || mensajeTexto.includes("editado exitósamente")) {
                             iziToast.success({
                                 title: 'Éxito',
                                 message: mensajeTexto,

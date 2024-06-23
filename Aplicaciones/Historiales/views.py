@@ -73,34 +73,68 @@ def new_patient(request):
     genbdd=Gender.objects.all()
 
     if request.method == 'POST':
-        # try:
-        namePat = request.POST['namePat']
-        lastnPat = request.POST['lastnPat']
-        pldatePat = request.POST['pldatePat']
-        birthPat = request.POST['birthPat']
-        placePat = request.POST['placePat']
-        natiPat = request.POST['natiPat']
-        ciPat = request.POST['ciPat']
-        id_gen = request.POST['id_gen']
-        genselect = Gender.objects.get(id=id_gen)
+        try:
+            namePat = request.POST['namePat']
+            lastnPat = request.POST['lastnPat']
+            pldatePat = request.POST['pldatePat']
+            birthPat = request.POST['birthPat']
+            placePat = request.POST['placePat']
+            natiPat = request.POST['natiPat']
+            ciPat = request.POST['ciPat']
+            id_gen = request.POST['id_gen']
+            genselect = Gender.objects.get(id=id_gen)
 
-        new_pat = Patient.objects.create(
-            namePat=namePat,
-            lastnPat=lastnPat,
-            pldatePat=pldatePat,
-            birthPat=birthPat,
-            placePat=placePat,
-            natiPat=natiPat,
-            ciPat=ciPat,
-            genPat=genselect,
-        )
-        messages.success(request, "Paciente registrado correctamente.")
-        return redirect('doc_inicio')
+            new_pat = Patient.objects.create(
+                namePat=namePat,
+                lastnPat=lastnPat,
+                pldatePat=pldatePat,
+                birthPat=birthPat,
+                placePat=placePat,
+                natiPat=natiPat,
+                ciPat=ciPat,
+                genPat=genselect,
+            )
+            messages.success(request, "Paciente registrado correctamente.")
+            return redirect('doc_inicio')
 
-        # except Exception as e:
-        #     print(f"Error al procesar la solicitud: {str(e)}")
-        #     messages.error(request, "Ha ocurrido un error al procesar la solicitud.")
+        except Exception as e:
+            print(f"Error al procesar la solicitud: {str(e)}")
+            messages.error(request, "Ha ocurrido un error al procesar la solicitud.")
+            return redirect('error_p')
 
     return render(request,'patients/new.html',{'pacientes':patbdd,'generos':genbdd})
 
+
+@login_required
+@custom_login_required
+def edit_patient(request,idPat):
+    if request.method=='POST':
+        # try:
+            idPat=request.POST["idPat"]
+            namePat = request.POST['namePat']
+            lastnPat = request.POST['lastnPat']
+            pldatePat = request.POST['pldatePat']
+            birthPat = request.POST['birthPat']
+            placePat = request.POST['placePat']
+            natiPat = request.POST['natiPat']
+            ciPat = request.POST['ciPat']
+            id_gen = request.POST['id_gen']
+            genselect = Gender.objects.get(id=id_gen)
+
+            patEdit = Patient.objects.get(idPat=idPat)
+            patEdit.namePat=namePat
+            patEdit.lastnPat=lastnPat
+            patEdit.birthPat=birthPat
+            patEdit.placePat=placePat
+            patEdit.natiPat=natiPat
+            patEdit.ciPat=ciPat
+            patEdit.genPat=genselect
+            patEdit.save()
+
+            messages.success(request, 'Paciente editado exitósamente')
+    return redirect('doc_patient', idPat=idPat)
+        # except Exception as e:
+        #     print(f"Error al procesar la solicitud: {str(e)}")
+        #     messages.error(request, "Ha ocurrido un error al procesar la solicitud.")
+        #     return redirect('error_p')
 #Página CREAR PACIENTE FINAL

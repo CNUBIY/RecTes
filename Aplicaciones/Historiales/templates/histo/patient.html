@@ -99,7 +99,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form class="" action="" method="post">
+        <form class="" action="{% url 'edit_patient' idPat=pacientes.idPat %}" method="post">
           {% csrf_token %}
           <input type="hidden" name="idPat" id="idPat" value="{{pacientes.idPat}}">
           <div class="container-fluid">
