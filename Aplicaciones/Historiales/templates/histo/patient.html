@@ -50,7 +50,7 @@
                   {% else %}
                     <div class="text-center">
                       <p >No hay información de la madre disponible.</p>
-                      <a href="{% url 'agg_mom' idPat=pacientes.idPat %}" class="btn btn-outline-success rounded-pill"><i class="fa-solid fa-plus"></i></a>
+                      <a href="{% url 'agg_rep' idPat=pacientes.idPat %}" class="btn btn-outline-success rounded-pill"><i class="fa-solid fa-plus"></i></a>
                     </div>
                   {% endif %}
                 </div>
@@ -68,7 +68,7 @@
                   {% else %}
                     <div class="text-center">
                       <p >No hay información del padre disponible.</p>
-                      <a href="#" class="btn btn-outline-success rounded-pill"><i class="fa-solid fa-plus"></i></a>
+                      <a href="{% url 'agg_rep' idPat=pacientes.idPat %}" class="btn btn-outline-success rounded-pill"><i class="fa-solid fa-plus"></i></a>
                     </div>
                   {% endif %}
                 </div>

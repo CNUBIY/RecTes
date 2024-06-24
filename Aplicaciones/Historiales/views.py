@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from Aplicaciones.Citas.middleware import login_required as custom_login_required
-from .models import Patient, Gender, MadreCita
+from .models import Patient, Gender, MadreCita, PadreCita
 # Create your views here.
 
 
@@ -155,9 +155,10 @@ def edit_patient(request,idPat):
 #Página crear representantes INICIO
 @login_required
 @custom_login_required
-def agg_mom(request,idPat):
+def agg_rep(request,idPat):
     patbdd=Patient.objects.get(idPat=idPat)
-    
-    return render(request,'mom/agg_mom_pat.html',{'pacientes':patbdd})
+    mombdd=MadreCita.objects.all()
+    dadbdd=PadreCita.objects.all()
+    return render(request,'rep/agg_rep_pat.html',{'pacientes':patbdd,'mom':mombdd})
 
 #Página crear representantes FINAL
