@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from Aplicaciones.Citas.middleware import login_required as custom_login_required
-from .models import Patient, Gender
+from .models import Patient, Gender, MadreCita
 # Create your views here.
 
 
@@ -83,6 +83,9 @@ def new_patient(request):
             ciPat = request.POST['ciPat']
             id_gen = request.POST['id_gen']
             genselect = Gender.objects.get(id=id_gen)
+            tf_casa = request.POST['tf_casa']
+            cell = request.POST['cell']
+            tf_tra = request.POST['tf_tra']
 
             new_pat = Patient.objects.create(
                 namePat=namePat,
@@ -93,6 +96,9 @@ def new_patient(request):
                 natiPat=natiPat,
                 ciPat=ciPat,
                 genPat=genselect,
+                tf_casa = tf_casa,
+                cell = cell,
+                tf_tra = tf_tra
             )
             messages.success(request, "Paciente registrado correctamente.")
             return redirect('doc_inicio')
@@ -120,6 +126,9 @@ def edit_patient(request,idPat):
             ciPat = request.POST['ciPat']
             id_gen = request.POST['id_gen']
             genselect = Gender.objects.get(id=id_gen)
+            tf_casa = request.POST['tf_casa']
+            cell = request.POST['cell']
+            tf_tra = request.POST['tf_tra']
 
             patEdit = Patient.objects.get(idPat=idPat)
             patEdit.namePat=namePat
@@ -129,6 +138,9 @@ def edit_patient(request,idPat):
             patEdit.natiPat=natiPat
             patEdit.ciPat=ciPat
             patEdit.genPat=genselect
+            patEdit.tf_casa = tf_casa
+            patEdit.cell = cell
+            patEdit.tf_tra = tf_tra
             patEdit.save()
 
             messages.success(request, 'Paciente editado exitósamente')
@@ -138,3 +150,14 @@ def edit_patient(request,idPat):
         #     messages.error(request, "Ha ocurrido un error al procesar la solicitud.")
         #     return redirect('error_p')
 #Página CREAR PACIENTE FINAL
+
+
+#Página crear representantes INICIO
+@login_required
+@custom_login_required
+def agg_mom(request,idPat):
+    patbdd=Patient.objects.get(idPat=idPat)
+    
+    return render(request,'mom/agg_mom_pat.html',{'pacientes':patbdd})
+
+#Página crear representantes FINAL

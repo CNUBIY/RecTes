@@ -26,6 +26,15 @@
                 <p><b>Dirección: </b>{{pacientes.placePat}}</p>
                 <p><b>Cédula: </b>{{pacientes.ciPat}}</p>
               </div>
+              <br>
+              <div class="d-flex justify-content-between align-items-center">
+                <h5><b>Contacto</b></h5>
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <p><b>Tlf Casa: </b>{{pacientes.tf_casa}}</p>
+                <p><b>Celular: </b>{{pacientes.cell}}</p>
+                <p><b>Tlf Trabajo: </b>{{pacientes.tf_tra}}</p>
+              </div>
             </div>
           </div>
           <div class="row mt-4">
@@ -41,7 +50,7 @@
                   {% else %}
                     <div class="text-center">
                       <p >No hay información de la madre disponible.</p>
-                      <a href="#" class="btn btn-outline-success rounded-pill"><i class="fa-solid fa-plus"></i></a>
+                      <a href="{% url 'agg_mom' idPat=pacientes.idPat %}" class="btn btn-outline-success rounded-pill"><i class="fa-solid fa-plus"></i></a>
                     </div>
                   {% endif %}
                 </div>
@@ -68,15 +77,16 @@
             <div class="col-md-4">
               <div class="card">
                 <div class="card-body p-4">
-                  <h5><b>Contaco</b></h5>
+                  <h5><b>Factura</b></h5>
                   {% if pacientes.mom %}
                     <div>
                       <p><b>Nombre:</b> {{ madre_cita.nombre }}</p>
                       <p><b>Teléfono:</b> {{ madre_cita.telefono }}</p>
                     </div>
                   {% else %}
-                    <div>
-                      <p>No hay información disponible.</p>
+                  <br>
+                    <div class="text-center">
+                      <p>Sin datos de facturación.</p>
                     </div>
                   {% endif %}
                 </div>
@@ -171,6 +181,29 @@
                       {% endfor %}
                   </select>
                   <label for="id_gen">Género:</label>
+                  <div id="error-nom_da2" class="error-messages"></div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" name="tf_casa" id="tf_casa" placeholder="Paciente" value="{{pacientes.tf_casa}}" required>
+                  <label for="tf_casa">Tlf Casa:</label>
+                  <div id="error-nom_da2" class="error-messages"></div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" name="cell" id="cell" placeholder="Paciente" value="{{pacientes.cell}}" required>
+                  <label for="cell">Celular:</label>
+                  <div id="error-nom_da2" class="error-messages"></div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" name="tf_tra" id="tf_tra" placeholder="Paciente" value="{{pacientes.tf_tra}}" required>
+                  <label for="tf_tra">Tlf Trabajo:</label>
                   <div id="error-nom_da2" class="error-messages"></div>
                 </div>
               </div>
