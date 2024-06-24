@@ -16,7 +16,7 @@
              </button>
            </div>
           <div class="row align-items-center">
-            <form action="" method="POST" id="vldt_dias">
+            <form action="{% url 'agg_mom' idPat=pacientes.idPat %}" method="POST" id="vldt_dias">
               {% csrf_token %}
               <br>
               <div class="row">
@@ -45,8 +45,8 @@
                 </div>
                 <div class="col-md-4">
                   <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="age_mom" id="age_mom" placeholder="Paciente" value="" required>
-                    <label for="age_mom">Edad:</label>
+                    <input type="date" class="form-control" name="age_mom" id="age_mom" placeholder="Paciente" value="" required>
+                    <label for="age_mom">Fecha de Nacimiento:</label>
                     <div id="error-nom_da2" class="error-messages"></div>
                   </div>
                 </div>
@@ -100,10 +100,10 @@
         <input type="hidden" name="" value="{{pacientes.idPat}}">
         <br>
         <div class="form-floating mb-3">
-          <select name="id_gen" id="id_gen" class="form-control" required>
+          <select name="id_mom" id="id_mom" class="form-control" required>
               <option value="">Escoga un representante</option>
-              {% for genero in generos %}
-              <option value="{{ genero.id }}">{{ genero.nombreGen }}</option>
+              {% for mama in mom %}
+              <option value="{{ mama.id }}">{{mama.ape_mom}} {{ mama.nom_mom }}</option>
               {% endfor %}
           </select>
           <label for="id_gen">Madre:</label>

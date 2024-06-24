@@ -113,10 +113,10 @@ def new_patient(request):
 
 @login_required
 @custom_login_required
-def edit_patient(request,idPat):
-    if request.method=='POST':
-        # try:
-            idPat=request.POST["idPat"]
+def edit_patient(request, idPat):
+    if request.method == 'POST':
+        try:
+            idPat = request.POST["idPat"]
             namePat = request.POST['namePat']
             lastnPat = request.POST['lastnPat']
             pldatePat = request.POST['pldatePat']
@@ -131,24 +131,26 @@ def edit_patient(request,idPat):
             tf_tra = request.POST['tf_tra']
 
             patEdit = Patient.objects.get(idPat=idPat)
-            patEdit.namePat=namePat
-            patEdit.lastnPat=lastnPat
-            patEdit.birthPat=birthPat
-            patEdit.placePat=placePat
-            patEdit.natiPat=natiPat
-            patEdit.ciPat=ciPat
-            patEdit.genPat=genselect
+            patEdit.namePat = namePat
+            patEdit.lastnPat = lastnPat
+            patEdit.birthPat = birthPat
+            patEdit.placePat = placePat
+            patEdit.natiPat = natiPat
+            patEdit.ciPat = ciPat
+            patEdit.genPat = genselect
             patEdit.tf_casa = tf_casa
             patEdit.cell = cell
             patEdit.tf_tra = tf_tra
             patEdit.save()
 
             messages.success(request, 'Paciente editado exitósamente')
-    return redirect('doc_patient', idPat=idPat)
-        # except Exception as e:
-        #     print(f"Error al procesar la solicitud: {str(e)}")
-        #     messages.error(request, "Ha ocurrido un error al procesar la solicitud.")
-        #     return redirect('error_p')
+            return redirect('doc_patient', idPat=idPat)
+
+        except Exception as e:
+            print(f"Error al procesar la solicitud: {str(e)}")
+            messages.error(request, "Ha ocurrido un error al procesar la solicitud.")
+            return redirect('error_p')
+
 #Página CREAR PACIENTE FINAL
 
 
@@ -160,5 +162,27 @@ def agg_rep(request,idPat):
     mombdd=MadreCita.objects.all()
     dadbdd=PadreCita.objects.all()
     return render(request,'rep/agg_rep_pat.html',{'pacientes':patbdd,'mom':mombdd})
+
+def agg_mom(request,idPat):
+    if request.method == 'POST':
+        nom_mom = request.POST['nom_mom']
+        ape_mom = request.POST['ape_mom']
+        age_mom = request.POST['age_mom']
+        hij_mom = request.POST['hij_mom']
+        act_mom = request.POST['act_mom']
+        correo_mom = request.POST['correo_mom']
+        es_cimom = request.POST['es_cimom']
+
+        new_mom = MadreCita.objects.create(
+            nom_mom=nom_mom,
+            ape_mom=ape_mom,
+            age_mom=age_mom,
+            hij_mom = hij_mom,
+            act_mom = act_mom,
+            correo_mom = correo_mom,
+            es_cimom = es_cimom,
+        )
+        messages.success(request,'Representante agregado exitosamente')
+        return redirect('doc_patient', idPat=idPat)
 
 #Página crear representantes FINAL
