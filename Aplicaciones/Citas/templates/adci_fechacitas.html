@@ -161,8 +161,6 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
             <button type="submit" class="btn btn-outline-success" id="saveChangesButton"><i class="fas fa-edit" title="Guardar Cambios"></i></button>
-
-
           </div>
         </form>
       </div>
@@ -279,6 +277,27 @@
 
         return this.optional(element) || inputDate >= today;
       }, "La fecha no puede ser en el pasado");
+
+      // Añadir método de validación personalizado para horarios permitidos
+      $.validator.addMethod("validTimeRange", function(value, element) {
+        if (this.optional(element)) {
+          return true;
+        }
+
+        var time = value.split(":");
+        var hour = parseInt(time[0]);
+        var minutes = parseInt(time[1]);
+
+        var morningStart = 8 * 60; // 8:00 AM en minutos
+        var morningEnd = 13 * 60; // 1:00 PM en minutos
+        var afternoonStart = 16 * 60; // 4:00 PM en minutos
+        var afternoonEnd = 20 * 60; // 8:00 PM en minutos
+
+        var inputTime = hour * 60 + minutes; // Convertir la hora ingresada a minutos
+
+        return (inputTime >= morningStart && inputTime < morningEnd) || (inputTime >= afternoonStart && inputTime < afternoonEnd);
+      }, "Horario fuera de servicio");
+
       // Inicializar validación del modal cuando se muestre
       function initializeModalValidation() {
         $("#vldt_edidias").validate({
@@ -296,6 +315,7 @@
             },
             time_da: {
               required: true,
+              validTimeRange: true // Añadir regla personalizada aquí
             }
           },
           messages: {
@@ -312,6 +332,7 @@
             },
             time_da: {
               required: "Debe ingresar el horario de la cita",
+              validTimeRange: "Horario fuera de servicio"
             }
           },
           errorPlacement: function(error, element) {
@@ -347,6 +368,7 @@
           },
           time_da: {
             required: true,
+            validTimeRange: true // Añadir regla personalizada aquí también
           }
         },
         messages: {
@@ -363,6 +385,7 @@
           },
           time_da: {
             required: "Debe ingresar el horario de la cita",
+            validTimeRange: "Horario fuera de servicio"
           }
         },
         errorPlacement: function(error, element) {
@@ -377,6 +400,5 @@
       });
     });
   </script>
-
 
 {% endblock %}
