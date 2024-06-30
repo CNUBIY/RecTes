@@ -276,27 +276,45 @@
         inputDate.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
 
         return this.optional(element) || inputDate >= today;
-      }, "La fecha no puede ser en el pasado");
+      }, "Debe ingresar una fecha actual o futura");
 
       // Añadir método de validación personalizado para horarios permitidos
       $.validator.addMethod("validTimeRange", function(value, element) {
         if (this.optional(element)) {
           return true;
         }
-
         var time = value.split(":");
         var hour = parseInt(time[0]);
         var minutes = parseInt(time[1]);
-
         var morningStart = 8 * 60; // 8:00 AM en minutos
         var morningEnd = 13 * 60; // 1:00 PM en minutos
         var afternoonStart = 16 * 60; // 4:00 PM en minutos
         var afternoonEnd = 20 * 60; // 8:00 PM en minutos
-
         var inputTime = hour * 60 + minutes; // Convertir la hora ingresada a minutos
-
         return (inputTime >= morningStart && inputTime < morningEnd) || (inputTime >= afternoonStart && inputTime < afternoonEnd);
       }, "Horario fuera de servicio");
+
+      $.validator.addMethod("validTimeIfToday", function(value, element) {
+          var dateField = $('#fech_da').val();
+          var today = new Date();
+          var inputDateParts = dateField.split("-");
+          var inputDate = new Date(inputDateParts[0], inputDateParts[1] - 1, inputDateParts[2]);
+
+          // Si la fecha no es hoy, no hacer nada
+          if (inputDate.setHours(0, 0, 0, 0) !== today.setHours(0, 0, 0, 0)) {
+            return true;
+          }
+
+          var now = new Date();
+          var inputTimeParts = value.split(":");
+          var inputTime = new Date();
+          inputTime.setHours(inputTimeParts[0], inputTimeParts[1], 0, 0);
+
+          // Verificar que la hora ingresada no esté a más de una hora de diferencia de la hora actual
+          var timeDiff = Math.abs(inputTime - now) / 36e5; // Convertir la diferencia de milisegundos a horas
+          return timeDiff <= 1;
+        }, "La hora ingresada debe estar dentro de una hora de la hora actual");
+
 
       // Inicializar validación del modal cuando se muestre
       function initializeModalValidation() {
@@ -315,7 +333,7 @@
             },
             time_da: {
               required: true,
-              validTimeRange: true // Añadir regla personalizada aquí
+              validTimeRange: true, // Añadir regla personalizada aquí
             }
           },
           messages: {
@@ -328,11 +346,11 @@
             fech_da: {
               required: "Debe ingresar la fecha de la cita",
               date: "Ingrese una fecha válida",
-              noPastDate: "La fecha no puede ser en el pasado"
+              noPastDate: "Debe ingresar una fecha actual o futura"
             },
             time_da: {
               required: "Debe ingresar el horario de la cita",
-              validTimeRange: "Horario fuera de servicio"
+              validTimeRange: "Horario fuera de servicio",
             }
           },
           errorPlacement: function(error, element) {
@@ -368,7 +386,8 @@
           },
           time_da: {
             required: true,
-            validTimeRange: true // Añadir regla personalizada aquí también
+            validTimeRange: true, // Añadir regla personalizada aquí también
+            validTimeIfToday: true,
           }
         },
         messages: {
@@ -381,11 +400,12 @@
           fech_da: {
             required: "Debe ingresar la fecha de la cita",
             date: "Ingrese una fecha válida",
-            noPastDate: "La fecha no puede ser en el pasado"
+            noPastDate: "Debe ingresar una fecha actual o futura"
           },
           time_da: {
             required: "Debe ingresar el horario de la cita",
-            validTimeRange: "Horario fuera de servicio"
+            validTimeRange: "Horario fuera de servicio",
+            validTimeIfToday: "La hora ingresada debe estar dentro de una hora de la hora actual",
           }
         },
         errorPlacement: function(error, element) {
