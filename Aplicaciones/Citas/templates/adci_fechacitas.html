@@ -96,12 +96,12 @@
           <input type="text" class="form-control" name="telf_da" id="telf_da" placeholder="Ingrese el número de contacto">
           <div id="error-telf_da" class="error-messages"></div>
         </div>
-        <div class="mb-3">
+        <div class="mb-3 col-md-11">
           <label for="fech_da" class="form-label">Fecha</label>
           <input type="date" class="form-control" name="fech_da" id="fech_da" aria-describedby="dateHelp">
           <div id="error-fech_da" class="error-messages"></div>
         </div>
-        <div class="mb-3">
+        <div class="mb-3 col-md-11">
           <label for="time_da" class="form-label">Horario</label>
           <input type="time" class="form-control" name="time_da" id="time_da">
           <div id="error-time_da" class="error-messages"></div>
@@ -113,7 +113,6 @@
         </div>
         <button type="submit" class="btn btn-outline-primary rounded-pill m-2">Guardar</button>
         <button type="reset" name="button" class="btn btn-outline-danger rounded-pill m-2">Cancelar</button>
-
       </form>
     </div>
   </div>
@@ -265,86 +264,22 @@
 {% endif %}
   </script>
 
+
   <script type="text/javascript">
     $(document).ready(function() {
-
-      function setMinDate(input) {
+      // Añadir método de validación personalizado para fechas pasadas
+      $.validator.addMethod("noPastDate", function(value, element) {
         var today = new Date();
-        var day = String(today.getDate()).padStart(2, '0');
-        var month = String(today.getMonth() + 1).padStart(2, '0');
-        var year = today.getFullYear();
+        today.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
 
-        var minDate = year + '-' + month + '-' + day;
+        // Asegurarse de que el valor ingresado esté en formato yyyy-mm-dd
+        var inputDateParts = value.split("-");
+        var inputDate = new Date(inputDateParts[0], inputDateParts[1] - 1, inputDateParts[2]);
+        inputDate.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
 
-        input.setAttribute('min', minDate);
-      }
-
-      setMinDate(document.getElementById('fech_da'));
-      setMinDate(document.getElementById('exampleModal').querySelector('#fech_da'));
-
-      var inputFecha = document.getElementById('fech_da');
-
-          // Función para obtener la fecha actual en formato "yyyy-mm-dd"
-          function obtenerFechaActual() {
-            var hoy = new Date();
-            var day = String(hoy.getDate()).padStart(2, '0');
-            var month = String(hoy.getMonth() + 1).padStart(2, '0');
-            var year = hoy.getFullYear();
-            return year + '-' + month + '-' + day;
-          }
-
-          // Establecer la fecha actual como valor inicial del input
-          inputFecha.value = obtenerFechaActual();
-
-      $('#nom_da').on('input', function() {
-        var regex = /^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$/;
-        var inputText = $(this).val();
-        if (!regex.test(inputText)) {
-          $(this).val(inputText.slice(0, -1));
-        }
-        var inputTextTrimmed = inputText.trim();
-        var words = inputTextTrimmed.split(/\s+/);
-        if (words.length > 4) {
-          $(this).val(words.slice(0, 4).join(' '));
-        }
-      });
-
-      function disableSaveButton() {
-        $('#saveChangesButton').prop('disabled', true);
-      }
-
-      function enableSaveButton() {
-        $('#saveChangesButton').prop('disabled', false);
-      }
-
-      disableSaveButton();
-
-      $('#exampleModal form').on('input', function() {
-        enableSaveButton();
-      });
-
-      // Deshabilitar el botón de guardar cambios al cerrar el modal
-      $('#exampleModal').on('hidden.bs.modal', function() {
-        disableSaveButton();
-      });
-
-      // Función para permitir solo letras y tildes en el campo de nombre dentro del modal
-      $('#exampleModal #nom_da').on('input', function() {
-        var regex = /^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$/;
-        var inputText = $(this).val();
-        if (!regex.test(inputText)) {
-          $(this).val(inputText.slice(0, -1));
-        }
-
-        // Validación para permitir solo cuatro palabras en el campo de nombre
-        var inputTextTrimmed = inputText.trim();
-        var words = inputTextTrimmed.split(/\s+/);
-        if (words.length > 4) {
-          $(this).val(words.slice(0, 4).join(' '));
-        }
-      });
-
-      // Función para inicializar la validación del modal cuando se muestra
+        return this.optional(element) || inputDate >= today;
+      }, "La fecha no puede ser en el pasado");
+      // Inicializar validación del modal cuando se muestre
       function initializeModalValidation() {
         $("#vldt_edidias").validate({
           rules: {
@@ -356,7 +291,8 @@
             },
             fech_da: {
               required: true,
-              date:true,
+              date: true,
+              noPastDate: true // Añadir regla personalizada aquí
             },
             time_da: {
               required: true,
@@ -371,7 +307,8 @@
             },
             fech_da: {
               required: "Debe ingresar la fecha de la cita",
-              date:"Ingrese una fecha válida"
+              date: "Ingrese una fecha válida",
+              noPastDate: "La fecha no puede ser en el pasado"
             },
             time_da: {
               required: "Debe ingresar el horario de la cita",
@@ -405,6 +342,8 @@
           },
           fech_da: {
             required: true,
+            date: true,
+            noPastDate: true // Añadir regla personalizada aquí también
           },
           time_da: {
             required: true,
@@ -418,7 +357,9 @@
             required: "Debe ingresar el contacto del cliente",
           },
           fech_da: {
-            required: "Debe ingresar la fecha de la cita"
+            required: "Debe ingresar la fecha de la cita",
+            date: "Ingrese una fecha válida",
+            noPastDate: "La fecha no puede ser en el pasado"
           },
           time_da: {
             required: "Debe ingresar el horario de la cita",
@@ -436,5 +377,6 @@
       });
     });
   </script>
+
 
 {% endblock %}

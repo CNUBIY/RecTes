@@ -256,7 +256,7 @@ def aggagenda_adci(request):
             messages.error(request, "Ha ocurrido un error al procesar la solicitud.")
             return redirect('/error_p')
     else:
-    # Manejar solicitudes GET o cualquier otro método HTTP no permitido
+        # Manejar solicitudes GET o cualquier otro método HTTP no permitido
         return redirect('/error_p')
 
 @login_required
@@ -395,7 +395,7 @@ def cont_int(request):
     citas_por_fecha_ordenadas = OrderedDict(
         sorted(citas_por_fecha.items(), key=lambda item: item[0], reverse=True)
     )
-    
+
     total_anual = 0
     total_primer_semestre = 0
     total_segundo_semestre = 0

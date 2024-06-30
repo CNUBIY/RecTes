@@ -239,25 +239,31 @@
         <div class="row">
           {% block usci_contenido %}
             {% endblock %}
+
             {% if messages %}
-                {% for message in messages %}
-                    {% if message.tags == 'error' %}
-                        <script type="text/javascript">
+                {% for mensaje in messages %}
+                    <script type="text/javascript">
+                        var mensajeTexto = "{{ mensaje|escapejs }}";
+                        if (mensajeTexto.includes("eliminado")) {
                             iziToast.error({
-                                title: 'Error',
-                                message: '{{ message }}',
+                                title: 'Cancelado',
+                                message: mensajeTexto,
                                 position: 'topRight',
                             });
-                        </script>
-                    {% elif message.tags == 'success' %}
-                        <script type="text/javascript">
+                        } else if (mensajeTexto.includes("registrado") || mensajeTexto.includes("editado")) {
                             iziToast.success({
                                 title: 'Éxito',
-                                message: '{{ message }}',
+                                message: mensajeTexto,
                                 position: 'topRight',
                             });
-                        </script>
-                    {% endif %}
+                        } else {
+                            iziToast.error({
+                                title: 'Error',
+                                message: mensajeTexto,
+                                position: 'topRight',
+                            });
+                        }
+                    </script>
                 {% endfor %}
             {% endif %}
         <div class="py-6 px-6 text-center">
