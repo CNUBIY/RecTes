@@ -96,16 +96,26 @@
           <input type="text" class="form-control" name="telf_da" id="telf_da" placeholder="Ingrese el número de contacto">
           <div id="error-telf_da" class="error-messages"></div>
         </div>
-        <div class="mb-3 col-md-11">
-          <label for="fech_da" class="form-label">Fecha</label>
-          <input type="date" class="form-control" name="fech_da" id="fech_da" aria-describedby="dateHelp">
-          <div id="error-fech_da" class="error-messages"></div>
+        <div class="row">
+          <div class="mb-3 col-md-11">
+            <label for="fech_da" class="form-label">Fecha</label>
+            <input type="date" class="form-control" name="fech_da" id="fech_da" aria-describedby="dateHelp">
+            <div id="error-fech_da" class="error-messages"></div>
+          </div>
+          <div class="col-md-1 d-flex align-items-center justify-content-center">
+            <i class="fas fa-spinner fa-spin" style="margin-top: 12px; margin-right:12px;" title="Esperando..."></i>
+          </div>
         </div>
-        <div class="mb-3 col-md-11">
-          <label for="time_da" class="form-label">Horario</label>
-          <input type="time" class="form-control" name="time_da" id="time_da">
-          <div id="error-time_da" class="error-messages"></div>
-        </div>
+        <div class="row">
+            <div class="mb-3 col-md-11">
+              <label for="time_da" class="form-label">Horario</label>
+              <input type="time" class="form-control" name="time_da" id="time_da">
+              <div id="error-time_da" class="error-messages"></div>
+            </div>
+            <div class="col-md-1 d-flex align-items-center justify-content-center">
+              <i class="fas fa-spinner fa-spin" style="margin-top: 12px; margin-right:12px;"></i>
+            </div>
+          </div>
         <label for="cort_da" class="form-label">¿Cita de Cortesía?</label>
         <div class="mb-3 form-check">
           <input type="checkbox" class="form-check-input" name="cort_da" id="cort_da">
