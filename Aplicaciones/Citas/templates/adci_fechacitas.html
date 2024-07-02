@@ -141,6 +141,10 @@
             .tooltip('dispose')
             .tooltip();
 
+          // Clear previous error messages and styles
+          $('#error-fech_da, #error-time_da').text('').removeClass('text-danger');
+          $('#fech_da, #time_da').removeClass('is-invalid');
+
           if (fecha && hora) {
               $.ajax({
                   url: '{% url "verificar_cita" %}',
@@ -156,6 +160,11 @@
                             .addClass('fa-times text-danger')
                             .attr('title', 'Cita ya registrada')
                             .tooltip(); // Initialize new tooltip
+
+                          // Show error message and apply styles
+                          $('#error-fech_da').text('Fecha/Horario no disponible.').addClass('text-danger');
+                          $('#error-time_da').text('Fecha/Horario no disponible.').addClass('text-danger');
+                          $('#fech_da, #time_da').addClass('is-invalid');
                       } else {
                           $('#fech_da_icon, #time_da_icon')
                             .removeClass('fa-spinner fa-spin text-muted')
@@ -190,7 +199,9 @@
       $('#vldt_dias').on('submit', function(e) {
           if ($('#fech_da_icon').hasClass('fa-times') || $('#time_da_icon').hasClass('fa-times')) {
               e.preventDefault();
-              alert('Por favor, corrija los errores antes de enviar el formulario.');
+              $('#error-fech_da').text('Fecha/Horario no disponible.').addClass('text-danger');
+              $('#error-time_da').text('Fecha/Horario no disponible.').addClass('text-danger');
+              $('#fech_da, #time_da').addClass('is-invalid');
           }
       });
   });
