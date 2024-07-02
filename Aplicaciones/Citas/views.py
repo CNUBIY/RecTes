@@ -208,6 +208,16 @@ def adci_fechacitas (request):
     horabdd=HorasDia.objects.all()
     citabdd=CitaSol.objects.all()
     return render(request,'adci_fechacitas.html',{'horarios':horariobdd,'horas':horabdd,'citas':citabdd})
+@login_required
+@custom_login_required
+def verificar_cita(request):
+    fecha = request.GET.get('fecha')
+    hora = request.GET.get('hora')
+
+    if CitaSol.objects.filter(fech_da=fecha, time_da=hora).exists():
+        return JsonResponse({'existe': True})
+    else:
+        return JsonResponse({'existe': False})
 
 @login_required
 @custom_login_required
@@ -219,25 +229,6 @@ def aggagenda_adci(request):
             fech_da = request.POST["fech_da"]
             time_da = request.POST["time_da"]
             cort_da = request.POST.get("cort_da") == "on"
-
-            # Validar que el horario esté dentro de los rangos permitidos (8am - 8pm)
-            selected_time = datetime.strptime(time_da, "%H:%M").time()
-            if not ((8 <= selected_time.hour < 13) or (16 <= selected_time.hour < 20)):
-                messages.error(request, "No puede ingresar horarios fuera de servicio.")
-                return redirect('/adci_fechacitas')
-
-            # Validar que no se pueda seleccionar una hora pasada para la fecha actual
-            current_datetime = datetime.now()
-            selected_datetime = datetime.strptime(f"{fech_da} {time_da}", "%Y-%m-%d %H:%M")
-            if fech_da == current_datetime.strftime("%Y-%m-%d") and selected_datetime < current_datetime - timedelta(hours=1):
-                messages.error(request, "No puedes seleccionar una hora pasada para la fecha de hoy.")
-                return redirect('/adci_fechacitas')
-
-            # Verificar si la fecha y hora ya están registradas en otra cita
-            citas_existentes = CitaSol.objects.filter(fech_da=fech_da, time_da=time_da)
-            if citas_existentes.exists():
-                messages.error(request, "Ya existe una cita registrada para esta fecha y hora.")
-                return redirect('/adci_fechacitas')
 
             # Procesar la creación de la cita si pasa todas las validaciones
             nueva_cita = CitaSol.objects.create(

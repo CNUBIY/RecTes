@@ -24,6 +24,7 @@ urlpatterns=[
 
     #HORARIOS ADMIN
     path('adci_fechacitas/',views.adci_fechacitas),
+    path('verificar_cita/', views.verificar_cita, name='verificar_cita'),
     path('aggagenda_adci/',views.aggagenda_adci),
     path('delete_adci/<id>',views.delete_adci),
     path('adci_fechacitas/procesarActualizacionHorario/<int:id>/', views.procesarActualizacionHorario, name='procesarActualizacionHorario'),
