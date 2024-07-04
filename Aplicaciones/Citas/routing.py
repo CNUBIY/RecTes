@@ -1,17 +1,9 @@
-# En Aplicaciones/Citas/routing.py
-from channels.routing import ProtocolTypeRouter, URLRouter
-from channels.auth import AuthMiddlewareStack
-from django.urls import path
-from .consumers import TelegramConsumer
+# Aplicaciones/Citas/routing.py
 
-application = ProtocolTypeRouter({
-    'http': URLRouter([
-        # Otras URLs de tu aplicación si las hay para HTTP
-    ]),
-    'websocket': AuthMiddlewareStack(
-        URLRouter([
-            path('ws/CMIJbot/', TelegramConsumer.as_asgi()),
-            # Otras rutas WebSocket aquí si es necesario
-        ])
-    ),
-})
+from django.urls import re_path
+from . import consumers
+
+websocket_urlpatterns = [
+    re_path(r'ws/recordatorios/$', consumers.RecordatorioConsumer.as_asgi()),
+    # Define aquí otras rutas de WebSocket según tus necesidades
+]

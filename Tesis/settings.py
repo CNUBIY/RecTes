@@ -28,6 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 BOT_TOKEN='7245155863:AAGRbQXVqOYq0TzzxqTMBjajJt4Uc6bgJqc'
+
 BOT_CHAT_ID='1051876104'
 # Application definition
 
@@ -85,6 +86,12 @@ TEMPLATES = [
         },
     },
 ]
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',  # Usando InMemoryChannelLayer para desarrollo
+    },
+}
 
 WSGI_APPLICATION = 'Tesis.wsgi.application'
 ASGI_APPLICATION = 'Tesis.asgi.application'

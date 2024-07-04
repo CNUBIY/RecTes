@@ -3,9 +3,6 @@ from . import views
 from django.contrib.auth import views as auth_views
 from . import consumers
 
-websocket_urlpatterns = [
-    path('ws/CMIJbot/', consumers.TelegramConsumer.as_asgi()),
-]
 urlpatterns=[
     #INDEX
     path('',views.index, name='index'),

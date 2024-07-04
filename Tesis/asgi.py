@@ -1,27 +1,19 @@
-"""
-ASGI config for Tesis project.
-
-It exposes the ASGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/
-"""
+# asgi.py
 
 import os
-from channels.auth import AuthMiddlewareStack
-from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
-from django.urls import path
-from Aplicaciones.Citas.routing import application as tu_app_routing
+from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.auth import AuthMiddlewareStack
+from Aplicaciones.Citas.routing import websocket_urlpatterns  # Asegúrate de importar tus rutas de WebSocket aquí
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Tesis.settings')
 
-# application = get_asgi_application()
+# Configuración de la aplicación ASGI
 application = ProtocolTypeRouter({
-    'http': get_asgi_application(),
+    'http': get_asgi_application(),  # Configuración para manejar HTTP
     'websocket': AuthMiddlewareStack(
         URLRouter(
-            tu_app_routing.websocket_urlpatterns
+            websocket_urlpatterns  # Aquí se agregarán las rutas de WebSocket
         )
     ),
 })
