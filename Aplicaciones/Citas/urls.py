@@ -1,8 +1,11 @@
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
+from . import consumers
 
-
+websocket_urlpatterns = [
+    path('ws/CMIJbot/', consumers.TelegramConsumer.as_asgi()),
+]
 urlpatterns=[
     #INDEX
     path('',views.index, name='index'),
@@ -16,7 +19,7 @@ urlpatterns=[
     path('adci_inicio/aggin_adci/',views.aggin_adci),
     path('adci_inicio/procesarActualizacionHorarioIn/<int:id>/', views.procesarActualizacionHorarioIn, name='procesarActualizacionHorarioIn'),
     path('delete_adciIn/<id>/',views.delete_adciIn),
-    #CONTABILIDAD
+    #PAGOSREALIZADOS
     path('adci_inicio/cont_inicio/', views.cont_inicio),
     path('adci_inicio/cont_inicio/cont_int/',views.cont_int, name='cont_int'),
     path('adci_inicio/addcont_adci/<id>',views.addcont_adci, name='addcont_adci'),

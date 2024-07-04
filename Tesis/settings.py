@@ -27,10 +27,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+BOT_TOKEN='7245155863:AAGRbQXVqOYq0TzzxqTMBjajJt4Uc6bgJqc'
+BOT_CHAT_ID='1051876104'
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Aplicaciones.Citas',
     'Aplicaciones.Historiales',
+
     # 'django.contrib.sites',
     # 'allauth',
     # 'allauth.account',
@@ -84,6 +87,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Tesis.wsgi.application'
+ASGI_APPLICATION = 'Tesis.asgi.application'
 
 
 # Database

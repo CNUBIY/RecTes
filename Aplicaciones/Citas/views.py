@@ -13,10 +13,26 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from Aplicaciones.Citas.middleware import login_required as custom_login_required
 from collections import defaultdict, OrderedDict
+import telegram
+import asyncio
+from django.core.serializers.json import DjangoJSONEncoder
+from django.core.serializers import serialize
+from django.conf import settings
+
 # Create your views here.
 
+my_token = settings.BOT_TOKEN
+my_chat_id = settings.BOT_CHAT_ID
+
+async def bot(msg, chat_id=my_chat_id, token=my_token):
+    bot = telegram.Bot(token=token)
+    await bot.send_message(chat_id=chat_id, text=msg)
+
+
+
 #Página Informativa INICIO
-def index (request):
+async def index (request):
+    await bot("Iniciaste sesión ahora")
     return render(request,'index.html')
 
 

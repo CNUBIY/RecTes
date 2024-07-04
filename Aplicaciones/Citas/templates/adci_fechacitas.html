@@ -8,6 +8,36 @@
       <div class="card overflow-hidden">
         <div class="card-body p-4">
           <h5 class="card-title mb-9 fw-semibold">Citas Creadas</h5><br>
+          <script>
+            var socket = new WebSocket('ws://' + window.location.host + '/ws/CMIJbot/');
+            socket.onopen = function() {
+                console.log('WebSocket connection established.');
+            };
+            socket.onclose = function(event) {
+                console.log('WebSocket connection closed with code: ' + event.code + ', reason: ' + event.reason);
+            };
+            socket.onerror = function(error) {
+                console.error('WebSocket error: ' + error.message);
+            };
+            function enviarMensaje() {
+                if (socket.readyState === WebSocket.OPEN) {
+                    var message = "Hola desde Django! Este es un mensaje de prueba desde tu aplicación.";
+                    socket.send(JSON.stringify({'message': message}));
+                } else {
+                    console.error('WebSocket is not open.');
+                }
+            }
+          </script>
+          <div id="mensaje-status">
+              {% if message_sent %}
+                  <p>¡Mensaje enviado correctamente!</p>
+              {% endif %}
+          </div>
+
+          <form onsubmit="enviarMensaje(); return false;">
+              {% csrf_token %}
+              <button type="submit">Enviar Mensaje</button>
+          </form>
           <div class="row align-items-center">
             <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
               <thead class="text-dark fs-4">
