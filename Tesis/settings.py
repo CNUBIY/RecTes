@@ -33,7 +33,7 @@ BOT_CHAT_ID='1051876104'
 # Application definition
 
 INSTALLED_APPS = [
-    'channels',
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

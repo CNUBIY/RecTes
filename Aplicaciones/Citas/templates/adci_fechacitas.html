@@ -1,6 +1,37 @@
 {% extends 'adci_plantilla.html' %}
 {% block usci_contenido %}
+<h1>WebSocket Example</h1>
+    <input type="text" id="messageInput" placeholder="Type a message...">
+    <button onclick="sendMessage()">Send</button>
+    <ul id="messagesList"></ul>
 
+    <script>
+        const socket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/ejemplo/'
+        );
+
+        socket.onopen = function(event) {
+            console.log('WebSocket connected.');
+        };
+
+        socket.onmessage = function(event) {
+            const messageElement = document.createElement('li');
+            messageElement.textContent = event.data;
+            document.getElementById('messagesList').appendChild(messageElement);
+        };
+
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+
+            if (message !== '') {
+                socket.send(message);
+                messageInput.value = '';
+            }
+        }
+    </script>
 <div class="col-lg-8">
   <div class="row">
     <div class="col-lg-12">

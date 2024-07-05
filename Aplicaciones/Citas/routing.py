@@ -1,9 +1,7 @@
-# Aplicaciones/Citas/routing.py
-
-from django.urls import re_path
+from django.urls import path
 from . import consumers
 
 websocket_urlpatterns = [
-    re_path(r'ws/recordatorios/$', consumers.RecordatorioConsumer.as_asgi()),
-    # Define aquí otras rutas de WebSocket según tus necesidades
+    path('ws/ejemplo/', consumers.ChatConsumer.as_asgi()),
+    # Define otras rutas WebSocket y consumidores según tus necesidades
 ]
