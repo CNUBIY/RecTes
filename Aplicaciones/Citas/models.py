@@ -16,7 +16,7 @@ class CitaSol(models.Model):
     notificacion_enviada = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.nom_da}: {self.fech_da} | {self.time_da}"
+        return f"{self.nom_da}: {self.fech_da} a las {self.time_da} por favor comunicarse a {self.telf_da}"
 
 class FactCitas(models.Model):
     id=models.AutoField(primary_key=True)
