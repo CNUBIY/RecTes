@@ -13,6 +13,7 @@ class CitaSol(models.Model):
     nom_da=models.CharField(max_length=150)
     telf_da=models.CharField(max_length=10)
     est_da=models.BooleanField(default=False)
+    notificacion_enviada = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.nom_da}: {self.fech_da} | {self.time_da}"
