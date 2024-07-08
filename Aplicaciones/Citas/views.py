@@ -336,25 +336,31 @@ def check_appointment(request):
 @login_required
 @custom_login_required
 def cont_inicio(request):
-    factbdd=FactCitas.objects.all()
-    citabdd=CitaSol.objects.all()
+    factbdd = FactCitas.objects.all()
+    citabdd = CitaSol.objects.all()
     total_anual = 0
     total_primer_semestre = 0
     total_segundo_semestre = 0
+    citas_por_fecha = {}
 
     for fact in factbdd:
         if fact.fechfac and fact.fechfac.est_da:
+            fecha = fact.fechfac.fech_da
             turno = 'matutina' if fact.fechfac.time_da < time(12) else 'vespertina'
-            citas_por_fecha[fact.fechfac.fech_da][turno]['ventas'] += fact.valfac
+
+            if fecha not in citas_por_fecha:
+                citas_por_fecha[fecha] = {'matutina': {'ventas': 0}, 'vespertina': {'ventas': 0}}
+
+            citas_por_fecha[fecha][turno]['ventas'] += fact.valfac
 
             # Verificar si la fecha es del año actual
-            if fact.fechfac.fech_da.year == datetime.now().year:
+            if fecha.year == datetime.now().year:
                 total_anual += fact.valfac
 
                 # Calcular los totales semestrales
-                if 1 <= fact.fechfac.fech_da.month <= 6:
+                if 1 <= fecha.month <= 6:
                     total_primer_semestre += fact.valfac
-                elif 7 <= fact.fechfac.fech_da.month <= 12:
+                elif 7 <= fecha.month <= 12:
                     total_segundo_semestre += fact.valfac
 
     # Crear un diccionario para el total anual y los totales semestrales
@@ -364,7 +370,7 @@ def cont_inicio(request):
         'total_segundo_semestre': total_segundo_semestre
     }
 
-    return render(request,'cont_inicio.html',{'facturas':factbdd,'citas':citabdd, 'totales':totales})
+    return render(request, 'cont_inicio.html', {'facturas': factbdd, 'citas': citabdd, 'totales': totales})
 
 @login_required
 @custom_login_required

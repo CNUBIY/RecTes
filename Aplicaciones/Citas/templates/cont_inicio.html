@@ -19,7 +19,7 @@
           <h5 class="card-title fw-semibold">Total 2° Semestre</h5>
           <h4 class=" text-success">{{ totales.total_segundo_semestre }} $</h4>
         </div>
-        <div class="mt-auto">
+        <div class="mb-4">
           <a href="./cont_int/" class="btn btn-outline-success">Seguimiento Interno</a>
         </div>
       </div>
@@ -68,25 +68,61 @@
     </div>
   </div>
 </div>
+<style>
+    /* Agregar espacio entre el buscador y la tabla */
+    .dataTables_filter {
+        margin-bottom: 20px;
+    }
 
+    /* Personaliza el estilo de los botones */
+    .dt-buttons {
+        margin-bottom: 20px; /* Espacio entre los botones y el buscador */
+    }
+
+    .dt-button {
+        margin-right: 5px; /* Espacio entre los botones */
+    }
+</style>
 <!-- CONFIGURACCIÓN DE TABLA -->
 <script type="text/javascript">
   $(document).ready(function() {
       $('#tbl_cont').DataTable( {
-          dom: 'frtip',
+          dom: 'Bfrtip',
+          buttons: [
+              {
+                  extend: 'pdfHtml5',
+                  text: '<i class="fa-solid fa-file-pdf"></i> Exportar a PDF',
+                  className: 'btn btn-outline-info',
+                  messageTop: 'Pagos realizados',
+                  title:'REPORTE DE MEDIKID'
+              },
+              {
+                  extend: 'print',
+                  text: '<i class="fa-solid fa-print"></i> Imprimir',
+                  className: 'btn btn-outline-info',
+                  messageTop: 'REPORTE DE MEDIKID',
+                  title:'Pagos realizados'
+              },
+              {
+                  extend: 'csv',
+                  text: '<i class="fa-solid fa-file-csv"></i> Exportar a CSV',
+                  className: 'btn btn-outline-info',
+                  messageTop: 'Pagos realizados',
+                  title:'REPORTE DE MEDIKID'
+              }
+          ],
           language: {
               url: "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
           },
-          initComplete: function () {
-              $('.dataTables_filter input[type="search"]').addClass('form-control');
+          initComplete: function() {
+              $('.dataTables_filter input').addClass('form-control');
           },
           pageLength: 6,
           drawCallback: function(settings) {
               // Aplicar las clases a los botones de paginación después de cada redibujo
               $('.paginate_button').addClass('btn btn-outline-primary');
           }
-      });
-  });
+      } );
+  } );
 </script>
-
 {% endblock %}
