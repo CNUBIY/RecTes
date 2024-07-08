@@ -488,31 +488,4 @@ https://templatemo.com/tm-566-medic-care
 
 -->
     </body>
-    <script>
-        const socket = new WebSocket(
-            'ws://'
-            + window.location.host
-            + '/ws/notificaciones/'
-        );
-
-        socket.onopen = function(event) {
-            console.log('WebSocket connected.');
-        };
-
-        socket.onmessage = function(event) {
-            const messageElement = document.createElement('li');
-            messageElement.textContent = event.data;
-            document.getElementById('messagesList').appendChild(messageElement);
-        };
-
-        function sendMessage() {
-            const messageInput = document.getElementById('messageInput');
-            const message = messageInput.value.trim();
-
-            if (message !== '') {
-                socket.send(message);
-                messageInput.value = '';
-            }
-        }
-    </script>
 </html>
