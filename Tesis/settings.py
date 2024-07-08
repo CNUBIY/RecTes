@@ -87,6 +87,22 @@ TEMPLATES = [
     },
 ]
 
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'America/Guayaquil'
+
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'verificar-citas-cada-minuto': {
+        'task': 'Aplicaciones.Citas.tasks.verificar_citas_programadas',
+        'schedule': crontab(minute='*'),  # Ejecutar cada minuto
+    },
+}
+
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels.layers.InMemoryChannelLayer',  # Usando InMemoryChannelLayer para desarrollo
