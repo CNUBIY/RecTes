@@ -4,6 +4,9 @@
   .fa-calendar-plus {
     font-size: 20px; /* Ajusta el tamaño del ícono */
   }
+  #citas-mañana-list {
+    overflow-y: auto;
+  }
 </style>
 <!-- <script>
     {% for cita in citas_proximas %}
@@ -210,6 +213,7 @@
 
 
 
+
 <!-- MODAL VISTA CALENDAR cita no escogida-->
 <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -338,6 +342,16 @@
 <!-- CALENDARIO -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+
+    var citasHoyTable = document.querySelector("#tbl_horarios");
+    var citasMañanaList = document.querySelector("#citas-mañana-list");
+
+    if (citasHoyTable && citasMañanaList) {
+    // Obtener la altura de la tabla de citas de hoy
+    var tableHeight = citasHoyTable.offsetHeight;
+    // Ajustar la altura máxima de la lista de citas de mañana
+    citasMañanaList.style.maxHeight = tableHeight + 85+ "px";
+    }
     // Agregar un listener de clic a todos los enlaces con clase 'cita-link'
        var citaLinks = document.querySelectorAll('.cita-link');
 
@@ -375,7 +389,7 @@
       headerToolbar: {
         left: 'prev,next',
         center: 'title',
-        right: 'prev,next'
+        right: 'timeGridWeek,dayGridDay',
       },
       slotLabelFormat: {
         hour: '2-digit',
@@ -643,7 +657,7 @@
             initComplete: function () {
                 $('.dataTables_filter input[type="search"]').addClass('form-control');
             },
-            // pageLength: 6,
+            pageLength: 9,
             drawCallback: function(settings) {
                 // Aplicar las clases a los botones de paginación después de cada redibujo
                 $('.paginate_button').addClass('btn btn-outline-primary');
