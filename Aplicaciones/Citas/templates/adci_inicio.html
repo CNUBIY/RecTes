@@ -106,7 +106,9 @@
   </div>
 </div>
 </div>
+
 <div class="row">
+  <!-- Columna para las citas de mañana -->
   <div class="col-lg-4 d-flex align-items-stretch">
     <div class="card w-100">
       <div class="card-body p-4">
@@ -115,35 +117,40 @@
           <span id="fecha-siguiente">{{ mañana|date:"d/m/Y" }}</span>
         </div>
         <ul class="timeline-widget mb-0 position-relative mb-n5" id="citas-mañana-list">
-          {% for cita in citas_mañana %}
-          <li class="timeline-item d-flex position-relative overflow-hidden">
-            <div class="timeline-time text-dark flex-shrink-0 text-end">
-              {% if cita.time_da.hour < 12 %}
-                  {{ cita.time_da|time:"h:i" }} AM
-              {% else %}
-                  {{ cita.time_da|time:"h:i" }} PM
-              {% endif %}
-            </div>
-            <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-              <span class="timeline-badge border-2 border border-warning flex-shrink-0 my-8"></span>
-              <span class="timeline-badge-border d-block flex-shrink-0"></span>
-            </div>
-            <div class="timeline-desc fs-3 text-dark mt-n1">
-              <a href="#" class="cita-link"
-                 data-nom="{{ cita.nom_da }}"
-                 data-telf="{{ cita.telf_da }}"
-                 data-hora="{{ cita.time_da|time:'H:i' }}">
-                 {{ cita.nom_da }} - {{ cita.telf_da }}
-              </a>
-            </div>
-          </li>
-          {% endfor %}
+          {% if citas_mañana %}
+            {% for cita in citas_mañana %}
+              <li class="timeline-item d-flex position-relative overflow-hidden">
+                <div class="timeline-time text-dark flex-shrink-0 text-end">
+                  {{ cita.time_da|date:"h:i A" }}
+                </div>
+                <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                  <span class="timeline-badge border-2 border border-warning flex-shrink-0 my-8"></span>
+                  <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                </div>
+                <div class="timeline-desc fs-3 text-dark mt-n1">
+                  <a href="#" class="cita-link"
+                     data-nom="{{ cita.nom_da }}"
+                     data-telf="{{ cita.telf_da }}"
+                     data-hora="{{ cita.time_da|time:'H:i' }}">
+                     {{ cita.nom_da }} - {{ cita.telf_da }}
+                  </a>
+                </div>
+              </li>
+            {% endfor %}
+          {% else %}
+            <li class="timeline-item d-flex position-relative overflow-hidden">
+              <div class="timeline-desc fs-3 text-dark mt-n1">
+                No hay registros para mañana
+              </div>
+            </li>
+          {% endif %}
           <br><br>
         </ul>
       </div>
     </div>
   </div>
 
+  <!-- Columna para las citas de hoy -->
   <div class="col-lg-8 d-flex align-items-stretch">
     <div class="card w-100">
       <div class="card-body p-4">
@@ -172,29 +179,25 @@
             <tbody>
               {% for cita in citas_hoy %}
                 <tr>
-                    <td>{{ cita.fech_da }}</td>
-                    <td>
-                        {% if cita.time_da.hour < 12 %}
-                            {{ cita.time_da|time:"h:i" }} AM
-                        {% else %}
-                            {{ cita.time_da|time:"h:i" }} PM
-                        {% endif %}
-                    </td>
-                    <td>{{ cita.nom_da }}</td>
-                    <td>
-                      {% if cita.est_da %}
+                  <td>{{ cita.fech_da }}</td>
+                  <td>
+                    {{ cita.time_da|date:"h:i A" }}
+                  </td>
+                  <td>{{ cita.nom_da }}</td>
+                  <td>
+                    {% if cita.est_da %}
                       <span class="text-info">Realizados</span>
-                      {% else %}
+                    {% else %}
                       <span class="text-warning">En espera</span>
-                      {% endif %}
-                    </td>
-                    <td class="text-center">
-                      {% if not cita.est_da %}
-                        <a href="/adci_inicio/addcont_adci/{{ cita.id }}" class="btn btn-outline-success rounded-pill">Realizar Cobro</a>
-                      {% else %}
-                        <a href="#" class="btn btn-outline-success rounded-pill disabled" aria-disabled="true">Realizar Cobro</a>
-                      {% endif %}
-                    </td>
+                    {% endif %}
+                  </td>
+                  <td class="text-center">
+                    {% if not cita.est_da %}
+                      <a href="/adci_inicio/addcont_adci/{{ cita.id }}" class="btn btn-outline-success rounded-pill">Realizar Cobro</a>
+                    {% else %}
+                      <a href="#" class="btn btn-outline-success rounded-pill disabled" aria-disabled="true">Realizar Cobro</a>
+                    {% endif %}
+                  </td>
                 </tr>
               {% endfor %}
             </tbody>
@@ -204,6 +207,7 @@
     </div>
   </div>
 </div>
+
 
 
 <!-- MODAL VISTA CALENDAR cita no escogida-->
@@ -628,6 +632,24 @@
         });
     {% endfor %}
 {% endif %}
+  </script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+        $('#tbl_horarios').DataTable( {
+            dom: 'frtip',
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+            },
+            initComplete: function () {
+                $('.dataTables_filter input[type="search"]').addClass('form-control');
+            },
+            // pageLength: 6,
+            drawCallback: function(settings) {
+                // Aplicar las clases a los botones de paginación después de cada redibujo
+                $('.paginate_button').addClass('btn btn-outline-primary');
+            }
+        });
+    });
   </script>
 
 {% endblock %}

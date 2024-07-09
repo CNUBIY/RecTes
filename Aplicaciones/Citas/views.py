@@ -118,6 +118,10 @@ def adci_inicio(request):
     citas_mañana = CitaSol.objects.filter(fech_da=mañana).order_by('time_da')
     todas_citas = CitaSol.objects.all().order_by('fech_da', 'time_da')
 
+    # Formatear las horas de las citas para mañana
+    for cita in citas_mañana:
+        cita.formatted_time = cita.time_da.strftime('%I:%M %p')
+
     # Obtener citas que están a un día de llegar
     citas_proximas = CitaSol.objects.filter(fech_da=hoy + timedelta(days=1), cort_da=False).order_by('time_da')
 
@@ -126,6 +130,7 @@ def adci_inicio(request):
         'citas_mañana': citas_mañana,
         'citas': todas_citas,
         'citas_proximas': citas_proximas,  # Pasar las citas próximas al contexto
+        'mañana': mañana,
     }
 
     return render(request, 'adci_inicio.html', context)
