@@ -95,7 +95,10 @@ def usci_inicio (request):
 @login_required
 @custom_login_required
 def adci_perfil(request):
-    return render(request,'adci_perfil.html')
+    # Obtener todos los usuarios registrados con información básica
+    usuarios = User.objects.all().values('username', 'date_joined', 'last_login')
+
+    return render(request, 'adci_perfil.html', {'usuarios': usuarios})
 #Página PERFIL admin final
 
 #Página Inicio Administrador-Citas GENERAL INICIO

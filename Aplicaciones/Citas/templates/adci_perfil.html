@@ -6,32 +6,60 @@
             <div class="card-body">
               <div class="row">
                 <div class="col-md-4">
-                  <h5 class="card-title fw-semibold mb-4">Bienvenido {{request.user.username}}</h5>
+                  <h5 class="card-title fw-semibold mb-4 text-center">BIENVENIDO</h5>
+                  <h5 class="card-title fw-semibold mb-4">Haz ingresado con {{request.user.username}}</h5>
                   <div class="card">
-                    <img src="../assets/images/products/s4.jpg" class="card-img-top" alt="...">
                     <div class="card-body">
-                      <h5 class="card-title">Card title</h5>
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                        the
-                        card's content.</p>
+                      <h5 class="card-title text-center">Añadir Usuarios</h5>
+                      <p class="card-text"><b>¡¡Ojo!! Los usuarios registrados solo deben ser personal autorizado.</b></p>
+                      <p class="card-text">Si deseas ingresar un usuario nuevo por favor haz click aquí:</p>
                       <a href="/register/" class="btn btn-primary">Registrar Usuario</a>
                     </div>
                   </div>
-                </div>
-                <div class="col-md-4">
-                  <h5 class="card-title fw-semibold mb-4">Header and footer</h5>
                   <div class="card">
-                    <div class="card-header">
-                      Featured
-                    </div>
                     <div class="card-body">
-                      <h5 class="card-title">Special title treatment</h5>
-                      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                      <a href="#" class="btn btn-primary">Go somewhere</a>
+                      <h5 class="card-title text-center">Cambiar Contraseña</h5>
+                      <p class="card-text"><b>Para asegurar una mejor seguridad, se recomienda un cambio de contraseña cada mes. :)</b></p>
+                      <p class="card-text">Si deseas cambiar la contraseña por favor haz click aquí:</p>
+                      <a href="#" class="btn btn-primary">Cambiar contraseña</a>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-8">
+                  <h5 class="card-title fw-semibold mb-4">Usuarios Registrados</h5>
+                  <div class="card">
+                    <div class="card-header">
+                      Cambios permitidos
+                    </div>
+                    <div class="card-body">
+                      <table class="table" id="tbl_3">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Correo</th>
+                                <th>Fecha de Creación</th>
+                                <th>Última sesión</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          {% for usuario in usuarios %}
+                          <tr>
+                              <td>{{ forloop.counter }}</td>
+                              <td>{{ usuario.username }}</td>
+                              <td>{{ usuario.date_joined|date:"Y-m-d H:i:s" }}</td>
+                              <td>{{ usuario.last_login|date:"Y-m-d H:i:s" }}</td>
+                              <td class="text-center">
+                                <a href="#" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
+                              </td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="col-md-4">
                   <h5 class="card-title fw-semibold mb-4">Titles, text, and links</h5>
                   <div class="card">
                     <div class="card-body">
@@ -44,10 +72,30 @@
                       <a href="#" class="card-link">Another link</a>
                     </div>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
         </div>
       </div>
+      <script type="text/javascript">
+        $(document).ready(function() {
+            $('#tbl_3').DataTable( {
+                dom: 'frtip',
+                language: {
+                    url: "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+                },
+                initComplete: function () {
+                    $('.dataTables_filter input[type="search"]').addClass('form-control');
+                },
+                pageLength: 6,
+                //order: [[0, 'desc']],
+                drawCallback: function(settings) {
+                    // Aplicar las clases a los botones de paginación después de cada redibujo
+                    $('.paginate_button').addClass('btn btn-outline-primary');
+                }
+            });
+        });
+      </script>
+
 {% endblock %}
