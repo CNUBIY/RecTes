@@ -1,134 +1,151 @@
 {% extends 'adci_plantilla.html' %}
 {% block usci_contenido %}
 <div class="container-fluid">
-        <div class="container-fluid">
-          <div class="card">
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-4">
-                  <h5 class="card-title fw-semibold mb-4 text-center">BIENVENIDO</h5>
-                  <h5 class="card-title fw-semibold mb-4">Haz ingresado con {{request.user.username}}</h5>
-                  <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title text-center">Añadir Usuarios</h5>
-                      <p class="card-text"><b>¡¡Ojo!! Los usuarios registrados solo deben ser personal autorizado.</b></p>
-                      <p class="card-text">Si deseas ingresar un usuario nuevo por favor haz click aquí:</p>
-                      <a href="/register/" class="btn btn-primary">Registrar Usuario</a>
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 mb-3 text-center">
+                    <h5 class="card-title fw-semibold">BIENVENIDO</h5>
+                    <h5 class="card-title fw-semibold">Haz ingresado con {{request.user.username}}</h5>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <h5 class="card-title fw-semibold mb-4 text-center"><b>Ajustes</b></h5>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Añadir Usuarios</h5>
+                            <p class="card-text"><b>¡¡Ojo!! Los usuarios registrados solo deben ser personal autorizado.</b></p>
+                            <p class="card-text">Si deseas ingresar un usuario nuevo por favor haz click aquí:</p>
+                            <a href="/register/" class="btn btn-primary">Registrar Usuario</a>
+                        </div>
                     </div>
-                  </div>
-                  <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title text-center">Cambiar Contraseña</h5>
-                      <p class="card-text"><b>Para asegurar una mejor seguridad, se recomienda un cambio de contraseña cada mes. :)</b></p>
-                      <p class="card-text">Si deseas cambiar la contraseña por favor haz click aquí:</p>
-                      <a href="#" class="btn btn-primary">Cambiar contraseña</a>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Cambiar Contraseña</h5>
+                            <p class="card-text"><b>Para asegurar una mejor seguridad, se recomienda un cambio de contraseña cada mes. :)</b></p>
+                            <p class="card-text">Si deseas cambiar la contraseña por favor haz click aquí:</p>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Cambiar contraseña</button>
+                        </div>
                     </div>
-                  </div>
                 </div>
                 <div class="col-md-8">
-                  <h5 class="card-title fw-semibold mb-4">Usuarios Registrados</h5>
-                  <div class="card">
-                      {% if es_staff or es_superuser %}
-                          <div class="card-header">
-                              Cambios permitidos
-                          </div>
-                          <div class="card-body">
-                              <table class="table" id="tbl_3">
-                                  <thead>
-                                      <tr>
-                                          <th>Correo</th>
-                                          <th>Fecha de Creación</th>
-                                          <th>Última sesión</th>
-                                          <th>Acciones</th>
-                                      </tr>
-                                  </thead>
-                                  <tbody>
-                                      {% for usuario in usuarios %}
-                                      <tr>
-                                          <td>{{ usuario.username }}</td>
-                                          <td>{{ usuario.date_joined|date:"Y-m-d H:i:s" }}</td>
-                                          <td>{{ usuario.last_login|date:"Y-m-d H:i:s" }}</td>
-                                          <td class="text-center">
-                                              <a href="#" class="btn btn-outline-danger rounded-pill" onclick="eliminar_usuario('{% url 'eliminar_usuario' usuario.id %}')"><i class="fa fa-trash"></i></a>
-                                          </td>
-                                      </tr>
-                                      {% endfor %}
-                                  </tbody>
-                              </table>
-                          </div>
-                      {% else %}
-                          <div class="card-header">
-                              No tienes los permisos necesarios
-                          </div>
-                          <div class="card-body centered">
-                              <p class="text-center">Solo personal autorizado</p>
-                          </div>
-                      {% endif %}
-                  </div>
-                </div>
-                <!-- <div class="col-md-4">
-                  <h5 class="card-title fw-semibold mb-4">Titles, text, and links</h5>
-                  <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title">Card title</h5>
-                      <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                        the
-                        card's content.</p>
-                      <a href="#" class="card-link">Card link</a>
-                      <a href="#" class="card-link">Another link</a>
+                    <h5 class="card-title fw-semibold mb-4 text-center"><b>Usuarios Registrados</b></h5>
+                    <div class="card">
+                        {% if es_staff or es_superuser %}
+                            <div class="card-header">
+                                Cambios permitidos
+                            </div>
+                            <div class="card-body table-responsive">
+                                <table class="table" id="tbl_3">
+                                    <thead>
+                                        <tr>
+                                            <th>Correo</th>
+                                            <th>Fecha de Creación</th>
+                                            <th>Última sesión</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for usuario in usuarios %}
+                                        <tr>
+                                            <td>{{ usuario.username }}</td>
+                                            <td>{{ usuario.date_joined|date:"Y-m-d H:i:s" }}</td>
+                                            <td>{{ usuario.last_login|date:"Y-m-d H:i:s" }}</td>
+                                            <td class="text-center">
+                                                <a href="#" class="btn btn-outline-danger rounded-pill" onclick="eliminar_usuario('{% url 'eliminar_usuario' usuario.id %}')"><i class="fa fa-trash"></i></a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="card-header">
+                                No tienes los permisos necesarios
+                            </div>
+                            <div class="card-body centered">
+                                <p class="text-center">Solo personal autorizado</p>
+                            </div>
+                        {% endif %}
                     </div>
-                  </div>
-                </div> -->
-              </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-      <script type="text/javascript">
-        $(document).ready(function() {
-            $('#tbl_3').DataTable( {
-                dom: 'frtip',
-                language: {
-                    url: "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
-                },
-                initComplete: function () {
-                    $('.dataTables_filter input[type="search"]').addClass('form-control');
-                },
-                pageLength: 4,
-                //order: [[0, 'desc']],
-                drawCallback: function(settings) {
-                    // Aplicar las clases a los botones de paginación después de cada redibujo
-                    $('.paginate_button').addClass('btn btn-outline-primary');
-                }
-            });
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePasswordModalLabel">Cambiar Contraseña</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm" method="POST" action="">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="old_password" class="form-label">Contraseña Actual</label>
+                        <input type="password" class="form-control" id="old_password" name="old_password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_password1" class="form-label">Nueva Contraseña</label>
+                        <input type="password" class="form-control" id="new_password1" name="new_password1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_password2" class="form-label">Confirmar Nueva Contraseña</label>
+                        <input type="password" class="form-control" id="new_password2" name="new_password2" required>
+                    </div>
+                    <button type="submit" class="btn btn-outline-success">Cambiar Contraseña</button>
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#tbl_3').DataTable({
+            dom: 'frtip',
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+            },
+            initComplete: function () {
+                $('.dataTables_filter input[type="search"]').addClass('form-control');
+            },
+            pageLength: 4,
+            drawCallback: function(settings) {
+                // Aplicar las clases a los botones de paginación después de cada redibujo
+                $('.paginate_button').addClass('btn btn-outline-primary');
+            }
         });
-      </script>
+    });
+</script>
 
-      <!-- MENSAJE DE CONFIRMACIÓN ELIMINAR usuarios -->
-      <script type="text/javascript">
-          function eliminar_usuario(url){
-              iziToast.question({
-                  timeout: 15000,
-                  close: true,
-                  overlay: true,
-                  displayMode: 'once',
-                  id: 'question',
-                  zindex: 999,
-                  title: 'CONFIRMACIÓN',
-                  message: '¿Está seguro de eliminar el <b>usuario</b> seleccionado?',
-                  position: 'center',
-                  buttons: [
-                      ['<button><b>SI</b></button>', function (instance, toast) {
-                          instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
-                          window.location.href = url;
-                      }, true],
-                      ['<button>NO</button>', function (instance, toast) {
-                          instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
-                      }],
-                  ]
-              });
-          }
-      </script>
-
+<!-- MENSAJE DE CONFIRMACIÓN ELIMINAR usuarios -->
+<script type="text/javascript">
+    function eliminar_usuario(url){
+        iziToast.question({
+            timeout: 15000,
+            close: true,
+            overlay: true,
+            displayMode: 'once',
+            id: 'question',
+            zindex: 999,
+            title: 'CONFIRMACIÓN',
+            message: '¿Está seguro de eliminar el <b>usuario</b> seleccionado?',
+            position: 'center',
+            buttons: [
+                ['<button><b>SI</b></button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                    window.location.href = url;
+                }, true],
+                ['<button>NO</button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                }],
+            ]
+        });
+    }
+</script>
 {% endblock %}

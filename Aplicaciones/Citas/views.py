@@ -20,7 +20,11 @@ from django.core.serializers import serialize
 from django.conf import settings
 from telegram import Bot
 from asgiref.sync import async_to_sync
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 # Create your views here.
+
+
 my_token = settings.BOT_TOKEN
 my_chat_id = settings.BOT_CHAT_ID
 
@@ -97,17 +101,30 @@ def usci_inicio (request):
 @custom_login_required
 def adci_perfil(request):
     # Obtener todos los usuarios registrados con información básica incluyendo is_staff e is_superuser
-    usuarios = User.objects.all().values('id','username', 'date_joined', 'last_login', 'is_staff', 'is_superuser')
+    usuarios = User.objects.all().values('id', 'username', 'date_joined', 'last_login', 'is_staff', 'is_superuser')
 
     # Pasar información del usuario actual
     usuario_actual = request.user
     es_staff = usuario_actual.is_staff
     es_superuser = usuario_actual.is_superuser
 
+    # Manejar el cambio de contraseña
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Importante para mantener la sesión después de cambiar la contraseña
+            messages.success(request, '¡Tu contraseña ha sido actualizada exitosamente!')
+            return redirect('adci_perfil')
+        # En caso de errores, no hagas nada
+    else:
+        form = PasswordChangeForm(request.user)
+
     return render(request, 'adci_perfil.html', {
         'usuarios': usuarios,
         'es_staff': es_staff,
-        'es_superuser': es_superuser
+        'es_superuser': es_superuser,
+        'form': form,
     })
 
 
@@ -123,6 +140,8 @@ def eliminar_usuario(request, user_id):
         messages.success(request, 'Usuario eliminado exitosamente.')
 
     return redirect('adci_perfil')
+
+
 #Página PERFIL admin final
 
 #Página Inicio Administrador-Citas GENERAL INICIO
