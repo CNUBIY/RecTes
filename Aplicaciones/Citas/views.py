@@ -18,14 +18,15 @@ import asyncio
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.serializers import serialize
 from django.conf import settings
-
+from telegram import Bot
+from asgiref.sync import async_to_sync
 # Create your views here.
 my_token = settings.BOT_TOKEN
 my_chat_id = settings.BOT_CHAT_ID
 
-def send_telegram_message(msg, chat_id=my_chat_id, token=my_token):
-    bot_instance = telegram.Bot(token=token)
-    bot_instance.sendMessage(chat_id=chat_id, text=msg)
+async def send_telegram_message(msg, chat_id=my_chat_id, token=my_token):
+    bot_instance = Bot(token=token)
+    await bot_instance.send_message(chat_id=chat_id, text=msg)
 
 # Página Informativa INICIO
 async def index(request):
@@ -66,7 +67,7 @@ def user_login(request):
         if user is not None:
             login(request, user)
             request.session['last_activity'] = timezone.now().isoformat()  # Convertir a cadena
-            send_telegram_message("Haz iniciado sesión")
+            async_to_sync(send_telegram_message)("Haz iniciado sesión")
             return redirect("/adci_inicio")
         else:
             messages.error(request, 'Contraseña/Correo Incorrectos')
