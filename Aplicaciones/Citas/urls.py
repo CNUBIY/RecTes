@@ -10,9 +10,11 @@ urlpatterns=[
     path('register/', views.register, name='register'),
     path('login/', views.user_login, name='login'),
     path('logout/',views.user_logout, name='logout'),
+    #PERFIL ADMIN
+    path('adci_inicio/adci_perfil/', views.adci_perfil, name='adci_perfil'),
+    path('adci_inicio/adci_perfil/del_us/<user_id>',views.eliminar_usuario, name='eliminar_usuario'),
     #GENERAL ADMIN
     path('adci_inicio/',views.adci_inicio, name='adci_inicio'),
-    path('adci_inicio/adci_perfil/',views.adci_perfil, name='adci_perfil'),
     path('adci_inicio/aggin_adci/',views.aggin_adci),
     path('adci_inicio/procesarActualizacionHorarioIn/<int:id>/', views.procesarActualizacionHorarioIn, name='procesarActualizacionHorarioIn'),
     path('delete_adciIn/<id>/',views.delete_adciIn),

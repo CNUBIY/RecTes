@@ -77,28 +77,30 @@
 {% if messages %}
     {% for mensaje in messages %}
         <script type="text/javascript">
-            {% if "eliminado" in mensaje %}
+            var mensajeTexto = "{{ mensaje|escapejs }}";
+            if (mensajeTexto.includes("eliminado")) {
                 iziToast.error({
                     title: 'Cancelado',
-                    message: '{{ mensaje }}',
+                    message: mensajeTexto,
                     position: 'topRight',
                 });
-            {% elif "guardado" in mensaje %}
+            } else if (mensajeTexto.includes("exitosamente")) {
                 iziToast.success({
                     title: 'Éxito',
-                    message: '{{ mensaje }}',
+                    message: mensajeTexto,
                     position: 'topRight',
                 });
-            {% else %}
+            } else {
                 iziToast.error({
                     title: 'Error',
-                    message: '{{ mensaje }}',
+                    message: mensajeTexto,
                     position: 'topRight',
                 });
-            {% endif %}
+            }
         </script>
     {% endfor %}
 {% endif %}
+
 
 <script>
     $(document).ready(function() {

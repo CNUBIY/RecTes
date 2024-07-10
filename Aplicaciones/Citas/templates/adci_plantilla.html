@@ -228,13 +228,13 @@
                 {% for mensaje in messages %}
                     <script type="text/javascript">
                         var mensajeTexto = "{{ mensaje|escapejs }}";
-                        if (mensajeTexto.includes("eliminado")) {
+                        if (mensajeTexto.includes("No")||mensajeTexto.includes("puede")) {
                             iziToast.error({
                                 title: 'Cancelado',
                                 message: mensajeTexto,
                                 position: 'topRight',
                             });
-                        } else if (mensajeTexto.includes("registrado") || mensajeTexto.includes("editado")) {
+                        } else if (mensajeTexto.includes("exitosamente")) {
                             iziToast.success({
                                 title: 'Éxito',
                                 message: mensajeTexto,

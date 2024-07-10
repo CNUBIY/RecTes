@@ -36,7 +36,6 @@
                               <table class="table" id="tbl_3">
                                   <thead>
                                       <tr>
-                                          <th>#</th>
                                           <th>Correo</th>
                                           <th>Fecha de Creación</th>
                                           <th>Última sesión</th>
@@ -46,12 +45,11 @@
                                   <tbody>
                                       {% for usuario in usuarios %}
                                       <tr>
-                                          <td>{{ forloop.counter }}</td>
                                           <td>{{ usuario.username }}</td>
                                           <td>{{ usuario.date_joined|date:"Y-m-d H:i:s" }}</td>
                                           <td>{{ usuario.last_login|date:"Y-m-d H:i:s" }}</td>
                                           <td class="text-center">
-                                              <a href="#" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
+                                              <a href="#" class="btn btn-outline-danger rounded-pill" onclick="eliminar_usuario('{% url 'eliminar_usuario' usuario.id %}')"><i class="fa fa-trash"></i></a>
                                           </td>
                                       </tr>
                                       {% endfor %}
@@ -97,7 +95,7 @@
                 initComplete: function () {
                     $('.dataTables_filter input[type="search"]').addClass('form-control');
                 },
-                pageLength: 6,
+                pageLength: 4,
                 //order: [[0, 'desc']],
                 drawCallback: function(settings) {
                     // Aplicar las clases a los botones de paginación después de cada redibujo
@@ -105,6 +103,32 @@
                 }
             });
         });
+      </script>
+
+      <!-- MENSAJE DE CONFIRMACIÓN ELIMINAR usuarios -->
+      <script type="text/javascript">
+          function eliminar_usuario(url){
+              iziToast.question({
+                  timeout: 15000,
+                  close: true,
+                  overlay: true,
+                  displayMode: 'once',
+                  id: 'question',
+                  zindex: 999,
+                  title: 'CONFIRMACIÓN',
+                  message: '¿Está seguro de eliminar el <b>usuario</b> seleccionado?',
+                  position: 'center',
+                  buttons: [
+                      ['<button><b>SI</b></button>', function (instance, toast) {
+                          instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                          window.location.href = url;
+                      }, true],
+                      ['<button>NO</button>', function (instance, toast) {
+                          instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                      }],
+                  ]
+              });
+          }
       </script>
 
 {% endblock %}

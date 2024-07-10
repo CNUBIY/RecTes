@@ -5,7 +5,7 @@ from django.contrib import messages
 from datetime import datetime, timedelta, time
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from collections import defaultdict
 from django.contrib.auth.models import User
@@ -97,7 +97,7 @@ def usci_inicio (request):
 @custom_login_required
 def adci_perfil(request):
     # Obtener todos los usuarios registrados con información básica incluyendo is_staff e is_superuser
-    usuarios = User.objects.all().values('username', 'date_joined', 'last_login', 'is_staff', 'is_superuser')
+    usuarios = User.objects.all().values('id','username', 'date_joined', 'last_login', 'is_staff', 'is_superuser')
 
     # Pasar información del usuario actual
     usuario_actual = request.user
@@ -109,6 +109,20 @@ def adci_perfil(request):
         'es_staff': es_staff,
         'es_superuser': es_superuser
     })
+
+
+@login_required
+@permission_required('auth.delete_user', raise_exception=True)
+def eliminar_usuario(request, user_id):
+    usuario_a_eliminar = get_object_or_404(User, id=user_id)
+
+    if usuario_a_eliminar.is_staff or usuario_a_eliminar.is_superuser:
+        messages.error(request, 'No tienes permiso para eliminar este usuario.')
+    else:
+        usuario_a_eliminar.delete()
+        messages.success(request, 'Usuario eliminado exitosamente.')
+
+    return redirect('adci_perfil')
 #Página PERFIL admin final
 
 #Página Inicio Administrador-Citas GENERAL INICIO
@@ -206,7 +220,7 @@ def procesarActualizacionHorarioIn(request, id):
             cita.cort_da = cort_da
             cita.save()
 
-            messages.success(request, "Cita actualizada correctamente.")
+            messages.success(request, "Cita actualizada exitosamente.")
             return redirect('/adci_inicio')
         except MultiValueDictKeyError as e:
             # Manejo de error cuando no se encuentra un campo esperado en request.POST
@@ -268,7 +282,7 @@ def aggagenda_adci(request):
                 cort_da=cort_da,
                 est_da=False,
             )
-            messages.success(request, "Cita registrada correctamente.")
+            messages.success(request, "Cita registrada exitosamente.")
             return redirect('/adci_inicio')
 
         except Exception as e:
@@ -327,7 +341,7 @@ def procesarActualizacionHorario(request, id):
             cita.save()
 
             # Agregar mensaje de éxito si la actualización fue exitosa
-            messages.success(request, "Cita actualizada correctamente.")
+            messages.success(request, "Cita actualizada exitosamente.")
             return redirect('/adci_fechacitas')
         except MultiValueDictKeyError as e:
             # Manejo de error cuando no se encuentra un campo esperado en request.POST
