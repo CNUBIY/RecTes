@@ -14,8 +14,11 @@
   <link rel="stylesheet" href="{% static 'css/estilo_validacion.css' %}" />
 
   <!-- IziToast -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
 </head>
 
@@ -40,20 +43,18 @@
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Correo Electrónico</label>
-                        <input type="email" class="form-control {% if mensaje_error.correo_us %}error{% endif %}" id="username" name="username" aria-describedby="emailHelp">
-                        <div class="error-message"></div>
-                        {% if mensaje_error.correo_us %}
-                        <p class="text-danger">{{ mensaje_error.correo_us }}</p>
-                        {% endif %}
-
+                        <input type="email" class="form-control" id="username" name="username" aria-describedby="emailHelp">
+                        <div class="error-message-correo"></div>
                     </div>
                     <div class="mb-4">
                         <label for="exampleInputPassword1" class="form-label">Contraseña</label>
-                        <input type="password" class="form-control {% if mensaje_error.pass_us %}error{% endif %}" name="password" id="password" autocomplete="off">
-                        <div class="error-message"></div>
-                        {% if mensaje_error.pass_us %}
-                             <p class="text-danger">{{ mensaje_error.pass_us }}</p>
-                         {% endif %}
+                        <div class="input-group">
+                            <input type="password" class="form-control" name="password" id="password" autocomplete="off">
+                            <button type="button" class="btn btn-outline-secondary toggle-password" data-toggle="#password">
+                                <i class="far fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="error-message-password"></div>
                     </div>
                     <div class="d-flex align-items-center justify-content-between mb-4">
                       <a class="text-primary fw-bold" href="./index.html">Olvidaste tu contraseña?</a>
@@ -101,31 +102,43 @@
     {% endfor %}
 {% endif %}
 
-
 <script>
     $(document).ready(function() {
         $("#log_val").validate({
             rules: {
-                "correo_us": {
+                "username": {
                     required: true,
-                    email:true,
+                    email: true,
                 },
-                "pass_us": {
+                "password": {
                     required: true
                 }
             },
             messages: {
-                "correo_us": {
+                "username": {
                     required: "Debe ingresar el correo",
-                    email:"Ingrese un correo válido"
+                    email: "Ingrese un correo válido"
                 },
-                "pass_us": {
+                "password": {
                     required: "Debe ingresar la contraseña"
                 }
             },
             errorPlacement: function(error, element) {
-                // Insertar el mensaje de error debajo del elemento
-                error.appendTo(element.parent().find('.error-message'));
+                if (element.attr("name") === "username") {
+                    error.appendTo(element.next(".error-message-correo"));
+                } else if (element.attr("name") === "password") {
+                    error.appendTo(element.closest(".input-group").next(".error-message-password"));
+                }
+            }
+        });
+
+        $(".toggle-password").click(function() {
+            $(this).find("i").toggleClass("fa-eye fa-eye-slash");
+            var input = $($(this).data("toggle"));
+            if (input.attr("type") === "password") {
+                input.attr("type", "text");
+            } else {
+                input.attr("type", "password");
             }
         });
     });

@@ -86,15 +86,30 @@
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="old_password" class="form-label">Contraseña Actual</label>
-                        <input type="password" class="form-control" id="old_password" name="old_password" required>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="old_password" name="old_password" required>
+                            <button type="button" class="btn btn-outline-secondary toggle-password" data-toggle="#old_password">
+                                <i class="far fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="new_password1" class="form-label">Nueva Contraseña</label>
-                        <input type="password" class="form-control" id="new_password1" name="new_password1" required>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="new_password1" name="new_password1" required>
+                            <button type="button" class="btn btn-outline-secondary toggle-password" data-toggle="#new_password1">
+                                <i class="far fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="new_password2" class="form-label">Confirmar Nueva Contraseña</label>
-                        <input type="password" class="form-control" id="new_password2" name="new_password2" required>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="new_password2" name="new_password2" required>
+                            <button type="button" class="btn btn-outline-secondary toggle-password" data-toggle="#new_password2">
+                                <i class="far fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-outline-success">Cambiar Contraseña</button>
                     <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
@@ -103,6 +118,7 @@
         </div>
     </div>
 </div>
+
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -148,4 +164,60 @@
         });
     }
 </script>
+
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    // Asegurar contraseña fuerte
+    $.validator.addMethod("strongPassword", function(value, element) {
+      return this.optional(element) ||
+        value.length >= 8 &&
+        /[a-z]/.test(value) &&
+        /[A-Z]/.test(value) &&
+        /[0-9]/.test(value) &&
+        /[@$!%*?&#]/.test(value);
+      }, "La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un carácter especial.");
+
+    $("#changePasswordForm").validate({
+      rules: {
+        "old_password": {
+          required: true
+        },
+        "new_password1": {
+          required: true,
+          strongPassword: true
+        },
+        "new_password2": {
+          required: true,
+          equalTo: "#new_password1"
+        }
+      },
+      messages: {
+        "old_password": {
+          required: "Debe ingresar su contraseña actual"
+        },
+        "new_password1": {
+          required: "Debe ingresar una nueva contraseña"
+        },
+        "new_password2": {
+          required: "Debe confirmar su nueva contraseña",
+          equalTo: "Las contraseñas no coinciden"
+        }
+      }
+    });
+
+    // Mostrar/Ocultar Contraseña
+    $(".toggle-password").click(function() {
+      $(this).find("i").toggleClass("fa-eye fa-eye-slash");
+      var input = $($(this).data("toggle"));
+      if (input.attr("type") === "password") {
+        input.attr("type", "text");
+      } else {
+        input.attr("type", "password");
+      }
+    });
+  });
+</script>
+
+
 {% endblock %}
