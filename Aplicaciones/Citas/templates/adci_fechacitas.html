@@ -56,7 +56,7 @@
                         <span class="text-center">Sin Acciones</span>
                         {% else %}
                         <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                          data-id="{{ cita.id }}" data-diah="{{ cita.fech_da|date:'Y-m-d' }}" data-horario="{{ cita.time_da|time:'h:i' }}" data-nom="{{cita.nom_da}}" data-telf={{cita.telf_da}}
+                          data-id="{{ cita.id }}" data-diah="{{ cita.fech_da|date:'Y-m-d' }}" data-horario="{{ cita.time_da|time:'H:i' }}" data-nom="{{cita.nom_da}}" data-telf="{{cita.telf_da}}"
                           data-cortesia="{{cita.cort_da}}">
                            <i class="fas fa-edit"></i>
                         </button>
@@ -87,18 +87,18 @@
         <div class="mb-3">
           <label for="nom_da" class="form-label">Nombre del Cliente</label>
           <input type="text" class="form-control" name="nom_da" id="nom_da" placeholder="Ingrese el nombre del representante">
-          <div id="error-nom_da" class="error-messages"></div>
+          <div class="error-messages"></div>
         </div>
         <div class="mb-3">
           <label for="telf_da" class="form-label">Telf/Celular</label>
           <input type="text" class="form-control" name="telf_da" id="telf_da" placeholder="Ingrese el número de contacto">
-          <div id="error-telf_da" class="error-messages"></div>
+          <div class="error-messages"></div>
         </div>
         <div class="row">
           <div class="mb-3 col-md-11">
             <label for="fech_da" class="form-label">Fecha</label>
             <input type="date" class="form-control" name="fech_da" id="fech_da" aria-describedby="dateHelp">
-            <div id="error-fech_da" class="error-messages"></div>
+            <div class="error-messages"></div>
           </div>
           <div class="col-md-1 d-flex align-items-center justify-content-center">
             <i id="fech_da_icon" class="fas fa-minus text-muted" style="margin-top: 12px; margin-right:12px;" title="Esperando datos..."></i>
@@ -108,7 +108,7 @@
             <div class="mb-3 col-md-11">
               <label for="time_da" class="form-label">Horario</label>
               <input type="time" class="form-control" name="time_da" id="time_da">
-              <div id="error-time_da" class="error-messages"></div>
+              <div class="error-messages"></div>
             </div>
             <div class="col-md-1 d-flex align-items-center justify-content-center">
               <i id="time_da_icon" class="fas fa-minus text-muted" style="margin-top: 12px; margin-right:12px;" title="Esperando datos..."></i>
@@ -141,7 +141,7 @@
             .tooltip();
 
           // Clear previous error messages and styles
-          $('#error-fech_da, #error-time_da').text('').removeClass('text-danger');
+          $('.error-messages').text('').removeClass('text-danger');
           $('#fech_da, #time_da').removeClass('is-invalid');
 
           if (fecha && hora) {
@@ -161,8 +161,7 @@
                             .tooltip(); // Initialize new tooltip
 
                           // Show error message and apply styles
-                          $('#error-fech_da').text('Fecha/Horario no disponible.').addClass('text-danger');
-                          $('#error-time_da').text('Fecha/Horario no disponible.').addClass('text-danger');
+                          $('.error-messages').text('Fecha/Horario no disponible.').addClass('text-danger');
                           $('#fech_da, #time_da').addClass('is-invalid');
                       } else {
                           $('#fech_da_icon, #time_da_icon')
@@ -198,8 +197,7 @@
       $('#vldt_dias').on('submit', function(e) {
           if ($('#fech_da_icon').hasClass('fa-times') || $('#time_da_icon').hasClass('fa-times')) {
               e.preventDefault();
-              $('#error-fech_da').text('Fecha/Horario no disponible.').addClass('text-danger');
-              $('#error-time_da').text('Fecha/Horario no disponible.').addClass('text-danger');
+              $('.error-messages').text('Fecha/Horario no disponible.').addClass('text-danger');
               $('#fech_da, #time_da').addClass('is-invalid');
           }
       });
@@ -220,27 +218,27 @@
           <input type="hidden" name="data_id" id="modalId" value="{{cita.id}}">
           <div class="mb-3">
             <label for="modal_nom_da" class="form-label">Nombre del Cliente</label>
-            <input type="text" class="form-control" name="nom_da" id="nom_da" placeholder="Ingrese el nombre del representante" required>
+            <input type="text" class="form-control" name="nom_da" id="modal_nom_da" placeholder="Ingrese el nombre del representante" required>
             <div class="error-message"></div>
           </div>
           <div class="mb-3">
             <label for="modal_telf_da" class="form-label">Contacto</label>
-            <input type="text" class="form-control" name="telf_da" id="telf_da" placeholder="Ingrese un número de Contacto" required>
+            <input type="text" class="form-control" name="telf_da" id="modal_telf_da" placeholder="Ingrese un número de Contacto" required>
             <div class="error-message"></div>
           </div>
           <div class="mb-3">
             <label for="modal_fech_da" class="form-label">Fecha</label>
-            <input type="date" class="form-control" name="fech_da" id="fech_da" aria-describedby="dateHelp" required>
+            <input type="date" class="form-control" name="fech_da" id="modal_fech_da" aria-describedby="dateHelp" required>
             <div class="error-message"></div>
           </div>
           <div class="mb-3">
             <label for="modal_time_da" class="form-label">Horario</label>
-            <input type="time" class="form-control" name="time_da" id="time_da" required>
+            <input type="time" class="form-control" name="time_da" id="modal_time_da" required>
             <div class="error-message"></div>
           </div>
           <label for="modal_cort_da" class="form-label">¿Cita de Cortesía?</label>
           <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" name="cort_da" id="cort_da">
+            <input type="checkbox" class="form-check-input" name="cort_da" id="modal_cort_da">
             <label class="form-check-label" for="modal_cort_da">Confirmar</label>
             <div class="error-message"></div>
           </div>
@@ -253,42 +251,40 @@
     </div>
   </div>
 </div>
-          <br>
-          <!-- SCRIPT PARA LLAMAR LA INFORMACIÓN -->
-          <script type="text/javascript">
 
-            var exampleModal = document.getElementById('exampleModal');
-            exampleModal.addEventListener('show.bs.modal', function (event) {
-              var button = event.relatedTarget;
-              var id = button.getAttribute('data-id');
-              var fech_da = button.getAttribute('data-diah');
-              var horario = button.getAttribute('data-horario');
-              var nomDa = button.getAttribute('data-nom');
-              var telfDa = button.getAttribute('data-telf');
-              var cortesia = button.getAttribute('data-cortesia') === "True"; // Convierte a booleano
+<!-- SCRIPT PARA LLAMAR LA INFORMACIÓN -->
+<script type="text/javascript">
+  var exampleModal = document.getElementById('exampleModal');
+  exampleModal.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    var id = button.getAttribute('data-id');
+    var fech_da = button.getAttribute('data-diah');
+    var horario = button.getAttribute('data-horario');
+    var nomDa = button.getAttribute('data-nom');
+    var telfDa = button.getAttribute('data-telf');
+    var cortesia = button.getAttribute('data-cortesia') === "True"; // Convierte a booleano
 
-              var form = document.getElementById('vldt_edidias');
+    var form = document.getElementById('vldt_edidias');
 
-              var modalId = exampleModal.querySelector('#modalId');
-              var modalFechDa = exampleModal.querySelector('#fech_da');
-              var modalNomDa = exampleModal.querySelector('#nom_da');
-              var modalTelfDa = exampleModal.querySelector('#telf_da');
-              var modalTimeDa = exampleModal.querySelector('#time_da');
-              var modalCortDa = exampleModal.querySelector('#cort_da');
+    var modalId = exampleModal.querySelector('#modalId');
+    var modalFechDa = exampleModal.querySelector('#modal_fech_da');
+    var modalNomDa = exampleModal.querySelector('#modal_nom_da');
+    var modalTelfDa = exampleModal.querySelector('#modal_telf_da');
+    var modalTimeDa = exampleModal.querySelector('#modal_time_da');
+    var modalCortDa = exampleModal.querySelector('#modal_cort_da');
 
-              modalId.value = id;
-             form.action = "./procesarActualizacionHorario/" + id + "/";
+    modalId.value = id;
+    form.action = "./procesarActualizacionHorario/" + id + "/";
 
-              modalNomDa.value = nomDa;  // Asignar el nombre del cliente
-              modalTelfDa.value = telfDa;  // Asignar el teléfono/celular
-              modalFechDa.value = fech_da;  // Asignar la fecha al input de tipo date
-              modalTimeDa.value = horario; // Asignar el horario al input de tipo time
-              modalCortDa.checked = cortesia; // Marcar o desmarcar el checkbox
-            });
+    modalNomDa.value = nomDa;  // Asignar el nombre del cliente
+    modalTelfDa.value = telfDa;  // Asignar el teléfono/celular
+    modalFechDa.value = fech_da;  // Asignar la fecha al input de tipo date
+    modalTimeDa.value = horario; // Asignar el horario al input de tipo time
+    modalCortDa.checked = cortesia; // Marcar o desmarcar el checkbox
+  });
+</script>
 
-
-          </script>
-<!-- CONFIGURACCIÓN DE TABLA -->
+<!-- CONFIGURACIÓN DE TABLA -->
 <script type="text/javascript">
   $(document).ready(function() {
       $('#tbl_horarios').DataTable( {
@@ -300,7 +296,6 @@
               $('.dataTables_filter input[type="search"]').addClass('form-control');
           },
           pageLength: 6,
-          //order: [[0, 'desc']],
           drawCallback: function(settings) {
               // Aplicar las clases a los botones de paginación después de cada redibujo
               $('.paginate_button').addClass('btn btn-outline-primary');
@@ -309,7 +304,7 @@
   });
 </script>
 
-<!-- MENSAJE DE CONFIRMACIÓN ELIMINAR DIAHORARIO -->
+<!-- MENSAJE DE CONFIRMACIÓN ELIMINAR DÍA HORARIO -->
 <script type="text/javascript">
         function delete_adci(url){
           iziToast.question({
@@ -328,125 +323,85 @@
                       window.location.href=url;
                   }, true],
                   ['<button>NO</button>', function (instance, toast) {
-
                       instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
-
                   }],
               ]
           });
         }
-  </script>
+</script>
 
+<!-- VALIDACIONES -->
+<script type="text/javascript">
+  $(document).ready(function() {
+      // Añadir método de validación personalizado para fechas pasadas
+      $.validator.addMethod("noPastDate", function(value, element) {
+          var today = new Date();
+          today.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
 
-  <script type="text/javascript">
-      $(document).ready(function() {
-          // Añadir método de validación personalizado para fechas pasadas
-          $.validator.addMethod("noPastDate", function(value, element) {
-              var today = new Date();
-              today.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
+          // Asegurarse de que el valor ingresado esté en formato yyyy-mm-dd
+          var inputDateParts = value.split("-");
+          var inputDate = new Date(inputDateParts[0], inputDateParts[1] - 1, inputDateParts[2]);
+          inputDate.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
 
-              // Asegurarse de que el valor ingresado esté en formato yyyy-mm-dd
-              var inputDateParts = value.split("-");
-              var inputDate = new Date(inputDateParts[0], inputDateParts[1] - 1, inputDateParts[2]);
-              inputDate.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
+          return this.optional(element) || inputDate >= today;
+      }, "Debe ingresar una fecha actual o futura");
 
-              return this.optional(element) || inputDate >= today;
-          }, "Debe ingresar una fecha actual o futura");
+      // Añadir método de validación personalizado para horarios permitidos
+      $.validator.addMethod("validTimeRange", function(value, element) {
+          if (this.optional(element)) {
+              return true;
+          }
+          var time = value.split(":");
+          var hour = parseInt(time[0]);
+          var minutes = parseInt(time[1]);
+          var morningStart = 8 * 60; // 8:00 AM en minutos
+          var morningEnd = 13 * 60; // 1:00 PM en minutos
+          var afternoonStart = 16 * 60; // 4:00 PM en minutos
+          var afternoonEnd = 20 * 60; // 8:00 PM en minutos
+          var inputTime = hour * 60 + minutes; // Convertir la hora ingresada a minutos
+          return (inputTime >= morningStart && inputTime < morningEnd) || (inputTime >= afternoonStart && inputTime < afternoonEnd);
+      }, "Horario fuera de servicio");
 
-          // Añadir método de validación personalizado para horarios permitidos
-          $.validator.addMethod("validTimeRange", function(value, element) {
-              if (this.optional(element)) {
-                  return true;
-              }
-              var time = value.split(":");
-              var hour = parseInt(time[0]);
-              var minutes = parseInt(time[1]);
-              var morningStart = 8 * 60; // 8:00 AM en minutos
-              var morningEnd = 13 * 60; // 1:00 PM en minutos
-              var afternoonStart = 16 * 60; // 4:00 PM en minutos
-              var afternoonEnd = 20 * 60; // 8:00 PM en minutos
-              var inputTime = hour * 60 + minutes; // Convertir la hora ingresada a minutos
-              return (inputTime >= morningStart && inputTime < morningEnd) || (inputTime >= afternoonStart && inputTime < afternoonEnd);
-          }, "Horario fuera de servicio");
+      $.validator.addMethod("validTimeIfToday", function(value, element) {
+          var dateField = $(element).closest('form').find('input[name="fech_da"]').val();
+          var today = new Date();
+          var inputDateParts = dateField.split("-");
+          var inputDate = new Date(inputDateParts[0], inputDateParts[1] - 1, inputDateParts[2]);
 
-          $.validator.addMethod("validTimeIfToday", function(value, element) {
-              var dateField = $('#fech_da').val();
-              var today = new Date();
-              var inputDateParts = dateField.split("-");
-              var inputDate = new Date(inputDateParts[0], inputDateParts[1] - 1, inputDateParts[2]);
-
-              // Si la fecha no es hoy, no hacer nada
-              if (inputDate.setHours(0, 0, 0, 0) !== today.setHours(0, 0, 0, 0)) {
-                  return true;
-              }
-
-              var now = new Date();
-              var inputTimeParts = value.split(":");
-              var inputTime = new Date();
-              inputTime.setHours(inputTimeParts[0], inputTimeParts[1], 0, 0);
-
-              // Verificar que la hora ingresada no sea menor a la hora actual
-              return inputTime >= now;
-          }, "La hora ingresada debe ser mayor o igual a la hora actual");
-
-          // Inicializar validación del modal cuando se muestre
-          function initializeModalValidation() {
-              $("#vldt_edidias").validate({
-                  rules: {
-                      nom_da: {
-                          required: true,
-                      },
-                      telf_da: {
-                          required: true,
-                      },
-                      fech_da: {
-                          required: true,
-                          date: true,
-                          noPastDate: true // Añadir regla personalizada aquí
-                      },
-                      time_da: {
-                          required: true,
-                          validTimeRange: true, // Añadir regla personalizada aquí
-                          validTimeIfToday: true,
-                      }
-                  },
-                  messages: {
-                      nom_da: {
-                          required: "Debe ingresar el nombre del cliente",
-                      },
-                      telf_da: {
-                          required: "Debe ingresar el contacto del cliente",
-                      },
-                      fech_da: {
-                          required: "Debe ingresar la fecha de la cita",
-                          date: "Ingrese una fecha válida",
-                          noPastDate: "Debe ingresar una fecha actual o futura"
-                      },
-                      time_da: {
-                          required: "Debe ingresar el horario de la cita",
-                          validTimeRange: "Horario fuera de servicio",
-                          validTimeIfToday: "La hora ingresada debe ser mayor o igual a la hora actual",
-                      }
-                  },
-                  errorPlacement: function(error, element) {
-                      element.parent().find('.error-message').html(error);
-                  },
-                  onkeyup: function(element) {
-                      $(element).valid();
-                  },
-                  onfocusout: function(element) {
-                      $(element).valid();
-                  }
-              });
+          // Si la fecha no es hoy, no hacer nada
+          if (inputDate.setHours(0, 0, 0, 0) !== today.setHours(0, 0, 0, 0)) {
+              return true;
           }
 
-          // Inicializar validación del modal cuando se muestre
-          $('#exampleModal').on('shown.bs.modal', function() {
-              initializeModalValidation();
-          });
+          var now = new Date();
+          var inputTimeParts = value.split(":");
+          var inputTime = new Date();
+          inputTime.setHours(inputTimeParts[0], inputTimeParts[1], 0, 0);
 
-          // Validación para el formulario de creación
-          $("#vldt_dias").validate({
+          // Verificar que la hora ingresada no sea menor a la hora actual
+          return inputTime >= now;
+      }, "La hora ingresada debe ser mayor o igual a la hora actual");
+
+      // Añadir método de validación personalizado para verificar la fecha si el checkbox de cortesía está marcado
+      $.validator.addMethod("validCortesiaDate", function(value, element) {
+          var isChecked = $(element).closest('form').find('input[name="cort_da"]').is(':checked');
+          if (!isChecked) {
+              return true; // Si no está marcado, no hacer nada
+          }
+
+          var today = new Date();
+          today.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
+
+          var inputDateParts = value.split("-");
+          var inputDate = new Date(inputDateParts[0], inputDateParts[1] - 1, inputDateParts[2]);
+          inputDate.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
+
+          return inputDate.getTime() === today.getTime();
+      }, "Las citas de cortesía solo se permiten en la fecha actual");
+
+      // Inicializar validación del modal cuando se muestre
+      function initializeModalValidation() {
+          $("#vldt_edidias").validate({
               rules: {
                   nom_da: {
                       required: true,
@@ -457,11 +412,12 @@
                   fech_da: {
                       required: true,
                       date: true,
-                      noPastDate: true // Añadir regla personalizada aquí también
+                      noPastDate: true, // Añadir regla personalizada aquí
+                      validCortesiaDate: true, // Añadir regla personalizada para citas de cortesía
                   },
                   time_da: {
                       required: true,
-                      validTimeRange: true, // Añadir regla personalizada aquí también
+                      validTimeRange: true, // Añadir regla personalizada aquí
                       validTimeIfToday: true,
                   }
               },
@@ -475,7 +431,8 @@
                   fech_da: {
                       required: "Debe ingresar la fecha de la cita",
                       date: "Ingrese una fecha válida",
-                      noPastDate: "Debe ingresar una fecha actual o futura"
+                      noPastDate: "Debe ingresar una fecha actual o futura",
+                      validCortesiaDate: "Las citas de cortesía solo se permiten en la fecha actual",
                   },
                   time_da: {
                       required: "Debe ingresar el horario de la cita",
@@ -484,7 +441,7 @@
                   }
               },
               errorPlacement: function(error, element) {
-                  element.parent().find('.error-messages').html(error);
+                  element.closest('.mb-3').find('.error-message').html(error);
               },
               onkeyup: function(element) {
                   $(element).valid();
@@ -493,8 +450,64 @@
                   $(element).valid();
               }
           });
-      });
-  </script>
+      }
 
+      // Inicializar validación del modal cuando se muestre
+      $('#exampleModal').on('shown.bs.modal', function() {
+          initializeModalValidation();
+      });
+
+      // Validación para el formulario de creación
+      $("#vldt_dias").validate({
+          rules: {
+              nom_da: {
+                  required: true,
+              },
+              telf_da: {
+                  required: true,
+              },
+              fech_da: {
+                  required: true,
+                  date: true,
+                  noPastDate: true, // Añadir regla personalizada aquí también
+                  validCortesiaDate: true, // Añadir regla personalizada para citas de cortesía
+              },
+              time_da: {
+                  required: true,
+                  validTimeRange: true, // Añadir regla personalizada aquí también
+                  validTimeIfToday: true,
+              }
+          },
+          messages: {
+              nom_da: {
+                  required: "Debe ingresar el nombre del cliente",
+              },
+              telf_da: {
+                  required: "Debe ingresar el contacto del cliente",
+              },
+              fech_da: {
+                  required: "Debe ingresar la fecha de la cita",
+                  date: "Ingrese una fecha válida",
+                  noPastDate: "Debe ingresar una fecha actual o futura",
+                  validCortesiaDate: "Las citas de cortesía solo se permiten en la fecha actual",
+              },
+              time_da: {
+                  required: "Debe ingresar el horario de la cita",
+                  validTimeRange: "Horario fuera de servicio",
+                  validTimeIfToday: "La hora ingresada debe ser mayor o igual a la hora actual",
+              }
+          },
+          errorPlacement: function(error, element) {
+              element.closest('.mb-3').find('.error-messages').html(error);
+          },
+          onkeyup: function(element) {
+              $(element).valid();
+          },
+          onfocusout: function(element) {
+              $(element).valid();
+          }
+      });
+  });
+</script>
 
 {% endblock %}
