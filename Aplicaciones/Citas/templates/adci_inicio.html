@@ -635,17 +635,6 @@
               ]
           });
         }
-
-
-{% if messages %}
-    {% for message in messages %}
-        iziToast.success({
-            title: 'Éxito',
-            message: '{{ message }}',
-            position: 'topRight',
-        });
-    {% endfor %}
-{% endif %}
   </script>
   <script type="text/javascript">
     $(document).ready(function() {

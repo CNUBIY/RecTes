@@ -335,178 +335,166 @@
               ]
           });
         }
-
-
-{% if messages %}
-    {% for message in messages %}
-        iziToast.success({
-            title: 'Éxito',
-            message: '{{ message }}',
-            position: 'topRight',
-        });
-    {% endfor %}
-{% endif %}
   </script>
 
 
   <script type="text/javascript">
-    $(document).ready(function() {
+      $(document).ready(function() {
+          // Añadir método de validación personalizado para fechas pasadas
+          $.validator.addMethod("noPastDate", function(value, element) {
+              var today = new Date();
+              today.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
 
+              // Asegurarse de que el valor ingresado esté en formato yyyy-mm-dd
+              var inputDateParts = value.split("-");
+              var inputDate = new Date(inputDateParts[0], inputDateParts[1] - 1, inputDateParts[2]);
+              inputDate.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
 
-      // Añadir método de validación personalizado para fechas pasadas
-      $.validator.addMethod("noPastDate", function(value, element) {
-        var today = new Date();
-        today.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
+              return this.optional(element) || inputDate >= today;
+          }, "Debe ingresar una fecha actual o futura");
 
-        // Asegurarse de que el valor ingresado esté en formato yyyy-mm-dd
-        var inputDateParts = value.split("-");
-        var inputDate = new Date(inputDateParts[0], inputDateParts[1] - 1, inputDateParts[2]);
-        inputDate.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
+          // Añadir método de validación personalizado para horarios permitidos
+          $.validator.addMethod("validTimeRange", function(value, element) {
+              if (this.optional(element)) {
+                  return true;
+              }
+              var time = value.split(":");
+              var hour = parseInt(time[0]);
+              var minutes = parseInt(time[1]);
+              var morningStart = 8 * 60; // 8:00 AM en minutos
+              var morningEnd = 13 * 60; // 1:00 PM en minutos
+              var afternoonStart = 16 * 60; // 4:00 PM en minutos
+              var afternoonEnd = 20 * 60; // 8:00 PM en minutos
+              var inputTime = hour * 60 + minutes; // Convertir la hora ingresada a minutos
+              return (inputTime >= morningStart && inputTime < morningEnd) || (inputTime >= afternoonStart && inputTime < afternoonEnd);
+          }, "Horario fuera de servicio");
 
-        return this.optional(element) || inputDate >= today;
-      }, "Debe ingresar una fecha actual o futura");
+          $.validator.addMethod("validTimeIfToday", function(value, element) {
+              var dateField = $('#fech_da').val();
+              var today = new Date();
+              var inputDateParts = dateField.split("-");
+              var inputDate = new Date(inputDateParts[0], inputDateParts[1] - 1, inputDateParts[2]);
 
-      // Añadir método de validación personalizado para horarios permitidos
-      $.validator.addMethod("validTimeRange", function(value, element) {
-        if (this.optional(element)) {
-          return true;
-        }
-        var time = value.split(":");
-        var hour = parseInt(time[0]);
-        var minutes = parseInt(time[1]);
-        var morningStart = 8 * 60; // 8:00 AM en minutos
-        var morningEnd = 13 * 60; // 1:00 PM en minutos
-        var afternoonStart = 16 * 60; // 4:00 PM en minutos
-        var afternoonEnd = 20 * 60; // 8:00 PM en minutos
-        var inputTime = hour * 60 + minutes; // Convertir la hora ingresada a minutos
-        return (inputTime >= morningStart && inputTime < morningEnd) || (inputTime >= afternoonStart && inputTime < afternoonEnd);
-      }, "Horario fuera de servicio");
+              // Si la fecha no es hoy, no hacer nada
+              if (inputDate.setHours(0, 0, 0, 0) !== today.setHours(0, 0, 0, 0)) {
+                  return true;
+              }
 
-      $.validator.addMethod("validTimeIfToday", function(value, element) {
-          var dateField = $('#fech_da').val();
-          var today = new Date();
-          var inputDateParts = dateField.split("-");
-          var inputDate = new Date(inputDateParts[0], inputDateParts[1] - 1, inputDateParts[2]);
+              var now = new Date();
+              var inputTimeParts = value.split(":");
+              var inputTime = new Date();
+              inputTime.setHours(inputTimeParts[0], inputTimeParts[1], 0, 0);
 
-          // Si la fecha no es hoy, no hacer nada
-          if (inputDate.setHours(0, 0, 0, 0) !== today.setHours(0, 0, 0, 0)) {
-            return true;
+              // Verificar que la hora ingresada no sea menor a la hora actual
+              return inputTime >= now;
+          }, "La hora ingresada debe ser mayor o igual a la hora actual");
+
+          // Inicializar validación del modal cuando se muestre
+          function initializeModalValidation() {
+              $("#vldt_edidias").validate({
+                  rules: {
+                      nom_da: {
+                          required: true,
+                      },
+                      telf_da: {
+                          required: true,
+                      },
+                      fech_da: {
+                          required: true,
+                          date: true,
+                          noPastDate: true // Añadir regla personalizada aquí
+                      },
+                      time_da: {
+                          required: true,
+                          validTimeRange: true, // Añadir regla personalizada aquí
+                          validTimeIfToday: true,
+                      }
+                  },
+                  messages: {
+                      nom_da: {
+                          required: "Debe ingresar el nombre del cliente",
+                      },
+                      telf_da: {
+                          required: "Debe ingresar el contacto del cliente",
+                      },
+                      fech_da: {
+                          required: "Debe ingresar la fecha de la cita",
+                          date: "Ingrese una fecha válida",
+                          noPastDate: "Debe ingresar una fecha actual o futura"
+                      },
+                      time_da: {
+                          required: "Debe ingresar el horario de la cita",
+                          validTimeRange: "Horario fuera de servicio",
+                          validTimeIfToday: "La hora ingresada debe ser mayor o igual a la hora actual",
+                      }
+                  },
+                  errorPlacement: function(error, element) {
+                      element.parent().find('.error-message').html(error);
+                  },
+                  onkeyup: function(element) {
+                      $(element).valid();
+                  },
+                  onfocusout: function(element) {
+                      $(element).valid();
+                  }
+              });
           }
 
-          var now = new Date();
-          var inputTimeParts = value.split(":");
-          var inputTime = new Date();
-          inputTime.setHours(inputTimeParts[0], inputTimeParts[1], 0, 0);
+          // Inicializar validación del modal cuando se muestre
+          $('#exampleModal').on('shown.bs.modal', function() {
+              initializeModalValidation();
+          });
 
-          // Verificar que la hora ingresada no esté a más de una hora de diferencia de la hora actual
-          var timeDiff = Math.abs(inputTime - now) / 36e5; // Convertir la diferencia de milisegundos a horas
-          return timeDiff <= 1;
-        }, "La hora ingresada debe estar dentro de una hora de la hora actual");
-
-
-      // Inicializar validación del modal cuando se muestre
-      function initializeModalValidation() {
-        $("#vldt_edidias").validate({
-          rules: {
-            nom_da: {
-              required: true,
-            },
-            telf_da: {
-              required: true,
-            },
-            fech_da: {
-              required: true,
-              date: true,
-              noPastDate: true // Añadir regla personalizada aquí
-            },
-            time_da: {
-              required: true,
-              validTimeRange: true, // Añadir regla personalizada aquí
-            }
-          },
-          messages: {
-            nom_da: {
-              required: "Debe ingresar el nombre del cliente",
-            },
-            telf_da: {
-              required: "Debe ingresar el contacto del cliente",
-            },
-            fech_da: {
-              required: "Debe ingresar la fecha de la cita",
-              date: "Ingrese una fecha válida",
-              noPastDate: "Debe ingresar una fecha actual o futura"
-            },
-            time_da: {
-              required: "Debe ingresar el horario de la cita",
-              validTimeRange: "Horario fuera de servicio",
-            }
-          },
-          errorPlacement: function(error, element) {
-            element.parent().find('.error-message').html(error);
-          },
-          onkeyup: function(element) {
-            $(element).valid();
-          },
-          onfocusout: function(element) {
-            $(element).valid();
-          }
-        });
-      }
-
-      // Inicializar validación del modal cuando se muestre
-      $('#exampleModal').on('shown.bs.modal', function() {
-        initializeModalValidation();
+          // Validación para el formulario de creación
+          $("#vldt_dias").validate({
+              rules: {
+                  nom_da: {
+                      required: true,
+                  },
+                  telf_da: {
+                      required: true,
+                  },
+                  fech_da: {
+                      required: true,
+                      date: true,
+                      noPastDate: true // Añadir regla personalizada aquí también
+                  },
+                  time_da: {
+                      required: true,
+                      validTimeRange: true, // Añadir regla personalizada aquí también
+                      validTimeIfToday: true,
+                  }
+              },
+              messages: {
+                  nom_da: {
+                      required: "Debe ingresar el nombre del cliente",
+                  },
+                  telf_da: {
+                      required: "Debe ingresar el contacto del cliente",
+                  },
+                  fech_da: {
+                      required: "Debe ingresar la fecha de la cita",
+                      date: "Ingrese una fecha válida",
+                      noPastDate: "Debe ingresar una fecha actual o futura"
+                  },
+                  time_da: {
+                      required: "Debe ingresar el horario de la cita",
+                      validTimeRange: "Horario fuera de servicio",
+                      validTimeIfToday: "La hora ingresada debe ser mayor o igual a la hora actual",
+                  }
+              },
+              errorPlacement: function(error, element) {
+                  element.parent().find('.error-messages').html(error);
+              },
+              onkeyup: function(element) {
+                  $(element).valid();
+              },
+              onfocusout: function(element) {
+                  $(element).valid();
+              }
+          });
       });
-
-      // Validación para el formulario de creación
-      $("#vldt_dias").validate({
-        rules: {
-          nom_da: {
-            required: true,
-          },
-          telf_da: {
-            required: true,
-          },
-          fech_da: {
-            required: true,
-            date: true,
-            noPastDate: true // Añadir regla personalizada aquí también
-          },
-          time_da: {
-            required: true,
-            validTimeRange: true, // Añadir regla personalizada aquí también
-            validTimeIfToday: true,
-          }
-        },
-        messages: {
-          nom_da: {
-            required: "Debe ingresar el nombre del cliente",
-          },
-          telf_da: {
-            required: "Debe ingresar el contacto del cliente",
-          },
-          fech_da: {
-            required: "Debe ingresar la fecha de la cita",
-            date: "Ingrese una fecha válida",
-            noPastDate: "Debe ingresar una fecha actual o futura"
-          },
-          time_da: {
-            required: "Debe ingresar el horario de la cita",
-            validTimeRange: "Horario fuera de servicio",
-            validTimeIfToday: "La hora ingresada debe estar dentro de una hora de la hora actual",
-          }
-        },
-        errorPlacement: function(error, element) {
-          element.parent().find('.error-messages').html(error);
-        },
-        onkeyup: function(element) {
-          $(element).valid();
-        },
-        onfocusout: function(element) {
-          $(element).valid();
-        }
-      });
-    });
   </script>
+
 
 {% endblock %}
