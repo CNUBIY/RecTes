@@ -58,7 +58,7 @@
                                               {% if usuario.is_staff or usuario.is_superuser %}
                                                   <span>Administrador General</span>
                                               {% else %}
-                                                  <button type="button" class="btn btn-outline-warning" name="button">Admin</button>
+                                                  <button type="button" class="btn btn-outline-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#changeAdminModal" title="Promocionar a Admin"><i class="fa-solid fa-user-tie"></i></button>
                                                   <a href="#" class="btn btn-outline-danger rounded-pill" onclick="eliminar_usuario('{% url 'eliminar_usuario' usuario.id %}')">
                                                       <i class="fa fa-trash"></i>
                                                   </a>
@@ -84,7 +84,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal Cambiar Contraseña -->
 <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -123,6 +123,36 @@
                         </div>
                     </div>
                     <button type="submit" class="btn btn-outline-success">Cambiar Contraseña</button>
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Dar admin -->
+<div class="modal fade" id="changeAdminModal" tabindex="-1" aria-labelledby="changeAdminModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changeAdminModalLabel">Promocionar usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-warning"><b><i class="fa-solid fa-triangle-exclamation"></i> ¡AVISO!:</b></p>
+                <p class="card-text"><b>Este usuario pasará a ser un Administrador General, por favor ingrese su contraseña para confirmar.</b></p>
+                <form id="changeAdminForm" method="POST" action="">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="admin_password" class="form-label">Contraseña:</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="admin_password" name="admin_password" required>
+                            <button type="button" class="btn btn-outline-secondary toggle-password" data-toggle="#admin_password">
+                                <i class="far fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-outline-success">Promocionar usuario</button>
                     <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
                 </form>
             </div>
@@ -216,16 +246,22 @@
         }
       }
     });
+  });
+</script>
 
-    // Mostrar/Ocultar Contraseña
-    $(".toggle-password").click(function() {
-      $(this).find("i").toggleClass("fa-eye fa-eye-slash");
-      var input = $($(this).data("toggle"));
-      if (input.attr("type") === "password") {
-        input.attr("type", "text");
-      } else {
-        input.attr("type", "password");
-      }
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".toggle-password").forEach(button => {
+      button.addEventListener("click", function() {
+        let input = document.querySelector(this.getAttribute("data-toggle"));
+        if (input.type === "password") {
+          input.type = "text";
+        } else {
+          input.type = "password";
+        }
+        this.querySelector("i").classList.toggle("fa-eye");
+        this.querySelector("i").classList.toggle("fa-eye-slash");
+      });
     });
   });
 </script>
