@@ -14,11 +14,15 @@
                       <div class="card-body">
                           <h5 class="card-title text-center">Añadir Usuarios</h5>
                           <p class="card-text"><b>¡¡Ojo!! Los usuarios solo pueden ser registrados por el personal autorizado.</b></p>
-                          <p class="card-text">Si deseas ingresar un usuario nuevo por favor haz click aquí:</p>
+                          <p class="card-text">Si deseas ingresar un usuario nuevol, por favor haz click aquí:</p>
                           {% if user.is_staff or user.is_superuser %}
-                              <a href="/register/" class="btn btn-primary">Registrar Usuario</a>
+                              <div class="text-center">
+                                <a href="/register/" class="btn btn-primary">Registrar Usuario</a>
+                              </div>
                           {% else %}
-                              <button type="button" name="button" class="btn btn-outline-info" disabled>Solo personal autorizado</button>
+                              <div class="text-center">
+                                <button type="button" name="button" class="btn btn-outline-info" disabled>Solo personal autorizado</button>
+                              </div>
                           {% endif %}
                       </div>
                   </div>
@@ -26,8 +30,19 @@
                         <div class="card-body">
                             <h5 class="card-title text-center">Cambiar Contraseña</h5>
                             <p class="card-text"><b>Para asegurar una mejor seguridad, se recomienda un cambio de contraseña cada mes. :)</b></p>
-                            <p class="card-text">Si deseas cambiar la contraseña por favor haz click aquí:</p>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Cambiar contraseña</button>
+                            <p class="card-text">Si deseas cambiar la contraseña, por favor haz click aquí:</p>
+                            <div class="text-center">
+                              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Cambiar contraseña</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title text-center text-danger"><b>Eliminar Cuenta</b></h5>
+                            <p class="card-text">Si deseas eliminar tu cuenta, por favor haz click aquí:</p>
+                            <div class="text-center">
+                              <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Cambiar contraseña</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -181,7 +196,7 @@
             initComplete: function () {
                 $('.dataTables_filter input[type="search"]').addClass('form-control');
             },
-            pageLength: 4,
+            pageLength: 5,
             drawCallback: function(settings) {
                 // Aplicar las clases a los botones de paginación después de cada redibujo
                 $('.paginate_button').addClass('btn btn-outline-primary');
