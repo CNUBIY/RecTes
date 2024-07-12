@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from collections import defaultdict
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from Aplicaciones.Citas.middleware import login_required as custom_login_required
@@ -91,11 +91,6 @@ def usci_inicio (request):
     return render(request,'usci_inicio.html')
 #Página Inicio Usuarios-Citas FINAL
 
-
-#Página PERFIL usuarios-citas Inicio
-
-#Página PERFIL usuarios-citas final
-
 #Página PERFIL admin Inicio
 @login_required
 @custom_login_required
@@ -139,6 +134,32 @@ def eliminar_usuario(request, user_id):
 
     return redirect('adci_perfil')
 
+
+@login_required
+@custom_login_required
+def promote_user_to_admin(request):
+    if request.method == 'POST':
+        user_id = request.POST.get('user_id')
+        admin_password = request.POST.get('admin_password')
+
+        # Verificar la contraseña del usuario actual
+        user = authenticate(username=request.user.username, password=admin_password)
+        if user is not None and user.is_staff:
+            try:
+                user_to_promote = get_object_or_404(User, id=user_id)
+                admin_group = Group.objects.get(name='Administradores')
+                user_to_promote.is_staff = True
+                user_to_promote.groups.add(admin_group)
+                user_to_promote.save()
+                messages.success(request, f'{user_to_promote.username} ha sido promovido a Administrador exitosamente.')
+            except User.DoesNotExist:
+                messages.error(request, 'Usuario no encontrado.')
+            except Group.DoesNotExist:
+                messages.error(request, 'Grupo de Administradores no encontrado.')
+        else:
+            messages.error(request, 'Contraseña incorrecta')
+
+    return redirect('adci_perfil')
 
 #Página PERFIL admin final
 

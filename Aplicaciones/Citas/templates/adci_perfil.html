@@ -40,33 +40,35 @@
                             </div>
                             <div class="card-body table-responsive">
                               <table class="table" id="tbl_3">
-                                  <thead>
-                                      <tr>
-                                          <th>Correo</th>
-                                          <th>Fecha de Creación</th>
-                                          <th>Última sesión</th>
-                                          <th class="text-center">Acciones</th>
-                                      </tr>
-                                  </thead>
-                                  <tbody>
-                                      {% for usuario in usuarios %}
-                                      <tr>
-                                          <td>{{ usuario.username }}</td>
-                                          <td>{{ usuario.date_joined|date:"Y-m-d H:i:s" }}</td>
-                                          <td>{{ usuario.last_login|date:"Y-m-d H:i:s" }}</td>
-                                          <td class="text-center">
-                                              {% if usuario.is_staff or usuario.is_superuser %}
-                                                  <span>Administrador General</span>
-                                              {% else %}
-                                                  <button type="button" class="btn btn-outline-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#changeAdminModal" title="Promocionar a Admin"><i class="fa-solid fa-user-tie"></i></button>
-                                                  <a href="#" class="btn btn-outline-danger rounded-pill" onclick="eliminar_usuario('{% url 'eliminar_usuario' usuario.id %}')">
-                                                      <i class="fa fa-trash"></i>
-                                                  </a>
-                                              {% endif %}
-                                          </td>
-                                      </tr>
-                                      {% endfor %}
-                                  </tbody>
+                                <thead>
+                                  <tr>
+                                    <th>Correo</th>
+                                    <th>Fecha de Creación</th>
+                                    <th>Última sesión</th>
+                                    <th class="text-center">Acciones</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {% for usuario in usuarios %}
+                                  <tr>
+                                    <td>{{ usuario.username }}</td>
+                                    <td>{{ usuario.date_joined|date:"Y-m-d H:i:s" }}</td>
+                                    <td>{{ usuario.last_login|date:"Y-m-d H:i:s" }}</td>
+                                    <td class="text-center">
+                                      {% if usuario.is_staff or usuario.is_superuser %}
+                                      <span>Administrador General</span>
+                                      {% else %}
+                                      <button type="button" class="btn btn-outline-dark rounded-pill" onclick="setPromoteUserId('{{ usuario.id }}')" data-bs-toggle="modal" data-bs-target="#changeAdminModal" title="Promocionar a Admin">
+                                        <i class="fa-solid fa-user-tie"></i>
+                                      </button>
+                                      <a href="#" class="btn btn-outline-danger rounded-pill" onclick="eliminar_usuario('{% url 'eliminar_usuario' usuario.id %}')">
+                                        <i class="fa fa-trash"></i>
+                                      </a>
+                                      {% endif %}
+                                    </td>
+                                  </tr>
+                                  {% endfor %}
+                                </tbody>
                               </table>
                             </div>
                         {% else %}
@@ -136,35 +138,36 @@
 
 <!-- Modal Dar admin -->
 <div class="modal fade" id="changeAdminModal" tabindex="-1" aria-labelledby="changeAdminModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="changeAdminModalLabel">Promocionar usuario</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="changeAdminModalLabel">Promocionar usuario</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-warning"><b><i class="fa-solid fa-triangle-exclamation"></i> ¡AVISO!:</b></p>
+        <p class="card-text"><b>Este usuario pasará a ser un Administrador General, por favor ingrese su contraseña para confirmar.</b></p>
+        <form id="changeAdminForm" method="POST" action="{% url 'promote_user_to_admin' %}">
+          {% csrf_token %}
+          <input type="hidden" name="user_id" id="promote_user_id">
+          <div class="mb-3">
+            <label for="admin_password" class="form-label">Contraseña:</label>
+            <div class="input-group has-validation">
+              <input type="password" class="form-control" id="admin_password" name="admin_password" required>
+              <button type="button" class="btn btn-outline-secondary toggle-password" data-toggle="#admin_password">
+                <i class="far fa-eye"></i>
+              </button>
             </div>
-            <div class="modal-body">
-                <p class="text-warning"><b><i class="fa-solid fa-triangle-exclamation"></i> ¡AVISO!:</b></p>
-                <p class="card-text"><b>Este usuario pasará a ser un Administrador General, por favor ingrese su contraseña para confirmar.</b></p>
-                <form id="changeAdminForm" method="POST" action="">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="admin_password" class="form-label">Contraseña:</label>
-                        <div class="input-group has-validation">
-                            <input type="password" class="form-control" id="admin_password" name="admin_password" required>
-                            <button type="button" class="btn btn-outline-secondary toggle-password" data-toggle="#admin_password">
-                                <i class="far fa-eye"></i>
-                            </button>
-                        </div>
-                        <div class="mensaje-error-admin_password">
-                            <!-- Aquí va el mensaje de error para la contraseña de administrador -->
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-outline-success">Promocionar usuario</button>
-                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                </form>
+            <div class="mensaje-error-admin_password">
+              <!-- Aquí va el mensaje de error para la contraseña de administrador -->
             </div>
-        </div>
+          </div>
+          <button type="submit" class="btn btn-outline-success">Promocionar usuario</button>
+          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
 
 
@@ -215,7 +218,10 @@
 
 
 <script type="text/javascript">
-  $(document).ready(function() {
+    function setPromoteUserId(userId) {
+      document.getElementById('promote_user_id').value = userId;
+    }
+    $(document).ready(function() {
     // Asegurar contraseña fuerte
     $.validator.addMethod("strongPassword", function(value, element) {
       return this.optional(element) ||
