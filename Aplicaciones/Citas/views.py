@@ -116,15 +116,13 @@ def adci_perfil(request):
             update_session_auth_hash(request, user)  # Importante para mantener la sesión después de cambiar la contraseña
             messages.success(request, '¡Tu contraseña ha sido actualizada exitosamente!')
             return redirect('adci_perfil')
-        # En caso de errores, no hagas nada
-    else:
-        form = PasswordChangeForm(request.user)
+        else:
+            messages.error(request,'Contraseña incorrecta')
 
     return render(request, 'adci_perfil.html', {
         'usuarios': usuarios,
         'es_staff': es_staff,
         'es_superuser': es_superuser,
-        'form': form,
     })
 
 

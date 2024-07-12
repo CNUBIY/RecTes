@@ -103,6 +103,7 @@
                                 <i class="far fa-eye"></i>
                             </button>
                         </div>
+                        <div class="error-message-old_password"></div>
                     </div>
                     <div class="mb-3">
                         <label for="new_password1" class="form-label">Nueva Contraseña</label>
@@ -112,6 +113,7 @@
                                 <i class="far fa-eye"></i>
                             </button>
                         </div>
+                        <div class="error-message-new_password1"></div>
                     </div>
                     <div class="mb-3">
                         <label for="new_password2" class="form-label">Confirmar Nueva Contraseña</label>
@@ -121,6 +123,7 @@
                                 <i class="far fa-eye"></i>
                             </button>
                         </div>
+                        <div class="error-message-new_password2"></div>
                     </div>
                     <button type="submit" class="btn btn-outline-success">Cambiar Contraseña</button>
                     <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
@@ -129,6 +132,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- Modal Dar admin -->
 <div class="modal fade" id="changeAdminModal" tabindex="-1" aria-labelledby="changeAdminModalLabel" aria-hidden="true">
@@ -145,11 +149,14 @@
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="admin_password" class="form-label">Contraseña:</label>
-                        <div class="input-group">
+                        <div class="input-group has-validation">
                             <input type="password" class="form-control" id="admin_password" name="admin_password" required>
                             <button type="button" class="btn btn-outline-secondary toggle-password" data-toggle="#admin_password">
                                 <i class="far fa-eye"></i>
                             </button>
+                        </div>
+                        <div class="mensaje-error-admin_password">
+                            <!-- Aquí va el mensaje de error para la contraseña de administrador -->
                         </div>
                     </div>
                     <button type="submit" class="btn btn-outline-success">Promocionar usuario</button>
@@ -217,7 +224,7 @@
         /[A-Z]/.test(value) &&
         /[0-9]/.test(value) &&
         /[@$!%*?&#]/.test(value);
-      }, "La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un carácter especial.");
+    }, "La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un carácter especial.");
 
     $("#changePasswordForm").validate({
       rules: {
@@ -244,10 +251,31 @@
           required: "Debe confirmar su nueva contraseña",
           equalTo: "Las contraseñas no coinciden"
         }
+      },
+      errorPlacement: function(error, element) {
+        var id = element.attr("id");
+        $(".error-message-" + id).html(error);
+      }
+    });
+    $("#changeAdminForm").validate({
+      rules: {
+        "admin_password": {
+          required: true
+        }
+      },
+      messages: {
+        "admin_password": {
+          required: "Debe ingresar su contraseña"
+        }
+      },
+      errorPlacement: function(error, element) {
+        var id = element.attr("id");
+        $(".mensaje-error-" + id).html(error);
       }
     });
   });
 </script>
+
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {

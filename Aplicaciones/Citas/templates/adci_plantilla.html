@@ -231,7 +231,7 @@
                             var mensajeTexto = "{{ mensaje|escapejs }}";
                             if (mensajeTexto.includes("No") || mensajeTexto.includes("puede")) {
                                 iziToast.error({
-                                    title: 'Cancelado',
+                                    title: 'Error',
                                     message: mensajeTexto,
                                     position: 'topRight',
                                 });
