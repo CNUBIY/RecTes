@@ -161,6 +161,23 @@ def promote_user_to_admin(request):
 
     return redirect('adci_perfil')
 
+@login_required
+@custom_login_required
+def delete_account(request):
+    if request.method == 'POST':
+        delete_password = request.POST.get('delete_password')
+
+        # Verificar la contraseña del usuario actual
+        user = authenticate(username=request.user.username, password=delete_password)
+        if user is not None and not user.is_superuser:
+            user.delete()
+            messages.success(request, 'Tu cuenta ha sido eliminada correctamente.')
+            return redirect('login')  # Redirigir al logout después de eliminar la cuenta
+        else:
+            messages.error(request, 'Contraseña incorrecta o no puedes eliminar una cuenta de superusuario.')
+
+    return redirect('adci_perfil')
+
 #Página PERFIL admin final
 
 #Página Inicio Administrador-Citas GENERAL INICIO

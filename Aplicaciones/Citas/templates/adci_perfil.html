@@ -199,19 +199,17 @@
       <div class="modal-body">
         <p class="text-danger"><b><i class="fa-solid fa-triangle-exclamation"></i> ¡PRECAUCIÓN!:</b></p>
         <p class="card-text"><b>Esta cuenta será eliminada permanentemente, por favor ingrese su contraseña para confirmar</b></p>
-        <form id="changeAdminForm" method="POST" action="{% url 'promote_user_to_admin' %}">
+        <form id="deleteAccountForm" method="POST" action="{% url 'delete_account' %}">
           {% csrf_token %}
-          <input type="hidden" name="user_id" id="promote_user_id">
           <div class="mb-3">
-            <label for="admin_password" class="form-label">Contraseña:</label>
+            <label for="delete_password" class="form-label">Contraseña:</label>
             <div class="input-group has-validation">
-              <input type="password" class="form-control" id="admin_password" name="admin_password" required>
-              <button type="button" class="btn btn-outline-secondary toggle-password" data-toggle="#admin_password">
+              <input type="password" class="form-control" id="delete_password" name="delete_password" required>
+              <button type="button" class="btn btn-outline-secondary toggle-password" data-toggle="#delete_password">
                 <i class="far fa-eye"></i>
               </button>
             </div>
-            <div class="mensaje-error-admin_password">
-              <!-- Aquí va el mensaje de error para la contraseña de administrador -->
+            <div class="mensaje-error-delete_password">
             </div>
           </div>
           <button type="submit" class="btn btn-outline-danger">Eliminar cuenta</button>
@@ -221,6 +219,7 @@
     </div>
   </div>
 </div>
+
 
 <script type="text/javascript">
     $(document).ready(function() {

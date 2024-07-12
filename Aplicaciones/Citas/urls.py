@@ -13,7 +13,8 @@ urlpatterns=[
     #PERFIL ADMIN
     path('adci_inicio/adci_perfil/', views.adci_perfil, name='adci_perfil'),
     path('adci_inicio/adci_perfil/del_us/<user_id>',views.eliminar_usuario, name='eliminar_usuario'),
-    path('promote_user_to_admin/', views.promote_user_to_admin, name='promote_user_to_admin'),
+    path('adci_inicio/adci_perfil/promote_user_to_admin/', views.promote_user_to_admin, name='promote_user_to_admin'),
+    path('adci_inicio/adci_perfil/delete_account/', views.delete_account, name='delete_account'),
     #GENERAL ADMIN
     path('adci_inicio/',views.adci_inicio, name='adci_inicio'),
     path('adci_inicio/aggin_adci/',views.aggin_adci),
