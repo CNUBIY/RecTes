@@ -10,14 +10,18 @@
                 </div>
                 <div class="col-md-4 mb-3">
                   <h5 class="card-title fw-semibold mb-4 text-center"><b>Ajustes</b></h5>
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title text-center">Añadir Usuarios</h5>
-                            <p class="card-text"><b>¡¡Ojo!! Los usuarios registrados solo deben ser personal autorizado.</b></p>
-                            <p class="card-text">Si deseas ingresar un usuario nuevo por favor haz click aquí:</p>
-                            <a href="/register/" class="btn btn-primary">Registrar Usuario</a>
-                        </div>
-                    </div>
+                  <div class="card mb-3">
+                      <div class="card-body">
+                          <h5 class="card-title text-center">Añadir Usuarios</h5>
+                          <p class="card-text"><b>¡¡Ojo!! Los usuarios solo pueden ser registrados por el personal autorizado.</b></p>
+                          <p class="card-text">Si deseas ingresar un usuario nuevo por favor haz click aquí:</p>
+                          {% if user.is_staff or user.is_superuser %}
+                              <a href="/register/" class="btn btn-primary">Registrar Usuario</a>
+                          {% else %}
+                              <button type="button" name="button" class="btn btn-outline-info" disabled>Solo personal autorizado</button>
+                          {% endif %}
+                      </div>
+                  </div>
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title text-center">Cambiar Contraseña</h5>
@@ -35,28 +39,35 @@
                                 Cambios permitidos
                             </div>
                             <div class="card-body table-responsive">
-                                <table class="table" id="tbl_3">
-                                    <thead>
-                                        <tr>
-                                            <th>Correo</th>
-                                            <th>Fecha de Creación</th>
-                                            <th>Última sesión</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for usuario in usuarios %}
-                                        <tr>
-                                            <td>{{ usuario.username }}</td>
-                                            <td>{{ usuario.date_joined|date:"Y-m-d H:i:s" }}</td>
-                                            <td>{{ usuario.last_login|date:"Y-m-d H:i:s" }}</td>
-                                            <td class="text-center">
-                                                <a href="#" class="btn btn-outline-danger rounded-pill" onclick="eliminar_usuario('{% url 'eliminar_usuario' usuario.id %}')"><i class="fa fa-trash"></i></a>
-                                            </td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
+                              <table class="table" id="tbl_3">
+                                  <thead>
+                                      <tr>
+                                          <th>Correo</th>
+                                          <th>Fecha de Creación</th>
+                                          <th>Última sesión</th>
+                                          <th class="text-center">Acciones</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      {% for usuario in usuarios %}
+                                      <tr>
+                                          <td>{{ usuario.username }}</td>
+                                          <td>{{ usuario.date_joined|date:"Y-m-d H:i:s" }}</td>
+                                          <td>{{ usuario.last_login|date:"Y-m-d H:i:s" }}</td>
+                                          <td class="text-center">
+                                              {% if usuario.is_staff or usuario.is_superuser %}
+                                                  <span>Administrador General</span>
+                                              {% else %}
+                                                  <button type="button" class="btn btn-outline-warning" name="button">Admin</button>
+                                                  <a href="#" class="btn btn-outline-danger rounded-pill" onclick="eliminar_usuario('{% url 'eliminar_usuario' usuario.id %}')">
+                                                      <i class="fa fa-trash"></i>
+                                                  </a>
+                                              {% endif %}
+                                          </td>
+                                      </tr>
+                                      {% endfor %}
+                                  </tbody>
+                              </table>
                             </div>
                         {% else %}
                             <div class="card-header">
