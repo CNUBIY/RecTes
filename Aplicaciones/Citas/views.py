@@ -171,7 +171,7 @@ def delete_account(request):
         user = authenticate(username=request.user.username, password=delete_password)
         if user is not None and not user.is_superuser:
             user.delete()
-            messages.success(request, 'Tu cuenta ha sido eliminada correctamente.')
+            messages.success(request, 'Tu cuenta ha sido eliminada exitosamente.')
             return redirect('login')  # Redirigir al logout después de eliminar la cuenta
         else:
             messages.error(request, 'Contraseña incorrecta o no puedes eliminar una cuenta de superusuario.')
