@@ -161,7 +161,7 @@ def agg_rep(request,idPat):
     patbdd=Patient.objects.get(idPat=idPat)
     mombdd=MadreCita.objects.all()
     dadbdd=PadreCita.objects.all()
-    return render(request,'rep/agg_rep_pat.html',{'pacientes':patbdd,'mom':mombdd})
+    return render(request,'rep/agg_rep_pat.html',{'pacientes':patbdd,'mom':mombdd, 'dad':dadbdd})
 
 def agg_mom(request,idPat):
     if request.method == 'POST':
@@ -181,6 +181,22 @@ def agg_mom(request,idPat):
             act_mom = act_mom,
             correo_mom = correo_mom,
             es_cimom = es_cimom,
+        )
+        messages.success(request,'Representante agregado exitosamente')
+        return redirect('doc_patient', idPat=idPat)
+
+def agg_dad(request,idPat):
+    if request.method == 'POST':
+        nom_fat = request.POST['nom_fat']
+        ape_fat = request.POST['ape_fat']
+        age_fat = request.POST['age_fat']
+        act_fat = request.POST['act_fat']
+
+        new_mom = PadreCita.objects.create(
+            nom_fat=nom_fat,
+            ape_fat=ape_fat,
+            age_fat=age_fat,
+            act_fat = act_fat
         )
         messages.success(request,'Representante agregado exitosamente')
         return redirect('doc_patient', idPat=idPat)

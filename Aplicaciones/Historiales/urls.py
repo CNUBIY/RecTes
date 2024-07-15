@@ -16,4 +16,5 @@ urlpatterns=[
     #CREAR Madre
     path('doc_inicio/doc_patient/<int:idPat>/agg_rep/', views.agg_rep, name='agg_rep'),
     path('doc_inicio/doc_patient/<int:idPat>/agg_mom/', views.agg_mom, name='agg_mom'),
+    path('doc_inicio/doc_patient/<int:idPat>/agg_dad/', views.agg_dad, name='agg_dad'),
 ]
