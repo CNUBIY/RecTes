@@ -63,10 +63,19 @@ class Patient(models.Model):
     def __str__(self):
         return f"{self.lastnPat} {self.namePat} - {self.ciPat}"
 
-
 class Alergia(models.Model):
     id=models.AutoField(primary_key=True)
     creation=models.DateField(default=datetime.date.today)
     nombreAlergia=models.CharField(max_length=150)
     def __str__(self):
         return f"{self.id}. {self.nombreAlergia}"
+
+
+class PatAler(models.Model):
+    id = models.AutoField(primary_key=True)
+    creation=models.DateField(default=datetime.date.today)
+    alergia=models.ForeignKey(Alergia, on_delete=models.CASCADE)
+    paciente=models.ForeignKey(Patient, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.paciente} -> {self.alergia}"
