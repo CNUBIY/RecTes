@@ -58,6 +58,7 @@ class Patient(models.Model):
     tf_casa=models.CharField(null=True, blank=True, max_length=10)
     cell=models.CharField(null=True, blank=True, max_length=10)
     tf_tra=models.CharField(null=True, blank=True, max_length=10)
+    seguroPat=models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.lastnPat} {self.namePat} - {self.ciPat}"

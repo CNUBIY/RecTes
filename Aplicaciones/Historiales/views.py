@@ -218,7 +218,7 @@ def agg_mompat(request,idPat):
      patEdit = Patient.objects.get(idPat=idPat)
      patEdit.mom = momSelect
      patEdit.save()
-
+     messages.success(request,'Mamá añadida exitosamente')
      return redirect('doc_patient', idPat=idPat)
 
 
@@ -231,6 +231,6 @@ def agg_dadpat(request,idPat):
      patEdit = Patient.objects.get(idPat=idPat)
      patEdit.dad = dadSelect
      patEdit.save()
-
+     messages.success(request,'Papá añadido exitosamente')
      return redirect('doc_patient', idPat=idPat)
 #Página crear representantes FINAL

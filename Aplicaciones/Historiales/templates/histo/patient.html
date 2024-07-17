@@ -1,5 +1,9 @@
 {% extends 'doc_plantilla.html' %}
 {% block doc_contenido %}
+<div class="">
+  <a href="{% url 'doc_inicio' %}" class="btn btn-outline-secondary">Volver</a>
+</div>
+<br><br>
 
 <div class="container-fluid">
   <!-- Row 1 -->
@@ -35,17 +39,20 @@
                 <p><b>Celular: </b>{{pacientes.cell}}</p>
                 <p><b>Tlf Trabajo: </b>{{pacientes.tf_tra}}</p>
               </div>
+              <p><b>Seguro Médico Privado:</b> {{ pacientes.seguroPat|yesno:"Sí,No" }} </p>
             </div>
           </div>
           <div class="row mt-4">
-            <div class="col-md-4">
-              <div class="card">
+            <div class="col-md-4 d-flex align-items-stretch">
+              <div class="card w-100">
                 <div class="card-body p-4">
                   <div class="d-flex justify-content-between align-items-center">
                     <h5><b>Madre</b></h5>
-                    <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#momModal" title="Editar paciente">
-                       <i class="fas fa-edit"></i>
-                    </button>
+                    {% if pacientes.mom %}
+                      <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#momModal" title="Editar paciente">
+                         <i class="fas fa-edit"></i>
+                      </button>
+                    {% endif %}
                   </div>
                   <br>
                   {% if pacientes.mom %}
@@ -61,21 +68,23 @@
                     </div>
                   {% else %}
                     <div class="text-center">
-                      <p >No hay información de la madre disponible.</p>
+                      <p>No hay información de la madre disponible.</p>
                       <a href="{% url 'agg_rep' idPat=pacientes.idPat %}" class="btn btn-outline-success rounded-pill"><i class="fa-solid fa-plus"></i></a>
                     </div>
                   {% endif %}
                 </div>
               </div>
             </div>
-            <div class="col-md-4">
-              <div class="card">
+            <div class="col-md-4 d-flex align-items-stretch">
+              <div class="card w-100">
                 <div class="card-body p-4">
                   <div class="d-flex justify-content-between align-items-center">
                     <h5><b>Padre</b></h5>
-                    <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#dadModal" title="Editar paciente">
-                       <i class="fas fa-edit"></i>
-                    </button>
+                    {% if pacientes.dad %}
+                      <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#dadModal" title="Editar paciente">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                    {% endif %}
                   </div>
                   <br>
                   {% if pacientes.dad %}
@@ -86,26 +95,34 @@
                     </div>
                   {% else %}
                     <div class="text-center">
-                      <p >No hay información del padre disponible.</p>
+                      <p>No hay información del padre disponible.</p>
                       <a href="{% url 'agg_rep' idPat=pacientes.idPat %}" class="btn btn-outline-success rounded-pill"><i class="fa-solid fa-plus"></i></a>
                     </div>
                   {% endif %}
                 </div>
               </div>
             </div>
-            <div class="col-md-4">
-              <div class="card">
+            <div class="col-md-4 d-flex align-items-stretch">
+              <div class="card w-100">
                 <div class="card-body p-4">
-                  <h5><b>Comprobante de pago</b></h5>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h5><b>Comprobante de pago</b></h5>
+                    {% if pacientes.mom %}
+                      <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#comprobanteModal" title="Editar datos de facturación">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                    {% endif %}
+                  </div>
+                  <br>
                   {% if pacientes.mom %}
                     <div>
                       <p><b>Nombre:</b> {{ madre_cita.nombre }}</p>
                       <p><b>Teléfono:</b> {{ madre_cita.telefono }}</p>
                     </div>
                   {% else %}
-                  <br>
                     <div class="text-center">
                       <p>Sin datos de facturación.</p>
+                      <a href="{% url 'agg_rep' idPat=pacientes.idPat %}" class="btn btn-outline-success rounded-pill"><i class="fa-solid fa-plus"></i></a>
                     </div>
                   {% endif %}
                 </div>
@@ -466,12 +483,15 @@
     </div>
   </div>
 </div>
+
+
+
     <div class="col-lg-8 d-flex align-items-strech">
       <div class="card w-100">
         <div class="card-body">
           <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
             <div class="mb-3 mb-sm-0">
-              <h5 class="card-title fw-semibold">Sales Overview</h5>
+              <h5 class="card-title fw-semibold">Observaciones</h5>
             </div>
             <div>
               <select class="form-select">
