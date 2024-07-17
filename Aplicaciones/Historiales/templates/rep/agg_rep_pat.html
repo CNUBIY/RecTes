@@ -1,7 +1,10 @@
 {% extends 'doc_plantilla.html' %}
 
 {% block doc_contenido %}
-
+<div class="">
+  <a href="{% url 'doc_patient' pacientes.idPat %}" class="btn btn-outline-secondary">Volver</a>
+</div>
+<br><br>
 <div class="accordion" id="accordionPanelsStayOpenExample">
   <!-- Formulario para Registrar a Mamá -->
   <div class="accordion-item">

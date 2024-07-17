@@ -58,7 +58,9 @@ def doc_inicio (request):
 def doc_patient (request,idPat):
     patbdd=Patient.objects.get(idPat=idPat)
     genbdd=Gender.objects.all()
-    return render(request, 'histo/patient.html',{'pacientes':patbdd,'generos':genbdd})
+    mombdd=MadreCita.objects.all()
+    dadbdd=PadreCita.objects.all()
+    return render(request, 'histo/patient.html',{'pacientes':patbdd,'generos':genbdd,'mom':mombdd, 'dad':dadbdd})
 
 
 #Página PACIENTES FINAL

@@ -43,7 +43,7 @@
                 <div class="card-body p-4">
                   <div class="d-flex justify-content-between align-items-center">
                     <h5><b>Madre</b></h5>
-                    <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#patientModal" title="Editar paciente">
+                    <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#momModal" title="Editar paciente">
                        <i class="fas fa-edit"></i>
                     </button>
                   </div>
@@ -73,7 +73,7 @@
                 <div class="card-body p-4">
                   <div class="d-flex justify-content-between align-items-center">
                     <h5><b>Padre</b></h5>
-                    <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#patientModal" title="Editar paciente">
+                    <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#dadModal" title="Editar paciente">
                        <i class="fas fa-edit"></i>
                     </button>
                   </div>
@@ -81,7 +81,7 @@
                   {% if pacientes.dad %}
                     <div>
                       <p><b>Nombre:</b> {{ pacientes.dad.nom_fat }} {{ pacientes.dad.ape_fat }}</p>
-                      <p><b>Actividad:</b> {{ pacientes.dad.edad_dad }}</p>
+                      <p><b>Edad:</b> {{ pacientes.dad.edad_dad }}</p>
                       <p><b>Actividad:</b> {{ pacientes.dad.act_fat }}</p>
                     </div>
                   {% else %}
@@ -240,8 +240,232 @@
 </div>
 
 
+<!-- Modal para Registrar y Añadir a Mamá -->
+<div class="modal fade" id="momModal" tabindex="-1" aria-labelledby="momModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="momModalLabel">Edición de Representantes</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+          <!-- Formulario para Registrar a Mamá -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="flush-headingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="true" aria-controls="flush-collapseOne">
+                Editar a Mamá
+              </button>
+            </h2>
+            <div id="flush-collapseOne" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+              <div class="accordion-body">
+                <form action="" method="POST" id="vldt_dias">
+                  {% csrf_token %}
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" name="nom_mom" id="nom_mom" placeholder="Nombres de la madre" value="{{pacientes.mom.nom_mom}}" required>
+                        <label for="nom_mom">Nombres de la madre:</label>
+                        <div id="error-nom_da" class="error-messages"></div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" name="ape_mom" id="ape_mom" placeholder="Apellidos de la madre" value="{{pacientes.mom.ape_mom}}" required>
+                        <label for="ape_mom">Apellidos de la madre:</label>
+                        <div id="error-nom_da" class="error-messages"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" name="es_cimom" id="es_cimom" placeholder="Estado Civil" value="{{pacientes.mom.es_cimom}}" required>
+                        <label for="es_cimom">Estado Civil:</label>
+                        <div id="error-nom_da2" class="error-messages"></div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+                        <input type="date" class="form-control" name="age_mom" id="age_mom" placeholder="Fecha de Nacimiento" value="{{pacientes.mom.age_mom}}" required>
+                        <label for="age_mom">Fecha de Nacimiento:</label>
+                        <div id="error-nom_da2" class="error-messages"></div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" name="hij_mom" id="hij_mom" placeholder="# Hijos" value="{{pacientes.mom.hij_mom}}" required>
+                        <label for="hij_mom"># Hijos:</label>
+                        <div id="error-nom_da2" class="error-messages"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" name="act_mom" id="act_mom" placeholder="Actividad" value="{{pacientes.mom.act_mom}}" required>
+                        <label for="act_mom">Actividad:</label>
+                        <div id="error-nom_da" class="error-messages"></div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" name="correo_mom" id="correo_mom" placeholder="Correo" value="{{pacientes.mom.correo_mom}}" required>
+                        <label for="correo_mom">Correo:</label>
+                        <div id="error-nom_da" class="error-messages"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <button type="submit" class="btn btn-outline-warning rounded-pill m-2">Editar Representante</button>
+                      <button type="reset" class="btn btn-outline-danger rounded-pill m-2" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
 
+          <!-- Formulario para Añadir a Mamá -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="flush-headingTwo">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                Cambiar representante
+              </button>
+            </h2>
+            <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+              <div class="accordion-body">
+                <form action="{% url 'agg_mompat' idPat=pacientes.idPat %}" method="POST" id="vldt_dias">
+                  {% csrf_token %}
+                  <input type="hidden" name="idPat" id="idPat" value="{{pacientes.idPat}}">
+                  <div class="form-floating mb-3">
+                    <select name="id_mom" id="id_mom" class="form-control" required>
+                      <option value="">Escoga un representante</option>
+                      {% for mama in mom %}
+                      <option value="{{ mama.id }}">{{mama.ape_mom}} {{ mama.nom_mom }}</option>
+                      {% endfor %}
+                    </select>
+                    <label for="id_mom">Madre:</label>
+                    <div id="error-nom_da2" class="error-messages"></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <button type="submit" class="btn btn-outline-warning rounded-pill m-2">Cambiar Representante</button>
+                      <button type="button" class="btn btn-outline-danger rounded-pill m-2" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- Modal para Registrar y Añadir a Papá -->
+<div class="modal fade" id="dadModal" tabindex="-1" aria-labelledby="dadModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="dadModalLabel">Edición de Representantes</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="accordion accordion-flush" id="accordionFlushDadExample">
+          <!-- Formulario para Registrar a Papá -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="flush-dadHeadingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#flush-dadCollapseOne" aria-expanded="true" aria-controls="flush-dadCollapseOne">
+                Editar a Papá
+              </button>
+            </h2>
+            <div id="flush-dadCollapseOne" class="accordion-collapse collapse show" aria-labelledby="flush-dadHeadingOne" data-bs-parent="#accordionFlushDadExample">
+              <div class="accordion-body">
+                <form action="{% url 'agg_dad' idPat=pacientes.idPat %}" method="POST" id="vldt_dias">
+                  {% csrf_token %}
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" name="nom_fat" id="nom_fat" placeholder="Nombres del padre" value="{{pacientes.dad.nom_fat}}" required>
+                        <label for="nom_fat">Nombres del padre:</label>
+                        <div id="error-nom_da" class="error-messages"></div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" name="ape_fat" id="ape_fat" placeholder="Apellidos del padre" value="{{pacientes.dad.ape_fat}}" required>
+                        <label for="ape_fat">Apellidos del padre:</label>
+                        <div id="error-nom_da" class="error-messages"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" name="act_fat" id="act_fat" placeholder="Actividad" value="{{pacientes.dad.act_fat}}" required>
+                        <label for="act_fat">Actividad:</label>
+                        <div id="error-nom_da" class="error-messages"></div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-floating mb-3">
+                        <input type="date" class="form-control" name="age_fat" id="age_fat" placeholder="Fecha de Nacimiento" value="{{pacientes.dad.age_fat}}" required>
+                        <label for="age_fat">Fecha de Nacimiento:</label>
+                        <div id="error-nom_da" class="error-messages"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <button type="submit" class="btn btn-outline-warning rounded-pill m-2">Editar Representante</button>
+                      <button type="reset" class="btn btn-outline-danger rounded-pill m-2" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Formulario para Añadir a Papá -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="flush-dadHeadingTwo">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-dadCollapseTwo" aria-expanded="false" aria-controls="flush-dadCollapseTwo">
+                Cambiar representante
+              </button>
+            </h2>
+            <div id="flush-dadCollapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-dadHeadingTwo" data-bs-parent="#accordionFlushDadExample">
+              <div class="accordion-body">
+                <form action="{% url 'agg_dadpat' idPat=pacientes.idPat %}" method="POST" id="vldt_dias">
+                  {% csrf_token %}
+                  <input type="hidden" name="idPat" id="idPat" value="{{pacientes.idPat}}">
+                  <div class="form-floating mb-3">
+                    <select name="id_dad" id="id_dad" class="form-control" required>
+                      <option value="">Escoga un representante</option>
+                      {% for papa in dad %}
+                      <option value="{{ papa.id }}">{{papa.ape_fat}} {{ papa.nom_fat }}</option>
+                      {% endfor %}
+                    </select>
+                    <label for="id_dad">Padre:</label>
+                    <div id="error-nom_da2" class="error-messages"></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <button type="submit" class="btn btn-outline-warning rounded-pill m-2">Cambiar Representante</button>
+                      <button type="button" class="btn btn-outline-danger rounded-pill m-2" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
     <div class="col-lg-8 d-flex align-items-strech">
       <div class="card w-100">
         <div class="card-body">
