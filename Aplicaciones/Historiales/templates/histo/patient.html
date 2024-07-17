@@ -145,7 +145,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form class="" action="{% url 'edit_patient' idPat=pacientes.idPat %}" method="post">
+        <form action="{% url 'edit_patient' idPat=pacientes.idPat %}" method="post">
           {% csrf_token %}
           <input type="hidden" name="idPat" id="idPat" value="{{pacientes.idPat}}">
           <div class="container-fluid">
@@ -176,7 +176,7 @@
               </div>
               <div class="col-md-3">
                 <div class="form-floating mb-3">
-                  <input type="date" class="form-control" name="birthPat" id="birthPat" placeholder="Paciente" value="{{pacientes.birthPat}}" required>
+                  <input type="date" class="form-control" name="birthPat" id="birthPat" placeholder="Paciente" value="{{pacientes.birthPat|date:'Y-m-d'}}" required>
                   <label for="birthPat">Fecha de nacimiento:</label>
                   <div id="error-nom_da" class="error-messages"></div>
                 </div>
@@ -186,7 +186,7 @@
             <div class="row">
               <div class="col-12">
                 <div class="form-floating mb-3">
-                  <textarea class="form-control" name="placePat" placeholder="Leave a comment here" id="placePat" style="height: 100px;" value="" required>{{pacientes.placePat}}</textarea>
+                  <textarea class="form-control" name="placePat" placeholder="Leave a comment here" id="placePat" style="height: 100px;" required>{{pacientes.placePat}}</textarea>
                   <label for="placePat">Dirección:</label>
                   <div id="error-direccionRepresentante" class="error-messages"></div>
                 </div>
@@ -213,7 +213,7 @@
                   <select name="id_gen" id="id_gen" class="form-control" required>
                       <option value="">Escoga un género</option>
                       {% for genero in generos %}
-                      <option value="{{ genero.id }}">{{ genero.nombreGen }}</option>
+                      <option value="{{ genero.id }}" {% if pacientes.genPat.id == genero.id %}selected{% endif %}>{{ genero.nombreGen }}</option>
                       {% endfor %}
                   </select>
                   <label for="id_gen">Género:</label>
@@ -221,6 +221,7 @@
                 </div>
               </div>
             </div>
+
             <div class="row">
               <div class="col-md-4">
                 <div class="form-floating mb-3">
@@ -244,6 +245,18 @@
                 </div>
               </div>
             </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="seguroPat" id="seguroPat" {% if pacientes.seguroPat %}checked{% endif %}>
+                  <label class="form-check-label" for="seguroPat">
+                    Seguro Médico Privado
+                  </label>
+                </div>
+              </div>
+            </div>
+
             <br>
             <div class="modal-footer">
               <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>

@@ -76,8 +76,8 @@ def doc_patient (request,idPat):
 @login_required
 @custom_login_required
 def new_patient(request):
-    patbdd=Patient.objects.all()
-    genbdd=Gender.objects.all()
+    patbdd = Patient.objects.all()
+    genbdd = Gender.objects.all()
 
     if request.method == 'POST':
         try:
@@ -93,6 +93,7 @@ def new_patient(request):
             tf_casa = request.POST['tf_casa']
             cell = request.POST['cell']
             tf_tra = request.POST['tf_tra']
+            seguroPat = 'seguroPat' in request.POST
 
             new_pat = Patient.objects.create(
                 namePat=namePat,
@@ -103,9 +104,10 @@ def new_patient(request):
                 natiPat=natiPat,
                 ciPat=ciPat,
                 genPat=genselect,
-                tf_casa = tf_casa,
-                cell = cell,
-                tf_tra = tf_tra
+                tf_casa=tf_casa,
+                cell=cell,
+                tf_tra=tf_tra,
+                seguroPat=seguroPat
             )
             messages.success(request, "Paciente registrado correctamente.")
             return redirect('doc_inicio')
@@ -115,8 +117,7 @@ def new_patient(request):
             messages.error(request, "Ha ocurrido un error al procesar la solicitud.")
             return redirect('error_p')
 
-    return render(request,'patients/new.html',{'pacientes':patbdd,'generos':genbdd})
-
+    return render(request, 'patients/new.html', {'pacientes': patbdd, 'generos': genbdd})
 
 @login_required
 @custom_login_required
@@ -136,10 +137,12 @@ def edit_patient(request, idPat):
             tf_casa = request.POST['tf_casa']
             cell = request.POST['cell']
             tf_tra = request.POST['tf_tra']
+            seguroPat = 'seguroPat' in request.POST
 
             patEdit = Patient.objects.get(idPat=idPat)
             patEdit.namePat = namePat
             patEdit.lastnPat = lastnPat
+            patEdit.pldatePat = pldatePat
             patEdit.birthPat = birthPat
             patEdit.placePat = placePat
             patEdit.natiPat = natiPat
@@ -148,15 +151,17 @@ def edit_patient(request, idPat):
             patEdit.tf_casa = tf_casa
             patEdit.cell = cell
             patEdit.tf_tra = tf_tra
+            patEdit.seguroPat = seguroPat
             patEdit.save()
 
-            messages.success(request, 'Paciente editado exitósamente')
+            messages.success(request, 'Paciente editado correctamente')
             return redirect('doc_patient', idPat=idPat)
 
         except Exception as e:
             print(f"Error al procesar la solicitud: {str(e)}")
             messages.error(request, "Ha ocurrido un error al procesar la solicitud.")
             return redirect('error_p')
+
 
 #Página CREAR PACIENTE FINAL
 
@@ -189,7 +194,7 @@ def agg_mom(request,idPat):
             correo_mom = correo_mom,
             es_cimom = es_cimom,
         )
-        messages.success(request,'Representante agregado exitosamente')
+        messages.success(request,'Representante agregado correctamente')
         return redirect('doc_patient', idPat=idPat)
 
 def agg_dad(request,idPat):
@@ -205,7 +210,7 @@ def agg_dad(request,idPat):
             age_fat=age_fat,
             act_fat = act_fat
         )
-        messages.success(request,'Representante agregado exitosamente')
+        messages.success(request,'Representante agregado correctamente')
         return redirect('doc_patient', idPat=idPat)
 
 
@@ -218,7 +223,7 @@ def agg_mompat(request,idPat):
      patEdit = Patient.objects.get(idPat=idPat)
      patEdit.mom = momSelect
      patEdit.save()
-     messages.success(request,'Mamá añadida exitosamente')
+     messages.success(request,'Mamá añadida correctamente')
      return redirect('doc_patient', idPat=idPat)
 
 
@@ -231,6 +236,6 @@ def agg_dadpat(request,idPat):
      patEdit = Patient.objects.get(idPat=idPat)
      patEdit.dad = dadSelect
      patEdit.save()
-     messages.success(request,'Papá añadido exitosamente')
+     messages.success(request,'Papá añadido correctamente')
      return redirect('doc_patient', idPat=idPat)
 #Página crear representantes FINAL
