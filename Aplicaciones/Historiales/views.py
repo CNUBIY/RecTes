@@ -175,7 +175,9 @@ def agg_rep(request,idPat):
     dadbdd=PadreCita.objects.all()
     return render(request,'rep/agg_rep_pat.html',{'pacientes':patbdd,'mom':mombdd, 'dad':dadbdd})
 
-def agg_mom(request,idPat):
+@login_required
+@custom_login_required
+def agg_mom(request, idPat):
     if request.method == 'POST':
         nom_mom = request.POST['nom_mom']
         ape_mom = request.POST['ape_mom']
@@ -189,14 +191,16 @@ def agg_mom(request,idPat):
             nom_mom=nom_mom,
             ape_mom=ape_mom,
             age_mom=age_mom,
-            hij_mom = hij_mom,
-            act_mom = act_mom,
-            correo_mom = correo_mom,
-            es_cimom = es_cimom,
+            hij_mom=hij_mom,
+            act_mom=act_mom,
+            correo_mom=correo_mom,
+            es_cimom=es_cimom,
         )
-        messages.success(request,'Representante agregado correctamente')
+        messages.success(request, 'Representante agregado correctamente')
         return redirect('doc_patient', idPat=idPat)
 
+@login_required
+@custom_login_required
 def agg_dad(request,idPat):
     if request.method == 'POST':
         nom_fat = request.POST['nom_fat']

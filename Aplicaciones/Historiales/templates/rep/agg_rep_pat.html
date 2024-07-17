@@ -43,7 +43,15 @@
           <div class="row">
             <div class="col-md-4">
               <div class="form-floating mb-3">
-                <input type="text" class="form-control" name="es_cimom" id="es_cimom" placeholder="Paciente" value="" required>
+                <select class="form-control" name="es_cimom" id="es_cimom" required>
+                  <option value="">Seleccione un estado civil</option>
+                  <option value="Soltero/a">Soltero/a</option>
+                  <option value="Casado/a">Casado/a</option>
+                  <option value="Divorciado/a">Divorciado/a</option>
+                  <option value="Viudo/a">Viudo/a</option>
+                  <option value="Separado/a">Separado/a</option>
+                  <option value="Unión libre">Unión libre</option>
+                </select>
                 <label for="es_cimom">Estado Civil:</label>
                 <div id="error-nom_da2" class="error-messages"></div>
               </div>

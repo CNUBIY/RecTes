@@ -309,7 +309,15 @@
                   <div class="row">
                     <div class="col-md-4">
                       <div class="form-floating mb-3">
-                        <input type="text" class="form-control" name="es_cimom" id="es_cimom" placeholder="Estado Civil" value="{{ pacientes.mom.es_cimom }}" required>
+                        <select class="form-control" name="es_cimom" id="es_cimom" required>
+                          <option value="">Seleccione un estado civil</option>
+                          <option value="Soltero/a" {% if pacientes.mom.es_cimom == 'Soltero/a' %}selected{% endif %}>Soltero/a</option>
+                          <option value="Casado/a" {% if pacientes.mom.es_cimom == 'Casado/a' %}selected{% endif %}>Casado/a</option>
+                          <option value="Divorciado/a" {% if pacientes.mom.es_cimom == 'Divorciado/a' %}selected{% endif %}>Divorciado/a</option>
+                          <option value="Viudo/a" {% if pacientes.mom.es_cimom == 'Viudo/a' %}selected{% endif %}>Viudo/a</option>
+                          <option value="Separado/a" {% if pacientes.mom.es_cimom == 'Separado/a' %}selected{% endif %}>Separado/a</option>
+                          <option value="Unión libre" {% if pacientes.mom.es_cimom == 'Unión libre' %}selected{% endif %}>Unión libre</option>
+                        </select>
                         <label for="es_cimom">Estado Civil:</label>
                         <div id="error-nom_da2" class="error-messages"></div>
                       </div>
@@ -393,7 +401,6 @@
     </div>
   </div>
 </div>
-
 
 <!-- Modal para Registrar y Añadir a Papá -->
 <div class="modal fade" id="dadModal" tabindex="-1" aria-labelledby="dadModalLabel" aria-hidden="true">
