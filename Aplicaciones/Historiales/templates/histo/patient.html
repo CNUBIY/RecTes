@@ -239,7 +239,6 @@
   </div>
 </div>
 
-
 <!-- Modal para Registrar y Añadir a Mamá -->
 <div class="modal fade" id="momModal" tabindex="-1" aria-labelledby="momModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
@@ -259,19 +258,19 @@
             </h2>
             <div id="flush-collapseOne" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
               <div class="accordion-body">
-                <form action="" method="POST" id="vldt_dias">
+                <form action="{% url 'agg_mom' idPat=pacientes.idPat %}" method="POST" id="vldt_dias">
                   {% csrf_token %}
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-floating mb-3">
-                        <input type="text" class="form-control" name="nom_mom" id="nom_mom" placeholder="Nombres de la madre" value="{{pacientes.mom.nom_mom}}" required>
+                        <input type="text" class="form-control" name="nom_mom" id="nom_mom" placeholder="Nombres de la madre" value="{{ pacientes.mom.nom_mom }}" required>
                         <label for="nom_mom">Nombres de la madre:</label>
                         <div id="error-nom_da" class="error-messages"></div>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-floating mb-3">
-                        <input type="text" class="form-control" name="ape_mom" id="ape_mom" placeholder="Apellidos de la madre" value="{{pacientes.mom.ape_mom}}" required>
+                        <input type="text" class="form-control" name="ape_mom" id="ape_mom" placeholder="Apellidos de la madre" value="{{ pacientes.mom.ape_mom }}" required>
                         <label for="ape_mom">Apellidos de la madre:</label>
                         <div id="error-nom_da" class="error-messages"></div>
                       </div>
@@ -280,21 +279,21 @@
                   <div class="row">
                     <div class="col-md-4">
                       <div class="form-floating mb-3">
-                        <input type="text" class="form-control" name="es_cimom" id="es_cimom" placeholder="Estado Civil" value="{{pacientes.mom.es_cimom}}" required>
+                        <input type="text" class="form-control" name="es_cimom" id="es_cimom" placeholder="Estado Civil" value="{{ pacientes.mom.es_cimom }}" required>
                         <label for="es_cimom">Estado Civil:</label>
                         <div id="error-nom_da2" class="error-messages"></div>
                       </div>
                     </div>
                     <div class="col-md-4">
                       <div class="form-floating mb-3">
-                        <input type="date" class="form-control" name="age_mom" id="age_mom" placeholder="Fecha de Nacimiento" value="{{pacientes.mom.age_mom}}" required>
+                        <input type="date" class="form-control" name="age_mom" id="age_mom" placeholder="Fecha de Nacimiento" value="{{ pacientes.mom.age_mom|date:'Y-m-d' }}" required>
                         <label for="age_mom">Fecha de Nacimiento:</label>
                         <div id="error-nom_da2" class="error-messages"></div>
                       </div>
                     </div>
                     <div class="col-md-4">
                       <div class="form-floating mb-3">
-                        <input type="text" class="form-control" name="hij_mom" id="hij_mom" placeholder="# Hijos" value="{{pacientes.mom.hij_mom}}" required>
+                        <input type="text" class="form-control" name="hij_mom" id="hij_mom" placeholder="# Hijos" value="{{ pacientes.mom.hij_mom }}" required>
                         <label for="hij_mom"># Hijos:</label>
                         <div id="error-nom_da2" class="error-messages"></div>
                       </div>
@@ -303,14 +302,14 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-floating mb-3">
-                        <input type="text" class="form-control" name="act_mom" id="act_mom" placeholder="Actividad" value="{{pacientes.mom.act_mom}}" required>
+                        <input type="text" class="form-control" name="act_mom" id="act_mom" placeholder="Actividad" value="{{ pacientes.mom.act_mom }}" required>
                         <label for="act_mom">Actividad:</label>
                         <div id="error-nom_da" class="error-messages"></div>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-floating mb-3">
-                        <input type="text" class="form-control" name="correo_mom" id="correo_mom" placeholder="Correo" value="{{pacientes.mom.correo_mom}}" required>
+                        <input type="text" class="form-control" name="correo_mom" id="correo_mom" placeholder="Correo" value="{{ pacientes.mom.correo_mom }}" required>
                         <label for="correo_mom">Correo:</label>
                         <div id="error-nom_da" class="error-messages"></div>
                       </div>
@@ -365,6 +364,7 @@
   </div>
 </div>
 
+
 <!-- Modal para Registrar y Añadir a Papá -->
 <div class="modal fade" id="dadModal" tabindex="-1" aria-labelledby="dadModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
@@ -412,7 +412,7 @@
                     </div>
                     <div class="col-md-6">
                       <div class="form-floating mb-3">
-                        <input type="date" class="form-control" name="age_fat" id="age_fat" placeholder="Fecha de Nacimiento" value="{{pacientes.dad.age_fat}}" required>
+                        <input type="date" class="form-control" name="age_fat" id="age_fat" placeholder="Fecha de Nacimiento" value="{{pacientes.dad.age_fat|date:'Y-m-d'}}" required>
                         <label for="age_fat">Fecha de Nacimiento:</label>
                         <div id="error-nom_da" class="error-messages"></div>
                       </div>

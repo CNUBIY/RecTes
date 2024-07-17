@@ -60,6 +60,11 @@ def doc_patient (request,idPat):
     genbdd=Gender.objects.all()
     mombdd=MadreCita.objects.all()
     dadbdd=PadreCita.objects.all()
+    # Formatear fechas a YYYY-MM-DD
+    for mom in mombdd:
+        mom.age_mom = mom.age_mom.strftime('%Y-%m-%d') if mom.age_mom else ''
+    for dad in dadbdd:
+        dad.age_fat = dad.age_fat.strftime('%Y-%m-%d') if dad.age_fat else ''
     return render(request, 'histo/patient.html',{'pacientes':patbdd,'generos':genbdd,'mom':mombdd, 'dad':dadbdd})
 
 
