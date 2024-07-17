@@ -41,11 +41,23 @@
             <div class="col-md-4">
               <div class="card">
                 <div class="card-body p-4">
-                  <h5><b>Madre</b></h5>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h5><b>Madre</b></h5>
+                    <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#patientModal" title="Editar paciente">
+                       <i class="fas fa-edit"></i>
+                    </button>
+                  </div>
+                  <br>
                   {% if pacientes.mom %}
                     <div>
-                      <p><b>Nombre:</b> {{ pacientes.nombre }}</p>
-                      <p><b>Teléfono:</b> {{ pacientes.telefono }}</p>
+                      <p><b>Nombre:</b> {{ pacientes.mom.nom_mom }} {{ pacientes.mom.ape_mom }}</p>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <p><b>Edad:</b> {{ pacientes.mom.edad_mom }}</p>
+                        <p><b>#Hijos:</b> {{ pacientes.mom.hij_mom }}</p>
+                        <p><b>E.C.:</b> {{ pacientes.mom.es_cimom }}</p>
+                      </div>
+                      <p><b>Actividad:</b> {{ pacientes.mom.act_mom }}</p>
+                      <p><b>Correo:</b> {{ pacientes.mom.correo_mom }}</p>
                     </div>
                   {% else %}
                     <div class="text-center">
@@ -59,11 +71,18 @@
             <div class="col-md-4">
               <div class="card">
                 <div class="card-body p-4">
-                  <h5><b>Padre</b></h5>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h5><b>Padre</b></h5>
+                    <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#patientModal" title="Editar paciente">
+                       <i class="fas fa-edit"></i>
+                    </button>
+                  </div>
+                  <br>
                   {% if pacientes.dad %}
                     <div>
-                      <p><b>Nombre:</b> {{ madre_cita.nombre }}</p>
-                      <p><b>Teléfono:</b> {{ madre_cita.telefono }}</p>
+                      <p><b>Nombre:</b> {{ pacientes.dad.nom_fat }} {{ pacientes.dad.ape_fat }}</p>
+                      <p><b>Actividad:</b> {{ pacientes.dad.edad_dad }}</p>
+                      <p><b>Actividad:</b> {{ pacientes.dad.act_fat }}</p>
                     </div>
                   {% else %}
                     <div class="text-center">
@@ -77,7 +96,7 @@
             <div class="col-md-4">
               <div class="card">
                 <div class="card-body p-4">
-                  <h5><b>Factura</b></h5>
+                  <h5><b>Comprobante de pago</b></h5>
                   {% if pacientes.mom %}
                     <div>
                       <p><b>Nombre:</b> {{ madre_cita.nombre }}</p>

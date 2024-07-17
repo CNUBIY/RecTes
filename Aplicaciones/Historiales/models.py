@@ -1,5 +1,6 @@
 from django.db import models
 import datetime
+from datetime import date
 # Create your models here.
 class Gender(models.Model):
     id=models.AutoField(primary_key=True)
@@ -20,6 +21,10 @@ class MadreCita(models.Model):
 
     def __str__(self):
         return f"{self.nom_mom} {self.ape_mom}"
+    @property
+    def edad_mom(self):
+        today = date.today()
+        return today.year - self.age_mom.year - ((today.month, today.day) < (self.age_mom.month, self.age_mom.day))
 
 class PadreCita(models.Model):
     id= models.AutoField(primary_key=True)
@@ -30,6 +35,10 @@ class PadreCita(models.Model):
 
     def __str__(self):
         return f"{self.nom_fat} {self.ape_fat}"
+    @property
+    def edad_dad(self):
+        today = date.today()
+        return today.year - self.age_fat.year - ((today.month, today.day) < (self.age_fat.month, self.age_fat.day))
 
 
 class Patient(models.Model):

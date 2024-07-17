@@ -201,4 +201,29 @@ def agg_dad(request,idPat):
         messages.success(request,'Representante agregado exitosamente')
         return redirect('doc_patient', idPat=idPat)
 
+
+def agg_mompat(request,idPat):
+
+    if request.method == 'POST':
+     idPat = request.POST['idPat']
+     id_mom = request.POST.get('id_mom')
+     momSelect = MadreCita.objects.get(id=id_mom)
+     patEdit = Patient.objects.get(idPat=idPat)
+     patEdit.mom = momSelect
+     patEdit.save()
+
+     return redirect('doc_patient', idPat=idPat)
+
+
+def agg_dadpat(request,idPat):
+
+    if request.method == 'POST':
+     idPat = request.POST['idPat']
+     id_dad = request.POST.get('id_dad')
+     dadSelect = PadreCita.objects.get(id=id_dad)
+     patEdit = Patient.objects.get(idPat=idPat)
+     patEdit.dad = dadSelect
+     patEdit.save()
+
+     return redirect('doc_patient', idPat=idPat)
 #Página crear representantes FINAL

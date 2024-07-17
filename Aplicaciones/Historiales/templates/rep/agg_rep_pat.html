@@ -2,218 +2,227 @@
 
 {% block doc_contenido %}
 
-<div class="col-lg-7">
-  <div class="row">
-    <div class="col-lg-12">
-      <!-- Yearly Breakup -->
-      <div class="card overflow-hidden">
-        <div class="card-body p-4">
-          <div class="d-flex justify-content-between align-items-center">
-             <h5 class="card-title mb-9 fw-semibold">Registrar a mamá</h5>
-             <button type="button" name="button" class="btn btn-outline-info rounded-pill"
-                     title="Si el representante no está registrado, por favor realice este formulario." data-toggle="tooltip">
-               <i class="fa-solid fa-question"></i>
-             </button>
-           </div>
-          <div class="row align-items-center">
-            <form action="{% url 'agg_mom' idPat=pacientes.idPat %}" method="POST" id="vldt_dias">
-              {% csrf_token %}
-              <br>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="nom_mom" id="nom_mom" placeholder="Paciente" required>
-                    <label for="nom_mom">Nombres de la madre:</label>
-                    <div id="error-nom_da" class="error-messages"></div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="ape_mom" id="ape_mom" placeholder="Paciente" required>
-                    <label for="ape_mom">Apellidos de la madre:</label>
-                    <div id="error-nom_da" class="error-messages"></div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="es_cimom" id="es_cimom" placeholder="Paciente" value="" required>
-                    <label for="es_cimom">Estado Civil:</label>
-                    <div id="error-nom_da2" class="error-messages"></div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-floating mb-3">
-                    <input type="date" class="form-control" name="age_mom" id="age_mom" placeholder="Paciente" value="" required>
-                    <label for="age_mom">Fecha de Nacimiento:</label>
-                    <div id="error-nom_da2" class="error-messages"></div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="hij_mom" id="hij_mom" placeholder="Paciente" value="" required>
-                    <label for="hij_mom"># Hijos:</label>
-                    <div id="error-nom_da2" class="error-messages"></div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="act_mom" id="act_mom" placeholder="Paciente" required>
-                    <label for="act_mom">Actividad:</label>
-                    <div id="error-nom_da" class="error-messages"></div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="correo_mom" id="correo_mom" placeholder="Paciente" required>
-                    <label for="correo_mom">Correo:</label>
-                    <div id="error-nom_da" class="error-messages"></div>
-                  </div>
-                </div>
-              </div>
-              <button type="submit" class="btn btn-outline-primary rounded-pill m-2">Registrar</button>
-              <button type="reset" name="button" class="btn btn-outline-danger rounded-pill m-2">Cancelar</button>
-
-            </form>
-          </div>
+<div class="accordion" id="accordionPanelsStayOpenExample">
+  <!-- Formulario para Registrar a Mamá -->
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMom" aria-expanded="true" aria-controls="collapseMom">
+        Registrar a Mamá
+      </button>
+    </h2>
+    <div id="collapseMom" class="accordion-collapse collapse show">
+      <div class="accordion-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-3 fw-semibold">Registrar a Mamá</h5>
+          <button type="button" class="btn btn-outline-info rounded-pill" title="Si el representante no está registrado, por favor realice este formulario." data-toggle="tooltip">
+            <i class="fa-solid fa-question"></i>
+          </button>
         </div>
+        <br>
+        <form action="{% url 'agg_mom' idPat=pacientes.idPat %}" method="POST" id="vldt_dias">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" name="nom_mom" id="nom_mom" placeholder="Paciente" required>
+                <label for="nom_mom">Nombres de la madre:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" name="ape_mom" id="ape_mom" placeholder="Paciente" required>
+                <label for="ape_mom">Apellidos de la madre:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" name="es_cimom" id="es_cimom" placeholder="Paciente" value="" required>
+                <label for="es_cimom">Estado Civil:</label>
+                <div id="error-nom_da2" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-floating mb-3">
+                <input type="date" class="form-control" name="age_mom" id="age_mom" placeholder="Paciente" value="" required>
+                <label for="age_mom">Fecha de Nacimiento:</label>
+                <div id="error-nom_da2" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" name="hij_mom" id="hij_mom" placeholder="Paciente" value="" required>
+                <label for="hij_mom"># Hijos:</label>
+                <div id="error-nom_da2" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" name="act_mom" id="act_mom" placeholder="Paciente" required>
+                <label for="act_mom">Actividad:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" name="correo_mom" id="correo_mom" placeholder="Paciente" required>
+                <label for="correo_mom">Correo:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 text-center">
+              <button type="submit" class="btn btn-outline-primary rounded-pill m-2">Registrar</button>
+              <button type="reset" class="btn btn-outline-danger rounded-pill m-2">Cancelar</button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
-</div>
 
-<div class="col-lg-5 align-items-strech">
-  <div class="card w-100">
-    <div class="card-body">
-      <div class="d-flex justify-content-between align-items-center">
-         <h5 class="card-title mb-9 fw-semibold">Añadir representantes</h5>
-         <button type="button" name="button" class="btn btn-outline-info rounded-pill"
-                 title="Si el representante ya se encuentra registrado, por favor añadirlo en este apartado" data-toggle="tooltip">
-           <i class="fa-solid fa-question"></i>
-         </button>
-       </div>
-      <form action="/aggagenda_adci/" method="POST" id="vldt_dias">
-        {% csrf_token %}
-        <input type="hidden" name="" value="{{pacientes.idPat}}">
+  <!-- Formulario para Añadir a Mamá -->
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAddMom" aria-expanded="false" aria-controls="collapseAddMom">
+        Añadir a Mamá
+      </button>
+    </h2>
+    <div id="collapseAddMom" class="accordion-collapse collapse">
+      <div class="accordion-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-3 fw-semibold">Añadir a Mamá</h5>
+          <button type="button" class="btn btn-outline-info rounded-pill" title="Si el representante ya se encuentra registrado, por favor añadirlo en este apartado" data-toggle="tooltip">
+            <i class="fa-solid fa-question"></i>
+          </button>
+        </div>
         <br>
-        <div class="form-floating mb-3">
-          <select name="id_mom" id="id_mom" class="form-control" required>
+        <form action="{% url 'agg_mompat' idPat=pacientes.idPat %}" method="POST" id="vldt_dias">
+          {% csrf_token %}
+          <input type="hidden" name="idPat" id="idPat" value="{{pacientes.idPat}}">
+          <div class="form-floating mb-3">
+            <select name="id_mom" id="id_mom" class="form-control" required>
               <option value="">Escoga un representante</option>
               {% for mama in mom %}
               <option value="{{ mama.id }}">{{mama.ape_mom}} {{ mama.nom_mom }}</option>
               {% endfor %}
-          </select>
-          <label for="id_gen">Madre:</label>
-          <div id="error-nom_da2" class="error-messages"></div>
-        </div>
-        <div class="text-center d-grid gap-2 col-6 mx-auto">
-          <button type="submit" class="btn btn-outline-primary rounded-pill m-2">Añadir</button>
-        </div>
-
-
-      </form>
-    </div>
-  </div>
-</div>
-
-<div class="col-lg-7">
-  <div class="row">
-    <div class="col-lg-12">
-      <!-- Yearly Breakup -->
-      <div class="card overflow-hidden">
-        <div class="card-body p-4">
-          <div class="d-flex justify-content-between align-items-center">
-             <h5 class="card-title mb-9 fw-semibold">Registrar a Papá</h5>
-             <button type="button" name="button" class="btn btn-outline-info rounded-pill"
-                     title="Si el representante no está registrado, por favor realice este formulario." data-toggle="tooltip">
-               <i class="fa-solid fa-question"></i>
-             </button>
-           </div>
-
-           <script>
-             $(document).ready(function() {
-               $('[data-toggle="tooltip"]').tooltip();
-             });
-           </script>
-          <div class="row align-items-center">
-            <form action="{% url 'agg_dad' idPat=pacientes.idPat %}" method="POST" id="vldt_dias">
-              {% csrf_token %}
-              <br>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="nom_fat" id="nom_fat" placeholder="Nombre del padre" required>
-                    <label for="namePat">Nombres del padre:</label>
-                    <div id="error-nom_da" class="error-messages"></div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="ape_fat" id="ape_fat" placeholder="Paciente" required>
-                    <label for="ape_fat">Apellidos del padre:</label>
-                    <div id="error-nom_da" class="error-messages"></div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-8">
-                  <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="act_fat" id="act_fat" placeholder="Paciente" required>
-                    <label for="act_fat">Actividad:</label>
-                    <div id="error-nom_da" class="error-messages"></div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-floating mb-3">
-                    <input type="date" class="form-control" name="age_fat" id="age_fat" placeholder="Paciente" required>
-                    <label for="age_fat">Edad:</label>
-                    <div id="error-nom_da" class="error-messages"></div>
-                  </div>
-                </div>
-              </div>
-              <button type="submit" class="btn btn-outline-primary rounded-pill m-2">Registrar</button>
-              <button type="reset" name="button" class="btn btn-outline-danger rounded-pill m-2">Cancelar</button>
-
-            </form>
+            </select>
+            <label for="id_gen">Madre:</label>
+            <div id="error-nom_da2" class="error-messages"></div>
           </div>
-        </div>
+          <div class="row">
+            <div class="col-12 text-center">
+              <button type="submit" class="btn btn-outline-primary rounded-pill m-2">Añadir</button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
-</div>
-<div class="col-lg-5 align-items-strech">
-  <div class="card w-100">
-    <div class="card-body">
-      <div class="d-flex justify-content-between align-items-center">
-         <h5 class="card-title mb-9 fw-semibold">Añadir representantes</h5>
-         <button type="button" name="button" class="btn btn-outline-info rounded-pill"
-                 title="Si el representante ya se encuentra registrado, por favor añadirlo en este apartado" data-toggle="tooltip">
-           <i class="fa-solid fa-question"></i>
-         </button>
-       </div>
-      <form action="/aggagenda_adci/" method="POST" id="vldt_dias">
-        {% csrf_token %}
-        <input type="hidden" name="" value="{{pacientes.idPat}}">
+
+  <!-- Formulario para Registrar a Papá -->
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDad" aria-expanded="false" aria-controls="collapseDad">
+        Registrar a Papá
+      </button>
+    </h2>
+    <div id="collapseDad" class="accordion-collapse collapse">
+      <div class="accordion-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-3 fw-semibold">Registrar a Papá</h5>
+          <button type="button" class="btn btn-outline-info rounded-pill" title="Si el representante no está registrado, por favor realice este formulario." data-toggle="tooltip">
+            <i class="fa-solid fa-question"></i>
+          </button>
+        </div>
         <br>
-        <div class="form-floating mb-3">
-          <select name="id_gen" id="id_gen" class="form-control" required>
+        <form action="{% url 'agg_dad' idPat=pacientes.idPat %}" method="POST" id="vldt_dias">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" name="nom_fat" id="nom_fat" placeholder="Nombre del padre" required>
+                <label for="nom_fat">Nombres del padre:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" name="ape_fat" id="ape_fat" placeholder="Paciente" required>
+                <label for="ape_fat">Apellidos del padre:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" name="act_fat" id="act_fat" placeholder="Paciente" required>
+                <label for="act_fat">Actividad:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-floating mb-3">
+                <input type="date" class="form-control" name="age_fat" id="age_fat" placeholder="Paciente" required>
+                <label for="age_fat">Edad:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 text-center">
+              <button type="submit" class="btn btn-outline-primary rounded-pill m-2">Registrar</button>
+              <button type="reset" class="btn btn-outline-danger rounded-pill m-2">Cancelar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulario para Añadir a Papá -->
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAddDad" aria-expanded="false" aria-controls="collapseAddDad">
+        Añadir a Papá
+      </button>
+    </h2>
+    <div id="collapseAddDad" class="accordion-collapse collapse">
+      <div class="accordion-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-3 fw-semibold">Añadir a Papá</h5>
+          <button type="button" class="btn btn-outline-info rounded-pill" title="Si el representante ya se encuentra registrado, por favor añadirlo en este apartado" data-toggle="tooltip">
+            <i class="fa-solid fa-question"></i>
+          </button>
+        </div>
+        <br>
+        <form action="{% url 'agg_dadpat' idPat=pacientes.idPat %}" method="POST" id="vldt_dias">
+          {% csrf_token %}
+          <input type="hidden" name="idPat" id="idPat" value="{{pacientes.idPat}}">
+          <div class="form-floating mb-3">
+            <select name="id_dad" id="id_dad" class="form-control" required>
               <option value="">Escoga un representante</option>
               {% for papa in dad %}
               <option value="{{ papa.id }}">{{papa.ape_fat}} {{ papa.nom_fat }}</option>
               {% endfor %}
-          </select>
-          <label for="id_gen">Padre:</label>
-          <div id="error-nom_da2" class="error-messages"></div>
-        </div>
-        <div class="text-center d-grid gap-2 col-6 mx-auto">
-          <button type="submit" class="btn btn-outline-primary rounded-pill m-2">Añadir</button>
-        </div>
-
-
-      </form>
+            </select>
+            <label for="id_gen">Padre:</label>
+            <div id="error-nom_da2" class="error-messages"></div>
+          </div>
+          <div class="row">
+            <div class="col-12 text-center">
+              <button type="submit" class="btn btn-outline-primary rounded-pill m-2">Añadir</button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>
@@ -223,4 +232,5 @@
     $('[data-toggle="tooltip"]').tooltip();
   });
 </script>
+
 {% endblock %}
