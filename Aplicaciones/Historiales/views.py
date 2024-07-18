@@ -64,7 +64,6 @@ def doc_patient (request,idPat):
     alerbdd=Alergia.objects.all()
     alerpatbdd=PatAler.objects.filter(paciente=idPat)
     # Formatear fechas a YYYY-MM-DD
-
     for mom in mombdd:
         mom.age_mom = mom.age_mom.strftime('%Y-%m-%d') if mom.age_mom else ''
     for dad in dadbdd:
@@ -236,6 +235,36 @@ def agg_mom(request, idPat):
 
 @login_required
 @custom_login_required
+def edit_mom (request, idPat):
+    if request.method == 'POST':
+        try:
+            id = request.POST['id']
+            nom_mom = request.POST['nom_mom']
+            ape_mom = request.POST['ape_mom']
+            age_mom = request.POST['age_mom']
+            hij_mom = request.POST['hij_mom']
+            act_mom = request.POST['act_mom']
+            correo_mom = request.POST['correo_mom']
+            es_cimom = request.POST['es_cimom']
+
+            momEdit = MadreCita.objects.get(id=id)
+            momEdit.nom_mom=nom_mom
+            momEdit.ape_mom=ape_mom
+            momEdit.age_mom=age_mom
+            momEdit.hij_mom=hij_mom
+            momEdit.act_mom=act_mom
+            momEdit.correo_mom=correo_mom
+            momEdit.es_cimom=es_cimom
+            momEdit.save()
+            messages.success(request, 'Mamá editada correctamente')
+            return redirect('doc_patient', idPat=idPat)
+        except Exception as e:
+            print(f"Error al procesar la solicitud: {str(e)}")
+            messages.error(request, "Ha ocurrido un error al procesar la solicitud.")
+            return redirect('error_p')
+
+@login_required
+@custom_login_required
 def agg_dad(request,idPat):
     if request.method == 'POST':
         nom_fat = request.POST['nom_fat']
@@ -252,7 +281,8 @@ def agg_dad(request,idPat):
         messages.success(request,'Representante agregado correctamente')
         return redirect('doc_patient', idPat=idPat)
 
-
+@login_required
+@custom_login_required
 def agg_mompat(request,idPat):
 
     if request.method == 'POST':
@@ -266,6 +296,9 @@ def agg_mompat(request,idPat):
      return redirect('doc_patient', idPat=idPat)
 
 
+
+@login_required
+@custom_login_required
 def agg_dadpat(request,idPat):
 
     if request.method == 'POST':

@@ -288,9 +288,10 @@
             </h2>
             <div id="flush-collapseOne" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
               <div class="accordion-body">
-                <form action="{% url 'agg_mom' idPat=pacientes.idPat %}" method="POST" id="vldt_dias">
+                <form action="{% url 'edit_mom' idPat=pacientes.idPat %}" method="POST" id="vldt_dias">
                   {% csrf_token %}
                   <div class="row">
+                    <input type="hidden" name="id" id="id" value="{{ pacientes.mom.id }}">
                     <div class="col-md-6">
                       <div class="form-floating mb-3">
                         <input type="text" class="form-control" name="nom_mom" id="nom_mom" placeholder="Nombres de la madre" value="{{ pacientes.mom.nom_mom }}" required>
@@ -308,19 +309,19 @@
                   </div>
                   <div class="row">
                     <div class="col-md-4">
-                      <div class="form-floating mb-3">
-                        <select class="form-control" name="es_cimom" id="es_cimom" required>
-                          <option value="">Seleccione un estado civil</option>
-                          <option value="Soltero/a" {% if pacientes.mom.es_cimom == 'Soltero/a' %}selected{% endif %}>Soltero/a</option>
-                          <option value="Casado/a" {% if pacientes.mom.es_cimom == 'Casado/a' %}selected{% endif %}>Casado/a</option>
-                          <option value="Divorciado/a" {% if pacientes.mom.es_cimom == 'Divorciado/a' %}selected{% endif %}>Divorciado/a</option>
-                          <option value="Viudo/a" {% if pacientes.mom.es_cimom == 'Viudo/a' %}selected{% endif %}>Viudo/a</option>
-                          <option value="Separado/a" {% if pacientes.mom.es_cimom == 'Separado/a' %}selected{% endif %}>Separado/a</option>
-                          <option value="Unión libre" {% if pacientes.mom.es_cimom == 'Unión libre' %}selected{% endif %}>Unión libre</option>
-                        </select>
-                        <label for="es_cimom">Estado Civil:</label>
-                        <div id="error-nom_da2" class="error-messages"></div>
-                      </div>
+                        <div class="form-floating mb-3">
+                            <select class="form-control" name="es_cimom" id="es_cimom" required>
+                                <option value="">Seleccione un estado civil</option>
+                                <option value="Soltero/a" {% if mom.es_cimom == 'Soltero/a' %}selected{% endif %}>Soltero/a</option>
+                                <option value="Casado/a" {% if mom.es_cimom == 'Casado/a' %}selected{% endif %}>Casado/a</option>
+                                <option value="Divorciado/a" {% if mom.es_cimom == 'Divorciado/a' %}selected{% endif %}>Divorciado/a</option>
+                                <option value="Viudo/a" {% if mom.es_cimom == 'Viudo/a' %}selected{% endif %}>Viudo/a</option>
+                                <option value="Separado/a" {% if mom.es_cimom == 'Separado/a' %}selected{% endif %}>Separado/a</option>
+                                <option value="Unión libre" {% if mom.es_cimom == 'Unión libre' %}selected{% endif %}>Unión libre</option>
+                            </select>
+                            <label for="es_cimom">Estado Civil:</label>
+                            <div id="error-nom_da2" class="error-messages"></div>
+                        </div>
                     </div>
                     <div class="col-md-4">
                       <div class="form-floating mb-3">
@@ -375,12 +376,12 @@
               <div class="accordion-body">
                 <form action="{% url 'agg_mompat' idPat=pacientes.idPat %}" method="POST" id="vldt_dias">
                   {% csrf_token %}
-                  <input type="hidden" name="idPat" id="idPat" value="{{pacientes.idPat}}">
+                  <input type="hidden" name="idPat" id="idPat" value="{{ pacientes.idPat }}">
                   <div class="form-floating mb-3">
                     <select name="id_mom" id="id_mom" class="form-control" required>
                       <option value="">Escoga un representante</option>
                       {% for mama in mom %}
-                      <option value="{{ mama.id }}">{{mama.ape_mom}} {{ mama.nom_mom }}</option>
+                      <option value="{{ mama.id }}">{{ mama.ape_mom }} {{ mama.nom_mom }}</option>
                       {% endfor %}
                     </select>
                     <label for="id_mom">Madre:</label>
@@ -401,6 +402,7 @@
     </div>
   </div>
 </div>
+
 
 <!-- Modal para Editar y Añadir a Papá -->
 <div class="modal fade" id="dadModal" tabindex="-1" aria-labelledby="dadModalLabel" aria-hidden="true">
