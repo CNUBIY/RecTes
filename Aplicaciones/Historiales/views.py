@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from Aplicaciones.Citas.middleware import login_required as custom_login_required
-from .models import Patient, Gender, MadreCita, PadreCita
+from .models import Patient, Gender, MadreCita, PadreCita, Alergia, PatAler
 # Create your views here.
 
 
@@ -60,13 +60,32 @@ def doc_patient (request,idPat):
     genbdd=Gender.objects.all()
     mombdd=MadreCita.objects.all()
     dadbdd=PadreCita.objects.all()
+    alerbdd=Alergia.objects.all()
+    alerpatbdd=PatAler.objects.filter(paciente=idPat)
     # Formatear fechas a YYYY-MM-DD
+
     for mom in mombdd:
         mom.age_mom = mom.age_mom.strftime('%Y-%m-%d') if mom.age_mom else ''
     for dad in dadbdd:
         dad.age_fat = dad.age_fat.strftime('%Y-%m-%d') if dad.age_fat else ''
-    return render(request, 'histo/patient.html',{'pacientes':patbdd,'generos':genbdd,'mom':mombdd, 'dad':dadbdd})
+    return render(request, 'histo/patient.html',{'pacientes':patbdd,'generos':genbdd,'mom':mombdd, 'dad':dadbdd, 'alergias':alerbdd, 'misalergias':alerpatbdd})
 
+@login_required
+@custom_login_required
+def add_alergias(request, idPat):
+    patient = Patient.objects.get(idPat=idPat)
+    alergias = Alergia.objects.all()
+    if request.method == 'POST':
+        selected_alergias = request.POST.getlist('alergias')
+        for alergia_id in selected_alergias:
+            alergia = Alergia.objects.get(id=alergia_id)
+            # Verificar si la alergia ya está registrada para el paciente
+            if PatAler.objects.filter(paciente=patient, alergia=alergia).exists():
+                messages.error(request, f'La alergia "{alergia.nombreAlergia}" ya está registrada para este paciente.')
+            else:
+                PatAler.objects.create(paciente=patient, alergia=alergia)
+                messages.success(request, f'Alergia "{alergia.nombreAlergia}" añadida correctamente.')
+        return redirect('doc_patient', idPat=idPat)  # Redirige de nuevo a la página del paciente
 
 #Página PACIENTES FINAL
 
