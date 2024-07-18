@@ -79,3 +79,14 @@ class PatAler(models.Model):
 
     def __str__(self):
         return f"{self.paciente} -> {self.alergia}"
+
+class InfoMom(models.Model):
+    id = models.AutoField(primary_key=True)
+    creation=models.DateField(default=datetime.date.today)
+    prenatal=models.TextField()
+    natal=models.TextField()
+    app=models.TextField()
+    apf=models.TextField()
+    patient=models.ForeignKey(Patient, on_delete=models.CASCADE)
+    def __str__(self):
+        return f"{self.id} -> Observación de: {self.patient}"
