@@ -26,4 +26,7 @@ urlpatterns=[
     path('doc_inicio/doc_patient/<int:idPat>/agg_dad/', views.agg_dad, name='agg_dad'),
     path('doc_inicio/doc_patient/<int:idPat>/agg_mompat/', views.agg_mompat, name='agg_mompat'),
     path('doc_inicio/doc_patient/<int:idPat>/agg_dadpat/', views.agg_dadpat, name='agg_dadpat'),
+
+    #OBSERVACIONES
+    path('doc_inicio/viewobs/<int:id>/', views.viewobs, name='viewobs'),
 ]

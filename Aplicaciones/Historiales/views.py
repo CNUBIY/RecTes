@@ -427,3 +427,21 @@ def agg_dadpat(request,idPat):
      messages.success(request,'Papá añadido correctamente')
      return redirect('doc_patient', idPat=idPat)
 #Página crear representantes FINAL
+
+
+
+#Página VISTA OBSERVACIONES INICIO
+
+@login_required
+@custom_login_required
+def viewobs(request, id):
+    try:
+        obsbdd = observaciones.objects.get(id=id)
+        patbdd = obsbdd.paciente  # Obtener el paciente directamente desde la observación
+    except observaciones.DoesNotExist:
+        messages.error(request, "La observación no existe.")
+        return redirect('error_p')
+
+    return render(request, 'observation/viewobs.html', {'observaciones': obsbdd, 'pacientes': patbdd})
+
+#PÁGINA VISTA OBSERVACIONES FINAL

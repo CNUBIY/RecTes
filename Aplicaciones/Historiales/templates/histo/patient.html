@@ -792,7 +792,7 @@
                   {% if obs.cortesia %}
                     <a href="#" class="btn btn-outline-danger rounded-pill m-2" title="Vista Previa"><i class="fa-regular fa-eye"></i></a>
                   {% else %}
-                    <a href="#" class="btn btn-outline-info rounded-pill m-2" title="Vista Previa"><i class="fa-regular fa-eye"></i></a>
+                  <a href="{% url 'viewobs' id=obs.id %}" class="btn btn-outline-info rounded-pill m-2" title="Vista Previa"><i class="fa-regular fa-eye"></i></a>
                   {% endif %}
                 </td>
               </tr>
