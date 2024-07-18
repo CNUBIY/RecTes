@@ -309,19 +309,19 @@
                   </div>
                   <div class="row">
                     <div class="col-md-4">
-                        <div class="form-floating mb-3">
-                            <select class="form-control" name="es_cimom" id="es_cimom" required>
-                                <option value="">Seleccione un estado civil</option>
-                                <option value="Soltero/a" {% if mom.es_cimom == 'Soltero/a' %}selected{% endif %}>Soltero/a</option>
-                                <option value="Casado/a" {% if mom.es_cimom == 'Casado/a' %}selected{% endif %}>Casado/a</option>
-                                <option value="Divorciado/a" {% if mom.es_cimom == 'Divorciado/a' %}selected{% endif %}>Divorciado/a</option>
-                                <option value="Viudo/a" {% if mom.es_cimom == 'Viudo/a' %}selected{% endif %}>Viudo/a</option>
-                                <option value="Separado/a" {% if mom.es_cimom == 'Separado/a' %}selected{% endif %}>Separado/a</option>
-                                <option value="Unión libre" {% if mom.es_cimom == 'Unión libre' %}selected{% endif %}>Unión libre</option>
-                            </select>
-                            <label for="es_cimom">Estado Civil:</label>
-                            <div id="error-nom_da2" class="error-messages"></div>
-                        </div>
+                      <div class="form-floating mb-3">
+                        <select class="form-control" name="es_cimom" id="es_cimom" required>
+                          <option value="">Seleccione un estado civil</option>
+                          <option value="Soltero/a" {% if pacientes.mom.es_cimom == 'Soltero/a' %}selected{% endif %}>Soltero/a</option>
+                          <option value="Casado/a" {% if pacientes.mom.es_cimom == 'Casado/a' %}selected{% endif %}>Casado/a</option>
+                          <option value="Divorciado/a" {% if pacientes.mom.es_cimom == 'Divorciado/a' %}selected{% endif %}>Divorciado/a</option>
+                          <option value="Viudo/a" {% if pacientes.mom.es_cimom == 'Viudo/a' %}selected{% endif %}>Viudo/a</option>
+                          <option value="Separado/a" {% if pacientes.mom.es_cimom == 'Separado/a' %}selected{% endif %}>Separado/a</option>
+                          <option value="Unión libre" {% if pacientes.mom.es_cimom == 'Unión libre' %}selected{% endif %}>Unión libre</option>
+                        </select>
+                        <label for="es_cimom">Estado Civil:</label>
+                        <div id="error-nom_da2" class="error-messages"></div>
+                      </div>
                     </div>
                     <div class="col-md-4">
                       <div class="form-floating mb-3">
@@ -348,7 +348,7 @@
                     </div>
                     <div class="col-md-6">
                       <div class="form-floating mb-3">
-                        <input type="text" class="form-control" name="correo_mom" id="correo_mom" placeholder="Correo" value="{{ pacientes.mom.correo_mom }}" required>
+                        <input type="email" class="form-control" name="correo_mom" id="correo_mom" placeholder="Correo" value="{{ pacientes.mom.correo_mom }}" required>
                         <label for="correo_mom">Correo:</label>
                         <div id="error-nom_da" class="error-messages"></div>
                       </div>
@@ -374,17 +374,18 @@
             </h2>
             <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
               <div class="accordion-body">
+                <p><b><i class="fa-solid fa-triangle-exclamation text-warning"></i> En esta sección usted puede cambiar de representante en caso de errores, por favor solo realizar esta acción en caso de ser necesario </b></p>
                 <form action="{% url 'agg_mompat' idPat=pacientes.idPat %}" method="POST" id="vldt_dias">
                   {% csrf_token %}
                   <input type="hidden" name="idPat" id="idPat" value="{{ pacientes.idPat }}">
-                  <div class="form-floating mb-3">
-                    <select name="id_mom" id="id_mom" class="form-control" required>
-                      <option value="">Escoga un representante</option>
+                  <div class="form-group mb-3">
+                    <label for="id_mom">Madre:</label>
+                    <select name="id_mom" id="id_mom" class="form-control selectpicker" data-live-search="true" required>
+                      <option value="">Escoja un representante</option>
                       {% for mama in mom %}
                       <option value="{{ mama.id }}">{{ mama.ape_mom }} {{ mama.nom_mom }}</option>
                       {% endfor %}
                     </select>
-                    <label for="id_mom">Madre:</label>
                     <div id="error-nom_da2" class="error-messages"></div>
                   </div>
                   <div class="row">
@@ -402,7 +403,6 @@
     </div>
   </div>
 </div>
-
 
 <!-- Modal para Editar y Añadir a Papá -->
 <div class="modal fade" id="dadModal" tabindex="-1" aria-labelledby="dadModalLabel" aria-hidden="true">
@@ -478,17 +478,18 @@
             </h2>
             <div id="flush-dadCollapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-dadHeadingTwo" data-bs-parent="#accordionFlushDadExample">
               <div class="accordion-body">
+                <p><b><i class="fa-solid fa-triangle-exclamation text-warning"></i> En esta sección usted puede cambiar de representante en caso de errores, por favor solo realizar esta acción de en caso de ser necesario </b></p>
                 <form action="{% url 'agg_dadpat' idPat=pacientes.idPat %}" method="POST" id="vldt_dias">
                   {% csrf_token %}
                   <input type="hidden" name="idPat" id="idPat" value="{{pacientes.idPat}}">
-                  <div class="form-floating mb-3">
-                    <select name="id_dad" id="id_dad" class="form-control" required>
-                      <option value="">Escoga un representante</option>
+                  <div class="form-group mb-3">
+                    <label for="id_dad">Padre:</label>
+                    <select name="id_dad" id="id_dad" class="form-control selectpicker" required>
+                      <option value="">Escoja un representante</option>
                       {% for papa in dad %}
-                      <option value="{{ papa.id }}">{{papa.ape_fat}} {{ papa.nom_fat }}</option>
+                      <option value="{{ papa.id }}">{{ papa.ape_fat }} {{ papa.nom_fat }}</option>
                       {% endfor %}
                     </select>
-                    <label for="id_dad">Padre:</label>
                     <div id="error-nom_da2" class="error-messages"></div>
                   </div>
                   <div class="row">
@@ -507,7 +508,30 @@
   </div>
 </div>
 
+<script>
+  $(document).ready(function() {
+    $('.selectpicker').selectpicker();
 
+    // Inicializar selectpicker cuando se muestra el modal para mamá
+    $('#momModal').on('shown.bs.modal', function () {
+      $('.selectpicker').selectpicker('refresh');
+    });
+
+    // Inicializar selectpicker cuando se muestra el modal para papá
+    $('#dadModal').on('shown.bs.modal', function () {
+      $('.selectpicker').selectpicker('refresh');
+    });
+
+    // Inicializar selectpicker cuando se expande el acordeón
+    $('#accordionFlushExample').on('shown.bs.collapse', function () {
+      $('.selectpicker').selectpicker('refresh');
+    });
+
+    $('#accordionFlushDadExample').on('shown.bs.collapse', function () {
+      $('.selectpicker').selectpicker('refresh');
+    });
+  });
+</script>
 
 <div class="row">
   <div class="col-lg-8 d-flex align-items-stretch">
@@ -711,13 +735,15 @@
               {% endfor %}
             </select>
           </div>
-          <button type="submit" class="btn btn-outline-warning mt-3">Añadir Alergias</button>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-outline-warning mt-3">Añadir Alergias</button>
+            <button type="button" class="btn btn-outline-danger mt-3" data-bs-dismiss="modal">Cerrar</button>
+          </div>
         </form>
       </div>
     </div>
   </div>
 </div>
-
 <script>
   $(document).ready(function() {
     $('#alergias').select2({
