@@ -423,8 +423,9 @@
             </h2>
             <div id="flush-dadCollapseOne" class="accordion-collapse collapse show" aria-labelledby="flush-dadHeadingOne" data-bs-parent="#accordionFlushDadExample">
               <div class="accordion-body">
-                <form action="{% url 'agg_dad' idPat=pacientes.idPat %}" method="POST" id="vldt_dias">
+                <form action="{% url 'edit_dad' idPat=pacientes.idPat %}" method="POST" id="vldt_dias">
                   {% csrf_token %}
+                  <input type="hidden" name="id" id="id" value="{{pacientes.dad.id}}">
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-floating mb-3">

@@ -283,6 +283,29 @@ def agg_dad(request,idPat):
 
 @login_required
 @custom_login_required
+def edit_dad (request, idPat):
+    if request.method == 'POST':
+        try:
+            id = request.POST['id']
+            nom_fat = request.POST['nom_fat']
+            ape_fat = request.POST['ape_fat']
+            age_fat = request.POST['age_fat']
+            act_fat = request.POST['act_fat']
+            dadEdit = PadreCita.objects.get(id=id)
+            dadEdit.nom_fat=nom_fat
+            dadEdit.ape_fat=ape_fat
+            dadEdit.age_fat=age_fat
+            dadEdit.act_fat=act_fat
+            dadEdit.save()
+            messages.success(request, 'Papá editado correctamente')
+            return redirect('doc_patient', idPat=idPat)
+        except Exception as e:
+            print(f"Error al procesar la solicitud: {str(e)}")
+            messages.error(request, "Ha ocurrido un error al procesar la solicitud.")
+            return redirect('error_p')
+
+@login_required
+@custom_login_required
 def agg_mompat(request,idPat):
 
     if request.method == 'POST':
