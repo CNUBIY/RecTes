@@ -444,4 +444,18 @@ def viewobs(request, id):
 
     return render(request, 'observation/viewobs.html', {'observaciones': obsbdd, 'pacientes': patbdd})
 
+@login_required
+@custom_login_required
+def edit_obs(request, id):
+    if request.method=='POST':
+        id=request.POST['id']
+        firstsect=request.POST['firstsect']
+        secondsect=request.POST['secondsect']
+        obsEdit=observaciones.objects.get(id=id)
+        obsEdit.firstsect=firstsect
+        obsEdit.secondsect=secondsect
+        obsEdit.save()
+        messages.success(request,'Observación editada correctamente.')
+        return redirect('viewobs',id=id)
+
 #PÁGINA VISTA OBSERVACIONES FINAL
