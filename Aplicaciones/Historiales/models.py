@@ -90,3 +90,14 @@ class InfoMom(models.Model):
     patient=models.ForeignKey(Patient, on_delete=models.CASCADE)
     def __str__(self):
         return f"{self.id} -> Observación de: {self.patient}"
+
+class observaciones(models.Model):
+    id = models.AutoField(primary_key=True)
+    creation=models.DateField(default=datetime.date.today)
+    new_age=models.CharField(max_length=250)
+    firstsect= models.TextField()
+    secondsect=models.TextField()
+    cortesia=models.BooleanField(default=False)
+    paciente = models.ForeignKey(Patient,on_delete=models.CASCADE)
+    def __str__(self):
+        return f"{self.id} ->Observación de: {self.paciente}"

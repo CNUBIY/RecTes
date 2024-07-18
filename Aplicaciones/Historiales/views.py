@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from Aplicaciones.Citas.middleware import login_required as custom_login_required
-from .models import Patient, Gender, MadreCita, PadreCita, Alergia, PatAler, InfoMom
+from .models import Patient, Gender, MadreCita, PadreCita, Alergia, PatAler, InfoMom, observaciones
 from django.views.decorators.http import require_POST
 # Create your views here.
 
@@ -64,12 +64,13 @@ def doc_patient (request,idPat):
     alerbdd=Alergia.objects.all()
     alerpatbdd=PatAler.objects.filter(paciente=idPat)
     obsmom=InfoMom.objects.get(patient=idPat)
+    obsbdd=observaciones.objects.filter(paciente=idPat)
     # Formatear fechas a YYYY-MM-DD
     for mom in mombdd:
         mom.age_mom = mom.age_mom.strftime('%Y-%m-%d') if mom.age_mom else ''
     for dad in dadbdd:
         dad.age_fat = dad.age_fat.strftime('%Y-%m-%d') if dad.age_fat else ''
-    return render(request, 'histo/patient.html',{'pacientes':patbdd,'generos':genbdd,'mom':mombdd, 'dad':dadbdd, 'alergias':alerbdd, 'misalergias':alerpatbdd, 'infomom':obsmom})
+    return render(request, 'histo/patient.html',{'pacientes':patbdd,'generos':genbdd,'mom':mombdd, 'dad':dadbdd, 'alergias':alerbdd, 'misalergias':alerpatbdd, 'infomom':obsmom, 'observaciones':obsbdd})
 
 @login_required
 @custom_login_required
