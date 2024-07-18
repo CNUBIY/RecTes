@@ -171,3 +171,9 @@ STATICFILES_DIRS =(os.path.join(BASE_DIR,'Tesis/static'),)
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+import sys
+
+# Añade la ruta de la carpeta 'scripts'
+sys.path.append(os.path.join(BASE_DIR, 'scripts'))

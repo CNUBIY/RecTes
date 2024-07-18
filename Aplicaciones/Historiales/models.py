@@ -101,3 +101,11 @@ class observaciones(models.Model):
     paciente = models.ForeignKey(Patient,on_delete=models.CASCADE)
     def __str__(self):
         return f"{self.id} ->Observación de: {self.paciente}"
+
+
+class Cie10(models.Model):
+    id = models.AutoField(primary_key=True)
+    cod3 = models.CharField(max_length=10)
+    nombrecie=models.CharField(max_length=250)
+    def __str__(self):
+        return f"{self.cod3}. {self.nombrecie}"
