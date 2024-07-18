@@ -12,6 +12,7 @@ urlpatterns=[
     path('doc_inicio/doc_patient/<idPat>', views.doc_patient, name='doc_patient'),
     path('doc_inicio/doc_patient/<int:idPat>/edit_patient/', views.edit_patient, name='edit_patient'),
     path('historiales/add_alergias/<int:idPat>/', views.add_alergias, name='add_alergias'),
+    path('historiales/delete_alergia/<int:idPat>/<int:alergia_id>/', views.delete_alergia, name='delete_alergia'),
     #CREAR PACIENTE
     path('doc_inicio/new_patient/', views.new_patient, name='new_patient'),
     #CREAR Madre

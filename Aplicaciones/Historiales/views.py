@@ -12,6 +12,7 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from Aplicaciones.Citas.middleware import login_required as custom_login_required
 from .models import Patient, Gender, MadreCita, PadreCita, Alergia, PatAler
+from django.views.decorators.http import require_POST
 # Create your views here.
 
 
@@ -86,6 +87,21 @@ def add_alergias(request, idPat):
                 PatAler.objects.create(paciente=patient, alergia=alergia)
                 messages.success(request, f'Alergia "{alergia.nombreAlergia}" añadida correctamente.')
         return redirect('doc_patient', idPat=idPat)  # Redirige de nuevo a la página del paciente
+
+@login_required
+@custom_login_required
+def delete_alergia(request, idPat, alergia_id):
+    patient = get_object_or_404(Patient, idPat=idPat)
+    alergia = get_object_or_404(Alergia, id=alergia_id)
+    pat_alergia = PatAler.objects.filter(paciente=patient, alergia=alergia)
+
+    if pat_alergia.exists():
+        pat_alergia.delete()
+        messages.success(request, f'Alergia "{alergia.nombreAlergia}" eliminada correctamente.')
+    else:
+        messages.error(request, 'Alergia no encontrada para este paciente.')
+
+    return redirect('doc_patient', idPat=idPat)
 
 #Página PACIENTES FINAL
 

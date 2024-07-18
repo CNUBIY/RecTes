@@ -529,24 +529,23 @@
           <div class="card-body d-flex flex-column">
               <div class="d-flex justify-content-between align-items-center">
                   <h5 class="card-title mb-9 fw-semibold">Alergias</h5>
-                  {% if misalergias %}
                   <button type="button" class="btn btn-outline-success rounded-pill" data-bs-toggle="modal" data-bs-target="#addAlModal" title="Añadir alergia">
                       <i class="fa-solid fa-plus"></i>
                   </button>
-                  {% else %}
-                  <button type="button" class="btn btn-outline-success rounded-pill" data-bs-toggle="modal" data-bs-target="#addAlModal" title="Añadir alergia">
-                      <i class="fa-solid fa-plus"></i>
-                  </button>
-                  {% endif %}
               </div>
               <div class="row align-items-center mt-3">
                   {% if misalergias %}
                       <div class="list-container">
-                          <ul class="list-group list-group-flush">
+                          <ul class="list-group list-group-flush" id="alergias-list">
                               {% for alergia in misalergias %}
-                                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                                  <li class="list-group-item d-flex justify-content-between align-items-center" id="alergia-{{ alergia.alergia.id }}">
                                       {{ alergia.alergia.nombreAlergia }}
-                                      <a href="#" class="btn btn-outline-danger rounded-pill"><i class="fa-solid fa-trash"></i></a>
+                                      <form method="post" action="{% url 'delete_alergia' pacientes.idPat alergia.alergia.id %}">
+                                          {% csrf_token %}
+                                          <button type="button" class="btn btn-outline-danger rounded-pill" onclick="delete_alergia('{% url 'delete_alergia' pacientes.idPat alergia.alergia.id %}')">
+                                              <i class="fa-solid fa-trash"></i>
+                                          </button>
+                                      </form>
                                   </li>
                               {% endfor %}
                           </ul>
@@ -561,7 +560,6 @@
           </div>
       </div>
   </div>
-
 </div>
 
 <!-- Modal de Añadir Alergias -->
@@ -863,5 +861,31 @@
     </div>
   </div>
 </div>
+
+<!-- MENSAJE DE CONFIRMACIÓN ELIMINAR DÍA HORARIO -->
+<script type="text/javascript">
+    function delete_alergia(url) {
+        iziToast.question({
+            timeout: 15000,
+            close: true,
+            overlay: true,
+            displayMode: 'once',
+            id: 'question',
+            zindex: 999,
+            title: 'CONFIRMACIÓN',
+            message: '¿Está seguro de eliminar la <b>alergia</b> seleccionada?',
+            position: 'center',
+            buttons: [
+                ['<button><b>SI</b></button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                    window.location.href = url;
+                }, true],
+                ['<button>NO</button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                }],
+            ]
+        });
+    }
+</script>
 
 {% endblock %}
