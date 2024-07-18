@@ -517,22 +517,22 @@
         <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
           <div class="d-flex justify-content-between align-items-center w-100">
             <h5 class="card-title fw-semibold">Observaciones</h5>
-            <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#infoMomModal" title="Editar paciente">
+            <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#editinfoMomModal" title="Editar paciente">
                <i class="fas fa-edit"></i>
             </button>
           </div>
         </div>
-        <div class="mt-auto">
-          <p><b>Prenatal:</b></p>
-          <p><b>Natal:</b></p>
-          <p><b>APP:</b></p>
-          <p><b>APF:</b></p>
+        <div class="mt-auto list-container"> <!-- Añadido list-container para el scroll -->
+          <p><b>Prenatal: </b>{{infomom.prenatal}}</p>
+          <p><b>Natal:</b> {{infomom.natal}}</p>
+          <p><b>APP:</b> {{infomom.app}}</p>
+          <p><b>APF:</b> {{infomom.apf}}</p>
         </div>
         {% else %}
         <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
           <div class="d-flex justify-content-between align-items-center w-100">
             <h5 class="card-title fw-semibold">Observaciones</h5>
-            <button type="button" class="btn btn-outline-success rounded-pill" data-bs-toggle="modal" data-bs-target="#infoMomModal" title="Añadir alergia">
+            <button type="button" class="btn btn-outline-success rounded-pill" data-bs-toggle="modal" data-bs-target="#infoMomModal" title="Añadir observaciones">
                 <i class="fa-solid fa-plus"></i>
             </button>
           </div>
@@ -586,11 +586,11 @@
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="infoMomModalLabel">Añadir</h5>
+        <h5 class="modal-title" id="infoMomModalLabel">Añadir/Editar Observaciones</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="{% url 'edit_patient' idPat=pacientes.idPat %}" method="post">
+        <form action="{% url 'agg_infomom' idPat=pacientes.idPat %}" method="post">
           {% csrf_token %}
           <input type="hidden" name="idPat" id="idPat" value="{{pacientes.idPat}}">
           <div class="row">
@@ -634,6 +634,62 @@
     </div>
   </div>
 </div>
+
+<!-- Editar información parto -->
+<div class="modal fade" id="editinfoMomModal" tabindex="-1" aria-labelledby="editinfoMomModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editinfoMomModalLabel">Editar Observaciones</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'edit_infomom' idPat=pacientes.idPat id=infomom.id %}" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="idPat" id="idPat" value="{{pacientes.idPat}}">
+          <input type="hidden" name="id" id="id" value="{{infomom.id}}">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <textarea class="form-control" name="prenatal" id="prenatal" style="height: 150px;">{{ infomom.prenatal }}</textarea>
+                <label for="prenatal">Prenatal:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <textarea class="form-control" name="natal" id="natal" style="height: 150px;">{{ infomom.natal }}</textarea>
+                <label for="natal">Natal:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <textarea class="form-control" name="app" id="app" style="height: 150px;">{{ infomom.app }}</textarea>
+                <label for="app">APP:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <textarea class="form-control" name="apf" id="apf" style="height: 150px;">{{ infomom.apf }}</textarea>
+                <label for="apf">APF:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-outline-success" id="saveChangesButton"><i class="fas fa-edit" title="Guardar Cambios"></i></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 <!-- Modal de Añadir Alergias -->
@@ -680,8 +736,9 @@
   .list-container {
     max-height: 200px; /* Ajusta esta altura según tus necesidades */
     overflow-y: auto;
-}
+  }
 </style>
+
   </div>
   <div class="row">
     <div class="col-lg-4 d-flex align-items-stretch">

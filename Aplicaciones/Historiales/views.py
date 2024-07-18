@@ -63,7 +63,7 @@ def doc_patient (request,idPat):
     dadbdd=PadreCita.objects.all()
     alerbdd=Alergia.objects.all()
     alerpatbdd=PatAler.objects.filter(paciente=idPat)
-    obsmom=InfoMom.objects.filter(patient=idPat)
+    obsmom=InfoMom.objects.get(patient=idPat)
     # Formatear fechas a YYYY-MM-DD
     for mom in mombdd:
         mom.age_mom = mom.age_mom.strftime('%Y-%m-%d') if mom.age_mom else ''
@@ -102,6 +102,48 @@ def delete_alergia(request, idPat, alergia_id):
         messages.error(request, 'Alergia no encontrada para este paciente.')
 
     return redirect('doc_patient', idPat=idPat)
+
+
+def agg_infomom(request, idPat):
+    if request.method == 'POST':
+        prenatal = request.POST['prenatal']
+        natal = request.POST['natal']
+        app = request.POST['app']
+        apf = request.POST['apf']
+        patient = Patient.objects.get(idPat=idPat)
+        new_infomom = InfoMom.objects.create(
+            prenatal=prenatal,
+            natal=natal,
+            app=app,
+            apf=apf,
+            patient=patient
+        )
+        messages.success(request, 'Observación agregada correctamente.')
+        return redirect('doc_patient', idPat=idPat)
+
+@login_required
+@custom_login_required
+def edit_infomom(request, idPat, id):
+    if request.method == 'POST':
+        try:
+            prenatal = request.POST['prenatal']
+            natal = request.POST['natal']
+            app = request.POST['app']
+            apf = request.POST['apf']
+            infomomEdit = InfoMom.objects.get(id=id)  # Obtener la instancia correcta de InfoMom
+            infomomEdit.prenatal = prenatal
+            infomomEdit.natal = natal
+            infomomEdit.app = app
+            infomomEdit.apf = apf
+            infomomEdit.save()
+
+            messages.success(request, 'Observaciones editadas correctamente')
+            return redirect('doc_patient', idPat=idPat)
+
+        except Exception as e:
+            print(f"Error al procesar la solicitud: {str(e)}")
+            messages.error(request, "Ha ocurrido un error al procesar la solicitud.")
+            return redirect('error_p')
 
 #Página PACIENTES FINAL
 
