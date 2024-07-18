@@ -108,7 +108,7 @@
                   <div class="d-flex justify-content-between align-items-center">
                     <h5><b>Comprobante de pago</b></h5>
                     {% if pacientes.mom %}
-                      <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#comprobanteModal" title="Editar datos de facturación">
+                      <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#comprobanteModal" title="Editar datos de comprobante">
                         <i class="fas fa-edit"></i>
                       </button>
                     {% endif %}
@@ -121,7 +121,7 @@
                     </div>
                   {% else %}
                     <div class="text-center">
-                      <p>Sin datos de facturación.</p>
+                      <p>Sin datos de pago.</p>
                       <a href="{% url 'agg_rep' idPat=pacientes.idPat %}" class="btn btn-outline-success rounded-pill"><i class="fa-solid fa-plus"></i></a>
                     </div>
                   {% endif %}
@@ -517,7 +517,7 @@
         <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
           <div class="d-flex justify-content-between align-items-center w-100">
             <h5 class="card-title fw-semibold">Primeras observaciones</h5>
-            <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#editinfoMomModal" title="Editar paciente">
+            <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#editinfoMomModal" title="Editar Observación">
                <i class="fas fa-edit"></i>
             </button>
           </div>
@@ -747,12 +747,9 @@
       <div class="card-body p-4">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-9 fw-semibold">Observaciones</h5>
-            {% if observaciones %}
-            {% else %}
-            <button type="button" class="btn btn-outline-success rounded-pill" data-bs-toggle="modal" data-bs-target="#obsModal" title="Añadir alergia">
+            <button type="button" class="btn btn-outline-success rounded-pill" data-bs-toggle="modal" data-bs-target="#obsModal" title="Añadir Observación">
                 <i class="fa-solid fa-plus"></i>
             </button>
-            {% endif %}
         </div>
         {% if observaciones %}
         <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
@@ -770,18 +767,33 @@
               <th class="border-bottom-0">
                   <h6 class="fw-semibold mb-0">Edad Actual</h6>
               </th>
+              <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">Acciones</h6>
+              </th>
             </tr>
           </thead>
           <tbody>
-            {% for histo in historiales %}
+            {% for obs in observaciones %}
               <tr>
                 <td>
-                  <a href="#"><span class="text-info">{{histo.lastnPat}} {{histo.namePat}}</span></a>
+                  {{obs.id}}
                 </td>
-                <td>{{histo.creation}}</td>
-                <td>{{histo.ciPat}}</td>
+                <td>{{obs.creation}}</td>
                 <td>
-                    <a href="javascript:void(0)" onclick="delete_adci('/delete_adci/{{ cita.id }}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
+                  {% if obs.cortesia %}
+                    <span class="text-danger"> Cita de cortesía</span>
+                  {% else %}
+                    <span class="text-info"> Cita normal</span>
+                  {% endif %}
+                </td>
+
+                <td>{{obs.new_age}}</td>
+                <td>
+                  {% if obs.cortesia %}
+                    <a href="#" class="btn btn-outline-danger rounded-pill m-2" title="Vista Previa"><i class="fa-regular fa-eye"></i></a>
+                  {% else %}
+                    <a href="#" class="btn btn-outline-info rounded-pill m-2" title="Vista Previa"><i class="fa-regular fa-eye"></i></a>
+                  {% endif %}
                 </td>
               </tr>
               {% endfor %}
@@ -806,31 +818,39 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form id="addAlergiasForm" method="post" action="">
+        <form id="addObservacionForm" method="post" action="{% url 'agg_obs' idPat=pacientes.idPat %}">
           {% csrf_token %}
-            <input type="hidden" name="idPat" id="idPat" value="{{pacientes.idPat}}">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-floating mb-3">
-                  <textarea class="form-control" name="firstsect" id="firstsect" style="height: 150px;"></textarea>
-                  <label for="firstsect">Primera sección:</label>
-                  <div id="error-nom_da" class="error-messages"></div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-floating mb-3">
-                  <textarea class="form-control" name="secondsect" id="secondsect" style="height: 150px;"></textarea>
-                  <label for="secondsect">Segunda Sección:</label>
-                  <div id="error-nom_da" class="error-messages"></div>
-                </div>
+          <input type="hidden" name="idPat" id="idPat" value="{{pacientes.idPat}}">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <textarea class="form-control" name="firstsect" id="firstsect" style="height: 150px;"></textarea>
+                <label for="firstsect">Primera sección:</label>
+                <div id="error-nom_da" class="error-messages"></div>
               </div>
             </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <textarea class="form-control" name="secondsect" id="secondsect" style="height: 150px;"></textarea>
+                <label for="secondsect">Segunda Sección:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" value="" id="courtesyVisit" name="courtesyVisit">
+            <label class="form-check-label" for="courtesyVisit">
+              Cita de cortesía?
+            </label>
+          </div>
           <button type="submit" class="btn btn-outline-success mt-3">Añadir Observación</button>
         </form>
       </div>
     </div>
   </div>
 </div>
+
+
 
   <div class="row">
     <div class="col-lg-4 d-flex align-items-stretch">

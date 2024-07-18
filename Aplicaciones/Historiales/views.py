@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib import messages
-from datetime import datetime, timedelta, time
+from datetime import datetime, timedelta, time, date
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -145,6 +145,55 @@ def edit_infomom(request, idPat, id):
             print(f"Error al procesar la solicitud: {str(e)}")
             messages.error(request, "Ha ocurrido un error al procesar la solicitud.")
             return redirect('error_p')
+
+@login_required
+@custom_login_required
+def agg_obs(request, idPat):
+    if request.method == 'POST':
+        #try:
+            firstsect = request.POST['firstsect']
+            secondsect = request.POST['secondsect']
+            courtesy_visit = 'courtesyVisit' in request.POST
+
+            # Obtener el paciente
+            patient = Patient.objects.get(idPat=idPat)
+
+            # Calcular la edad en años, meses y días
+            today = date.today()
+            birth_date = patient.birthPat
+
+            years = today.year - birth_date.year
+            months = today.month - birth_date.month
+            days = today.day - birth_date.day
+
+            # Ajustar los valores si es necesario
+            if days < 0:
+                months -= 1
+                days += 30  # Esto es una simplificación; no todos los meses tienen 30 días
+
+            if months < 0:
+                years -= 1
+                months += 12
+
+            age_str = f"{years} años, {months} meses, {days} días"
+
+            # Crear la instancia de observación con los datos del formulario
+            new_observacion = observaciones.objects.create(
+                paciente=patient,
+                firstsect=firstsect,
+                secondsect=secondsect,
+                cortesia=courtesy_visit,
+                new_age=age_str,
+            )
+
+            messages.success(request, 'Observación añadida correctamente')
+            return redirect('doc_patient', idPat=idPat)
+
+        # except Exception as e:
+        #     print(f"Error al procesar la solicitud: {str(e)}")
+        #     messages.error(request, "Ha ocurrido un error al procesar la solicitud.")
+        #     return redirect('error_p')
+
 
 #Página PACIENTES FINAL
 
