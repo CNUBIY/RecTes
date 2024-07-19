@@ -135,7 +135,6 @@
   </div>
 </div>
 
-
 <!-- Edición de Paciente -->
 <div class="modal fade" id="patientModal" tabindex="-1" aria-labelledby="patientModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
@@ -380,7 +379,7 @@
                   <input type="hidden" name="idPat" id="idPat" value="{{ pacientes.idPat }}">
                   <div class="form-group mb-3">
                     <label for="id_mom">Madre:</label>
-                    <select name="id_mom" id="id_mom" class="form-control selectpicker" data-live-search="true" required>
+                    <select name="id_mom" id="id_mom" class="selectpicker form-control" data-live-search="true" required>
                       <option value="">Escoja un representante</option>
                       {% for mama in mom %}
                       <option value="{{ mama.id }}">{{ mama.ape_mom }} {{ mama.nom_mom }}</option>
@@ -484,7 +483,7 @@
                   <input type="hidden" name="idPat" id="idPat" value="{{pacientes.idPat}}">
                   <div class="form-group mb-3">
                     <label for="id_dad">Padre:</label>
-                    <select name="id_dad" id="id_dad" class="form-control selectpicker" required>
+                    <select name="id_dad" id="id_dad" class="selectpicker form-control" required>
                       <option value="">Escoja un representante</option>
                       {% for papa in dad %}
                       <option value="{{ papa.id }}">{{ papa.ape_fat }} {{ papa.nom_fat }}</option>
@@ -511,25 +510,6 @@
 <script>
   $(document).ready(function() {
     $('.selectpicker').selectpicker();
-
-    // Inicializar selectpicker cuando se muestra el modal para mamá
-    $('#momModal').on('shown.bs.modal', function () {
-      $('.selectpicker').selectpicker('refresh');
-    });
-
-    // Inicializar selectpicker cuando se muestra el modal para papá
-    $('#dadModal').on('shown.bs.modal', function () {
-      $('.selectpicker').selectpicker('refresh');
-    });
-
-    // Inicializar selectpicker cuando se expande el acordeón
-    $('#accordionFlushExample').on('shown.bs.collapse', function () {
-      $('.selectpicker').selectpicker('refresh');
-    });
-
-    $('#accordionFlushDadExample').on('shown.bs.collapse', function () {
-      $('.selectpicker').selectpicker('refresh');
-    });
   });
 </script>
 
