@@ -590,10 +590,11 @@
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="infoMomModalLabel">Añadir/Editar Observaciones</h5>
+        <h5 class="modal-title" id="infoMomModalLabel">Añadir Observaciones</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+        {% if pacientes.mom.id %}
         <form action="{% url 'agg_infomom' idPat=pacientes.idPat %}" method="post">
           {% csrf_token %}
           <input type="hidden" name="idPat" id="idPat" value="{{pacientes.idPat}}">
@@ -634,6 +635,9 @@
             <button type="submit" class="btn btn-outline-success" id="saveChangesButton"><i class="fas fa-edit" title="Guardar Cambios"></i></button>
           </div>
         </form>
+        {% else %}
+        <p class="text-center text-warning">Debe ingresar primero a su representante</p>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -648,47 +652,54 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="{% url 'edit_infomom' idPat=pacientes.idPat id=infomom.id %}" method="post">
-          {% csrf_token %}
-          <input type="hidden" name="idPat" id="idPat" value="{{pacientes.idPat}}">
-          <input type="hidden" name="id" id="id" value="{{infomom.id}}">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-floating mb-3">
-                <textarea class="form-control" name="prenatal" id="prenatal" style="height: 150px;">{{ infomom.prenatal }}</textarea>
-                <label for="prenatal">Prenatal:</label>
-                <div id="error-nom_da" class="error-messages"></div>
+        {% if pacientes.mom.id %}
+          {% if infomom.id %}
+          <form action="{% url 'edit_infomom' idPat=pacientes.idPat id=infomom.id %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="idPat" id="idPat" value="{{pacientes.idPat}}">
+            <input type="hidden" name="id" id="id" value="{{infomom.id}}">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <textarea class="form-control" name="prenatal" id="prenatal" style="height: 150px;">{{ infomom.prenatal }}</textarea>
+                  <label for="prenatal">Prenatal:</label>
+                  <div id="error-nom_da" class="error-messages"></div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <textarea class="form-control" name="natal" id="natal" style="height: 150px;">{{ infomom.natal }}</textarea>
+                  <label for="natal">Natal:</label>
+                  <div id="error-nom_da" class="error-messages"></div>
+                </div>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="form-floating mb-3">
-                <textarea class="form-control" name="natal" id="natal" style="height: 150px;">{{ infomom.natal }}</textarea>
-                <label for="natal">Natal:</label>
-                <div id="error-nom_da" class="error-messages"></div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <textarea class="form-control" name="app" id="app" style="height: 150px;">{{ infomom.app }}</textarea>
+                  <label for="app">APP:</label>
+                  <div id="error-nom_da" class="error-messages"></div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <textarea class="form-control" name="apf" id="apf" style="height: 150px;">{{ infomom.apf }}</textarea>
+                  <label for="apf">APF:</label>
+                  <div id="error-nom_da" class="error-messages"></div>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-floating mb-3">
-                <textarea class="form-control" name="app" id="app" style="height: 150px;">{{ infomom.app }}</textarea>
-                <label for="app">APP:</label>
-                <div id="error-nom_da" class="error-messages"></div>
-              </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-outline-success" id="saveChangesButton"><i class="fas fa-edit" title="Guardar Cambios"></i></button>
             </div>
-            <div class="col-md-6">
-              <div class="form-floating mb-3">
-                <textarea class="form-control" name="apf" id="apf" style="height: 150px;">{{ infomom.apf }}</textarea>
-                <label for="apf">APF:</label>
-                <div id="error-nom_da" class="error-messages"></div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-outline-success" id="saveChangesButton"><i class="fas fa-edit" title="Guardar Cambios"></i></button>
-          </div>
-        </form>
+          </form>
+          {% else %}
+          {% endif %}
+        {% else %}
+         <p>No id mom</p>
+        {% endif %}
       </div>
     </div>
   </div>

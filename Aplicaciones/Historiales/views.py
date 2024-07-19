@@ -56,21 +56,31 @@ def doc_inicio (request):
 
 @login_required
 @custom_login_required
-def doc_patient (request,idPat):
-    patbdd=Patient.objects.get(idPat=idPat)
-    genbdd=Gender.objects.all()
-    mombdd=MadreCita.objects.all()
-    dadbdd=PadreCita.objects.all()
-    alerbdd=Alergia.objects.all()
-    alerpatbdd=PatAler.objects.filter(paciente=idPat)
-    obsmom=InfoMom.objects.get(patient=idPat)
-    obsbdd=observaciones.objects.filter(paciente=idPat)
-    # Formatear fechas a YYYY-MM-DD
-    for mom in mombdd:
-        mom.age_mom = mom.age_mom.strftime('%Y-%m-%d') if mom.age_mom else ''
-    for dad in dadbdd:
-        dad.age_fat = dad.age_fat.strftime('%Y-%m-%d') if dad.age_fat else ''
-    return render(request, 'histo/patient.html',{'pacientes':patbdd,'generos':genbdd,'mom':mombdd, 'dad':dadbdd, 'alergias':alerbdd, 'misalergias':alerpatbdd, 'infomom':obsmom, 'observaciones':obsbdd})
+def doc_patient(request, idPat):
+    patbdd = Patient.objects.get(idPat=idPat)
+    genbdd = Gender.objects.all()
+    mombdd = MadreCita.objects.all()
+    dadbdd = PadreCita.objects.all()
+    alerbdd = Alergia.objects.all()
+    alerpatbdd = PatAler.objects.filter(paciente=idPat)
+
+    # Utilizar filter para obtener InfoMom
+    obsmom_qs = InfoMom.objects.filter(patient=idPat)
+    obsmom = obsmom_qs.first() if obsmom_qs.exists() else None
+
+    obsbdd = observaciones.objects.filter(paciente=idPat)
+
+    return render(request, 'histo/patient.html', {
+        'pacientes': patbdd,
+        'generos': genbdd,
+        'mom': mombdd,
+        'dad': dadbdd,
+        'alergias': alerbdd,
+        'misalergias': alerpatbdd,
+        'infomom': obsmom,
+        'observaciones': obsbdd
+    })
+
 
 @login_required
 @custom_login_required
