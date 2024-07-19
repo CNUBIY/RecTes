@@ -48,11 +48,18 @@
                 <div class="card-body p-4">
                   <div class="d-flex justify-content-between align-items-center">
                     <h5><b>Madre</b></h5>
-                    {% if pacientes.mom %}
-                      <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#momModal" title="Editar paciente">
-                         <i class="fas fa-edit"></i>
-                      </button>
-                    {% endif %}
+                    <div class="">
+                      {% if pacientes.mom %}
+                        <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#momModal" title="Editar paciente">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                      {% endif %}
+                      {% if not mom.ruc_mom %}
+                        <button type="button" class="btn btn-outline-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#factMomModal" title="Añadir información">
+                          <i class="fa-solid fa-file-invoice"></i>
+                        </button>
+                      {% endif %}
+                    </div>
                   </div>
                   <br>
                   {% if pacientes.mom %}
@@ -80,11 +87,18 @@
                 <div class="card-body p-4">
                   <div class="d-flex justify-content-between align-items-center">
                     <h5><b>Padre</b></h5>
-                    {% if pacientes.dad %}
-                      <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#dadModal" title="Editar paciente">
-                        <i class="fas fa-edit"></i>
-                      </button>
-                    {% endif %}
+                    <div class="">
+                      {% if pacientes.dad %}
+                        <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#dadModal" title="Editar paciente">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                      {% endif %}
+                      {% if not dad.ruc_fat %}
+                        <button type="button" class="btn btn-outline-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#factDadModal" title="Añadir información">
+                          <i class="fa-solid fa-file-invoice"></i>
+                        </button>
+                      {% endif %}
+                    </div>
                   </div>
                   <br>
                   {% if pacientes.dad %}
@@ -107,14 +121,14 @@
                 <div class="card-body p-4">
                   <div class="d-flex justify-content-between align-items-center">
                     <h5><b>Comprobante de pago</b></h5>
-                    {% if pacientes.mom %}
+                    {% if mom.ruc_mom or dad.ruc_fat %}
                       <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#comprobanteModal" title="Editar datos de comprobante">
                         <i class="fas fa-edit"></i>
                       </button>
                     {% endif %}
                   </div>
                   <br>
-                  {% if pacientes.mom %}
+                  {% if mom.ruc_mom %}
                     <div>
                       <p><b>Nombre:</b> {{ madre_cita.nombre }}</p>
                       <p><b>Teléfono:</b> {{ madre_cita.telefono }}</p>
@@ -122,7 +136,6 @@
                   {% else %}
                     <div class="text-center">
                       <p>Sin datos de pago.</p>
-                      <a href="{% url 'agg_rep' idPat=pacientes.idPat %}" class="btn btn-outline-success rounded-pill"><i class="fa-solid fa-plus"></i></a>
                     </div>
                   {% endif %}
                 </div>
@@ -130,6 +143,69 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Añadir información pagos -->
+<div class="modal fade" id="factMomModal" tabindex="-1" aria-labelledby="factMomModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="factMomModalLabel">Añadir Datos</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="id" id="id" value="{{pacientes.mom.id}}">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" id="nom_mom" name="nom_mom" class="form-control" value="{{pacientes.mom.nom_mom}}" disabled>
+                <label for="nom_mom">Nombres:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" id="ape_mom" name="ape_mom" class="form-control" value="{{pacientes.mom.ape_mom}}" disabled>
+                <label for="ape_mom">Apellidos:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" id="ruc_mom" name="ruc_mom" class="form-control" placeholder="RUC">
+                <label for="ruc_mom">RUC</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" id="telf_mom" name="telf_mom" class="form-control" placeholder="Teléfono">
+                <label for="telf_mom">Teléfono</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-floating mb-3">
+                <textarea class="form-control" name="app" id="app" style="height: 150px;" placeholder="Dirección"></textarea>
+                <label for="app">Dirección:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-outline-success" id="saveChangesButton"><i class="fas fa-edit" title="Guardar Cambios"></i></button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

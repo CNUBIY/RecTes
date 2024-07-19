@@ -18,6 +18,9 @@ class MadreCita(models.Model):
     es_cimom=models.CharField(max_length=150)
     act_mom=models.CharField(max_length=150)
     correo_mom=models.CharField(max_length=150)
+    ruc_mom=models.CharField(null=True, blank=True, max_length=13)
+    dir_mom=models.TextField(null=True,blank=True)
+    telf_mom=models.CharField(max_length=10,null=True,blank=True)
 
     def __str__(self):
         return f"{self.nom_mom} {self.ape_mom}"
@@ -32,6 +35,9 @@ class PadreCita(models.Model):
     ape_fat=models.CharField(max_length=150)
     age_fat=models.DateField()
     act_fat=models.CharField(max_length=150)
+    ruc_fat=models.CharField(null=True, blank=True, max_length=13)
+    dir_fat=models.TextField(null=True,blank=True)
+    telf_fat=models.CharField(max_length=10,null=True,blank=True)
 
     def __str__(self):
         return f"{self.nom_fat} {self.ape_fat}"
