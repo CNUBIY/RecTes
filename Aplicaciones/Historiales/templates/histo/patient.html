@@ -54,7 +54,7 @@
                           <i class="fas fa-edit"></i>
                         </button>
                       {% endif %}
-                      {% if not mom.ruc_mom %}
+                      {% if not pacientes.mom.ruc_mom %}
                         <button type="button" class="btn btn-outline-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#factMomModal" title="Añadir información">
                           <i class="fa-solid fa-file-invoice"></i>
                         </button>
@@ -93,7 +93,7 @@
                           <i class="fas fa-edit"></i>
                         </button>
                       {% endif %}
-                      {% if not dad.ruc_fat %}
+                      {% if not pacientes.dad.ruc_fat %}
                         <button type="button" class="btn btn-outline-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#factDadModal" title="Añadir información">
                           <i class="fa-solid fa-file-invoice"></i>
                         </button>
@@ -128,26 +128,33 @@
                     {% endif %}
                   </div>
                   <br>
-                  {% if pacientes.mom.ruc_mom %}
-                    <div>
-                      <b>MADRE</b>
-                      <p><b>Nombre:</b> {{ pacientes.mom.nom_mom }} {{ pacientes.mom.ape_mom }}</p>
-                      <p><b>RUC/CI:</b> {{ pacientes.mom.ruc_mom }}</p>
-                      <p><b>Teléfono:</b> {{ pacientes.mom.telf_mom }}</p>
-                      <p><b>Dirección:</b> {{ pacientes.mom.dir_mom }}</p>
-                    </div>
-                  {% elif pacientes.dad.ruc_fat %}
-                    <div>
-                      <p><b>Nombre:</b> {{ pacientes.dad.nom_fat }} {{ pacientes.dad.ape_fat }}</p>
-                      <p><b>RUC/CI:</b> {{ pacientes.dad.ruc_fat }}</p>
-                      <p><b>Teléfono:</b> {{ pacientes.dad.telf_fat }}</p>
-                      <p><b>Dirección:</b> {{ pacientes.dad.dir_fat }}</p>
-                    </div>
-                  {% else %}
-                    <div class="text-center">
-                      <p>Sin datos de pago.</p>
-                    </div>
-                  {% endif %}
+                  <div class="list-container">
+                    {% if pacientes.mom.ruc_mom %}
+                      <div>
+                        <b>MADRE:</b>
+                        <p><b>Nombre:</b> {{ pacientes.mom.nom_mom }} {{ pacientes.mom.ape_mom }}</p>
+                        <p><b>RUC/CI:</b> {{ pacientes.mom.ruc_mom }}</p>
+                        <p><b>Teléfono:</b> {{ pacientes.mom.telf_mom }}</p>
+                        <p><b>Dirección:</b> {{ pacientes.mom.dir_mom }}</p>
+                      </div>
+                    {% endif %}
+
+                    {% if pacientes.dad.ruc_fat %}
+                      <div>
+                        <b>PADRE:</b>
+                        <p><b>Nombre:</b> {{ pacientes.dad.nom_fat }} {{ pacientes.dad.ape_fat }}</p>
+                        <p><b>RUC/CI:</b> {{ pacientes.dad.ruc_fat }}</p>
+                        <p><b>Teléfono:</b> {{ pacientes.dad.telf_fat }}</p>
+                        <p><b>Dirección:</b> {{ pacientes.dad.dir_fat }}</p>
+                      </div>
+                    {% endif %}
+
+                    {% if not pacientes.mom.ruc_mom and not pacientes.dad.ruc_fat %}
+                      <div class="text-center">
+                        <p>Sin datos de pago.</p>
+                      </div>
+                    {% endif %}
+                  </div>
                 </div>
               </div>
             </div>
@@ -230,37 +237,37 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="" method="post">
+        <form action="{% url 'pagosPapa' idPat=pacientes.idPat %}" method="post">
           {% csrf_token %}
           <input type="hidden" name="id" id="id" value="{{pacientes.dad.id}}">
           <div class="row">
             <div class="col-md-6">
               <div class="form-floating mb-3">
-                <input type="text" id="nom_mom" name="nom_mom" class="form-control" value="{{pacientes.dad.nom_fat}}" disabled>
-                <label for="nom_mom">Nombres:</label>
+                <input type="text" id="nom_fat" name="nom_fat" class="form-control" value="{{pacientes.dad.nom_fat}}" disabled>
+                <label for="nom_fat">Nombres:</label>
                 <div id="error-nom_da" class="error-messages"></div>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-floating mb-3">
-                <input type="text" id="ape_mom" name="ape_mom" class="form-control" value="{{pacientes.dad.ape_fat}}" disabled>
-                <label for="ape_mom">Apellidos:</label>
+                <input type="text" id="ape_fat" name="ape_fat" class="form-control" value="{{pacientes.dad.ape_fat}}" disabled>
+                <label for="ape_fat">Apellidos:</label>
                 <div id="error-nom_da" class="error-messages"></div>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-6">
-              <div class="form-floating mb-3">
-                <input type="text" id="ruc_mom" name="ruc_mom" class="form-control" placeholder="RUC">
-                <label for="ruc_mom">RUC</label>
+              <div class="form-floating mb-fat">
+                <input type="text" id="ruc_fat" name="ruc_fat" class="form-control" placeholder="RUC">
+                <label for="ruc_fat">RUC</label>
                 <div id="error-nom_da" class="error-messages"></div>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-floating mb-3">
-                <input type="text" id="telf_mom" name="telf_mom" class="form-control" placeholder="Teléfono">
-                <label for="telf_mom">Teléfono</label>
+                <input type="text" id="telf_fat" name="telf_fat" class="form-control" placeholder="Teléfono">
+                <label for="telf_fat">Teléfono</label>
                 <div id="error-nom_da" class="error-messages"></div>
               </div>
             </div>
@@ -268,8 +275,8 @@
           <div class="row">
             <div class="col-md-12">
               <div class="form-floating mb-3">
-                <textarea class="form-control" name="app" id="app" style="height: 150px;" placeholder="Dirección"></textarea>
-                <label for="app">Dirección:</label>
+                <textarea class="form-control" name="dir_fat" id="dir_fat" style="height: 150px;" placeholder="Dirección"></textarea>
+                <label for="dir_fat">Dirección:</label>
                 <div id="error-nom_da" class="error-messages"></div>
               </div>
             </div>

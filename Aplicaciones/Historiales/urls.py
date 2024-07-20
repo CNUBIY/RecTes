@@ -16,6 +16,7 @@ urlpatterns=[
     path('doc_inicio/doc_patient/<int:idPat>/agg_infomom', views.agg_infomom, name='agg_infomom'),
     path('doc_inicio/doc_patient/<int:idPat>/agg_obs', views.agg_obs, name='agg_obs'),
     path('doc_inicio/doc_patient/<int:idPat>/pagosMama', views.pagosMama, name='pagosMama'),
+    path('doc_inicio/doc_patient/<int:idPat>/pagosPapa', views.pagosPapa, name='pagosPapa'),
     path('historiales/doc_inicio/doc_patient/<int:idPat>/edit_infomom/<int:id>/', views.edit_infomom, name='edit_infomom'),
     path('historiales/add_alergias/<int:idPat>/', views.add_alergias, name='add_alergias'),
     path('historiales/delete_alergia/<int:idPat>/<int:alergia_id>/', views.delete_alergia, name='delete_alergia'),

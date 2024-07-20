@@ -222,6 +222,25 @@ def pagosMama(request, idPat):
     else:
         messages.error(request,'No se pudo guardar la información')
         return redirect('doc_patient', idPat=idPat)
+
+def pagosPapa(request, idPat):
+    if request.method == 'POST':
+        id= request.POST['id']
+        ruc_fat= request.POST['ruc_fat']
+        telf_fat = request.POST['telf_fat']
+        dir_fat = request.POST['dir_fat']
+
+        pagosFat=PadreCita.objects.get(id=id)
+        pagosFat.ruc_fat=ruc_fat
+        pagosFat.telf_fat=telf_fat
+        pagosFat.dir_fat=dir_fat
+        pagosFat.save()
+        messages.success(request,'Información agregada correctamente')
+        return redirect('doc_patient', idPat=idPat)
+
+    else:
+        messages.error(request,'No se pudo guardar la información')
+        return redirect('doc_patient', idPat=idPat)
 #Página PACIENTES FINAL
 
 
