@@ -204,7 +204,24 @@ def agg_obs(request, idPat):
         #     messages.error(request, "Ha ocurrido un error al procesar la solicitud.")
         #     return redirect('error_p')
 
+def pagosMama(request, idPat):
+    if request.method == 'POST':
+        id= request.POST['id']
+        ruc_mom= request.POST['ruc_mom']
+        telf_mom = request.POST['telf_mom']
+        dir_mom = request.POST['dir_mom']
 
+        pagosMom=MadreCita.objects.get(id=id)
+        pagosMom.ruc_mom=ruc_mom
+        pagosMom.telf_mom=telf_mom
+        pagosMom.dir_mom=dir_mom
+        pagosMom.save()
+        messages.success(request,'Información agregada correctamente')
+        return redirect('doc_patient', idPat=idPat)
+
+    else:
+        messages.error(request,'No se pudo guardar la información')
+        return redirect('doc_patient', idPat=idPat)
 #Página PACIENTES FINAL
 
 

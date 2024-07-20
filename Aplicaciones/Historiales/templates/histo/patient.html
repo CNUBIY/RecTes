@@ -121,21 +121,22 @@
                 <div class="card-body p-4">
                   <div class="d-flex justify-content-between align-items-center">
                     <h5><b>Comprobante de pago</b></h5>
-                    {% if mom.ruc_mom or dad.ruc_fat %}
+                    {% if pacientes.mom.ruc_mom or pacientes.dad.ruc_fat %}
                       <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#comprobanteModal" title="Editar datos de comprobante">
                         <i class="fas fa-edit"></i>
                       </button>
                     {% endif %}
                   </div>
                   <br>
-                  {% if mom.ruc_mom %}
+                  {% if pacientes.mom.ruc_mom %}
                     <div>
-                      <p><b>Nombre:</b> {{ pacientes.dad.nom_mom }} {{ pacientes.dad.ape_mom }}</p>
-                      <p><b>RUC/CI:</b> {{ pacientes.dad.ruc_mom }}</p>
-                      <p><b>Teléfono:</b> {{ pacientes.dad.telf_mom }}</p>
-                      <p><b>Dirección:</b> {{ pacientes.dad.dir_mom }}</p>
+                      <b>MADRE</b>
+                      <p><b>Nombre:</b> {{ pacientes.mom.nom_mom }} {{ pacientes.mom.ape_mom }}</p>
+                      <p><b>RUC/CI:</b> {{ pacientes.mom.ruc_mom }}</p>
+                      <p><b>Teléfono:</b> {{ pacientes.mom.telf_mom }}</p>
+                      <p><b>Dirección:</b> {{ pacientes.mom.dir_mom }}</p>
                     </div>
-                  {% elif dad.ruc_fat %}
+                  {% elif pacientes.dad.ruc_fat %}
                     <div>
                       <p><b>Nombre:</b> {{ pacientes.dad.nom_fat }} {{ pacientes.dad.ape_fat }}</p>
                       <p><b>RUC/CI:</b> {{ pacientes.dad.ruc_fat }}</p>
@@ -166,7 +167,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="" method="post">
+        <form action="{% url 'pagosMama' idPat=pacientes.idPat %}" method="post">
           {% csrf_token %}
           <input type="hidden" name="id" id="id" value="{{pacientes.mom.id}}">
           <div class="row">
@@ -204,8 +205,8 @@
           <div class="row">
             <div class="col-md-12">
               <div class="form-floating mb-3">
-                <textarea class="form-control" name="app" id="app" style="height: 150px;" placeholder="Dirección"></textarea>
-                <label for="app">Dirección:</label>
+                <textarea class="form-control" name="dir_mom" id="dir_mom" style="height: 150px;" placeholder="Dirección"></textarea>
+                <label for="dir_mom">Dirección:</label>
                 <div id="error-nom_da" class="error-messages"></div>
               </div>
             </div>
