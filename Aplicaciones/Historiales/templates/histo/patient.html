@@ -291,6 +291,153 @@
   </div>
 </div>
 
+<!-- Editar información de pagos -->
+<div class="modal fade" id="comprobanteModal" tabindex="-1" aria-labelledby="comprobanteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="comprobanteModalLabel">Edición de Representantes</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+          <!-- Formulario para Registrar a Mamá -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="flush-headingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="true" aria-controls="flush-collapseOne">
+                Editar a Mamá
+              </button>
+            </h2>
+            <div id="flush-collapseOne" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+              <div class="accordion-body">
+                {% if pacientes.mom.ruc_mom %}
+                <form action="{% url 'editPagosMama' idPat=pacientes.idPat %}" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="id" id="id" value="{{pacientes.mom.id}}">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-floating mb-3">
+                        <input type="text" id="nom_mom" name="nom_mom" class="form-control" value="{{pacientes.mom.nom_mom}}" disabled>
+                        <label for="nom_mom">Nombres:</label>
+                        <div id="error-nom_da" class="error-messages"></div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-floating mb-3">
+                        <input type="text" id="ape_mom" name="ape_mom" class="form-control" value="{{pacientes.mom.ape_mom}}" disabled>
+                        <label for="ape_mom">Apellidos:</label>
+                        <div id="error-nom_da" class="error-messages"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-floating mb-3">
+                        <input type="text" id="ruc_mom" name="ruc_mom" class="form-control" placeholder="RUC" value="{{pacientes.mom.ruc_mom}}">
+                        <label for="ruc_mom">RUC</label>
+                        <div id="error-nom_da" class="error-messages"></div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-floating mb-3">
+                        <input type="text" id="telf_mom" name="telf_mom" class="form-control" placeholder="Teléfono" value="{{pacientes.mom.telf_mom}}">
+                        <label for="telf_mom">Teléfono</label>
+                        <div id="error-nom_da" class="error-messages"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-floating mb-3">
+                        <textarea class="form-control" name="dir_mom" id="dir_mom" style="height: 150px;" placeholder="Dirección" >{{pacientes.mom.dir_mom}}</textarea>
+                        <label for="dir_mom">Dirección:</label>
+                        <div id="error-nom_da" class="error-messages"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-outline-success" id="saveChangesButton"><i class="fas fa-edit" title="Guardar Cambios"></i></button>
+                  </div>
+                </form>
+                {% else %}
+                  <p class=" text-warning text-center ">Sin datos registrados</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <!-- Formulario para comprobante Padre -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="flush-headingTwo">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                Padre
+              </button>
+            </h2>
+            <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+              <div class="accordion-body">
+                {% if pacientes.dad.ruc_fat %}
+                <form action="{% url 'editPagosPapa' idPat=pacientes.idPat %}" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="id" id="id" value="{{pacientes.dad.id}}">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-floating mb-3">
+                        <input type="text" id="nom_fat" name="nom_fat" class="form-control" value="{{pacientes.dad.nom_fat}}" disabled>
+                        <label for="nom_fat">Nombres:</label>
+                        <div id="error-nom_da" class="error-messages"></div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-floating mb-3">
+                        <input type="text" id="ape_fat" name="ape_fat" class="form-control" value="{{pacientes.dad.ape_fat}}" disabled>
+                        <label for="ape_fat">Apellidos:</label>
+                        <div id="error-nom_da" class="error-messages"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-floating mb-fat">
+                        <input type="text" id="ruc_fat" name="ruc_fat" class="form-control" placeholder="RUC" value="{{pacientes.dad.ruc_fat}}">
+                        <label for="ruc_fat">RUC</label>
+                        <div id="error-nom_da" class="error-messages"></div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-floating mb-3">
+                        <input type="text" id="telf_fat" name="telf_fat" class="form-control" placeholder="Teléfono" value="{{pacientes.dad.telf_fat}}">
+                        <label for="telf_fat">Teléfono</label>
+                        <div id="error-nom_da" class="error-messages"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-floating mb-3">
+                        <textarea class="form-control" name="dir_fat" id="dir_fat" style="height: 150px;" placeholder="Dirección">{{pacientes.dad.dir_fat}}</textarea>
+                        <label for="dir_fat">Dirección:</label>
+                        <div id="error-nom_da" class="error-messages"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-outline-success" id="saveChangesButton"><i class="fas fa-edit" title="Guardar Cambios"></i></button>
+                  </div>
+                </form>
+                {% else %}
+                 <p class="text-warning text-center ">Sin datos registrados</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Edición de Paciente -->
 <div class="modal fade" id="patientModal" tabindex="-1" aria-labelledby="patientModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
