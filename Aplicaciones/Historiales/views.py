@@ -679,4 +679,33 @@ def newMedicina(request):
         return redirect('medicamentos')
     else:
         messages.error(request,'No se pudo agregar el medicamento')
+
+@login_required
+@custom_login_required
+def deleteMedicina(request, id):
+    try:
+        eliminarMedicina = medicina.objects.get(id=id)
+        eliminarMedicina.delete()
+        messages.success(request, 'Medicamento eliminada correctamente')
+    except Alergia.DoesNotExist:
+        messages.error(request, 'El medicamento no existe')
+    return redirect('medicamentos')
+
+@login_required
+@custom_login_required
+def editMedicina(request, id):
+    if request.method == 'POST':
+        nombregen_med = request.POST['nombregen_med']
+        nombrecom_med = request.POST['nombrecom_med']
+        tipo_med = request.POST['tipo_med']
+        editMed = get_object_or_404(medicina, id=id)
+        editMed.nombregen_med = nombregen_med
+        editMed.nombrecom_med = nombrecom_med
+        editMed.tipo_med = tipo_med
+        editMed.save()
+        messages.success(request, 'Medicamento editado correctamente')
+        return redirect('medicamentos')  # Cambia 'reportMedicina' a la vista a la que deseas redirigir después de la edición
+    else:
+        messages.error(request, 'No se pudo editar el medicamento')
+        return redirect('medicamentos')
 #PÁGINA MEDICAMENTOS FINAL

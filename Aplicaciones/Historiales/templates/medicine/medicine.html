@@ -46,7 +46,7 @@
                       <td class="text-center">{{medicina.nombrecom_med}}</td>
                       <td class="text-center">{{medicina.tipo_med}}</td>
                       <td class="text-center">
-                        <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#editModal" data-id="{{ cie.id }}" data-nombre="{{ cie.nombrecie }}" data-cod3="{{ cie.cod3 }}">
+                        <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#editMedModal" data-id="{{ medicina.id }}" data-nombregen="{{ medicina.nombregen_med }}" data-nombrecom="{{ medicina.nombrecom_med }}" data-tipo="{{ medicina.tipo_med }}">
                           <i class="fas fa-edit"></i>
                         </button>
                           <a href="javascript:void(0)" onclick="deletecie('{% url 'deletecie' id=medicina.id %}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
@@ -97,30 +97,35 @@
     </div>
   </div>
 
-  <!-- Modal editar CIE10-->
-  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <!-- Modal editar Medicamento-->
+  <div class="modal fade" id="editMedModal" tabindex="-1" aria-labelledby="editMedModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="editModalLabel">Editar Categoría</h1>
+          <h1 class="modal-title fs-5" id="editMedModalLabel">Editar Medicamento</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form method="post" id="cie-form">
+          <form method="post" id="medicina-form">
             {% csrf_token %}
-            <input type="hidden" name="id" id="id">
+            <input type="hidden" name="id" id="med-id">
             <div class="form-floating mb-3">
-              <input type="text" id="cod3" name="cod3" class="form-control" placeholder="Código 3:">
-              <label for="cod3">Código 3:</label>
+              <input type="text" id="nombregen_med" name="nombregen_med" class="form-control" placeholder="Nombre genérico">
+              <label for="nombregen_med">Nombre genérico:</label>
               <div id="error-nom_da" class="error-messages"></div>
             </div>
             <div class="form-floating mb-3">
-              <input type="text" id="nombrecie" name="nombrecie" class="form-control" placeholder="Categoría:">
-              <label for="nombrecie">Categoría:</label>
+              <input type="text" id="nombrecom_med" name="nombrecom_med" class="form-control" placeholder="Nombre comercial">
+              <label for="nombrecom_med">Nombre comercial:</label>
+              <div id="error-nom_da" class="error-messages"></div>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" id="tipo_med" name="tipo_med" class="form-control" placeholder="Tipo de medicina">
+              <label for="tipo_med">Tipo de medicina:</label>
               <div id="error-nom_da" class="error-messages"></div>
             </div>
             <div class="modal-footer">
-              <button type="submit" class="btn btn-warning" id="editarBtn" disabled>Editar categoría</button>
+              <button type="submit" class="btn btn-warning" id="editarMedBtn" disabled>Editar medicamento</button>
               <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
           </form>
@@ -131,45 +136,52 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      var editModal = document.getElementById('editModal');
-      var form = document.getElementById('cie-form');
-      var editButton = document.getElementById('editarBtn');
-      var initialCod3 = '';
-      var initialNombreCie = '';
+      var editMedModal = document.getElementById('editMedModal');
+      var form = document.getElementById('medicina-form');
+      var editButton = document.getElementById('editarMedBtn');
+      var initialNombregenMed = '';
+      var initialNombrecomMed = '';
+      var initialTipoMed = '';
 
-      editModal.addEventListener('show.bs.modal', function (event) {
+      editMedModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget; // Botón que activó el modal
         var id = button.getAttribute('data-id');
-        var cod3 = button.getAttribute('data-cod3');
-        var nombrecie = button.getAttribute('data-nombre');
+        var nombregen_med = button.getAttribute('data-nombregen');
+        var nombrecom_med = button.getAttribute('data-nombrecom');
+        var tipo_med = button.getAttribute('data-tipo');
 
-        // Rellenar el formulario del modal con los datos de la categoría
-        var idInput = editModal.querySelector('#id');
-        var cod3Input = editModal.querySelector('#cod3');
-        var nombrecieInput = editModal.querySelector('#nombrecie');
+        // Rellenar el formulario del modal con los datos del medicamento
+        var idInput = editMedModal.querySelector('#med-id');
+        var nombregenMedInput = editMedModal.querySelector('#nombregen_med');
+        var nombrecomMedInput = editMedModal.querySelector('#nombrecom_med');
+        var tipoMedInput = editMedModal.querySelector('#tipo_med');
 
         idInput.value = id;
-        cod3Input.value = cod3;
-        nombrecieInput.value = nombrecie;
-        initialCod3 = cod3;
-        initialNombreCie = nombrecie;
+        nombregenMedInput.value = nombregen_med;
+        nombrecomMedInput.value = nombrecom_med;
+        tipoMedInput.value = tipo_med;
+        initialNombregenMed = nombregen_med;
+        initialNombrecomMed = nombrecom_med;
+        initialTipoMed = tipo_med;
 
         // Deshabilitar el botón de editar inicialmente
         editButton.disabled = true;
 
         // Actualizar la acción del formulario
-        form.action = ''.replace('0', id);
+        form.action = '{% url "editMedicina" id=0 %}'.replace('0', id);
       });
 
       form.addEventListener('input', function() {
-        if (form.cod3.value.trim() !== initialCod3.trim() || form.nombrecie.value.trim() !== initialNombreCie.trim()) {
+        if (form.nombregen_med.value.trim() !== initialNombregenMed.trim() ||
+            form.nombrecom_med.value.trim() !== initialNombrecomMed.trim() ||
+            form.tipo_med.value.trim() !== initialTipoMed.trim()) {
           editButton.disabled = false;
         } else {
           editButton.disabled = true;
         }
       });
 
-      $('#editModal').on('hidden.bs.modal', function () {
+      $('#editMedModal').on('hidden.bs.modal', function () {
         editButton.disabled = true;
       });
     });
