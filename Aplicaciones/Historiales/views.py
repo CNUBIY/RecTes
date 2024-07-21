@@ -629,6 +629,17 @@ def newcie(request):
 
 @login_required
 @custom_login_required
+def deletecie(request, id):
+    try:
+        eliminarCie = Cie10.objects.get(id=id)
+        eliminarCie.delete()
+        messages.success(request, 'Categoría eliminada correctamente')
+    except Alergia.DoesNotExist:
+        messages.error(request, 'La categoría no existe')
+    return redirect('reportcie')
+
+@login_required
+@custom_login_required
 def editcie(request, id):
     if request.method == 'POST':
         cod3 = request.POST['cod3']
