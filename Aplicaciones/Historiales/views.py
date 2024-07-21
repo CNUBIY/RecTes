@@ -585,4 +585,20 @@ def deleteAlergia(request, id):
         messages.error(request, 'La alergia no existe')
     return redirect('alergias')
 
+@login_required
+@custom_login_required
+def editAlergia(request, id):
+    if request.method == 'POST':
+        id = request.POST['id']
+        nombreAlergia = request.POST['nombreAlergia']
+
+        editAlergia=Alergia.objects.get(id=id)
+        editAlergia.nombreAlergia=nombreAlergia
+        editAlergia.save()
+        messages.success(request,'Alergia editada correctamente')
+        return redirect('alergias')
+
+    else:
+        messages.error(request,'No se pudo agregar la alergia')
+        return redirect('alergias')
 #PÁGINA ALERGIAS

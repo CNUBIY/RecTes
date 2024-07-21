@@ -88,7 +88,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form action="" method="post" id="alergia-form">
+          <form method="post" id="alergia-form">
             {% csrf_token %}
             <input type="hidden" name="id" id="alergia-id">
             <div class="form-floating mb-3">
@@ -105,44 +105,47 @@
       </div>
     </div>
   </div>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      var editModal = document.getElementById('editModal');
-      var form = document.getElementById('alergia-form');
-      var editButton = document.getElementById('editarBtn');
-      var initialNombreAlergia = '';
 
-      editModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget; // Botón que activó el modal
-        var alergiaId = button.getAttribute('data-id');
-        var nombreAlergia = button.getAttribute('data-nombre');
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var editModal = document.getElementById('editModal');
+    var form = document.getElementById('alergia-form');
+    var editButton = document.getElementById('editarBtn');
+    var initialNombreAlergia = '';
 
-        // Rellenar el formulario del modal con los datos de la alergia
+    editModal.addEventListener('show.bs.modal', function (event) {
+      var button = event.relatedTarget; // Botón que activó el modal
+      var alergiaId = button.getAttribute('data-id');
+      var nombreAlergia = button.getAttribute('data-nombre');
 
-        var alergiaIdInput = editModal.querySelector('#alergia-id');
-        var nombreAlergiaInput = editModal.querySelector('#nombreAlergia');
+      // Rellenar el formulario del modal con los datos de la alergia
+      var alergiaIdInput = editModal.querySelector('#alergia-id');
+      var nombreAlergiaInput = editModal.querySelector('#nombreAlergia');
 
-        alergiaIdInput.value = alergiaId;
-        nombreAlergiaInput.value = nombreAlergia;
-        initialNombreAlergia = nombreAlergia;
+      alergiaIdInput.value = alergiaId;
+      nombreAlergiaInput.value = nombreAlergia;
+      initialNombreAlergia = nombreAlergia;
 
-        // Deshabilitar el botón de editar inicialmente
-        editButton.disabled = true;
-      });
+      // Deshabilitar el botón de editar inicialmente
+      editButton.disabled = true;
 
-      form.addEventListener('input', function() {
-        if (form.nombreAlergia.value.trim() !== initialNombreAlergia.trim()) {
-          editButton.disabled = false;
-        } else {
-          editButton.disabled = true;
-        }
-      });
-
-      $('#editModal').on('hidden.bs.modal', function () {
-        editButton.disabled = true;
-      });
+      // Actualizar la acción del formulario
+      form.action = '{% url "editAlergia" id=0 %}'.replace('0', alergiaId);
     });
-  </script>
+
+    form.addEventListener('input', function() {
+      if (form.nombreAlergia.value.trim() !== initialNombreAlergia.trim()) {
+        editButton.disabled = false;
+      } else {
+        editButton.disabled = true;
+      }
+    });
+
+    $('#editModal').on('hidden.bs.modal', function () {
+      editButton.disabled = true;
+    });
+  });
+</script>
 
   <!-- CONFIGURACIÓN DE TABLA -->
   <script type="text/javascript">
