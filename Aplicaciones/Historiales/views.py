@@ -333,6 +333,7 @@ def new_patient(request):
 
     return render(request, 'patients/new.html', {'pacientes': patbdd, 'generos': genbdd})
 
+
 @login_required
 @custom_login_required
 def edit_patient(request, idPat):

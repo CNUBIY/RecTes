@@ -1062,73 +1062,62 @@
 
   </div>
 
-<div class="row">
-  <div class="col-md-12">
-    <div class="card w-100">
-      <div class="card-body p-4">
-        <div class="d-flex justify-content-between align-items-center">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card w-100">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-9 fw-semibold">Observaciones</h5>
             <button type="button" class="btn btn-outline-success rounded-pill" data-bs-toggle="modal" data-bs-target="#obsModal" title="Añadir Observación">
-                <i class="fa-solid fa-plus"></i>
+              <i class="fa-solid fa-plus"></i>
             </button>
-        </div>
-        {% if observaciones %}
-        <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
-          <thead class="text-dark fs-4">
-            <tr>
-              <th class="border-bottom-0">
-                <h6 class="fw-semibold mb-0">#</h6>
-              </th>
-              <th class="border-bottom-0">
-                <h6 class="fw-semibold mb-0">Fecha de Creación</h6>
-              </th>
-              <th class="border-bottom-0">
-                <h6 class="fw-semibold mb-0">Tipo</h6>
-              </th>
-              <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">Edad Actual</h6>
-              </th>
-              <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">Acciones</h6>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for obs in observaciones %}
-              <tr>
-                <td>
-                  {{obs.id}}
-                </td>
-                <td>{{obs.creation}}</td>
-                <td>
-                  {% if obs.cortesia %}
-                    <span class="text-danger"> Cita de cortesía</span>
-                  {% else %}
-                    <span class="text-info"> Cita normal</span>
-                  {% endif %}
-                </td>
-
-                <td>{{obs.new_age}}</td>
-                <td>
-                  {% if obs.cortesia %}
+          </div>
+          {% if observaciones %}
+          <div class="table-responsive">
+            <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
+              <thead class="text-dark fs-4">
+                <tr>
+                  <th class="border-bottom-0"><h6 class="fw-semibold mb-0">#</h6></th>
+                  <th class="border-bottom-0"><h6 class="fw-semibold mb-0">Fecha de Creación</h6></th>
+                  <th class="border-bottom-0"><h6 class="fw-semibold mb-0">Tipo</h6></th>
+                  <th class="border-bottom-0"><h6 class="fw-semibold mb-0">Edad Actual</h6></th>
+                  <th class="border-bottom-0"><h6 class="fw-semibold mb-0">Acciones</h6></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for obs in observaciones %}
+                <tr>
+                  <td>{{ obs.id }}</td>
+                  <td>{{ obs.creation }}</td>
+                  <td>
+                    {% if obs.cortesia %}
+                    <span class="text-danger">Cita de cortesía</span>
+                    {% else %}
+                    <span class="text-info">Cita normal</span>
+                    {% endif %}
+                  </td>
+                  <td>{{ obs.new_age }}</td>
+                  <td>
+                    {% if obs.cortesia %}
                     <a href="#" class="btn btn-outline-danger rounded-pill m-2" title="Vista Previa"><i class="fa-regular fa-eye"></i></a>
-                  {% else %}
-                  <a href="{% url 'viewobs' id=obs.id %}" class="btn btn-outline-info rounded-pill m-2" title="Vista Previa"><i class="fa-regular fa-eye"></i></a>
-                  {% endif %}
-                </td>
-              </tr>
-              {% endfor %}
-          </tbody>
-        </table>
-        {% else %}
+                    {% else %}
+                    <a href="{% url 'viewobs' id=obs.id %}" class="btn btn-outline-info rounded-pill m-2" title="Vista Previa"><i class="fa-regular fa-eye"></i></a>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
           <div class="text-center">
             <p><b>Sin observaciones registradas.</b></p>
           </div>
-        {% endif %}
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>
-</div>
 
 <!-- Modal de Añadir Observaciones -->
 <div class="modal fade" id="obsModal" tabindex="-1" aria-labelledby="obsModalLabel" aria-hidden="true">
