@@ -34,4 +34,7 @@ urlpatterns=[
     #OBSERVACIONES
     path('doc_inicio/viewobs/<int:id>/', views.viewobs, name='viewobs'),
     path('doc_inicio/viewobs/<int:id>/edit_obs', views.edit_obs, name='edit_obs'),
+
+    #ALERGIAS
+    path('doc_inicio/alergias/',views.alergias, name='alergias'),
 ]

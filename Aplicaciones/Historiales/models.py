@@ -115,3 +115,11 @@ class Cie10(models.Model):
     nombrecie=models.CharField(max_length=250)
     def __str__(self):
         return f"{self.cod3}. {self.nombrecie}"
+
+class medicina(models.Model):
+    id = models.AutoField(primary_key=True)
+    nombregen_med=models.CharField(max_length=150)
+    nombrecom_med=models.CharField(max_length=150)
+    tipo_med= models.CharField(max_length=150)
+    def __str__(self):
+        return f"{self.nombrecom_med} -> {self.tipo_med}"

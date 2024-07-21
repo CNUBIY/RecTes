@@ -546,3 +546,15 @@ def edit_obs(request, id):
         return redirect('viewobs',id=id)
 
 #PÁGINA VISTA OBSERVACIONES FINAL
+
+
+#PÁGINA ALERGIAS
+
+@login_required
+@custom_login_required
+def alergias(request):
+    alerbdd=Alergia.objects.all()
+
+    return render(request, 'alergy/alergies.html',{'alergias':alerbdd})
+
+#PÁGINA ALERGIAS
