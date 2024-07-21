@@ -13,6 +13,7 @@ from django.utils.decorators import method_decorator
 from Aplicaciones.Citas.middleware import login_required as custom_login_required
 from .models import Patient, Gender, MadreCita, PadreCita, Alergia, PatAler, InfoMom, observaciones, Cie10, medicina
 from django.views.decorators.http import require_POST
+from dateutil.relativedelta import relativedelta
 # Create your views here.
 
 
@@ -289,6 +290,7 @@ def editPagosPapa(request, idPat):
 #Página CREAR PACIENTE INICIO
 @login_required
 @custom_login_required
+
 def new_patient(request):
     patbdd = Patient.objects.all()
     genbdd = Gender.objects.all()
@@ -298,7 +300,7 @@ def new_patient(request):
             namePat = request.POST['namePat']
             lastnPat = request.POST['lastnPat']
             pldatePat = request.POST['pldatePat']
-            birthPat = request.POST['birthPat']
+            birthPat = datetime.strptime(request.POST['birthPat'], '%Y-%m-%d').date()
             placePat = request.POST['placePat']
             natiPat = request.POST['natiPat']
             ciPat = request.POST['ciPat']
@@ -308,6 +310,11 @@ def new_patient(request):
             cell = request.POST['cell']
             tf_tra = request.POST['tf_tra']
             seguroPat = 'seguroPat' in request.POST
+
+            # Calcular la edad de la primera cita
+            today = datetime.today().date()
+            diff = relativedelta(today, birthPat)
+            fagePat = f"{diff.years} años, {diff.months} meses y {diff.days} días"
 
             new_pat = Patient.objects.create(
                 namePat=namePat,
@@ -321,7 +328,8 @@ def new_patient(request):
                 tf_casa=tf_casa,
                 cell=cell,
                 tf_tra=tf_tra,
-                seguroPat=seguroPat
+                seguroPat=seguroPat,
+                fagePat=fagePat  # Guardar la edad de la primera cita
             )
             messages.success(request, "Paciente registrado correctamente.")
             return redirect('doc_inicio')
@@ -353,6 +361,7 @@ def edit_patient(request, idPat):
             cell = request.POST['cell']
             tf_tra = request.POST['tf_tra']
             seguroPat = 'seguroPat' in request.POST
+            fagePat = request.POST['fagePat']
 
             patEdit = Patient.objects.get(idPat=idPat)
             patEdit.namePat = namePat
@@ -367,6 +376,7 @@ def edit_patient(request, idPat):
             patEdit.cell = cell
             patEdit.tf_tra = tf_tra
             patEdit.seguroPat = seguroPat
+            patEdit.fagePat = fagePat
             patEdit.save()
 
             messages.success(request, 'Paciente editado correctamente')

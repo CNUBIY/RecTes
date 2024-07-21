@@ -23,7 +23,7 @@
               <p><b>Nombres y Apellidos:</b> {{pacientes.lastnPat}} {{pacientes.namePat}}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <p><b>Lugar y Fecha de Nacimiento: </b>{{pacientes.pldatePat}} - {{pacientes.birthPat}}</p>
-                <p><b>Edad 1° Cita:</b> 21</p>
+                <p><b>Edad 1° Cita:</b> {{pacientes.fagePat}}</p>
               </div>
               <div class="d-flex justify-content-between align-items-center">
                 <p><b>Nacionalidad: </b>{{pacientes.natiPat}}</p>
@@ -53,11 +53,11 @@
                         <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#momModal" title="Editar paciente">
                           <i class="fas fa-edit"></i>
                         </button>
-                      {% endif %}
-                      {% if not pacientes.mom.ruc_mom %}
-                        <button type="button" class="btn btn-outline-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#factMomModal" title="Añadir información">
-                          <i class="fa-solid fa-file-invoice"></i>
-                        </button>
+                        {% if not pacientes.mom.ruc_mom %}
+                          <button type="button" class="btn btn-outline-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#factMomModal" title="Añadir información">
+                            <i class="fa-solid fa-file-invoice"></i>
+                          </button>
+                        {% endif %}
                       {% endif %}
                     </div>
                   </div>
@@ -92,11 +92,11 @@
                         <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#dadModal" title="Editar paciente">
                           <i class="fas fa-edit"></i>
                         </button>
-                      {% endif %}
-                      {% if not pacientes.dad.ruc_fat %}
-                        <button type="button" class="btn btn-outline-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#factDadModal" title="Añadir información">
-                          <i class="fa-solid fa-file-invoice"></i>
-                        </button>
+                        {% if not pacientes.dad.ruc_fat %}
+                          <button type="button" class="btn btn-outline-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#factDadModal" title="Añadir información">
+                            <i class="fa-solid fa-file-invoice"></i>
+                          </button>
+                        {% endif %}
                       {% endif %}
                     </div>
                   </div>
@@ -469,10 +469,18 @@
             </div>
 
             <div class="row">
-              <div class="col-md-9">
+              <div class="col-md-6">
                 <div class="form-floating mb-3">
                   <input type="text" class="form-control" name="pldatePat" id="pldatePat" placeholder="Paciente" value="{{pacientes.pldatePat}}" required>
                   <label for="pldatePat">Lugar de Nacimiento:</label>
+                  <div id="error-nom_da" class="error-messages"></div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control border-warning" name="fagePat" id="fagePat" placeholder="Paciente" value="{{pacientes.fagePat}}" required aria-describedby="emailHelp">
+                  <label for="fagePat">Edad de primera Cita:</label>
+                  <div id="emailHelp" class="form-text text-warning">Modificar en caso de ser necesario</div>
                   <div id="error-nom_da" class="error-messages"></div>
                 </div>
               </div>
