@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from Aplicaciones.Citas.middleware import login_required as custom_login_required
-from .models import Patient, Gender, MadreCita, PadreCita, Alergia, PatAler, InfoMom, observaciones, Cie10
+from .models import Patient, Gender, MadreCita, PadreCita, Alergia, PatAler, InfoMom, observaciones, Cie10, medicina
 from django.views.decorators.http import require_POST
 # Create your views here.
 
@@ -654,3 +654,12 @@ def editcie(request, id):
         messages.error(request, 'No se pudo editar la categoría')
         return redirect('reportcie')
 #PÁGINA CIE10 FINAL
+
+
+#PÁGINA MEDICAMENTOS INICIO
+@login_required
+@custom_login_required
+def medicamentos(request):
+    medbdd=medicina.objects.all()
+    return render(request,'medicine/medicine.html')
+#PÁGINA MEDICAMENTOS FINAL

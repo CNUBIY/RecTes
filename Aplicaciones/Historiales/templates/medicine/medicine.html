@@ -1,0 +1,217 @@
+{% extends 'doc_plantilla.html' %}
+
+{% block doc_contenido %}
+<div class="col-lg-12">
+  <div class="row">
+    <div class="col-lg-12">
+      <!-- Yearly Breakup -->
+      <div class="card overflow-hidden">
+        <div class="card-body p-4">
+          <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+            <div class="mb-3 mb-sm-0">
+              <h5 class="card-title fw-semibold">Medicamentos</h5>
+            </div>
+            <div class="ml-auto">
+              <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#cieModal" title="Añadir alergia">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+          </div>
+          <div class="row align-items-center">
+            <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
+              <thead class="text-dark fs-4">
+                <tr>
+                  <th class="border-bottom-0">
+                    <h6 class="fw-semibold mb-0">#</h6>
+                  </th>
+                  <th class="border-bottom-0 text-center">
+                    <h6 class="fw-semibold mb-0">Nombre Genérico</h6>
+                  </th>
+                  <th class="border-bottom-0 text-center">
+                    <h6 class="fw-semibold mb-0">Nombre Comercial</h6>
+                  </th>
+                  <th class="border-bottom-0 text-center">
+                    <h6 class="fw-semibold mb-0">Tipo</h6>
+                  </th>
+                  <th class="border-bottom-0 text-center">
+                    <h6 class="fw-semibold mb-0">Acciones</h6>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for cie in cies %}
+                  <tr>
+                      <td>{{ cie.id }}</td>
+                      <td class="text-center">{{cie.cod3}}</td>
+                      <td class="text-center">{{cie.nombrecie}}</td>
+                      <td class="text-center">
+                        <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#editModal" data-id="{{ cie.id }}" data-nombre="{{ cie.nombrecie }}" data-cod3="{{ cie.cod3 }}">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                          <a href="javascript:void(0)" onclick="deletecie('{% url 'deletecie' id=cie.id %}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
+                      </td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal añadir CIE10-->
+  <div class="modal fade" id="cieModal" tabindex="-1" aria-labelledby="cieModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="cieModalLabel">Añadir Categoría</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form class="" action="{% url 'newcie' %}" method="post">
+            {% csrf_token %}
+            <div class="form-floating mb-3">
+              <input type="text" id="cod3" name="cod3" class="form-control" placeholder="Nombre de la alergia:">
+              <label for="cod3">Código 3:</label>
+              <div id="error-nom_da" class="error-messages"></div>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" id="nombrecie" name="nombrecie" class="form-control" placeholder="Nombre de la alergia:">
+              <label for="nombrecie">Categoría:</label>
+              <div id="error-nom_da" class="error-messages"></div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-success">Guardar categoría</button>
+              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal editar CIE10-->
+  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="editModalLabel">Editar Categoría</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="post" id="cie-form">
+            {% csrf_token %}
+            <input type="hidden" name="id" id="id">
+            <div class="form-floating mb-3">
+              <input type="text" id="cod3" name="cod3" class="form-control" placeholder="Código 3:">
+              <label for="cod3">Código 3:</label>
+              <div id="error-nom_da" class="error-messages"></div>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" id="nombrecie" name="nombrecie" class="form-control" placeholder="Categoría:">
+              <label for="nombrecie">Categoría:</label>
+              <div id="error-nom_da" class="error-messages"></div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-warning" id="editarBtn" disabled>Editar categoría</button>
+              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var editModal = document.getElementById('editModal');
+      var form = document.getElementById('cie-form');
+      var editButton = document.getElementById('editarBtn');
+      var initialCod3 = '';
+      var initialNombreCie = '';
+
+      editModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget; // Botón que activó el modal
+        var id = button.getAttribute('data-id');
+        var cod3 = button.getAttribute('data-cod3');
+        var nombrecie = button.getAttribute('data-nombre');
+
+        // Rellenar el formulario del modal con los datos de la categoría
+        var idInput = editModal.querySelector('#id');
+        var cod3Input = editModal.querySelector('#cod3');
+        var nombrecieInput = editModal.querySelector('#nombrecie');
+
+        idInput.value = id;
+        cod3Input.value = cod3;
+        nombrecieInput.value = nombrecie;
+        initialCod3 = cod3;
+        initialNombreCie = nombrecie;
+
+        // Deshabilitar el botón de editar inicialmente
+        editButton.disabled = true;
+
+        // Actualizar la acción del formulario
+        form.action = '{% url "editcie" id=0 %}'.replace('0', id);
+      });
+
+      form.addEventListener('input', function() {
+        if (form.cod3.value.trim() !== initialCod3.trim() || form.nombrecie.value.trim() !== initialNombreCie.trim()) {
+          editButton.disabled = false;
+        } else {
+          editButton.disabled = true;
+        }
+      });
+
+      $('#editModal').on('hidden.bs.modal', function () {
+        editButton.disabled = true;
+      });
+    });
+  </script>
+
+  <!-- CONFIGURACIÓN DE TABLA -->
+  <script type="text/javascript">
+    $(document).ready(function() {
+        $('#tbl_horarios').DataTable( {
+            dom: 'frtip',
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+            },
+            initComplete: function () {
+                $('.dataTables_filter input[type="search"]').addClass('form-control');
+            },
+            pageLength: 7,
+            drawCallback: function(settings) {
+                // Aplicar las clases a los botones de paginación después de cada redibujo
+                $('.paginate_button').addClass('btn btn-outline-primary');
+            }
+        });
+    });
+  </script>
+
+<!-- MENSAJE DE CONFIRMACIÓN ELIMINAR DÍA HORARIO -->
+<script type="text/javascript">
+        function deletecie(url){
+          iziToast.question({
+              timeout: 15000,
+              close: true,
+              overlay: true,
+              displayMode: 'once',
+              id: 'question',
+              zindex: 999,
+              title: 'CONFIRMACIÓN',
+              message: '¿Está seguro de eliminar la <b>cita </b> seleccionada?',
+              position: 'center',
+              buttons: [
+                  ['<button><b>SI</b></button>', function (instance, toast) {
+                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                      window.location.href=url;
+                  }, true],
+                  ['<button>NO</button>', function (instance, toast) {
+                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                  }],
+              ]
+          });
+        }
+</script>
+{% endblock %}
