@@ -52,5 +52,6 @@ urlpatterns=[
     #MEDICAMENTOS
     path('doc_inicio/medicamentos', views.medicamentos, name='medicamentos'),
     path('doc_inicio/newMedicina', views.newMedicina, name='newMedicina'),
+    path('doc_inicio/deleteMedicina/<int:id>',views.deleteMedicina, name='deleteMedicina'),
     path('doc_inicio/editMedicina/<int:id>/', views.editMedicina, name='editMedicina'),
 ]
