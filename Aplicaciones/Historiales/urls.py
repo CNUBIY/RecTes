@@ -40,4 +40,9 @@ urlpatterns=[
     path('doc_inicio/newalergia/',views.newalergia, name='newalergia'),
     path('doc_inicio/deleteAlergia/<int:id>',views.deleteAlergia, name='deleteAlergia'),
     path('doc_inicio/editAlergia/<int:id>',views.editAlergia, name='editAlergia'),
+
+
+    #CIE10
+    path('doc_inicio/reportcie', views.reportcie, name='reportcie'),
+    path('doc_inicio/newcie', views.newcie, name='newcie'),
 ]

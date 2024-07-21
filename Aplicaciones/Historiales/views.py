@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from Aplicaciones.Citas.middleware import login_required as custom_login_required
-from .models import Patient, Gender, MadreCita, PadreCita, Alergia, PatAler, InfoMom, observaciones
+from .models import Patient, Gender, MadreCita, PadreCita, Alergia, PatAler, InfoMom, observaciones, Cie10
 from django.views.decorators.http import require_POST
 # Create your views here.
 
@@ -602,3 +602,25 @@ def editAlergia(request, id):
         messages.error(request,'No se pudo agregar la alergia')
         return redirect('alergias')
 #PÁGINA ALERGIAS
+
+
+#PÁGINA CIE10 INICIO
+def reportcie(request):
+    ciebdd=Cie10.objects.all()
+    return render(request,'cie10/report.html', {'cies':ciebdd})
+
+def newcie(request):
+    if request.method == 'POST':
+        cod3=request.POST['cod3']
+        nombrecie=request.POST['nombrecie']
+        newCie=Cie10.objects.create(
+            cod3=cod3,
+            nombrecie=nombrecie,
+        )
+        messages.success(request,'Categoría agregada correctamente')
+        return redirect('reportcie')
+    else:
+        messages.error(request,'No se pudo agregar la categoría')
+        return redirect('reportcie')
+
+#PÁGINA CIE10 FINAL

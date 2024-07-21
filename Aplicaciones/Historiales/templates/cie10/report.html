@@ -9,10 +9,10 @@
         <div class="card-body p-4">
           <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
             <div class="mb-3 mb-sm-0">
-              <h5 class="card-title fw-semibold">Alergias</h5>
+              <h5 class="card-title fw-semibold">CIE10</h5>
             </div>
             <div class="ml-auto">
-              <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#alergyModal" title="Añadir alergia">
+              <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#cieModal" title="Añadir alergia">
                 <i class="fa-solid fa-plus"></i>
               </button>
             </div>
@@ -25,7 +25,10 @@
                     <h6 class="fw-semibold mb-0">#</h6>
                   </th>
                   <th class="border-bottom-0 text-center">
-                    <h6 class="fw-semibold mb-0">Nombre de Alergia</h6>
+                    <h6 class="fw-semibold mb-0">Categoría 3</h6>
+                  </th>
+                  <th class="border-bottom-0 text-center">
+                    <h6 class="fw-semibold mb-0">Nombre</h6>
                   </th>
                   <th class="border-bottom-0 text-center">
                     <h6 class="fw-semibold mb-0">Acciones</h6>
@@ -33,15 +36,16 @@
                 </tr>
               </thead>
               <tbody>
-                {% for alergia in alergias %}
+                {% for cie in cies %}
                   <tr>
-                      <td>{{ alergia.id }}</td>
-                      <td class="text-center">{{alergia.nombreAlergia}}</td>
+                      <td>{{ cie.id }}</td>
+                      <td class="text-center">{{cie.cod3}}</td>
+                      <td class="text-center">{{cie.nombrecie}}</td>
                       <td class="text-center">
                         <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#editModal" data-id="{{ alergia.id }}" data-nombre="{{ alergia.nombreAlergia }}">
                           <i class="fas fa-edit"></i>
                         </button>
-                          <a href="javascript:void(0)" onclick="deleteAlergia('{% url 'deleteAlergia' id=alergia.id %}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
+                          <a href="javascript:void(0)" onclick="deleteAlergia('{% url 'deleteAlergia' id=cie.id %}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
                       </td>
                   </tr>
                   {% endfor %}
@@ -54,23 +58,28 @@
   </div>
 
   <!-- Modal añadir Alergias-->
-  <div class="modal fade" id="alergyModal" tabindex="-1" aria-labelledby="alergyModalLabel" aria-hidden="true">
+  <div class="modal fade" id="cieModal" tabindex="-1" aria-labelledby="cieModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="alergyModalLabel">Añadir alergia</h1>
+          <h1 class="modal-title fs-5" id="cieModalLabel">Añadir Categoría</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form class="" action="{% url 'newalergia' %}" method="post">
+          <form class="" action="{% url 'newcie' %}" method="post">
             {% csrf_token %}
             <div class="form-floating mb-3">
-              <input type="text" id="nombreAlergia" name="nombreAlergia" class="form-control" placeholder="Nombre de la alergia:">
-              <label for="nombreAlergia">Nombre de la alergia:</label>
+              <input type="text" id="cod3" name="cod3" class="form-control" placeholder="Nombre de la alergia:">
+              <label for="cod3">Código 3:</label>
+              <div id="error-nom_da" class="error-messages"></div>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" id="nombrecie" name="nombrecie" class="form-control" placeholder="Nombre de la alergia:">
+              <label for="nombrecie">Categoría:</label>
               <div id="error-nom_da" class="error-messages"></div>
             </div>
             <div class="modal-footer">
-              <button type="submit" class="btn btn-success">Guardar alergia</button>
+              <button type="submit" class="btn btn-success">Guardar categoría</button>
               <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
           </form>
