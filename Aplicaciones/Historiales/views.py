@@ -572,4 +572,17 @@ def newalergia(request):
         messages.error(request, 'No se pudo agregar la alergia')
         return redirect('alergias')
 
+
+
+@login_required
+@custom_login_required
+def deleteAlergia(request, id):
+    try:
+        eliminarAlergia = Alergia.objects.get(id=id)
+        eliminarAlergia.delete()
+        messages.success(request, 'Alergia eliminada correctamente')
+    except Alergia.DoesNotExist:
+        messages.error(request, 'La alergia no existe')
+    return redirect('alergias')
+
 #PÁGINA ALERGIAS

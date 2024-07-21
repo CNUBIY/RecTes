@@ -38,4 +38,5 @@ urlpatterns=[
     #ALERGIAS
     path('doc_inicio/alergias/',views.alergias, name='alergias'),
     path('doc_inicio/newalergia/',views.newalergia, name='newalergia'),
+    path('doc_inicio/deleteAlergia/<int:id>',views.deleteAlergia, name='deleteAlergia'),
 ]
