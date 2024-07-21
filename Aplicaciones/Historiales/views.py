@@ -661,5 +661,22 @@ def editcie(request, id):
 @custom_login_required
 def medicamentos(request):
     medbdd=medicina.objects.all()
-    return render(request,'medicine/medicine.html')
+    return render(request,'medicine/medicine.html', {'medicinas':medbdd})
+
+@login_required
+@custom_login_required
+def newMedicina(request):
+    if request.method=='POST':
+        nombregen_med=request.POST['nombregen_med']
+        nombrecom_med=request.POST['nombrecom_med']
+        tipo_med=request.POST['tipo_med']
+        newMedicina=medicina.objects.create(
+            nombregen_med=nombregen_med,
+            nombrecom_med=nombrecom_med,
+            tipo_med=tipo_med,
+        )
+        messages.success(request,'Medicamento agregado correctamente')
+        return redirect('medicamentos')
+    else:
+        messages.error(request,'No se pudo agregar el medicamento')
 #PÁGINA MEDICAMENTOS FINAL

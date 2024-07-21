@@ -47,4 +47,9 @@ urlpatterns=[
     path('doc_inicio/newcie', views.newcie, name='newcie'),
     path('doc_inicio/deletecie/<int:id>',views.deletecie, name='deletecie'),
     path('doc_inicio/editcie/<int:id>', views.editcie, name='editcie'),
+
+
+    #MEDICAMENTOS
+    path('doc_inicio/medicamentos', views.medicamentos, name='medicamentos'),
+    path('doc_inicio/newMedicina', views.newMedicina, name='newMedicina'),
 ]

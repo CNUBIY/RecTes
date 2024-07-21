@@ -12,7 +12,7 @@
               <h5 class="card-title fw-semibold">Medicamentos</h5>
             </div>
             <div class="ml-auto">
-              <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#cieModal" title="Añadir alergia">
+              <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#medicamentoModal" title="Añadir alergia">
                 <i class="fa-solid fa-plus"></i>
               </button>
             </div>
@@ -39,16 +39,17 @@
                 </tr>
               </thead>
               <tbody>
-                {% for cie in cies %}
+                {% for medicina in medicinas %}
                   <tr>
-                      <td>{{ cie.id }}</td>
-                      <td class="text-center">{{cie.cod3}}</td>
-                      <td class="text-center">{{cie.nombrecie}}</td>
+                      <td>{{ medicina.id }}</td>
+                      <td class="text-center">{{medicina.nombregen_med}}</td>
+                      <td class="text-center">{{medicina.nombrecom_med}}</td>
+                      <td class="text-center">{{medicina.tipo_med}}</td>
                       <td class="text-center">
                         <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#editModal" data-id="{{ cie.id }}" data-nombre="{{ cie.nombrecie }}" data-cod3="{{ cie.cod3 }}">
                           <i class="fas fa-edit"></i>
                         </button>
-                          <a href="javascript:void(0)" onclick="deletecie('{% url 'deletecie' id=cie.id %}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
+                          <a href="javascript:void(0)" onclick="deletecie('{% url 'deletecie' id=medicina.id %}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
                       </td>
                   </tr>
                   {% endfor %}
@@ -60,29 +61,34 @@
     </div>
   </div>
 
-  <!-- Modal añadir CIE10-->
-  <div class="modal fade" id="cieModal" tabindex="-1" aria-labelledby="cieModalLabel" aria-hidden="true">
+  <!-- Modal añadir Medicamento-->
+  <div class="modal fade" id="medicamentoModal" tabindex="-1" aria-labelledby="medicamentoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="cieModalLabel">Añadir Categoría</h1>
+          <h1 class="modal-title fs-5" id="medicamentoModalLabel">Añadir Medicamento</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form class="" action="{% url 'newcie' %}" method="post">
+          <form class="" action="{% url 'newMedicina' %}" method="post">
             {% csrf_token %}
             <div class="form-floating mb-3">
-              <input type="text" id="cod3" name="cod3" class="form-control" placeholder="Nombre de la alergia:">
-              <label for="cod3">Código 3:</label>
+              <input type="text" id="nombregen_med" name="nombregen_med" class="form-control" placeholder="Nombre de la alergia:">
+              <label for="nombregen_med">Nombre genérico:</label>
               <div id="error-nom_da" class="error-messages"></div>
             </div>
             <div class="form-floating mb-3">
-              <input type="text" id="nombrecie" name="nombrecie" class="form-control" placeholder="Nombre de la alergia:">
-              <label for="nombrecie">Categoría:</label>
+              <input type="text" id="nombrecom_med" name="nombrecom_med" class="form-control" placeholder="Nombre de la alergia:">
+              <label for="nombrecom_med">Nombre comercial:</label>
+              <div id="error-nom_da" class="error-messages"></div>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" id="tipo_med" name="tipo_med" class="form-control" placeholder="Nombre de la alergia:">
+              <label for="tipo_med">Tipo de medicina:</label>
               <div id="error-nom_da" class="error-messages"></div>
             </div>
             <div class="modal-footer">
-              <button type="submit" class="btn btn-success">Guardar categoría</button>
+              <button type="submit" class="btn btn-success">Guardar medicamento</button>
               <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
           </form>
@@ -152,7 +158,7 @@
         editButton.disabled = true;
 
         // Actualizar la acción del formulario
-        form.action = '{% url "editcie" id=0 %}'.replace('0', id);
+        form.action = ''.replace('0', id);
       });
 
       form.addEventListener('input', function() {
