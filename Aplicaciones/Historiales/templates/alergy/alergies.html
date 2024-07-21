@@ -7,7 +7,16 @@
       <!-- Yearly Breakup -->
       <div class="card overflow-hidden">
         <div class="card-body p-4">
-          <h5 class="card-title mb-9 fw-semibold">Alergías</h5>
+          <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+            <div class="mb-3 mb-sm-0">
+              <h5 class="card-title fw-semibold">Alergias</h5>
+            </div>
+            <div class="ml-auto">
+              <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#alergyModal" title="Añadir alergia">
+                <i class="fa-solid fa-calendar-plus"></i>
+              </button>
+            </div>
+          </div>
           <div class="row align-items-center">
             <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
               <thead class="text-dark fs-4">
@@ -46,6 +55,31 @@
     </div>
   </div>
 
+  <!-- Modal añadir Alergias-->
+  <div class="modal fade" id="alergyModal" tabindex="-1" aria-labelledby="alergyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="alergyModalLabel">Añadir alergia</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form class="" action="index.html" method="post">
+            {% csrf_token %}
+            <div class="form-floating mb-3">
+              <input type="text" id="nombreAlergia" name="nombreAlergia" class="form-control" placeholder="Nombre de la alergia:">
+              <label for="nombreAlergia">Nombre de la alergia:</label>
+              <div id="error-nom_da" class="error-messages"></div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-success">Guardar alergia</button>
+              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- CONFIGURACIÓN DE TABLA -->
   <script type="text/javascript">
