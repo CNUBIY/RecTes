@@ -45,4 +45,5 @@ urlpatterns=[
     #CIE10
     path('doc_inicio/reportcie', views.reportcie, name='reportcie'),
     path('doc_inicio/newcie', views.newcie, name='newcie'),
+    path('doc_inicio/editcie/<int:id>', views.editcie, name='editcie'),
 ]

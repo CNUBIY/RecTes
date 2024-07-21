@@ -605,10 +605,14 @@ def editAlergia(request, id):
 
 
 #PÁGINA CIE10 INICIO
+@login_required
+@custom_login_required
 def reportcie(request):
     ciebdd=Cie10.objects.all()
     return render(request,'cie10/report.html', {'cies':ciebdd})
 
+@login_required
+@custom_login_required
 def newcie(request):
     if request.method == 'POST':
         cod3=request.POST['cod3']
@@ -623,4 +627,19 @@ def newcie(request):
         messages.error(request,'No se pudo agregar la categoría')
         return redirect('reportcie')
 
+@login_required
+@custom_login_required
+def editcie(request, id):
+    if request.method == 'POST':
+        cod3 = request.POST['cod3']
+        nombrecie = request.POST['nombrecie']
+        editCie = get_object_or_404(Cie10, id=id)
+        editCie.cod3 = cod3
+        editCie.nombrecie = nombrecie
+        editCie.save()
+        messages.success(request, 'Categoría editada correctamente')
+        return redirect('reportcie')
+    else:
+        messages.error(request, 'No se pudo editar la categoría')
+        return redirect('reportcie')
 #PÁGINA CIE10 FINAL
