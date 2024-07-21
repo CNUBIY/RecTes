@@ -557,4 +557,19 @@ def alergias(request):
 
     return render(request, 'alergy/alergies.html',{'alergias':alerbdd})
 
+@login_required
+@custom_login_required
+def newalergia(request):
+    if request.method == 'POST':
+        nombreAlergia = request.POST['nombreAlergia']
+        if Alergia.objects.filter(nombreAlergia=nombreAlergia).exists():
+            messages.error(request, 'Esta alergia ya existe')
+        else:
+            newAler = Alergia.objects.create(nombreAlergia=nombreAlergia)
+            messages.success(request, 'Alergia agregada correctamente')
+        return redirect('alergias')
+    else:
+        messages.error(request, 'No se pudo agregar la alergia')
+        return redirect('alergias')
+
 #PÁGINA ALERGIAS

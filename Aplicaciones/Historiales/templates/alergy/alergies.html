@@ -64,7 +64,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form class="" action="index.html" method="post">
+          <form class="" action="{% url 'newalergia' %}" method="post">
             {% csrf_token %}
             <div class="form-floating mb-3">
               <input type="text" id="nombreAlergia" name="nombreAlergia" class="form-control" placeholder="Nombre de la alergia:">
@@ -72,7 +72,7 @@
               <div id="error-nom_da" class="error-messages"></div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-success">Guardar alergia</button>
+              <button type="submit" class="btn btn-success">Guardar alergia</button>
               <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
           </form>
