@@ -85,9 +85,9 @@
                   <div class="d-flex justify-content-between align-items-center">
                       <h5 class="card-title mb-9 fw-semibold">Detalles</h5>
                       {% if diagnosticos %}
-                          <a href="{% url 'new_patient' %}" class="btn btn-outline-warning rounded-pill" title="Editar Observación">
-                              <i class="fa fa-edit"></i>
-                          </a>
+                        <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#editDiaModal" title="Añadir información">
+                            <i class="fa fa-edit"></i>
+                        </button>
                       {% else %}
                           <button type="button" class="btn btn-outline-success rounded-pill" data-bs-toggle="modal" data-bs-target="#diagnosticoModal" title="Añadir información">
                               <i class="fa-solid fa-plus"></i>
@@ -96,83 +96,84 @@
                   </div>
                   <br>
                   <div class="row align-items-center mb-3">
-                      {% if diagnosticos %}
-                          <div class="col-md-12">
-                              {% for diagnostico in diagnosticos %}
-                                  <div class="row mb-2">
-                                      <div class="col-md-6">
-                                          <p><b>#{{ diagnostico.id }}</b></p>
-                                      </div>
-                                      <div class="col-md-6 text-end">
-                                          <p><b>Fecha:</b> {{ diagnostico.creation }}</p>
-                                      </div>
-                                  </div>
-                                  <div class="row mb-2">
-                                      <div class="col-md-7 ">
-                                          <p><b>Nombre:</b> {{ pacientes.namePat }} {{ pacientes.lastnPat }}</p>
-                                      </div>
-                                      <div class="col-md-2 text-end">
-                                          <p><b>Sexo:</b> {% if pacientes.genPat == 'Masculino' %}M{% else %}F{% endif %}</p>
-                                      </div>
-                                      <div class="col-md-3 text-end">
-                                          <p><b>Edad:</b> {{ observaciones.new_age }}</p>
-                                      </div>
-                                  </div>
-                                  <div class="row mb-2">
-                                      <div class="col-md-4">
-                                          <p><b>Nacionalidad:</b> {{ pacientes.natiPat|slice:":3"|upper }}</p>
-                                      </div>
-                                      <div class="col-md-5">
-                                          <p><b>Dirección:</b> {{ pacientes.placePat }}</p>
-                                      </div>
-                                      <div class="col-md-3 text-end">
-                                          <p><b>CI:</b> {{ pacientes.ciPat }}</p>
-                                      </div>
-                                  </div>
-                                  <div class="row mb-2">
-                                      <div class="col-md-6">
-                                          <p><b>Tratamiento:</b> {{ diagnostico.tratamiento }}</p>
-                                      </div>
-                                      <div class="col-md-6">
-                                          <p><b>CIE10:</b>
-                                              {% for cie in diagnostico.cies.all %}
-                                                  {{ cie.cod3 }}
-                                                  {% if not forloop.last %}, {% endif %}
-                                              {% endfor %}
-                                          </p>
-                                      </div>
-                                  </div>
-                                  <div class="row mb-2">
-                                      <div class="col-md-6">
-                                          <p><b>Alergias:</b>
-                                              {% if alergias %}
-                                                  {% for alergia in alergias %}
-                                                      {{ alergia.alergia.nombreAlergia }}
-                                                      {% if not forloop.last %}, {% endif %}
-                                                  {% endfor %}
-                                              {% else %}
-                                                  No
-                                              {% endif %}
-                                          </p>
-                                      </div>
-                                      <div class="col-md-6">
-                                          <p><b>Contacto:</b> {{ pacientes.cell }}</p>
-                                      </div>
-                                  </div>
-                                  <br><br>
-                                  <div class="text-center">
-                                    <h6 class="text-info"><b>RECETA</b></h6>
-                                    <button type="button" class="btn btn-outline-success rounded-pill" data-bs-toggle="modal" data-bs-target="#diagnosticoModal" title="Añadir información">
-                                        <i class="fa-solid fa-plus"></i>
-                                    </button>
-                                  </div>
-                              {% endfor %}
-                          </div>
-                      {% else %}
-                          <div class="text-center">
-                              <p>SIN DETALLES</p>
-                          </div>
-                      {% endif %}
+                    {% if diagnosticos %}
+                        <div class="col-md-12">
+                            {% for diagnostico in diagnosticos %}
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <p><b>#{{ diagnostico.id }}</b></p>
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <p><b>Fecha:</b> {{ diagnostico.creation }}</p>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-md-7 ">
+                                        <p><b>Nombre:</b> {{ pacientes.namePat }} {{ pacientes.lastnPat }}</p>
+                                    </div>
+                                    <div class="col-md-2 text-end">
+                                        <p><b>Sexo:</b> {% if pacientes.genPat == 'Masculino' %}M{% else %}F{% endif %}</p>
+                                    </div>
+                                    <div class="col-md-3 text-end">
+                                        <p><b>Edad:</b> {{ observaciones.new_age }}</p>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-md-4">
+                                        <p><b>Nacionalidad:</b> {{ pacientes.natiPat|slice:":3"|upper }}</p>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <p><b>Dirección:</b> {{ pacientes.placePat }}</p>
+                                    </div>
+                                    <div class="col-md-3 text-end">
+                                        <p><b>CI:</b> {{ pacientes.ciPat }}</p>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <p><b>Tratamiento:</b> {{ diagnostico.tratamiento }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><b>CIE10:</b>
+                                            {% for cie in diagnostico.cies.all %}
+                                                {{ cie.cod3 }}
+                                                {% if not forloop.last %}, {% endif %}
+                                            {% endfor %}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <p><b>Alergias:</b>
+                                            {% if alergias %}
+                                                {% for alergia in alergias %}
+                                                    {{ alergia.alergia.nombreAlergia }}
+                                                    {% if not forloop.last %}, {% endif %}
+                                                {% endfor %}
+                                            {% else %}
+                                                No
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><b>Contacto:</b> {{ pacientes.cell }}</p>
+                                    </div>
+                                </div>
+                                <br><br>
+                                <div class="text-center">
+                                  <h6 class="text-info"><b>RECETA</b></h6>
+                                  <button type="button" class="btn btn-outline-success rounded-pill" data-bs-toggle="modal" data-bs-target="#diagnosticoModal" title="Añadir información">
+                                      <i class="fa-solid fa-plus"></i>
+                                  </button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center">
+                            <p>SIN DETALLES</p>
+                        </div>
+                    {% endif %}
+
                   </div>
               </div>
           </div>
@@ -267,9 +268,72 @@
 </div>
 
 
+<!-- Modal editar diagnostico -->
+<div class="modal fade" id="editDiaModal" tabindex="-1" aria-labelledby="editDiaModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="editDiaModalLabel">Añadir Información</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editDiagnosticoForm" method="post" action="{% url 'addDiagnostico' id=observaciones.id %}">
+          {% csrf_token %}
+          <input type="hidden" name="id" id="id" value="{{ diagnosticos.0.id }}">
+          <div class="form-group">
+            <label for="cie">CIE10:</label>
+            <select id="cie2" name="cie" class="form-control" multiple>
+              {% for cie in cies %}
+                <option value="{{ cie.id }}" {% if diagnosticos and cie in diagnosticos.0.cies.all %}selected{% endif %}>{{ cie.cod3 }} - {{ cie.nombrecie }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" id="alimentacion" name="alimentacion" class="form-control" placeholder="Alimentación:" value="{% if diagnosticos %}{{ diagnosticos.0.alimentacion }}{% endif %}">
+                <label for="alimentacion">Alimentación:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" id="examen" name="examen" class="form-control" placeholder="Examen/es:" value="{% if diagnosticos %}{{ diagnosticos.0.examen }}{% endif %}">
+                <label for="examen">Examen/es:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group mt-3">
+            <label>Tratamiento:</label><br>
+            <div class="d-inline-block me-3">
+              <input type="radio" id="agudo" name="tratamiento" value="Agudo" {% if diagnosticos and diagnosticos.0.tratamiento == 'Agudo' %}checked{% endif %} required>
+              <label for="agudo">Agudo</label>
+            </div>
+            <div class="d-inline-block">
+              <input type="radio" id="cronico" name="tratamiento" value="Crónico" {% if diagnosticos and diagnosticos.0.tratamiento == 'Crónico' %}checked{% endif %} required>
+              <label for="cronico">Crónico</label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-outline-warning mt-3">Añadir Diagnóstico</button>
+            <button type="button" class="btn btn-outline-danger mt-3" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   $(document).ready(function() {
     $('#cie').select2({
+      width: '100%', // Ajusta el ancho del select2 para que se ajuste al contenedor
+      placeholder: 'Seleccione CIE10',
+      allowClear: true
+    });
+    $('#cie2').select2({
       width: '100%', // Ajusta el ancho del select2 para que se ajuste al contenedor
       placeholder: 'Seleccione CIE10',
       allowClear: true

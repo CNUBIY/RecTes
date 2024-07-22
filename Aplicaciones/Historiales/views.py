@@ -536,7 +536,7 @@ def viewobs(request, id):
     try:
         obsbdd = observaciones.objects.get(id=id)
         patbdd = obsbdd.paciente  # Obtener el paciente directamente desde la observación
-        diabdd = Diagnostico.objects.filter(obs=id).prefetch_related('cies')
+        diabdd = Diagnostico.objects.filter(obs=id).prefetch_related('cies')  # Obtener una lista de diagnósticos
         ciebdd = Cie10.objects.all()
         alergias = PatAler.objects.filter(paciente=patbdd).select_related('alergia')
     except observaciones.DoesNotExist:
@@ -546,10 +546,11 @@ def viewobs(request, id):
     return render(request, 'observation/viewobs.html', {
         'observaciones': obsbdd,
         'pacientes': patbdd,
-        'diagnosticos': diabdd,
+        'diagnosticos': diabdd,  # Pasar una lista de diagnósticos
         'cies': ciebdd,
         'alergias': alergias
     })
+
 
 @login_required
 @custom_login_required
