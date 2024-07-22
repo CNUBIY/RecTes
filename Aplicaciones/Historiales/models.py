@@ -123,3 +123,13 @@ class medicina(models.Model):
     tipo_med= models.CharField(max_length=150)
     def __str__(self):
         return f"{self.nombrecom_med} -> {self.tipo_med}"
+
+class Diagnostico(models.Model):
+    id = models.AutoField(primary_key=True)
+    creation = models.DateField(default=datetime.date.today)
+    cies = models.ManyToManyField(Cie10)
+    obs = models.ForeignKey(observaciones, on_delete=models.PROTECT)
+    tratamiento = models.CharField(max_length=50, choices=[('Agudo', 'Agudo'), ('Crónico', 'Crónico')])
+
+    def __str__(self):
+        return f"{self.creation} - {self.obs}"

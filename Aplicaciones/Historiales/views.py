@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from Aplicaciones.Citas.middleware import login_required as custom_login_required
-from .models import Patient, Gender, MadreCita, PadreCita, Alergia, PatAler, InfoMom, observaciones, Cie10, medicina
+from .models import Patient, Gender, MadreCita, PadreCita, Alergia, PatAler, InfoMom, observaciones, Cie10, medicina, Diagnostico
 from django.views.decorators.http import require_POST
 from dateutil.relativedelta import relativedelta
 # Create your views here.
@@ -536,11 +536,20 @@ def viewobs(request, id):
     try:
         obsbdd = observaciones.objects.get(id=id)
         patbdd = obsbdd.paciente  # Obtener el paciente directamente desde la observación
+        diabdd = Diagnostico.objects.filter(obs=id).prefetch_related('cies')
+        ciebdd = Cie10.objects.all()
+        alergias = PatAler.objects.filter(paciente=patbdd).select_related('alergia')
     except observaciones.DoesNotExist:
         messages.error(request, "La observación no existe.")
         return redirect('error_p')
 
-    return render(request, 'observation/viewobs.html', {'observaciones': obsbdd, 'pacientes': patbdd})
+    return render(request, 'observation/viewobs.html', {
+        'observaciones': obsbdd,
+        'pacientes': patbdd,
+        'diagnosticos': diabdd,
+        'cies': ciebdd,
+        'alergias': alergias
+    })
 
 @login_required
 @custom_login_required
@@ -555,6 +564,36 @@ def edit_obs(request, id):
         obsEdit.save()
         messages.success(request,'Observación editada correctamente.')
         return redirect('viewobs',id=id)
+
+@login_required
+@custom_login_required
+def addDiagnostico(request, id):
+    if request.method == 'POST':
+        try:
+            # Obtiene la observación correspondiente
+            observacion = observaciones.objects.get(id=id)
+
+            # Obtiene los datos del formulario
+            cie_ids = request.POST.getlist('cie')
+            tratamiento_tipo = request.POST.get('tratamiento')
+
+            # Crea el diagnóstico
+            nuevo_diagnostico = Diagnostico.objects.create(
+                obs=observacion,
+                tratamiento=tratamiento_tipo
+            )
+
+            # Añade las CIE10 al diagnóstico
+            for cie_id in cie_ids:
+                cie = Cie10.objects.get(id=cie_id)
+                nuevo_diagnostico.cies.add(cie)
+
+            messages.success(request, "Diagnóstico y tratamiento añadidos correctamente.")
+        except Exception as e:
+            print(f"Error al procesar la solicitud: {str(e)}")
+            messages.error(request, "Ha ocurrido un error al procesar la solicitud.")
+
+    return redirect('viewobs', id=id)
 
 #PÁGINA VISTA OBSERVACIONES FINAL
 

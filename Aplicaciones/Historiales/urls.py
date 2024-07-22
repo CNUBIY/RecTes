@@ -35,6 +35,9 @@ urlpatterns=[
     path('doc_inicio/viewobs/<int:id>/', views.viewobs, name='viewobs'),
     path('doc_inicio/viewobs/<int:id>/edit_obs', views.edit_obs, name='edit_obs'),
 
+    #DIAGNOSTICOS
+    path('doc_inicio/viewobs/<int:id>/addDiagnostico',views.addDiagnostico,name='addDiagnostico'),
+
     #ALERGIAS
     path('doc_inicio/alergias/',views.alergias, name='alergias'),
     path('doc_inicio/newalergia/',views.newalergia, name='newalergia'),
