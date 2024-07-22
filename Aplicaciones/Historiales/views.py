@@ -576,11 +576,15 @@ def addDiagnostico(request, id):
             # Obtiene los datos del formulario
             cie_ids = request.POST.getlist('cie')
             tratamiento_tipo = request.POST.get('tratamiento')
+            alimentacion = request.POST['alimentacion']
+            examen = request.POST['examen']
 
             # Crea el diagnóstico
             nuevo_diagnostico = Diagnostico.objects.create(
                 obs=observacion,
-                tratamiento=tratamiento_tipo
+                tratamiento=tratamiento_tipo,
+                alimentacion=alimentacion,
+                examen=examen
             )
 
             # Añade las CIE10 al diagnóstico
