@@ -600,6 +600,29 @@ def addDiagnostico(request, id):
 
     return redirect('viewobs', id=id)
 
+@login_required
+@custom_login_required
+def editDiagnostico(request, id):
+    if request.method == 'POST':
+        diagnostico_id = request.POST['id']
+        alimentacion = request.POST['alimentacion']
+        examen = request.POST['examen']
+        tratamiento = request.POST['tratamiento']
+        cie_ids = request.POST.getlist('cie')
+
+        diagnostico = get_object_or_404(Diagnostico, id=diagnostico_id)
+        diagnostico.alimentacion = alimentacion
+        diagnostico.examen = examen
+        diagnostico.tratamiento = tratamiento
+        diagnostico.cies.set(cie_ids)
+
+        diagnostico.save()
+        messages.success(request, 'Información actualizada correctamente.')
+        return redirect('viewobs', id=id)
+    else:
+        messages.error(request,'No se pudo editar la información')
+    return redirect('viewobs', id=id)
+
 #PÁGINA VISTA OBSERVACIONES FINAL
 
 

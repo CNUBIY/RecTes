@@ -277,9 +277,9 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form id="editDiagnosticoForm" method="post" action="{% url 'addDiagnostico' id=observaciones.id %}">
+        <form id="editDiagnosticoForm" method="post" action="{% url 'editDiagnostico' id=observaciones.id %}">
           {% csrf_token %}
-          <input type="hidden" name="id" id="id" value="{{ diagnosticos.0.id }}">
+          <input type="hidden" name="id" id="id" value="{{ diagnostico.id }}">
           <div class="form-group">
             <label for="cie">CIE10:</label>
             <select id="cie2" name="cie" class="form-control" multiple>
