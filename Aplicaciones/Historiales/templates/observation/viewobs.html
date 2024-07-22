@@ -147,7 +147,7 @@
                                           <p><b>Alergias:</b>
                                               {% if alergias %}
                                                   {% for alergia in alergias %}
-                                                      {{ alergia.alergia.nombre }}
+                                                      {{ alergia.alergia.nombreAlergia }}
                                                       {% if not forloop.last %}, {% endif %}
                                                   {% endfor %}
                                               {% else %}
@@ -186,7 +186,7 @@
         <div class="card overflow-hidden">
           <div class="card-body p-4">
             <div class="d-flex justify-content-between align-items-center">
-              <h5 class="card-title mb-9 fw-semibold">Detalles</h5>
+              <h5 class="card-title mb-9 fw-semibold">Indicaciones</h5>
               <a href="{% url 'new_patient' %}" class="btn btn-outline-warning rounded-pill" title="Editar Observación">
                 <i class="fa fa-edit"></i>
               </a>
@@ -227,6 +227,23 @@
                 <option value="{{ cie.id }}">{{ cie.cod3 }} - {{cie.nombrecie}}</option>
               {% endfor %}
             </select>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" id="alimentacion" name="alimentacion" class="form-control" placeholder="Alimentación:">
+                <label for="alimentacion">Alimentación:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" id="examen" name="examen" class="form-control" placeholder="Examen/es:">
+                <label for="examen">Examen/es:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
           </div>
           <div class="form-group mt-3">
             <label>Tratamiento:</label><br>
