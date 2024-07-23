@@ -539,6 +539,7 @@ def viewobs(request, id):
         diabdd = Diagnostico.objects.filter(obs=id).prefetch_related('cies')  # Obtener una lista de diagnósticos
         ciebdd = Cie10.objects.all()
         alergias = PatAler.objects.filter(paciente=patbdd).select_related('alergia')
+        medbdd = medicina.objects.all()
     except observaciones.DoesNotExist:
         messages.error(request, "La observación no existe.")
         return redirect('error_p')
@@ -548,7 +549,8 @@ def viewobs(request, id):
         'pacientes': patbdd,
         'diagnosticos': diabdd,  # Pasar una lista de diagnósticos
         'cies': ciebdd,
-        'alergias': alergias
+        'alergias': alergias,
+        'medicinas' : medbdd
     })
 
 

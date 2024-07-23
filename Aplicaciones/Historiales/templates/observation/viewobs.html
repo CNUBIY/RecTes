@@ -162,7 +162,7 @@
                                 <br><br>
                                 <div class="text-center">
                                   <h6 class="text-info"><b>RECETA</b></h6>
-                                  <button type="button" class="btn btn-outline-success rounded-pill" data-bs-toggle="modal" data-bs-target="#diagnosticoModal" title="Añadir información">
+                                  <button type="button" class="btn btn-outline-success rounded-pill" data-bs-toggle="modal" data-bs-target="#recetaModal" title="Añadir información">
                                       <i class="fa-solid fa-plus"></i>
                                   </button>
                                 </div>
@@ -258,7 +258,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-outline-warning mt-3">Añadir Diagnóstico</button>
+            <button type="submit" class="btn btn-outline-success mt-3">Añadir Información</button>
             <button type="button" class="btn btn-outline-danger mt-3" data-bs-dismiss="modal">Cerrar</button>
           </div>
         </form>
@@ -326,6 +326,63 @@
   </div>
 </div>
 
+<!-- Modal añadir receta-->
+<div class="modal fade" id="recetaModal" tabindex="-1" aria-labelledby="recetaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="recetaModalLabel">Añadir Receta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="recetaForm" method="post" action="/tu-url/">
+                    <input type="hidden" name="observaciones" value="{{ observaciones.id }}">
+                    <div id="formContainer">
+                        <div class="receta-form">
+                            <div class="form-group mb-3">
+                                <label for="medicamentos">Medicinas:</label>
+                                <select name="medicamentos[]" class="selectpicker form-control" data-live-search="true" required>
+                                    <option value="">Escoja un medicamento</option>
+                                    <!-- Aquí deben ir las opciones de los medicamentos -->
+                                    {% for medicina in medicinas %}
+                                    <option value="{{ medicina.id }}">{{ medicina.nombregen_med }} {{ medicina.nombrecom_med }} | {{ medicina.tipo_med }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div id="error-nom_da2" class="error-messages"></div>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="total" name="total" required placeholder="Total de medicinas">
+                                <label for="total">Total de medicinas</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="cantidad" name="cantidad" required placeholder="Cantidad unitaria">
+                                <label for="cantidad">Cantidad unitaria</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="via" name="via" required placeholder="Vía">
+                                <label for="via">Vía</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="frecuencia" name="frecuencia" required placeholder="Frecuencia">
+                                <label for="frecuencia">Frecuencia</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="duracion" name="duracion" required placeholder="Duración">
+                                <label for="duracion">Duración</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success">Guardar medicamento</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SELECTS -->
 <script>
   $(document).ready(function() {
     $('#cie').select2({
@@ -338,8 +395,10 @@
       placeholder: 'Seleccione CIE10',
       allowClear: true
     });
+    $('.selectpicker').selectpicker();
   });
 </script>
+
 <style>
   .select2-container--open {
     z-index: 9999; /* Ajustar el z-index para asegurarse de que el select2 esté encima del modal */
