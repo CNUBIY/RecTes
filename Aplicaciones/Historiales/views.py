@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from Aplicaciones.Citas.middleware import login_required as custom_login_required
-from .models import Patient, Gender, MadreCita, PadreCita, Alergia, PatAler, InfoMom, observaciones, Cie10, medicina, Diagnostico
+from .models import Patient, Gender, MadreCita, PadreCita, Alergia, PatAler, InfoMom, observaciones, Cie10, medicina, Diagnostico, Receta
 from django.views.decorators.http import require_POST
 from dateutil.relativedelta import relativedelta
 # Create your views here.
@@ -540,6 +540,7 @@ def viewobs(request, id):
         ciebdd = Cie10.objects.all()
         alergias = PatAler.objects.filter(paciente=patbdd).select_related('alergia')
         medbdd = medicina.objects.all()
+        recbdd = Receta.objects.filter(obsmed=id)
     except observaciones.DoesNotExist:
         messages.error(request, "La observación no existe.")
         return redirect('error_p')
@@ -550,7 +551,8 @@ def viewobs(request, id):
         'diagnosticos': diabdd,  # Pasar una lista de diagnósticos
         'cies': ciebdd,
         'alergias': alergias,
-        'medicinas' : medbdd
+        'medicinas' : medbdd,
+        'recetas' : recbdd
     })
 
 
@@ -625,6 +627,36 @@ def editDiagnostico(request, id):
         messages.error(request,'No se pudo editar la información')
     return redirect('viewobs', id=id)
 
+@login_required
+@custom_login_required
+def addReceta(request, id):
+
+    if request.method == 'POST':
+        id = request.POST['id']
+        obsmed = observaciones.objects.get(id=id)
+        medicamento_id = request.POST.get('medicamentos')
+        total = request.POST.get('total')
+        cantidad = request.POST.get('cantidad')
+        via = request.POST.get('via')
+        frecuencia = request.POST.get('frecuencia')
+        duracion = request.POST.get('duracion')
+
+        receta = Receta(
+            obsmed=obsmed,
+            medicamento=medicina.objects.get(id=medicamento_id),
+            total=total,
+            cantidad=cantidad,
+            via=via,
+            frecuencia=frecuencia,
+            duracion=duracion
+        )
+        receta.save()
+
+        messages.success(request, 'Receta añadida correctamente')
+        return redirect('viewobs', id=id)
+    else:
+        messages.error(request, 'No se pudo añadir la receta')
+        return redirect('viewobs', id=id)
 #PÁGINA VISTA OBSERVACIONES FINAL
 
 
