@@ -14,6 +14,7 @@ from Aplicaciones.Citas.middleware import login_required as custom_login_require
 from .models import Patient, Gender, MadreCita, PadreCita, Alergia, PatAler, InfoMom, observaciones, Cie10, medicina, Diagnostico, Receta
 from django.views.decorators.http import require_POST
 from dateutil.relativedelta import relativedelta
+from num2words import num2words
 # Create your views here.
 
 
@@ -541,6 +542,10 @@ def viewobs(request, id):
         alergias = PatAler.objects.filter(paciente=patbdd).select_related('alergia')
         medbdd = medicina.objects.all()
         recbdd = Receta.objects.filter(obsmed=id)
+
+        from num2words import num2words
+        for receta in recbdd:
+            receta.total_words = num2words(receta.total, lang='es')
     except observaciones.DoesNotExist:
         messages.error(request, "La observación no existe.")
         return redirect('error_p')
@@ -551,10 +556,9 @@ def viewobs(request, id):
         'diagnosticos': diabdd,  # Pasar una lista de diagnósticos
         'cies': ciebdd,
         'alergias': alergias,
-        'medicinas' : medbdd,
-        'recetas' : recbdd
+        'medicinas': medbdd,
+        'recetas': recbdd
     })
-
 
 @login_required
 @custom_login_required
