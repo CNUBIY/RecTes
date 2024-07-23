@@ -279,7 +279,7 @@
       <div class="modal-body">
         <form id="editDiagnosticoForm" method="post" action="{% url 'editDiagnostico' id=observaciones.id %}">
           {% csrf_token %}
-          <input type="hidden" name="id" id="id" value="{{ diagnostico.id }}">
+          <input type="hidden" name="id" id="id" value="{{ diagnosticos.0.id }}">
           <div class="form-group">
             <label for="cie">CIE10:</label>
             <select id="cie2" name="cie" class="form-control" multiple>
@@ -317,7 +317,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-outline-warning mt-3">Añadir Diagnóstico</button>
+            <button type="submit" class="btn btn-outline-warning mt-3">Editar información</button>
             <button type="button" class="btn btn-outline-danger mt-3" data-bs-dismiss="modal">Cerrar</button>
           </div>
         </form>
