@@ -308,8 +308,8 @@
                                                 <td>{{ receta.duracion }}</td>
                                                 <td>
                                                     <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#editRecModal" data-id="{{ receta.id }}"
-                                                    data-medicamento="{{ receta.medicamento.id }}" data-total="{{ receta.total }}" data-cantidad="{{ receta.cantidad }}" data-via="{{receta.via}}"
-                                                    data-frecuencia="{{receta.frecuencia}}" data-duracion="{{receta.duracion}}">
+                                                        data-medicamento="{{ receta.medicamento.id }}" data-total="{{ receta.total }}" data-cantidad="{{ receta.cantidad }}" data-via="{{receta.via}}"
+                                                        data-frecuencia="{{receta.frecuencia}}" data-duracion="{{receta.duracion}}">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
                                                     <a href="javascript:void(0)" onclick="" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
@@ -524,7 +524,7 @@
                       <div class="receta-form">
                           <div class="form-group mb-3">
                               <label for="medicamentos">Medicinas:</label>
-                              <select name="medicamentos" class="selectpicker form-control" data-live-search="true" required>
+                              <select id="medicamentos" name="medicamentos" class="selectpicker form-control" data-live-search="true" required>
                                   <option value="">Escoja un medicamento</option>
                                   {% for medicina in medicinas %}
                                   <option value="{{ medicina.id }}">{{ medicina.nombregen_med }} -- {{ medicina.nombrecom_med }} | {{ medicina.tipo_med }}</option>
@@ -563,6 +563,45 @@
         </div>
     </div>
 </div>
+
+<!-- Llamado de información modal edición receta -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var editRecModal = document.getElementById('editRecModal');
+        editRecModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget; // Botón que activó el modal
+            var id = button.getAttribute('data-id');
+            var medicamento = button.getAttribute('data-medicamento');
+            var total = button.getAttribute('data-total');
+            var cantidad = button.getAttribute('data-cantidad');
+            var via = button.getAttribute('data-via');
+            var frecuencia = button.getAttribute('data-frecuencia');
+            var duracion = button.getAttribute('data-duracion');
+
+            // Poner los valores en el modal
+            var modalIdInput = editRecModal.querySelector('#id');
+            var modalMedicamentoSelect = editRecModal.querySelector('#medicamentos');
+            var modalTotalInput = editRecModal.querySelector('#total');
+            var modalCantidadInput = editRecModal.querySelector('#cantidad');
+            var modalViaInput = editRecModal.querySelector('#via');
+            var modalFrecuenciaInput = editRecModal.querySelector('#frecuencia');
+            var modalDuracionInput = editRecModal.querySelector('#duracion');
+
+            modalIdInput.value = id;
+            modalTotalInput.value = total;
+            modalCantidadInput.value = cantidad;
+            modalViaInput.value = via;
+            modalFrecuenciaInput.value = frecuencia;
+            modalDuracionInput.value = duracion;
+
+            // Marcar el select con el medicamento seleccionado
+            modalMedicamentoSelect.value = medicamento;
+
+            // Forzar la actualización del selectpicker para que se muestre la opción seleccionada
+            $(modalMedicamentoSelect).selectpicker('val', medicamento);
+        });
+    });
+</script>
 
 <!-- SELECTS -->
 <script>
