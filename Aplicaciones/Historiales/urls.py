@@ -41,6 +41,7 @@ urlpatterns=[
 
     #RECETAS
     path('doc_inicio/viewobs/<int:id>/addReceta', views.addReceta, name='addReceta'),
+    path('doc_inicio/viewobs/<int:idobs>/edit_receta/<int:idreceta>/', views.editReceta, name='editReceta'),
 
     #ALERGIAS
     path('doc_inicio/alergias/',views.alergias, name='alergias'),

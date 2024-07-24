@@ -661,6 +661,32 @@ def addReceta(request, id):
     else:
         messages.error(request, 'No se pudo añadir la receta')
         return redirect('viewobs', id=id)
+
+@login_required
+@custom_login_required
+def editReceta(request, idobs, idreceta):
+    if request.method == 'POST':
+        medicina_id = request.POST['medicamentos']
+        medicinaSel = medicina.objects.get(id=medicina_id)
+        total = request.POST['total']
+        cantidad = request.POST['cantidad']
+        via = request.POST['via']
+        frecuencia = request.POST['frecuencia']
+        duracion = request.POST['duracion']
+
+        receta = get_object_or_404(Receta, id=idreceta)
+        receta.medicamento = medicinaSel
+        receta.total = total
+        receta.cantidad = cantidad
+        receta.via = via
+        receta.frecuencia = frecuencia
+        receta.duracion = duracion
+        receta.save()
+        messages.success(request, 'Receta editada correctamente')
+        return redirect('viewobs', id=idobs)
+    else:
+        messages.error(request, 'No se pudo editar la receta')
+        return redirect('viewobs', id=idobs)
 #PÁGINA VISTA OBSERVACIONES FINAL
 
 
