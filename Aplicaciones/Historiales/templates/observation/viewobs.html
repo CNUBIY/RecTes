@@ -517,7 +517,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <form id="recetaForm" method="post" action="">
+              <form id="editRecetaForm" method="post" action="">
                   {% csrf_token %}
                   <input type="hidden" name="id" id="id" value="{{ receta.id }}">
                   <div id="formContainer">
@@ -555,7 +555,7 @@
                       </div>
                   </div>
                   <div class="modal-footer">
-                      <button type="submit" class="btn btn-warning">Editar receta</button>
+                      <button type="submit" class="btn btn-warning" id="editarRecetaBtn">Editar receta</button>
                       <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
                   </div>
               </form>
@@ -568,6 +568,22 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var editRecModal = document.getElementById('editRecModal');
+        var recetaForm = document.getElementById('editRecetaForm');
+        var editButton = recetaForm.querySelector('button[type="submit"]');
+
+        // Variables para almacenar los valores iniciales del formulario
+        var initialId = '';
+        var initialMedicamento = '';
+        var initialTotal = '';
+        var initialCantidad = '';
+        var initialVia = '';
+        var initialFrecuencia = '';
+        var initialDuracion = '';
+
+        // Deshabilitar el botón de edición inicialmente
+        editButton.disabled = true;
+
+        // Configurar el modal al mostrarlo
         editRecModal.addEventListener('show.bs.modal', function (event) {
             var button = event.relatedTarget; // Botón que activó el modal
             var id = button.getAttribute('data-id');
@@ -588,17 +604,48 @@
             var modalDuracionInput = editRecModal.querySelector('#duracion');
 
             modalIdInput.value = id;
+            modalMedicamentoSelect.value = medicamento;
             modalTotalInput.value = total;
             modalCantidadInput.value = cantidad;
             modalViaInput.value = via;
             modalFrecuenciaInput.value = frecuencia;
             modalDuracionInput.value = duracion;
 
-            // Marcar el select con el medicamento seleccionado
-            modalMedicamentoSelect.value = medicamento;
+            // Almacenar los valores iniciales
+            initialId = id;
+            initialMedicamento = medicamento;
+            initialTotal = total;
+            initialCantidad = cantidad;
+            initialVia = via;
+            initialFrecuencia = frecuencia;
+            initialDuracion = duracion;
 
             // Forzar la actualización del selectpicker para que se muestre la opción seleccionada
             $(modalMedicamentoSelect).selectpicker('val', medicamento);
+
+            // Deshabilitar el botón de edición inicialmente
+            editButton.disabled = true;
+        });
+
+        // Activar el botón si se detecta un cambio en el formulario
+        recetaForm.addEventListener('input', function() {
+            if (recetaForm.id.value.trim() !== initialId.trim() ||
+                recetaForm.medicamentos.value.trim() !== initialMedicamento.trim() ||
+                recetaForm.total.value.trim() !== initialTotal.trim() ||
+                recetaForm.cantidad.value.trim() !== initialCantidad.trim() ||
+                recetaForm.via.value.trim() !== initialVia.trim() ||
+                recetaForm.frecuencia.value.trim() !== initialFrecuencia.trim() ||
+                recetaForm.duracion.value.trim() !== initialDuracion.trim()) {
+                editButton.disabled = false;
+            } else {
+                editButton.disabled = true;
+            }
+        });
+
+        // Resetear el formulario y desactivar el botón al cerrar el modal
+        $('#editRecModal').on('hidden.bs.modal', function () {
+            recetaForm.reset();
+            editButton.disabled = true;
         });
     });
 </script>
