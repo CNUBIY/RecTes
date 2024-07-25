@@ -900,4 +900,7 @@ def representantesLista(request):
         padre.age_years = calculate_age(padre.age_fat)
 
     return render(request, 'rep/parents.html', {'pacientes': patbdd, 'madres': mombdd, 'padres': dadbdd})
+
+
+
 #PÁGINA REPRESENTANTES FINAL

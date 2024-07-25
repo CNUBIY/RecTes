@@ -134,9 +134,9 @@
               <td>{{ madre.act_mom }}</td>
               <td>{{ madre.correo_mom }}</td>
               <td>
-                <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#editMomModal"
                   data-id="{{ madre.id }}" data-nom="{{ madre.nom_mom }}" data-ape="{{ madre.ape_mom }}" data-esci="{{ madre.es_cimom }}"
-                  data-age="{{ madre.age_years }}" data-hij="{{ madre.hij_mom }}" data-act="{{ madre.act_mom }}" data-correo="{{ madre.correo_mom }}">
+                  data-age="{{ madre.age_mom|date:'Y-m-d' }}" data-hij="{{ madre.hij_mom }}" data-act="{{ madre.act_mom }}" data-correo="{{ madre.correo_mom }}">
                   <i class="fas fa-edit"></i>
                 </button>
                 <a href="javascript:void(0)" onclick="delete_adci('/delete_adci/{{ madre.id }}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
@@ -148,6 +148,131 @@
     </div>
   </div>
 </div>
+
+<!-- Modal edit madre-->
+<div class="modal fade" id="editMomModal" tabindex="-1" aria-labelledby="editMomModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="editMomModalLabel">Editar Información</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="" method="POST" id="vldt_dias">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" name="nom_mom" id="nom_mom" placeholder="Paciente" required>
+                <label for="nom_mom">Nombres de la madre:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" name="ape_mom" id="ape_mom" placeholder="Paciente" required>
+                <label for="ape_mom">Apellidos de la madre:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-floating mb-3">
+                <select class="form-control" name="es_cimom" id="es_cimom" required>
+                  <option value="">Seleccione un estado civil</option>
+                  <option value="Soltero/a">Soltero/a</option>
+                  <option value="Casado/a">Casado/a</option>
+                  <option value="Divorciado/a">Divorciado/a</option>
+                  <option value="Viudo/a">Viudo/a</option>
+                  <option value="Separado/a">Separado/a</option>
+                  <option value="Unión libre">Unión libre</option>
+                </select>
+                <label for="es_cimom">Estado Civil:</label>
+                <div id="error-nom_da2" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-floating mb-3">
+                <input type="date" class="form-control" name="age_mom" id="age_mom" placeholder="Paciente" value="" required>
+                <label for="age_mom">Fecha de Nacimiento:</label>
+                <div id="error-nom_da2" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" name="hij_mom" id="hij_mom" placeholder="Paciente" value="" required>
+                <label for="hij_mom"># Hijos:</label>
+                <div id="error-nom_da2" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" name="act_mom" id="act_mom" placeholder="Paciente" required>
+                <label for="act_mom">Actividad:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="email" class="form-control" name="correo_mom" id="correo_mom" placeholder="Paciente" required>
+                <label for="correo_mom">Correo:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-warning">Editar</button>
+              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Llamado de información madre -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var editMomModal = document.getElementById('editMomModal');
+    editMomModal.addEventListener('show.bs.modal', function (event) {
+      var button = event.relatedTarget; // Botón que activó el modal
+      var id = button.getAttribute('data-id');
+      var nom = button.getAttribute('data-nom');
+      var ape = button.getAttribute('data-ape');
+      var esci = button.getAttribute('data-esci');
+      var age = button.getAttribute('data-age');
+      var hij = button.getAttribute('data-hij');
+      var act = button.getAttribute('data-act');
+      var correo = button.getAttribute('data-correo');
+
+      // Actualizar los valores de los campos del formulario en el modal
+      var modal = this;
+      modal.querySelector('#nom_mom').value = nom;
+      modal.querySelector('#ape_mom').value = ape;
+      modal.querySelector('#es_cimom').value = esci;
+      modal.querySelector('#age_mom').value = age;
+      modal.querySelector('#hij_mom').value = hij;
+      modal.querySelector('#act_mom').value = act;
+      modal.querySelector('#correo_mom').value = correo;
+
+      // Si necesitas usar el ID en el formulario, por ejemplo, en una acción de actualización, puedes agregar un campo oculto
+      var idField = modal.querySelector('#mom_id');
+      if (!idField) {
+        idField = document.createElement('input');
+        idField.type = 'hidden';
+        idField.id = 'mom_id';
+        idField.name = 'mom_id';
+        modal.querySelector('form').appendChild(idField);
+      }
+      idField.value = id;
+    });
+  });
+</script>
+
 
 <div class="card mb-3">
   <!-- Formulario para Registrar a Papá -->
@@ -239,9 +364,9 @@
               <td>{{ padre.act_fat }}</td>
               <td>{{ padre.age_years }}</td>
               <td>
-                <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#editdadModal"
                   data-id="{{ padre.id }}" data-nom="{{ padre.nom_fat }}" data-ape="{{ padre.ape_fat }}" data-act="{{ padre.act_fat }}"
-                  data-age="{{ padre.age_years }}">
+                  data-age="{{ padre.age_fat|date:'Y-m-d' }}">
                   <i class="fas fa-edit"></i>
                 </button>
                 <a href="javascript:void(0)" onclick="delete_adci('/delete_adci/{{ padre.id }}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
@@ -254,9 +379,90 @@
   </div>
 </div>
 
+<!-- Modal edit padre-->
+<div class="modal fade" id="editdadModal" tabindex="-1" aria-labelledby="editdadModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="editdadModalLabel">Editar Información</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="" method="POST" id="vldt_dias">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" name="nom_fat" id="nom_fat" placeholder="Nombre del padre" required>
+                <label for="nom_fat">Nombres del padre:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" name="ape_fat" id="ape_fat" placeholder="Apellidos del padre" required>
+                <label for="ape_fat">Apellidos del padre:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" name="act_fat" id="act_fat" placeholder="Actividad" required>
+                <label for="act_fat">Actividad:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-floating mb-3">
+                <input type="date" class="form-control" name="age_fat" id="age_fat" placeholder="Edad" required>
+                <label for="age_fat">Edad:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-warning">Editar</button>
+              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Llamado de información padre -->
 <script>
-  $(document).ready(function() {
-    $('[data-toggle="tooltip"]').tooltip();
+  document.addEventListener('DOMContentLoaded', function() {
+    var editDadModal = document.getElementById('editdadModal');
+    editDadModal.addEventListener('show.bs.modal', function (event) {
+      var button = event.relatedTarget; // Botón que activó el modal
+      var id = button.getAttribute('data-id');
+      var nom = button.getAttribute('data-nom');
+      var ape = button.getAttribute('data-ape');
+      var act = button.getAttribute('data-act');
+      var age = button.getAttribute('data-age');
+
+      // Actualizar los valores de los campos del formulario en el modal
+      var modal = this;
+      modal.querySelector('#nom_fat').value = nom;
+      modal.querySelector('#ape_fat').value = ape;
+      modal.querySelector('#act_fat').value = act;
+      modal.querySelector('#age_fat').value = age;
+
+      // Si necesitas usar el ID en el formulario, por ejemplo, en una acción de actualización, puedes agregar un campo oculto
+      var idField = modal.querySelector('#fat_id');
+      if (!idField) {
+        idField = document.createElement('input');
+        idField.type = 'hidden';
+        idField.id = 'fat_id';
+        idField.name = 'fat_id';
+        modal.querySelector('form').appendChild(idField);
+      }
+      idField.value = id;
+    });
   });
 </script>
 
