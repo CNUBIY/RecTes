@@ -878,8 +878,19 @@ def editMedicina(request, id):
 @login_required
 @custom_login_required
 def representantesLista(request):
-    patbdd=Patient.objects.all()
-    mombdd=MadreCita.objects.all()
-    dadbdd=PadreCita.objects.all()
-    return render(request,'rep/parents.html',{'pacientes':patbdd,'mom':mombdd, 'dad':dadbdd})
+    patbdd = Patient.objects.all()
+    mombdd = MadreCita.objects.all()
+    dadbdd = PadreCita.objects.all()
+
+    def calculate_age(birthdate):
+        today = date.today()
+        return today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
+
+    for madre in mombdd:
+        madre.age_years = calculate_age(madre.age_mom)
+
+    for padre in dadbdd:
+        padre.age_years = calculate_age(padre.age_fat)
+
+    return render(request, 'rep/parents.html', {'pacientes': patbdd, 'madres': mombdd, 'padres': dadbdd})
 #PÁGINA REPRESENTANTES FINAL

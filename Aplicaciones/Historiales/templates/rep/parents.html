@@ -3,9 +3,6 @@
 {% block doc_contenido %}
 <div class="card mb-3">
   <!-- Formulario para Registrar a Mamá -->
-  <div class="card-header">
-    Registrar a Mamá
-  </div>
   <div class="card-body">
     <div class="d-flex justify-content-between align-items-center">
       <h5 class="card-title mb-3 fw-semibold">Registrar a Mamá</h5>
@@ -90,10 +87,70 @@
 </div>
 
 <div class="card mb-3">
-  <!-- Formulario para Registrar a Papá -->
-  <div class="card-header">
-    Registrar a Papá
+  <!-- Tabla Mamá -->
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center">
+      <h5 class="card-title mb-3 fw-semibold">Madres registradas</h5>
+    </div>
+    <br>
+    <div class="table-responsive">
+      <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
+        <thead class="text-dark fs-4">
+          <tr>
+            <th class="border-bottom-0">
+              <h6 class="fw-semibold mb-0">#</h6>
+            </th>
+            <th class="border-bottom-0">
+              <h6 class="fw-semibold mb-0">Nombre</h6>
+            </th>
+            <th class="border-bottom-0">
+              <h6 class="fw-semibold mb-0">Estado Civil</h6>
+            </th>
+            <th class="border-bottom-0">
+              <h6 class="fw-semibold mb-0">Edad</h6>
+            </th>
+            <th class="border-bottom-0">
+              <h6 class="fw-semibold mb-0">#Hijos</h6>
+            </th>
+            <th class="border-bottom-0">
+              <h6 class="fw-semibold mb-0">Actividad</h6>
+            </th>
+            <th class="border-bottom-0">
+              <h6 class="fw-semibold mb-0">Correo</h6>
+            </th>
+            <th class="border-bottom-0">
+              <h6 class="fw-semibold mb-0">Acción</h6>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for madre in madres %}
+            <tr>
+              <td>{{ madre.id }}</td>
+              <td>{{ madre.nom_mom }} {{ madre.ape_mom }}</td>
+              <td>{{ madre.es_cimom }}</td>
+              <td>{{ madre.age_years }}</td>
+              <td>{{ madre.hij_mom }}</td>
+              <td>{{ madre.act_mom }}</td>
+              <td>{{ madre.correo_mom }}</td>
+              <td>
+                <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                  data-id="{{ madre.id }}" data-nom="{{ madre.nom_mom }}" data-ape="{{ madre.ape_mom }}" data-esci="{{ madre.es_cimom }}"
+                  data-age="{{ madre.age_years }}" data-hij="{{ madre.hij_mom }}" data-act="{{ madre.act_mom }}" data-correo="{{ madre.correo_mom }}">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <a href="javascript:void(0)" onclick="delete_adci('/delete_adci/{{ madre.id }}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
+</div>
+
+<div class="card mb-3">
+  <!-- Formulario para Registrar a Papá -->
   <div class="card-body">
     <div class="d-flex justify-content-between align-items-center">
       <h5 class="card-title mb-3 fw-semibold">Registrar a Papá</h5>
@@ -146,6 +203,56 @@
   </div>
 </div>
 
+<div class="card mb-3">
+  <!-- Tabla Papá -->
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center">
+      <h5 class="card-title mb-3 fw-semibold">Padres registrados</h5>
+    </div>
+    <br>
+    <div class="table-responsive">
+      <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
+        <thead class="text-dark fs-4">
+          <tr>
+            <th class="border-bottom-0">
+              <h6 class="fw-semibold mb-0">#</h6>
+            </th>
+            <th class="border-bottom-0">
+              <h6 class="fw-semibold mb-0">Nombre</h6>
+            </th>
+            <th class="border-bottom-0">
+              <h6 class="fw-semibold mb-0">Actividad</h6>
+            </th>
+            <th class="border-bottom-0">
+              <h6 class="fw-semibold mb-0">Edad</h6>
+            </th>
+            <th class="border-bottom-0">
+              <h6 class="fw-semibold mb-0">Acción</h6>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for padre in padres %}
+            <tr>
+              <td>{{ padre.id }}</td>
+              <td>{{ padre.nom_fat }} {{ padre.ape_fat }}</td>
+              <td>{{ padre.act_fat }}</td>
+              <td>{{ padre.age_years }}</td>
+              <td>
+                <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                  data-id="{{ padre.id }}" data-nom="{{ padre.nom_fat }}" data-ape="{{ padre.ape_fat }}" data-act="{{ padre.act_fat }}"
+                  data-age="{{ padre.age_years }}">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <a href="javascript:void(0)" onclick="delete_adci('/delete_adci/{{ padre.id }}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
 <script>
   $(document).ready(function() {
