@@ -8,9 +8,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Medic Care Bootstrap 5 CSS Template</title>
-
-        <!-- CSS FILES -->
+        <title>Centro Médico Infantil Juvenil</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,392 +24,1013 @@
         <link href="{% static 'css/owl.theme.default.min.css' %}" rel="stylesheet">
 
         <link href="{% static 'css/templatemo-medic-care.css' %}" rel="stylesheet">
-<!--
 
-TemplateMo 566 Medic Care
+<style>
+.navbar-brand .logo {
+    width: 50px;
+    height: auto;
+}
 
-https://templatemo.com/tm-566-medic-care
 
--->
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand .logo {
+    margin-right: 0.5rem;
+}
+
+
+.image-wrapper {
+     position: relative;
+     width: 250px;
+     height: 400px;
+     margin: 10px;
+   }
+   .image-wrapper img {
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+     opacity: 0.8;
+   }
+   .overlay {
+     position: absolute;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background-color: rgba(0, 0, 0, 0.5);
+     opacity: 0;
+     transition: opacity 0.5s;
+   }
+   .image-wrapper:hover .overlay {
+     opacity: 1;
+   }
+   .overlay .text {
+     color: white;
+     text-align: center;
+     padding: 10px;
+     background-color: rgba(0, 0, 0, 0.7);
+   }
+   .timeline-icon {
+     font-size: 2rem;
+     color: #fff;
+   }
+   .d-flex.flex-wrap.justify-content-center {
+     max-width: 1200px;
+     margin: auto;
+   }
+
+      .navbar {
+          background-color: #DCFBFF;
+      }
+
+
+      .navbar-nav .nav-link {
+          color: #2445EA;
+          padding: 15px 20px;
+          border: 2px solid transparent;
+          border-radius: 50px;
+          transition: border-color 0.3s, background-color 0.3s;
+      }
+
+      .navbar-nav .nav-item.active .nav-link,
+      .navbar-nav .nav-link:hover {
+          border-color: #00aaff;
+          background-color: #247cff;
+          color: #ffffff;
+      }
+
+
+      .btn-primary {
+          background-color: #0056b3;
+          color: #ffffff;
+          border: 2px solid #00aaff;
+          border-radius: 5px;
+          transition: background-color 0.3s, border-color 0.3s;
+      }
+
+
+      .btn-primary:hover {
+          background-color: #ffffff;
+          border-color: #ffffff;
+          color: #ffffff;
+      }
+
+
+      .navbar-toggler {
+          border-color: #00aaff;
+      }
+       .section-padding {
+           padding: 60px 0;
+       }
+       .featured-circle {
+           width: 200px;
+           height: 200px;
+           border-radius: 50%;
+       }
+       .featured-text {
+           font-size: 1.2em;
+           font-weight: bold;
+           text-align: center;
+       }
+       .featured-number {
+           font-size: 2.5em;
+           color: #007bff;
+       }
+       .about-section {
+           background-color: #f8f9fa;
+           border-radius: 15px;
+           padding: 30px;
+           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+       }
+       .about-section h2 {
+           font-family: 'Arial', sans-serif;
+           color: #343a40;
+       }
+       .about-section p {
+           font-family: 'Arial', sans-serif;
+           font-size: 1em;
+           color: #6c757d;
+           text-align: justify;
+       }
+       .about-section a {
+           color: #007bff;
+           text-decoration: none;
+       }
+       .about-section a:hover {
+           text-decoration: underline;
+       }
+
+       .interactive-img {
+           width: 120px;
+           border-radius: 8px;
+           transition: transform 0.6s ease, filter 0.3s ease;
+           cursor: pointer;
+           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+       }
+
+       .interactive-img.rotated {
+           transform: rotate(180deg);
+           filter: brightness(1.2);
+       }
+
+       .interactive-img:hover {
+           filter: brightness(1.1);
+       }
+
+       .interactive-img {
+           transition: transform 1s ease-in-out;
+           transform: translateX(-100%);
+       }
+
+       .interactive-img.animate {
+           transform: translateX(0);
+       }
+
+       .interactive-img1 {
+           width: 120px;
+           border-radius: 8px;
+           transition: transform 0.6s ease, filter 0.3s ease;
+           cursor: pointer;
+           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+       }
+       .interactive-img1.rotated {
+           transform: rotate(180deg)
+           filter: brightness(1.2);
+       }
+
+       .interactive-img1:hover {
+            filter: brightness(1.1);
+          }
+          .interactive-img1 {
+              transition: transform 1s ease-in-out;
+              transform: translateX(100%);
+          }
+
+          .interactive-img1.animate {
+              transform: translateX(0);
+          }
+
+       .interactive-img2 {
+           width: 120px;
+           border-radius: 8px;
+           transition: transform 0.6s ease, filter 0.3s ease;
+           cursor: pointer;
+           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+       }
+
+       .interactive-img2.rotated {
+           transform: rotate(180deg);
+           filter: brightness(1.2);
+       }
+
+       .interactive-img2:hover {
+           filter: brightness(1.1);
+       }
+
+       .interactive-img2 {
+           transition: transform 1s ease-in-out;
+           transform: translateX(-100%);
+       }
+
+       .interactive-img2.animate {
+           transform: translateX(0);
+       }
+
+       .rotated {
+           transform: rotate(180deg);
+       }
+
+
+          .interactive-img3 {
+              width: 120px;
+              border-radius: 8px;
+              transition: transform 0.6s ease, filter 0.3s ease
+              cursor: pointer;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          }
+
+          .interactive-img3.rotated {
+              transform: rotate(180deg);
+              filter: brightness(1.2);
+          }
+
+          .interactive-img3:hover {
+              filter: brightness(1.1);
+          }
+
+          .interactive-img3 {
+              transition: transform 1s ease-in-out;
+              transform: translateX(100%);
+          }
+
+          .interactive-img3.animate {
+              transform: translateX(0);
+          }
+
+          .interactive-img4 {
+              width: 120px;
+              border-radius: 8px;
+              transition: transform 0.6s ease, filter 0.3s ease;
+              cursor: pointer;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          }
+
+          .interactive-img4.rotated {
+              transform: rotate(180deg);
+              filter: brightness(1.2);
+          }
+
+          .interactive-img4:hover {
+              filter: brightness(1.1);
+          }
+
+          .interactive-img4 {
+              transition: transform 1s ease-in-out;
+              transform: translateX(-100%);
+          }
+
+          .interactive-img4.animate {
+              transform: translateX(0);
+          }
+
+          .reviews-thumb {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .reviews-thumb:hover {
+            transform: scale(1.05);
+        }
+
+        .reviews-image {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .reviews-stars {
+            color: #FFD700;
+        }
+
+        .reviews-carousel .owl-nav button.owl-prev,
+        .reviews-carousel .owl-nav button.owl-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+        }
+
+        .reviews-carousel .owl-nav button.owl-prev {
+            left: -30px;
+        }
+
+        .reviews-carousel .owl-nav button.owl-next {
+            right: -30px;
+        }
+
+        .quote {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: #555;
+        }
+
+        .booking-form {
+       background: #ffffff;
+       border-radius: 10px;
+       padding: 20px;
+       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+   }
+
+   .form-control-lg {
+       height: calc(2.5em + .75rem + 2px);
+       padding: .75rem 1.25rem;
+       font-size: 1.25rem;
+   }
+
+   .btn-primary {
+       background-color: #007bff;
+       border-color: #007bff;
+   }
+
+   .btn-primary:hover {
+       background-color: #0056b3;
+       border-color: #004080;
+   }
+
+
+   #timeline {
+     background-image: url('https://i.pinimg.com/564x/b7/25/51/b7255178dcdd5961e98c664d9a5631bb.jpg');
+     background-size: cover;
+     background-position: center;
+     background-repeat: no-repeat;
+     width: 100vw;
+     margin-left: 0;
+     margin-right: 0;
+     padding-left: 0;
+     padding-right: 0;
+ }
+
+ #timeline1 {
+   background-image: url('https://img.freepik.com/vector-gratis/fondo-blanco-gris-brillante-lineas-onduladas_1017-25101.jpg');
+   background-size: cover;
+   background-position: center;
+   background-repeat: no-repeat;
+   width: 100vw;
+   margin-left: 0;
+   margin-right: 0;
+   padding-left: 0;
+   padding-right: 0;
+
+}
+
+#timeline2 {
+    position: relative;
+    background-image: url('https://i.pinimg.com/564x/bf/db/2e/bfdb2ee4338759ea9a5f089832a3467d.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100vw;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    z-index: 1;
+}
+
+#timeline2::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: -1;
+}
+
+#booking {
+    position: relative;
+    background-image: url('https://i.pinimg.com/564x/bf/db/2e/bfdb2ee4338759ea9a5f089832a3467d.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100vw;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    z-index: 1;
+}
+#booking .booking-form {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+#booking h2 {
+    color: #0056b3;
+    margin-bottom: 1.5rem;
+}
+
+#booking .form-control {
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    height: auto;
+    padding: 0.75rem 1.25rem;
+}
+
+#booking .btn-primary {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.25rem;
+    background-color: #007bff;
+    border: none;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+#booking .btn-primary:hover {
+    background-color: #0056b3;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    color: #333;
+    background-color: #f4f4f4;
+}
+
+h1, h4, h6 {
+    font-family: 'Montserrat', sans-serif;
+    color: #0056b3;
+}
+h2 {
+    color: #007bff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2em;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
+
+.hero {
+    color: white;
+}
+
+#about {
+    background-color: #75BCEB;
+    color: white;
+}
+
+
+#services {
+    background: linear-gradient(to right, #3dd598, #00aaff);
+    color: white;
+}
+
+
+#testimonials {
+    background-color: #feca57;
+    color: #333;
+}
+
+#contact {
+    background-color: rgba(246, 241, 247, 0.5);
+    color: #333;
+}
+
+.btn {
+    background-color: #3dd598;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #ff6b6b;
+}
+
+a, a:hover, a:focus {
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: #ff6b6b;
+}
+
+#timeline1 {
+    text-align: center;
+}
+
+#timeline1 .service-thumb {
+    text-align: center;
+}
+
+#timeline1 .service-info h3,
+#timeline1 .service-info p {
+    margin: auto;
+    padding: 0 10px;
+}
+
+
+.carousel-inner, .carousel-item, .carousel-item img {
+    width: 100%;
+    height: 80%;
+}
+
+.carousel-item img {
+    object-fit: cover;
+    opacity: 0.5;
+}
+
+.carousel-caption {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 2rem;
+    color: white;
+    text-align: center;
+    z-index: 10;
+}
+
+.carousel-caption h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.carousel-caption p {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.carousel-caption .heroLinks a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 1rem;
+}
+
+.carousel-caption .contact-phone {
+    margin: 0;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 0%;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 1%;
+}
+
+ </style>
+</head>
+
     </head>
 
     <body id="top">
 
         <main>
 
-            <nav class="navbar navbar-expand-lg bg-light fixed-top shadow-lg">
-                <div class="container">
-                    <a class="navbar-brand mx-auto d-lg-none" href="/">
-                        MediKid
-                        <strong class="d-block">Médico Pediatra</strong>
-                    </a>
-
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav mx-auto">
-                            <li class="nav-item active">
-                                <a class="nav-link" href="#hero">Inicio</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="#about">Acerca de</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="#timeline">Línea de Tiempo</a>
-                            </li>
-
-                            <a class="navbar-brand d-none d-lg-block" href="/">
-                                MediKid
-                                <strong class="d-block">Médico Pediatra</strong>
-                            </a>
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="#booking">Agendar Cita</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="#contact">Contáctanos</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link" style="color:blue" href="/login/">Iniciar sesión</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                </div>
-            </nav>
+      <nav class="navbar navbar-expand-lg fixed-top shadow-lg">
+          <div class="container">
+              <a class="navbar-brand mx-auto d-lg-none" href="/">
+                  <img src="{% static 'images/slider/logo.png' %}" alt="Logo Pediatra" class="logo me-2">
+                  MediKid
+                  
+                  <strong class="d-block">Médico Pediatra</strong>
+              </a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                  <a class="navbar-brand d-none d-lg-block" href="/">
+                      <img src="{% static 'images/slider/logo.png' %}" alt="Logo Pediatra" class="logo me-2">
+                      MediKid
+                      <strong class="d-block">Médico Pediatra</strong>
+                  </a>
+                  <ul class="navbar-nav mx-auto">
+                      <li class="nav-item">
+                          <a class="nav-link" href="#hero">Inicio</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="#about">Acerca de</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="#timeline">Conocimientos</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="#booking">Agendar Cita</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="#contact">Contáctanos</a>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </nav>
 
             <section class="hero" id="hero">
-                <div class="container">
-                    <div class="row">
-
-                        <div class="col-12">
-                            <div id="myCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="images/slider/portrait-successful-mid-adult-doctor-with-crossed-arms.jpg" class="img-fluid" alt="">
-                                    </div>
-
-                                    <div class="carousel-item">
-                                        <img src="images/slider/young-asian-female-dentist-white-coat-posing-clinic-equipment.jpg" class="img-fluid" alt="">
-                                    </div>
-
-                                    <div class="carousel-item">
-                                        <img src="images/slider/doctor-s-hand-holding-stethoscope-closeup.jpg" class="img-fluid" alt="">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="heroText d-flex flex-column justify-content-center">
-
-                                <h1 class="mt-auto mb-2">
-                                    Better
+                <div id="myCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="{% static 'images/slider/doctor.jpg' %}" class="d-block w-100" alt="no vale">
+                            <div class="carousel-caption d-flex flex-column justify-content-center align-items-center">
+                                <h1>
+                                    Médico
                                     <div class="animated-info">
-                                        <span class="animated-item">health</span>
-                                        <span class="animated-item">days</span>
-                                        <span class="animated-item">lives</span>
+                                        <span class="animated-item">Pediátrico</span>
+                                        <span class="animated-item">Cirujano</span>
+                                        <span class="animated-item">Especialista</span>
                                     </div>
                                 </h1>
-
-                                <p class="mb-4">Medic Care is a Bootstrap 5 Template provided by TemplateMo website. Credits go to FreePik and RawPixel for images used in this template.</p>
-
-                                <div class="heroLinks d-flex flex-wrap align-items-center">
-                                    <a class="custom-link me-4" href="#about" data-hover="Learn More">Learn More</a>
-
-                                    <p class="contact-phone mb-0"><i class="bi-phone"></i> 010-020-0340</p>
+                                <p>Especialista con vocación de servicio para el bienestar tanto físico como emocional de niños y adolescentes.</p>
+                                <div class="heroLinks d-flex flex-wrap justify-content-center">
+                                    <a class="custom-link me-4" href="#about" data-hover="Acerca De">Acerca De</a>
+                                    <p class="contact-phone mb-0"><i class="bi-phone"></i> 0961828384</p>
                                 </div>
                             </div>
                         </div>
 
+                        <div class="carousel-item">
+                            <img src="{% static 'images/slider/portrait-successful-mid-adult-doctor-with-crossed-arms.jpg' %}" class="d-block w-100" alt="no vale">
+                            <div class="carousel-caption d-flex flex-column justify-content-center align-items-center">
+                                <h1>
+                                    Médico
+                                    <div class="animated-info">
+                                        <span class="animated-item">Pediátrico</span>
+                                        <span class="animated-item">Cirujano</span>
+                                        <span class="animated-item">Especialista</span>
+                                    </div>
+                                </h1>
+                                <p>Especialista con vocación de servicio para el bienestar tanto físico como emocional de niños y adolescentes.</p>
+                                <div class="heroLinks d-flex flex-wrap justify-content-center">
+                                    <a class="custom-link me-4" href="#about" data-hover="Acerca De">Acerca De</a>
+                                    <p class="contact-phone mb-0"><i class="bi-phone"></i> 0961828384</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="carousel-item">
+                            <img src="{% static 'images/slider/young-asian-female-dentist-white-coat-posing-clinic-equipment.jpg' %}" class="d-block w-100" alt="no vale">
+                            <div class="carousel-caption d-flex flex-column justify-content-center align-items-center">
+                                <h1>
+                                    Médico
+                                    <div class="animated-info">
+                                        <span class="animated-item">Pediátrico</span>
+                                        <span class="animated-item">Cirujano</span>
+                                        <span class="animated-item">Especialista</span>
+                                    </div>
+                                </h1>
+                                <p>Especialista con vocación de servicio para el bienestar tanto físico como emocional de niños y adolescentes.</p>
+                                <div class="heroLinks d-flex flex-wrap justify-content-center">
+                                    <a class="custom-link me-4" href="#about" data-hover="Acerca De">Acerca De</a>
+                                    <p class="contact-phone mb-0"><i class="bi-phone"></i> 0961828384</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="carousel-item">
+                            <img src="{% static 'images/slider/fondo.png' %}" class="d-block w-100" alt="no vale">
+                            <div class="carousel-caption d-flex flex-column justify-content-center align-items-center">
+                                <h1>
+                                    Médico
+                                    <div class="animated-info">
+                                        <span class="animated-item">Pediátrico</span>
+                                        <span class="animated-item">Cirujano</span>
+                                        <span class="animated-item">Especialista</span>
+                                    </div>
+                                </h1>
+                                <p>Especialista con vocación de servicio para el bienestar tanto físico como emocional de niños y adolescentes.</p>
+                                <div class="heroLinks d-flex flex-wrap justify-content-center">
+                                    <a class="custom-link me-4" href="#about" data-hover="Acerca De">Acerca De</a>
+                                    <p class="contact-phone mb-0"><i class="bi-phone"></i> 0961828384</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <a class="carousel-control-prev" href="#myCarousel" role="button" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#myCarousel" role="button" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </a>
                 </div>
             </section>
+
 
             <section class="section-padding" id="about">
                 <div class="container">
                     <div class="row">
 
-                        <div class="col-lg-6 col-md-6 col-12">
-                            <h2 class="mb-lg-3 mb-3">Meet Dr. Carson</h2>
+                        <div class="col-lg-6 col-md-6 col-12 mx-auto about-section">
+                            <h2 class="mb-lg-3 mb-3 text-center">Conoce al Dr. Rojas</h2>
 
-                            <p>Protect yourself and others by wearing masks and washing hands frequently. Outdoor is safer than indoor for gatherings or holding events. People who get sick with Coronavirus disease (COVID-19) will experience mild to moderate symptoms and recover without special treatments.</p>
+                            <p>Doctor en Medicina y Cirugía por la Universidad Central del Ecuador.
 
-                            <p>You can feel free to use this CSS template for your medical profession or health care related websites. You can <a rel="nofollow" href="http://paypal.me/templatemo" target="_blank">support us a little</a> via PayPal if this template is good and useful for your work.</p>
+                                Especialista en Pediatría por la Universidad Internacional del Ecuador, con título reconocido por el Colegio de Médicos de Pichincha y registrado en SENESCYT con número 1041R-08-1558</p>
+
                         </div>
+
 
                         <div class="col-lg-4 col-md-5 col-12 mx-auto">
                             <div class="featured-circle bg-white shadow-lg d-flex justify-content-center align-items-center">
-                                <p class="featured-text"><span class="featured-number">12</span> Years<br> of Experiences</p>
+                                <p class="featured-text"><span class="featured-number"> + 20</span> Años<br> de Experiencia</p>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </section>
 
             <section class="gallery">
+              <div class="container">
+                  <div class="row">
+
+                      <div class="col-lg-6 col-6 ps-0">
+                          <div class="image-wrapper">
+                              <img id="movingImage" src="{% static 'images/slider/doctor.png' %}" class="img-fluid" alt="no vale">
+                          </div>
+                      </div>
+
+                      <div class="col-lg-6 col-6 pe-0 d-flex align-items-center justify-content-center">
+                          <div class="text-center p-4">
+                              <h4>Descripción del Doctor</h4>
+                              <p>Nombre del Doctor: Dr. Marco Vinicio Rojas Silva</p>
+                              <p>Edad: 45 años</p>
+                              <p>Especialidad: Medicina General</p>
+                              <p>Descripción: El Dr. Marco Rojas es un médico con más de 20 años de experiencia en el campo de la medicina general. Su compromiso con el bienestar de sus pacientes y su extensa formación le permiten ofrecer un cuidado integral y especializado.</p>
+                          </div>
+                      </div>
+
+                  </div>
+              </div>
+          </section>
+
+          <script>
+              document.addEventListener('DOMContentLoaded', function() {
+                  const image = document.getElementById('movingImage');
+                  const maxMoveAmount = window.innerWidth / 2;
+
+                  window.addEventListener('scroll', function() {
+                      const scrollPosition = window.scrollY;
+                      let moveAmount = scrollPosition * 0.2;
+                      if (moveAmount > maxMoveAmount) {
+                          moveAmount = maxMoveAmount;
+                      }
+
+                      image.style.transform = `translateX(${moveAmount}px)`;
+                  });
+              });
+          </script>
+
+
+
+            <section class="section-padding pb-0 bg-image" id="timeline">
                 <div class="container">
-                    <div class="row">
+                  <div class="row">
+                    <div class="d-flex flex-wrap justify-content-center">
 
-                        <div class="col-lg-6 col-6 ps-0">
-                            <img src="images/gallery/medium-shot-man-getting-vaccine.jpg" class="img-fluid galleryImage" alt="get a vaccine" title="get a vaccine for yourself">
+                      <div class="image-wrapper">
+                        <img src="{% static 'images/slider/motricidad.jpg' %}" alt="Desarrollo de la Motricidad Fina">
+                        <div class="position-absolute" style="top: 10px; left: 10px;">
+                          <i class="bi-hand-index-thumb timeline-icon"></i>
                         </div>
-
-                        <div class="col-lg-6 col-6 pe-0">
-                            <img src="images/gallery/female-doctor-with-presenting-hand-gesture.jpg" class="img-fluid galleryImage" alt="wear a mask" title="wear a mask to protect yourself">
+                        <div class="overlay">
+                          <div class="text">
+                            <h4>Desarrollo de la Motricidad Fina</h4>
+                            <p>Nueve meses es una buena edad para que los niños empiecen a comer con las manos. A esa edad la mayoría de los bebés habrán desarrollado las habilidades de motricidad fina</p>
+                          </div>
                         </div>
+                      </div>
 
+                      <div class="image-wrapper">
+                        <img src="{% static 'images/slider/inteligencia.png' %}" alt="Inteligencia en un niño">
+                        <div class="position-absolute" style="top: 10px; left: 10px;">
+                          <i class="bi-thermometer timeline-icon"></i>
+                        </div>
+                        <div class="overlay">
+                          <div class="text">
+                            <h4>Inteligencia en un niño</h4>
+                            <p>La inteligencia se define como la capacidad para aprender, comprender, abstraer información y resolver problemas. Por esto es importante fortalecer la inteligencia en los primeros años de vida.</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="image-wrapper">
+                        <img src="{% static 'images/slider/lectura.jpg' %}" alt="Beneficios de la lectura">
+                        <div class="position-absolute" style="top: 10px; left: 10px;">
+                          <i class="bi-file-medical timeline-icon"></i>
+                        </div>
+                        <div class="overlay">
+                          <div class="text">
+                            <h4>Beneficios de la lectura</h4>
+                            <p>Leer enriquece su cultura, mejora su lenguaje, desarrolla la capacidad de concentración y estimula la imaginación en los más pequeños.</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="image-wrapper">
+                        <img src="{% static 'images/slider/controles.jpg' %}" alt="Importancia de los controles pediátricos">
+                        <div class="position-absolute" style="top: 10px; left: 10px;">
+                          <i class="bi-plus-circle timeline-icon"></i>
+                        </div>
+                        <div class="overlay">
+                          <div class="text">
+                            <h4>Importancia de los controles pediátricos</h4>
+                            <p>Los controles periódicos de salud son fundamentales para monitorear el crecimiento y detectar problemas de malnutrición.</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+                  </div>
                 </div>
-            </section>
+                      <br>
+                      <br>
+              </section>
 
-            <section class="section-padding pb-0" id="timeline">
-                <div class="container">
+            <section class="section-padding pb-0 bg-image" id="timeline1">
+                <div class="container bg-image2">
                     <div class="row">
 
-                        <h2 class="text-center mb-lg-5 mb-4">Our Timeline</h2>
+                        <div class="col-lg-12 col-12 text-center">
+                            <h2 class="mb-4">Nuestros Valores</h2>
+                            <h6>Lo más importante para mí es la salud y bienestar de mis pacientes y la tranquilidad de sus padres.</h6>
+                        </div>
 
-                        <div class="timeline">
-                            <div class="row g-0 justify-content-end justify-content-md-around align-items-start timeline-nodes">
-                                <div class="col-9 col-md-5 me-md-4 me-lg-0 order-3 order-md-1 timeline-content bg-white shadow-lg">
-                                    <h3 class=" text-light">Get the vaccine</h3>
-
-                                    <p>Donec facilisis urna dui, a dignissim mauris pretium a. Quisque quis libero fermentum, tempus felis eu, consequat nibh.</p>
+                        <div class="col-lg-4 col-md-6 col-12">
+                            <div class="service-thumb">
+                                <div class="service-info">
+                                    <h3 class="mb-3">Cuidado y Respeto</h3>
                                 </div>
-
-                                <div class="col-3 col-sm-1 order-2 timeline-icons text-md-center">
-                                    <i class="bi-patch-check-fill timeline-icon"></i>
-                                </div>
-
-                                <div class="col-9 col-md-5 ps-md-3 ps-lg-0 order-1 order-md-3 py-4 timeline-date">
-                                    <time>2021-07-31 Saturday</time>
-                                </div>
-                            </div>
-
-                            <div class="row g-0 justify-content-end justify-content-md-around align-items-start timeline-nodes my-lg-5 my-4">
-                                <div class="col-9 col-md-5 ms-md-4 ms-lg-0 order-3 order-md-1 timeline-content bg-white shadow-lg">
-                                    <h3 class=" text-light">Consulting your health</h3>
-
-                                    <p>You are fully permitted to use this template for your commercial or personal website. You are not permitted to redistribute the template ZIP file for a download purpose on any other <a href="https://www.google.com/search?q=free+css" target="_blank">Free CSS collection</a> website.</p>
-                                </div>
-
-                                <div class="col-3 col-sm-1 order-2 timeline-icons text-md-center">
-                                    <i class="bi-book timeline-icon"></i>
-                                </div>
-
-                                <div class="col-9 col-md-5 pe-md-3 pe-lg-0 order-1 order-md-3 py-4 timeline-date">
-                                    <time>2021-07-15 Thursday</time>
-                                </div>
-                            </div>
-
-                            <div class="row g-0 justify-content-end justify-content-md-around align-items-start timeline-nodes">
-                                <div class="col-9 col-md-5 me-md-4 me-lg-0 order-3 order-md-1 timeline-content bg-white shadow-lg">
-                                    <h3 class=" text-light">Certified Nurses</h3>
-
-                                    <p>Phasellus eleifend, urna interdum congue viverra, arcu neque ultrices ligula, id pulvinar nisi nibh et lacus. Vivamus gravida, ipsum non euismod tincidunt, sapien elit fermentum mi, quis iaculis enim ligula at arcu.</p>
-                                </div>
-
-                                <div class="col-3 col-sm-1 order-2 timeline-icons text-md-center">
-                                    <i class="bi-file-medical timeline-icon"></i>
-                                </div>
-
-                                <div class="col-9 col-md-5 ps-md-3 ps-lg-0 order-1 order-md-3 py-4 timeline-date">
-                                    <time>2021-06-28 Monday</time>
-                                </div>
-                            </div>
-
-                            <div class="row g-0 justify-content-end justify-content-md-around align-items-start timeline-nodes my-lg-5 my-4">
-                                <div class="col-9 col-md-5 ms-md-4 ms-lg-0 order-3 order-md-1 timeline-content bg-white shadow-lg">
-                                    <h3 class=" text-light">Covid-19 Hospitals</h3>
-
-                                    <p class="mb-0 pb-0">Fusce vestibulum euismod nulla sed ultrices. Praesent rutrum nulla vel sapien euismod, quis tempus dui placerat.</p>
-
-                                    <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Maecenas faucibus mollis interdum. Donec ullamcorper nulla non metus auctor fringilla</p>
-                                </div>
-
-                                <div class="col-3 col-sm-1 order-2 timeline-icons text-md-center">
-                                    <i class="bi-globe timeline-icon"></i>
-                                </div>
-
-                                <div class="col-9 col-md-5 pe-md-3 pe-lg-0 order-1 order-md-3 py-4 timeline-date">
-                                    <time>2021-05-30 Sunday</time>
-                                </div>
-                            </div>
-
-                            <div class="row g-0 justify-content-end justify-content-md-around align-items-start timeline-nodes">
-                                <div class="col-9 col-md-5 me-md-4 me-lg-0 order-3 order-md-1 timeline-content bg-white shadow-lg">
-                                    <h3 class=" text-light">Freelance Nursing</h3>
-
-                                    <p>If you need a working contact form that submits email to your inbox, please <a rel="nofollow" href="https://templatemo.com/contact" target="_parent">visit our contact page</a> for more information.</p>
-                                </div>
-
-                                <div class="col-3 col-sm-1 order-2 timeline-icons text-md-center">
-                                    <i class="bi-person timeline-icon"></i>
-                                </div>
-
-                                <div class="col-9 col-md-5 ps-md-3 ps-lg-0 order-1 order-md-3 py-4 timeline-date">
-                                    <time>2021-05-18 Tuesday</time>
-                                </div>
+                                <img src="{% static 'images/slider/cuidado.webp' %}" class="img-fluid" alt="no vale">
                             </div>
                         </div>
 
-                    </div>
-                </div>
-            </section>
+                        <div class="col-lg-4 col-md-6 col-12">
+                            <div class="service-thumb">
+                                <div class="service-info">
+                                    <h3 class="mb-3">Profesionalismo con Rigor Científico</h3>
+                                </div>
 
-            <section class="section-padding pb-0" id="reviews">
-                <div class="container">
-                    <div class="row">
+                                <img src="{% static 'images/slider/profesionalismo.webp' %}" class="img-fluid" alt="no vale">
+                            </div>
+                        </div>
 
-                        <div class="col-12">
-                            <h2 class="text-center mb-lg-5 mb-4">Our Patients</h2>
+                        <div class="col-lg-4 col-md-6 col-12">
+                            <div class="service-thumb">
+                                <div class="service-info">
+                                    <h3 class="mb-3">Comunicación</h3>
+                                </div>
 
-                            <div class="owl-carousel reviews-carousel">
-
-                                <figure class="reviews-thumb d-flex flex-wrap align-items-center rounded">
-                                    <div class="reviews-stars">
-                                        <i class="bi-star-fill"></i>
-                                        <i class="bi-star-fill"></i>
-                                        <i class="bi-star-fill"></i>
-                                        <i class="bi-star-fill"></i>
-                                        <i class="bi-star"></i>
-                                    </div>
-
-                                    <p class="text-primary d-block mt-2 mb-0 w-100"><strong>Best Health Care</strong></p>
-
-                                    <p class="reviews-text w-100">Phasellus ligula ante, tempus ac imperdiet ut, mattis ac nibh. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-
-                                    <img src="images/reviews/beautiful-woman-face-portrait-brown-background.jpeg" class="img-fluid reviews-image" alt="">
-
-                                    <figcaption class="ms-4">
-                                        <strong>Marie</strong>
-
-                                        <span class="text-muted">Patient</span>
-                                    </figcaption>
-                                </figure>
-
-                                <figure class="reviews-thumb d-flex flex-wrap align-items-center rounded">
-                                    <div class="reviews-stars">
-                                        <i class="bi-star-fill"></i>
-                                        <i class="bi-star-fill"></i>
-                                        <i class="bi-star-fill"></i>
-                                        <i class="bi-star-fill"></i>
-                                        <i class="bi-star"></i>
-                                    </div>
-
-                                    <p class="text-primary d-block mt-2 mb-0 w-100"><strong>Doctor cares everyone!</strong></p>
-
-                                    <p class="reviews-text w-100">Donec in elementum orci, nec posuere ligula. Quisque vulputate diam et ullamcorper ullamcorper. Pellentesque vestibulum neque at leo fermentum mattis.</p>
-
-                                    <img src="images/reviews/senior-man-wearing-white-face-mask-covid-19-campaign-with-design-space.jpeg" class="img-fluid reviews-image" alt="">
-
-                                    <figcaption class="ms-4">
-                                        <strong>Ben Walker</strong>
-
-                                        <span class="text-muted">Recovered</span>
-                                    </figcaption>
-                                </figure>
-
-                                <figure class="reviews-thumb d-flex flex-wrap align-items-center rounded">
-                                    <div class="reviews-stars">
-                                        <i class="bi-star-fill"></i>
-                                        <i class="bi-star-fill"></i>
-                                        <i class="bi-star-fill"></i>
-                                        <i class="bi-star-fill"></i>
-                                        <i class="bi-star-fill"></i>
-                                    </div>
-
-                                    <p class="text-primary d-block mt-2 mb-0 w-100"><strong>Great services!</strong></p>
-
-                                    <p class="reviews-text w-100">Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec sit amet velit vitae purus aliquam efficitur.</p>
-
-                                    <img src="images/reviews/portrait-british-woman.jpeg" class="img-fluid reviews-image" alt="">
-
-                                    <figcaption class="ms-4">
-                                        <strong>Laura Zono</strong>
-
-                                        <span class="text-muted">New Patient</span>
-                                    </figcaption>
-                                </figure>
-
-                                <figure class="reviews-thumb d-flex flex-wrap align-items-center rounded">
-                                    <div class="reviews-stars">
-                                        <i class="bi-star-fill"></i>
-                                        <i class="bi-star-fill"></i>
-                                        <i class="bi-star-fill"></i>
-                                        <i class="bi-star"></i>
-                                        <i class="bi-star"></i>
-                                    </div>
-
-                                    <p class="text-primary d-block mt-2 mb-0 w-100"><strong>Best Advices</strong></p>
-
-                                    <p class="reviews-text w-100">Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Maecenas faucibus mollis interdum. Donec ullamcorper nulla non metus auctor fringilla.</p>
-
-                                    <img src="images/reviews/woman-wearing-mask-face-closeup-covid-19-green-background.jpeg" class="img-fluid reviews-image" alt="">
-
-                                    <figcaption class="ms-4">
-                                        <strong>Rosey</strong>
-
-                                        <span class="text-muted">Almost Recovered</span>
-                                    </figcaption>
-                                </figure>
-
+                                <img src="{% static 'images/slider/comunicacion-icono.webp' %}" class="img-fluid" alt="no vale">
                             </div>
                         </div>
 
                     </div>
                 </div>
             </section>
+            <section class="section-padding pb-0" id="pediatric-care">
+      <div class="container">
+          <div class="row">
+              <div class="col-12">
+                  <h2 class="text-center mb-lg-5 mb-4">Testimonios sobre Atención Pediátrica</h2>
 
-            <section class="section-padding" id="booking">
-                <div class="container">
-                    <div class="row">
+                  <div class="owl-carousel reviews-carousel">
+                      <figure class="reviews-thumb d-flex flex-wrap align-items-center rounded shadow">
+                          <div class="reviews-stars">
+                              <i class="bi-star-fill"></i>
+                              <i class="bi-star-fill"></i>
+                              <i class="bi-star-fill"></i>
+                              <i class="bi-star-fill"></i>
+                              <i class="bi-star"></i>
+                          </div>
+                          <p class="text-primary d-block mt-2 mb-0 w-100"><strong>Un cambio positivo en la vida de mi hijo</strong></p>
+                          <p class="reviews-text w-100 quote">Desde que comenzamos a visitar al Dr. Rojas, hemos notado un gran cambio en la salud de nuestro hijo. Sus recomendaciones y cuidados han sido fundamentales para el desarrollo saludable y la felicidad de nuestro pequeño. La atención es siempre personalizada y llena de empatía.</p>
+                          <img src="images/reviews/pediatric-care-1.jpg" class="img-fluid reviews-image" alt="Testimonio 1">
+                          <figcaption class="ms-4">
+                              <strong>Laura Pérez</strong>
+                              <span class="text-muted">Madre de Paciente</span>
+                          </figcaption>
+                      </figure>
+                      <figure class="reviews-thumb d-flex flex-wrap align-items-center rounded shadow">
+                          <div class="reviews-stars">
+                              <i class="bi-star-fill"></i>
+                              <i class="bi-star-fill"></i>
+                              <i class="bi-star-fill"></i>
+                              <i class="bi-star-fill"></i>
+                              <i class="bi-star-fill"></i>
+                          </div>
+                          <p class="text-primary d-block mt-2 mb-0 w-100"><strong>Excelente cuidado y atención</strong></p>
+                          <p class="reviews-text w-100 quote">El Dr. Rojas y su equipo han proporcionado un cuidado excepcional para mi hijo desde su nacimiento. Las visitas regulares nos han permitido seguir de cerca su crecimiento y desarrollo, y su orientación ha sido invaluable para nuestra familia.</p>
+                          <img src="images/reviews/pediatric-care-2.jpg" class="img-fluid reviews-image" alt="Testimonio 2">
+                          <figcaption class="ms-4">
+                              <strong>Javier Gómez</strong>
+                              <span class="text-muted">Padre de Paciente</span>
+                          </figcaption>
+                      </figure>
+                      <figure class="reviews-thumb d-flex flex-wrap align-items-center rounded shadow">
+                          <div class="reviews-stars">
+                              <i class="bi-star-fill"></i>
+                              <i class="bi-star-fill"></i>
+                              <i class="bi-star-fill"></i>
+                              <i class="bi-star-fill"></i>
+                              <i class="bi-star-fill"></i>
+                          </div>
+                          <p class="text-primary d-block mt-2 mb-0 w-100"><strong>Un aliado en la salud infantil</strong></p>
+                          <p class="reviews-text w-100 quote">Nos sentimos muy afortunados de contar con el Dr. Rojas como pediatra de nuestro hijo. Su enfoque profesional y su cuidado genuino nos han dado una gran tranquilidad, sabiendo que nuestro hijo está en buenas manos.</p>
+                          <img src="images/reviews/pediatric-care-3.jpg" class="img-fluid reviews-image" alt="Testimonio 3">
+                          <figcaption class="ms-4">
+                              <strong>Marcela Fernández</strong>
+                              <span class="text-muted">Madre de Paciente</span>
+                          </figcaption>
+                      </figure>
+                      <figure class="reviews-thumb d-flex flex-wrap align-items-center rounded shadow">
+                          <div class="reviews-stars">
+                              <i class="bi-star-fill"></i>
+                              <i class="bi-star-fill"></i>
+                              <i class="bi-star-fill"></i>
+                              <i class="bi-star-fill"></i>
+                              <i class="bi-star-fill"></i>
+                          </div>
+                          <p class="text-primary d-block mt-2 mb-0 w-100"><strong>Atención de primera clase</strong></p>
+                          <p class="reviews-text w-100 quote">La atención que hemos recibido es de primera clase. Los exámenes y el seguimiento de nuestro hijo han sido detallados y efectivos, y apreciamos el tiempo que el Dr. Rojas dedica a responder nuestras preguntas y preocupaciones.</p>
+                          <img src="images/reviews/pediatric-care-4.jpg" class="img-fluid reviews-image" alt="Testimonio 4">
+                          <figcaption class="ms-4">
+                              <strong>Antonio Ruiz</strong>
+                              <span class="text-muted">Padre de Paciente</span>
+                          </figcaption>
+                      </figure>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
 
-                        <div class="col-lg-8 col-12 mx-auto">
-                            <div class="booking-form">
+ <script>
+       document.addEventListener('DOMContentLoaded', function() {
+           $('.reviews-carousel').owlCarousel({
+               loop: true,
+               margin: 10,
+               nav: true,
+               responsive: {
+                   0: {
+                       items: 1
+                   },
+                   600: {
+                       items: 2
+                   },
+                   1000: {
+                       items: 3
+                   }
+               }
+           });
+       });
+   </script>
 
-                                <h2 class="text-center mb-lg-3 mb-2">Book an appointment</h2>
 
-                                <form role="form" action="#booking" method="post">
-                                    <div class="row">
-                                        <div class="col-lg-6 col-12">
-                                            <input type="text" name="name" id="name" class="form-control" placeholder="Full name" required>
-                                        </div>
 
-                                        <div class="col-lg-6 col-12">
-                                            <input type="email" name="email" id="email" pattern="[^ @]*@[^ @]*" class="form-control" placeholder="Email address" required>
-                                        </div>
-
-                                        <div class="col-lg-6 col-12">
-                                            <input type="telephone" name="phone" id="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="form-control" placeholder="Phone: 123-456-7890">
-                                        </div>
-
-                                        <div class="col-lg-6 col-12">
-                                            <input type="date" name="date" id="date" value="" class="form-control">
-
-                                        </div>
-
-                                        <div class="col-12">
-                                            <textarea class="form-control" rows="5" id="message" name="message" placeholder="Additional Message"></textarea>
-                                        </div>
-
-                                        <div class="col-lg-3 col-md-4 col-6 mx-auto">
-                                            <button type="submit" class="form-control" id="submit-button">Book Now</button>
-                                        </div>
-                                    </div>
-                                </form>
-
+   <section class="section-padding pb-0" id="booking">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-12 mx-auto">
+                <div class="booking-form bg-white rounded shadow p-4">
+                    <h2 class="text-center mb-4">Agenda tu cita</h2>
+                    <form role="form" action="#booking" method="post" id="bookingForm">
+                        <div class="row g-3">
+                            <div class="col-lg-6 col-md-6">
+                                <input type="text" name="name" id="name" class="form-control form-control-lg" placeholder="Nombres Completos" required>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="Email" required>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <input type="tel" name="phone" id="phone" class="form-control form-control-lg" placeholder="Teléfono" required>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <input type="date" name="date" id="date" class="form-control form-control-lg" required>
+                            </div>
+                            <div class="col-12">
+                                <textarea class="form-control form-control-lg" rows="5" id="message" name="message" placeholder="Mensaje adicional" required></textarea>
+                            </div>
+                            <div class="col-12 text-center">
+                                <button type="submit" class="btn btn-primary btn-lg" id="submit-button">Reservar Ahora</button>
                             </div>
                         </div>
-
-                    </div>
+                    </form>
                 </div>
-            </section>
+                <br>
+                <br>
+            </div>
+        </div>
+    </div>
+</section>
 
         </main>
 
@@ -420,20 +1039,20 @@ https://templatemo.com/tm-566-medic-care
                 <div class="row">
 
                     <div class="col-lg-5 me-auto col-12">
-                        <h5 class="mb-lg-4 mb-3">Opening Hours</h5>
+                        <h5 class="mb-lg-4 mb-3">Horarios de atencion</h5>
 
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item d-flex">
-                                Sunday : Closed
+                                Domingo : Cerrado
                             </li>
 
                             <li class="list-group-item d-flex">
-                                Monday, Tuesday - Firday
-                                <span>8:00 AM - 3:30 PM</span>
+                                Lunes, Martes - Viernes
+                                <span>8:00 AM - 5:30 PM</span>
                             </li>
 
                             <li class="list-group-item d-flex">
-                                Saturday
+                                Sábado
                                 <span>10:30 AM - 5:30 PM</span>
                             </li>
                         </ul>
@@ -467,25 +1086,13 @@ https://templatemo.com/tm-566-medic-care
                             <p class="copyright-text">Distributed By: <a href="https://themewagon.com" target="_parent">Themewagon</a></p>
                         </div>
                     </div>
-
-
-
                 </div>
             </section>
         </footer>
-
-        <!-- JAVASCRIPT FILES -->
         <script src="{% static 'js/jquery.min.js' %}"></script>
         <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
         <script src="{% static 'js/owl.carousel.min.js' %}"></script>
         <script src="{% static 'js/scrollspy.min.js' %}"></script>
         <script src="{% static 'js/custom.js' %}"></script>
-<!--
-
-TemplateMo 566 Medic Care
-
-https://templatemo.com/tm-566-medic-care
-
--->
     </body>
 </html>
