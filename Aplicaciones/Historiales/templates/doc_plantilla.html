@@ -232,7 +232,7 @@
                 {% for mensaje in messages %}
                     <script type="text/javascript">
                         var mensajeTexto = "{{ mensaje|escapejs }}";
-                        if (mensajeTexto.includes("eliminado")) {
+                        if (mensajeTexto.includes("No")) {
                             iziToast.error({
                                 title: 'Cancelado',
                                 message: mensajeTexto,

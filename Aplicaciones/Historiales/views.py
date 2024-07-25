@@ -687,6 +687,17 @@ def editReceta(request, idobs, idreceta):
     else:
         messages.error(request, 'No se pudo editar la receta')
         return redirect('viewobs', id=idobs)
+
+@login_required
+@custom_login_required
+def deleteReceta (request, idReceta, idobs):
+        try:
+            eliminarReceta = Receta.objects.get(id=idReceta)
+            eliminarReceta.delete()
+            messages.success(request, 'Recetario eliminado correctamente')
+        except Receta.DoesNotExist:
+            messages.error(request, 'La receta no existe')
+        return redirect('viewobs', id=idobs)
 #PÁGINA VISTA OBSERVACIONES FINAL
 
 

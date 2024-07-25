@@ -312,7 +312,9 @@
                                                         data-frecuencia="{{receta.frecuencia}}" data-duracion="{{receta.duracion}}">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
-                                                    <a href="javascript:void(0)" onclick="" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
+                                                    <a href="javascript:void(0)" onclick="deleteReceta('{% url 'deleteReceta' idobs=observaciones.id idReceta=receta.id %}');" class="btn btn-outline-danger rounded-pill">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
                                                 </td>
                                             </tr>
                                             {% endfor %}
@@ -719,4 +721,30 @@
       }
   }
 </style>
+
+<!-- MENSAJE DE CONFIRMACIÓN ELIMINAR DÍA HORARIO -->
+<script type="text/javascript">
+        function deleteReceta(url){
+          iziToast.question({
+              timeout: 15000,
+              close: true,
+              overlay: true,
+              displayMode: 'once',
+              id: 'question',
+              zindex: 999,
+              title: 'CONFIRMACIÓN',
+              message: '¿Está seguro de eliminar la <b>cita </b> seleccionada?',
+              position: 'center',
+              buttons: [
+                  ['<button><b>SI</b></button>', function (instance, toast) {
+                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                      window.location.href=url;
+                  }, true],
+                  ['<button>NO</button>', function (instance, toast) {
+                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                  }],
+              ]
+          });
+        }
+</script>
 {% endblock %}
