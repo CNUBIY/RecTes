@@ -63,4 +63,7 @@ urlpatterns=[
     path('doc_inicio/newMedicina', views.newMedicina, name='newMedicina'),
     path('doc_inicio/deleteMedicina/<int:id>',views.deleteMedicina, name='deleteMedicina'),
     path('doc_inicio/editMedicina/<int:id>/', views.editMedicina, name='editMedicina'),
+
+    #REPRESENTANTES
+    path('doc_inicio/representantesLista/', views.representantesLista, name='representantesLista'),
 ]

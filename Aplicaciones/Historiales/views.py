@@ -15,8 +15,18 @@ from .models import Patient, Gender, MadreCita, PadreCita, Alergia, PatAler, Inf
 from django.views.decorators.http import require_POST
 from dateutil.relativedelta import relativedelta
 from num2words import num2words
+from django.conf import settings
+from telegram import Bot
+from asgiref.sync import async_to_sync
 # Create your views here.
 
+
+my_token = settings.BOT_TOKEN
+my_chat_id = settings.BOT_CHAT_ID
+
+async def send_telegram_message(msg, chat_id=my_chat_id, token=my_token):
+    bot_instance = Bot(token=token)
+    await bot_instance.send_message(chat_id=chat_id, text=msg)
 
 #Página LOGIN usarios INICIO
 
@@ -31,6 +41,7 @@ def user_login(request):
         if user is not None:
             login(request, user)
             request.session['last_activity'] = timezone.now().isoformat()  # Convertir a cadena
+            async_to_sync(send_telegram_message)(f"Se ha iniciado sesión con {user.username} en Sitio administrativo Médico")
             return redirect("doc_inicio")
         else:
             messages.error(request, 'Contraseña/Correo Incorrectos')
@@ -862,3 +873,13 @@ def editMedicina(request, id):
         messages.error(request, 'No se pudo editar el medicamento')
         return redirect('medicamentos')
 #PÁGINA MEDICAMENTOS FINAL
+
+#PÁGINA REPRESENTANTES INICIO
+@login_required
+@custom_login_required
+def representantesLista(request):
+    patbdd=Patient.objects.all()
+    mombdd=MadreCita.objects.all()
+    dadbdd=PadreCita.objects.all()
+    return render(request,'rep/parents.html',{'pacientes':patbdd,'mom':mombdd, 'dad':dadbdd})
+#PÁGINA REPRESENTANTES FINAL

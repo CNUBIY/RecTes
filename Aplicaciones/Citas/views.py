@@ -71,7 +71,7 @@ def user_login(request):
         if user is not None:
             login(request, user)
             request.session['last_activity'] = timezone.now().isoformat()  # Convertir a cadena
-            async_to_sync(send_telegram_message)(f"Se ha iniciado sesión con {user.username}")
+            async_to_sync(send_telegram_message)(f"Se ha iniciado sesión con {user.username} en Sitio administrativo Secretaría")
             return redirect("/adci_inicio")
         else:
             messages.error(request, 'Contraseña/Correo Incorrectos')
