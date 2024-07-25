@@ -33,18 +33,25 @@ async def send_telegram_message(msg, chat_id=my_chat_id, token=my_token):
 def user_login(request):
     if request.user.is_authenticated:
         logout(request)
+
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
 
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)
-            request.session['last_activity'] = timezone.now().isoformat()  # Convertir a cadena
-            async_to_sync(send_telegram_message)(f"Se ha iniciado sesión con {user.username} en Sitio administrativo Médico")
-            return redirect("doc_inicio")
+            if user.is_superuser or user.is_staff:
+                login(request, user)
+                request.session['last_activity'] = timezone.now().isoformat()  # Convertir a cadena
+                async_to_sync(send_telegram_message)(f"Se ha iniciado sesión con {user.username} en Sitio administrativo Médico")
+                return redirect("doc_inicio")
+            else:
+                messages.error(request, 'No tienes permisos para acceder a esta área.')
+                return redirect('logindoc')
         else:
             messages.error(request, 'Contraseña/Correo Incorrectos')
+            return redirect('logindoc')
+
     return render(request, 'auth/doc_login.html')
 
 
