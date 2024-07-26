@@ -94,7 +94,7 @@
     </div>
     <br>
     <div class="table-responsive">
-      <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
+      <table id="tbl_mom" class="table text-nowrap mb-0 align-middle">
         <thead class="text-dark fs-4">
           <tr>
             <th class="border-bottom-0">
@@ -348,7 +348,7 @@
     </div>
     <br>
     <div class="table-responsive">
-      <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
+      <table id="tbl_dad" class="table text-nowrap mb-0 align-middle">
         <thead class="text-dark fs-4">
           <tr>
             <th class="border-bottom-0">
@@ -541,5 +541,42 @@
           });
         }
 </script>
+<!-- CONFIGURACCIÓN DE TABLA -->
+<script type="text/javascript">
+  $(document).ready(function() {
+      $('#tbl_mom').DataTable( {
+          dom: 'frtip',  // Eliminamos la 'B' que corresponde a los botones de exportación
+          language: {
+              url: "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+          },
+          initComplete: function() {
+              $('.dataTables_filter input').addClass('form-control');
+          },
+          pageLength: 6,
+          drawCallback: function(settings) {
+              // Aplicar las clases a los botones de paginación después de cada redibujo
+              $('.paginate_button').addClass('btn btn-outline-primary');
+          }
+      } );
+  } );
+</script>
 
+<script type="text/javascript">
+  $(document).ready(function() {
+      $('#tbl_dad').DataTable( {
+          dom: 'frtip',  // Eliminamos la 'B' que corresponde a los botones de exportación
+          language: {
+              url: "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+          },
+          initComplete: function() {
+              $('.dataTables_filter input').addClass('form-control');
+          },
+          pageLength: 6,
+          drawCallback: function(settings) {
+              // Aplicar las clases a los botones de paginación después de cada redibujo
+              $('.paginate_button').addClass('btn btn-outline-primary');
+          }
+      } );
+  } );
+</script>
 {% endblock %}
