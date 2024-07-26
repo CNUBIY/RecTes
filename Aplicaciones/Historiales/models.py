@@ -164,6 +164,6 @@ class Curvas(models.Model):
     peso = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
     estatura_pat = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
     IMC = models.DecimalField(max_digits=4, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
-
+    per_enc = models.DecimalField( null=True, blank=True,max_digits=5, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
     def __str__(self):
         return f"Curvas del paciente {self.paciente} - {self.creation}"
