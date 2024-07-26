@@ -1172,9 +1172,11 @@
       <div class="card-body p-4">
         <div class="d-flex justify-content-between align-items-center">
           <h5 class="card-title mb-9 fw-semibold">Curvas de Crecimiento</h5>
-          <button type="button" class="btn btn-outline-success rounded-pill" data-bs-toggle="modal" data-bs-target="#obsModal" title="Añadir Observación">
-            <i class="fa-solid fa-plus"></i>
+          {% if estaturas %}
+          <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#editestrepModal" title="Añadir Observación">
+            <i class="fa-solid fa-edit"></i>
           </button>
+          {% endif %}
         </div>
         <div class="">
           {% if estaturas %}
@@ -1300,6 +1302,68 @@
 
 </div>
 
+<!-- Modal editar estaturas padre y madre -->
+<div class="modal fade" id="editestrepModal" tabindex="-1" aria-labelledby="editestrepModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="editestrepModalLabel">Editar información</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'editEstatura' estaturas.idest %}" method="post">
+          {% csrf_token %}
+          <div class="row">
+            <input type="hidden" name="idest" id="idest" value="{{ estaturas.idest }}">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" name="estatura_mom" id="estatura_mom" class="form-control" placeholder="Estatura de la madre" value="{{ estaturas.estatura_mom }}" required>
+                <label for="estatura_mom">Estatura de la madre</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" name="estatura_dad" id="estatura_dad" class="form-control" placeholder="Estatura del Padre" value="{{ estaturas.estatura_dad }}" required>
+                <label for="estatura_dad">Estatura del Padre</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-outline-success" id="saveChangesButton"><i class="fa-solid fa-floppy-disk"></i></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Script para restringir entrada a números y punto decimal -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var numericFields = document.querySelectorAll('#estatura_mom, #estatura_dad');
+
+    numericFields.forEach(function (field) {
+      field.addEventListener('keypress', function (event) {
+        var charCode = (event.which) ? event.which : event.keyCode;
+        if ((charCode >= 48 && charCode <= 57) || charCode == 46) {
+          return true;
+        }
+        event.preventDefault();
+        return false;
+      });
+
+      field.addEventListener('input', function (event) {
+        var value = field.value;
+        if (value.split('.').length > 2) {
+          field.value = value.substring(0, value.length - 1);
+        }
+      });
+    });
+  });
+</script>
 
 
 <!-- MENSAJE DE CONFIRMACIÓN ELIMINAR DÍA HORARIO -->

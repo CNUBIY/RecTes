@@ -33,6 +33,7 @@ urlpatterns=[
 
     #ESTATURAS PADRE Y MADRE
     path('doc_inicio/doc_patient/<int:idPat>/aggEstatura', views.aggEstatura, name='aggEstatura'),
+    path('doc_inicio/doc_patient/<int:idPat>/editEstatura', views.editEstatura, name='editEstatura'),
 
     #OBSERVACIONES
     path('doc_inicio/viewobs/<int:id>/', views.viewobs, name='viewobs'),

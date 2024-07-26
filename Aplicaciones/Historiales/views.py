@@ -84,7 +84,12 @@ def doc_patient(request, idPat):
     alerbdd = Alergia.objects.all()
     alerpatbdd = PatAler.objects.filter(paciente=idPat)
     estrepbdd = EstaturasRep.objects.filter(paciente=idPat).first()
-    curvabdd = Curvas.objects.filter(paciente = idPat)
+    curvabdd = Curvas.objects.filter(paciente=idPat)
+
+    # Convertir comas a puntos en estaturas
+    if estrepbdd:
+        estrepbdd.estatura_mom = str(estrepbdd.estatura_mom).replace(',', '.')
+        estrepbdd.estatura_dad = str(estrepbdd.estatura_dad).replace(',', '.')
 
     # Utilizar filter para obtener InfoMom
     obsmom_qs = InfoMom.objects.filter(patient=idPat)
@@ -102,9 +107,8 @@ def doc_patient(request, idPat):
         'infomom': obsmom,
         'observaciones': obsbdd,
         'estaturas': estrepbdd,
-        'curvas' : curvabdd
+        'curvas': curvabdd
     })
-
 
 @login_required
 @custom_login_required
@@ -321,6 +325,23 @@ def aggEstatura(request,idPat):
         return redirect('doc_patient', idPat=idPat)
     else:
         messages.error(request, 'No se pudo agregar la información')
+        return redirect('doc_patient', idPat=idPat)
+
+@login_required
+@custom_login_required
+def editEstatura(request, idPat):
+    if request.method=='POST':
+        idest=request.POST['idest']
+        estatura_mom = request.POST['estatura_mom']
+        estatura_dad = request.POST['estatura_dad']
+        editEstatura = EstaturasRep.objects.get(idest=idest)
+        editEstatura.estatura_mom = estatura_mom
+        editEstatura.estatura_dad = estatura_dad
+        editEstatura.save()
+        messages.success(request, 'Información editada correctamente')
+        return redirect('doc_patient', idPat=idPat)
+    else:
+        messages.error(request, 'No se pudo guardar la información')
         return redirect('doc_patient', idPat=idPat)
 #Página PACIENTES FINAL
 
