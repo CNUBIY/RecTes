@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Gender, Patient, PadreCita, MadreCita, Alergia, InfoMom, Cie10, medicina, Diagnostico, Receta
+from .models import Gender, Patient, PadreCita, MadreCita, Alergia, InfoMom, Cie10, medicina, Diagnostico, Receta, Curvas
 # Register your models here.
 
 admin.site.register(Gender)
@@ -12,3 +12,4 @@ admin.site.register(Cie10)
 admin.site.register(medicina)
 admin.site.register(Diagnostico)
 admin.site.register(Receta)
+admin.site.register(Curvas)

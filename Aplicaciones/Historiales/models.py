@@ -1,6 +1,8 @@
 from django.db import models
 import datetime
 from datetime import date
+from django.core.validators import MinValueValidator, MaxValueValidator
+from decimal import Decimal
 # Create your models here.
 class Gender(models.Model):
     id=models.AutoField(primary_key=True)
@@ -68,6 +70,8 @@ class Patient(models.Model):
 
     def __str__(self):
         return f"{self.lastnPat} {self.namePat} - {self.ciPat}"
+
+
 
 class Alergia(models.Model):
     id=models.AutoField(primary_key=True)
@@ -149,3 +153,17 @@ class Receta(models.Model):
     duracion = models.CharField(max_length=150)
     def __str__(self):
         return f"{self.obsmed} -> {self.medicamento}"
+
+class Curvas(models.Model):
+    idcur = models.AutoField(primary_key=True)
+    creation = models.DateField(default=datetime.date.today)
+    paciente = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    estatura_mom = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
+    estatura_dad = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
+    age_pat = models.DecimalField(max_digits=4, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
+    peso = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
+    estatura_pat = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
+    IMC = models.DecimalField(max_digits=4, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
+
+    def __str__(self):
+        return f"Curvas del paciente {self.paciente} - {self.creation}"
