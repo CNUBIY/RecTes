@@ -1192,7 +1192,12 @@
           {% endif  %}
         </div>
         <br>
-        <h5>Datos del paciente</h5>
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-9 fw-semibold">Datos del paciente</h5>
+          <button type="button" class="btn btn-outline-success rounded-pill" data-bs-toggle="modal" data-bs-target="#puntoModal" title="Añadir Observación">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
         {% if curvas %}
         <div class="table-responsive">
           <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
@@ -1340,31 +1345,58 @@
   </div>
 </div>
 
-<!-- Script para restringir entrada a números y punto decimal -->
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    var numericFields = document.querySelectorAll('#estatura_mom, #estatura_dad');
-
-    numericFields.forEach(function (field) {
-      field.addEventListener('keypress', function (event) {
-        var charCode = (event.which) ? event.which : event.keyCode;
-        if ((charCode >= 48 && charCode <= 57) || charCode == 46) {
-          return true;
-        }
-        event.preventDefault();
-        return false;
-      });
-
-      field.addEventListener('input', function (event) {
-        var value = field.value;
-        if (value.split('.').length > 2) {
-          field.value = value.substring(0, value.length - 1);
-        }
-      });
-    });
-  });
-</script>
-
+<!-- Modal editar estaturas padre y madre -->
+<div class="modal fade" id="puntoModal" tabindex="-1" aria-labelledby="puntoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="puntoModalLabel">Añadir Información</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="" method="post">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" name="estatura_pat" id="estatura_pat" class="form-control" placeholder="Estatura del paciente" required>
+                <label for="estatura_pat">Estatura del paciente:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" name="peso" id="peso" class="form-control" placeholder="Peso del paciente" required>
+                <label for="peso">Peso del paciente:</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" name="IMC" id="IMC" class="form-control" placeholder="IMC:" required>
+                <label for="IMC">IMC</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-floating mb-3">
+              <input type="text" name="per_enc" id="per_enc" class="form-control" placeholder="Perímetro cefálico (Nacimiento - 5 años):" required>
+              <label for="per_enc">Perímetro cefálico (Nacimiento - 5 años):</label>
+              <div id="error-nom_da" class="error-messages"></div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-outline-success" id="saveChangesButton"><i class="fa-solid fa-floppy-disk"></i></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- MENSAJE DE CONFIRMACIÓN ELIMINAR DÍA HORARIO -->
 <script type="text/javascript">
