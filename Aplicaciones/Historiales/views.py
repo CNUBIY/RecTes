@@ -18,6 +18,8 @@ from num2words import num2words
 from django.conf import settings
 from telegram import Bot
 from asgiref.sync import async_to_sync
+from decimal import Decimal
+
 # Create your views here.
 
 
@@ -343,6 +345,56 @@ def editEstatura(request, idPat):
     else:
         messages.error(request, 'No se pudo guardar la información')
         return redirect('doc_patient', idPat=idPat)
+
+
+@login_required
+@custom_login_required
+def aggCurva(request, idPat):
+    if request.method == 'POST':
+        paciente = Patient.objects.get(idPat=idPat)
+        estatura_pat = request.POST.get('estatura_pat')
+        peso = request.POST.get('peso')
+        IMC = request.POST.get('IMC')
+        per_enc = request.POST.get('per_enc', None)
+
+        # Convertir valores a Decimal
+        try:
+            estatura_pat = Decimal(estatura_pat)
+            peso = Decimal(peso)
+            IMC = Decimal(IMC)
+            if per_enc:
+                per_enc = Decimal(per_enc)
+            else:
+                per_enc = None
+        except InvalidOperation:
+            messages.error(request, 'Por favor, ingrese valores válidos para todos los campos.')
+            return redirect('doc_patient', idPat=idPat)
+
+        # Calcular la edad del paciente
+        birth_date = paciente.birthPat
+        today = date.today()
+        age_years = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+
+        if age_years < 5:
+            months_diff = (today.year - birth_date.year) * 12 + today.month - birth_date.month
+            age_pat = Decimal(f"{age_years}.{months_diff % 12}")
+        else:
+            age_pat = Decimal(age_years)
+
+        newCurva = Curvas.objects.create(
+            paciente=paciente,
+            estatura_pat=estatura_pat,
+            peso=peso,
+            IMC=IMC,
+            per_enc=per_enc,
+            age_pat=age_pat
+        )
+        messages.success(request, 'Dato registrado correctamente')
+        return redirect('doc_patient', idPat=idPat)
+    else:
+        messages.error(request, 'No se pudo ingresar la información')
+        return redirect('doc_patient', idPat=idPat)
+
 #Página PACIENTES FINAL
 
 

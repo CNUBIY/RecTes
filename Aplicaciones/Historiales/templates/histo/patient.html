@@ -1203,32 +1203,32 @@
           <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
             <thead class="text-dark fs-4">
               <tr>
-                <th class="border-bottom-0"><h6 class="fw-semibold mb-0">#</h6></th>
                 <th class="border-bottom-0"><h6 class="fw-semibold mb-0">Fecha de Creación</h6></th>
-                <th class="border-bottom-0"><h6 class="fw-semibold mb-0">Tipo</h6></th>
-                <th class="border-bottom-0"><h6 class="fw-semibold mb-0">Edad Actual</h6></th>
+                <th class="border-bottom-0"><h6 class="fw-semibold mb-0">Edad del Paciente</h6></th>
+                <th class="border-bottom-0"><h6 class="fw-semibold mb-0">Estatura (cm)</h6></th>
+                <th class="border-bottom-0"><h6 class="fw-semibold mb-0">Peso (kg)</h6></th>
+                <th class="border-bottom-0"><h6 class="fw-semibold mb-0">IMC</h6></th>
+                <th class="border-bottom-0"><h6 class="fw-semibold mb-0">Perímetro Cefálico</h6></th>
                 <th class="border-bottom-0"><h6 class="fw-semibold mb-0">Acciones</h6></th>
               </tr>
             </thead>
             <tbody>
-              {% for obs in observaciones %}
+              {% for curva in curvas %}
               <tr>
-                <td>{{ obs.id }}</td>
-                <td>{{ obs.creation }}</td>
+                <td>{{ curva.creation }}</td>
+                <td>{{ curva.age_pat }}</td>
+                <td>{{ curva.estatura_pat }}</td>
+                <td>{{ curva.peso }}</td>
+                <td>{{ curva.IMC }}</td>
                 <td>
-                  {% if obs.cortesia %}
-                  <span class="text-danger">Cita de cortesía</span>
+                  {% if curva.per_enc %}
+                  {{ curva.per_enc }}
                   {% else %}
-                  <span class="text-info">Cita normal</span>
+                  Sin datos
                   {% endif %}
                 </td>
-                <td>{{ obs.new_age }}</td>
                 <td>
-                  {% if obs.cortesia %}
-                  <a href="#" class="btn btn-outline-danger rounded-pill m-2" title="Vista Previa"><i class="fa-regular fa-eye"></i></a>
-                  {% else %}
-                  <a href="{% url 'viewobs' id=obs.id %}" class="btn btn-outline-info rounded-pill m-2" title="Vista Previa"><i class="fa-regular fa-eye"></i></a>
-                  {% endif %}
+
                 </td>
               </tr>
               {% endfor %}
@@ -1345,7 +1345,7 @@
   </div>
 </div>
 
-<!-- Modal editar estaturas padre y madre -->
+<!-- Modal añadir puntos de curvas de crecimiento -->
 <div class="modal fade" id="puntoModal" tabindex="-1" aria-labelledby="puntoModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -1354,20 +1354,20 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="" method="post">
+        <form action="{% url 'aggCurva' idPat=pacientes.idPat %}" method="post">
           {% csrf_token %}
           <div class="row">
             <div class="col-md-6">
               <div class="form-floating mb-3">
                 <input type="text" name="estatura_pat" id="estatura_pat" class="form-control" placeholder="Estatura del paciente" required>
-                <label for="estatura_pat">Estatura del paciente:</label>
+                <label for="estatura_pat">Estatura del paciente(cm):</label>
                 <div id="error-nom_da" class="error-messages"></div>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-floating mb-3">
                 <input type="text" name="peso" id="peso" class="form-control" placeholder="Peso del paciente" required>
-                <label for="peso">Peso del paciente:</label>
+                <label for="peso">Peso del paciente(kg):</label>
                 <div id="error-nom_da" class="error-messages"></div>
               </div>
             </div>
@@ -1375,7 +1375,7 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-floating mb-3">
-                <input type="text" name="IMC" id="IMC" class="form-control" placeholder="IMC:" required>
+                <input type="text" name="IMC" id="IMC" class="form-control" placeholder="IMC:" readonly>
                 <label for="IMC">IMC</label>
                 <div id="error-nom_da" class="error-messages"></div>
               </div>
@@ -1397,6 +1397,51 @@
     </div>
   </div>
 </div>
+
+<!-- Script para calcular IMC y ajustar el campo de perímetro cefálico -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var estaturaField = document.getElementById('estatura_pat');
+    var pesoField = document.getElementById('peso');
+    var imcField = document.getElementById('IMC');
+    var perEncField = document.getElementById('per_enc');
+
+    function calculateIMC() {
+      var estatura = parseFloat(estaturaField.value) / 100; // Convertir cm a metros
+      var peso = parseFloat(pesoField.value);
+
+      if (!isNaN(estatura) && !isNaN(peso) && estatura > 0) {
+        var imc = peso / (estatura * estatura);
+        imcField.value = imc.toFixed(2); // Redondear a 2 decimales
+      } else {
+        imcField.value = '';
+      }
+    }
+
+    estaturaField.addEventListener('input', calculateIMC);
+    pesoField.addEventListener('input', calculateIMC);
+
+    $('#puntoModal').on('show.bs.modal', function (event) {
+      var birthDate = new Date('{{ pacientes.birthPat|date:"Y-m-d" }}');
+      var today = new Date();
+      var ageYears = today.getFullYear() - birthDate.getFullYear();
+      var ageMonths = today.getMonth() - birthDate.getMonth();
+      if (ageMonths < 0 || (ageMonths === 0 && today.getDate() < birthDate.getDate())) {
+        ageYears--;
+      }
+
+      // Ajustar el campo de perímetro cefálico en función de la edad
+      if (ageYears >= 5) {
+        perEncField.readOnly = true;
+        perEncField.value = ''; // Limpiar el campo si se desactiva
+      } else {
+        perEncField.readOnly = false;
+      }
+    });
+  });
+</script>
+
+
 
 <!-- MENSAJE DE CONFIRMACIÓN ELIMINAR DÍA HORARIO -->
 <script type="text/javascript">
