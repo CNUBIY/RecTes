@@ -158,7 +158,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="" method="POST" id="vldt_dias">
+        <form action="" method="POST" id="vldt_dias_mom">
           {% csrf_token %}
           <div class="row">
             <div class="col-md-6">
@@ -225,7 +225,7 @@
           </div>
           <div class="row">
             <div class="modal-footer">
-              <button type="submit" class="btn btn-warning">Editar</button>
+              <button type="submit" class="btn btn-warning" id="editMomBtn" disabled>Editar</button>
               <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
             </div>
           </div>
@@ -234,10 +234,14 @@
     </div>
   </div>
 </div>
+
 <!-- Llamado de información madre -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     var editMomModal = document.getElementById('editMomModal');
+    var editMomBtn = document.getElementById('editMomBtn');
+    var formElements = document.querySelectorAll('#vldt_dias_mom input, #vldt_dias_mom select');
+
     editMomModal.addEventListener('show.bs.modal', function (event) {
       var button = event.relatedTarget; // Botón que activó el modal
       var id = button.getAttribute('data-id');
@@ -259,6 +263,9 @@
       modal.querySelector('#act_mom').value = act;
       modal.querySelector('#correo_mom').value = correo;
 
+      // Deshabilitar el botón de edición al mostrar el modal
+      editMomBtn.disabled = true;
+
       // Si necesitas usar el ID en el formulario, por ejemplo, en una acción de actualización, puedes agregar un campo oculto
       var idField = modal.querySelector('#mom_id');
       if (!idField) {
@@ -270,9 +277,21 @@
       }
       idField.value = id;
     });
+
+    // Habilitar el botón de edición cuando se detecta un cambio en los campos del formulario
+    formElements.forEach(function(element) {
+      element.addEventListener('input', function() {
+        editMomBtn.disabled = false;
+      });
+    });
+
+    // Restablecer el estado del formulario y el botón al cerrar el modal
+    editMomModal.addEventListener('hidden.bs.modal', function () {
+      editMomBtn.disabled = true;
+      document.getElementById('vldt_dias_mom').reset();
+    });
   });
 </script>
-
 
 <div class="card mb-3">
   <!-- Formulario para Registrar a Papá -->
@@ -388,7 +407,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="" method="POST" id="vldt_dias">
+        <form action="" method="POST" id="vldt_dias_dad">
           {% csrf_token %}
           <div class="row">
             <div class="col-md-6">
@@ -424,7 +443,7 @@
           </div>
           <div class="row">
             <div class="modal-footer">
-              <button type="submit" class="btn btn-warning">Editar</button>
+              <button type="submit" class="btn btn-warning" id="editDadBtn" disabled>Editar</button>
               <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
             </div>
           </div>
@@ -433,10 +452,14 @@
     </div>
   </div>
 </div>
+
 <!-- Llamado de información padre -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     var editDadModal = document.getElementById('editdadModal');
+    var editDadBtn = document.getElementById('editDadBtn');
+    var formElements = document.querySelectorAll('#vldt_dias_dad input');
+
     editDadModal.addEventListener('show.bs.modal', function (event) {
       var button = event.relatedTarget; // Botón que activó el modal
       var id = button.getAttribute('data-id');
@@ -452,6 +475,9 @@
       modal.querySelector('#act_fat').value = act;
       modal.querySelector('#age_fat').value = age;
 
+      // Deshabilitar el botón de edición al mostrar el modal
+      editDadBtn.disabled = true;
+
       // Si necesitas usar el ID en el formulario, por ejemplo, en una acción de actualización, puedes agregar un campo oculto
       var idField = modal.querySelector('#fat_id');
       if (!idField) {
@@ -462,6 +488,19 @@
         modal.querySelector('form').appendChild(idField);
       }
       idField.value = id;
+    });
+
+    // Habilitar el botón de edición cuando se detecta un cambio en los campos del formulario
+    formElements.forEach(function(element) {
+      element.addEventListener('input', function() {
+        editDadBtn.disabled = false;
+      });
+    });
+
+    // Restablecer el estado del formulario y el botón al cerrar el modal
+    editDadModal.addEventListener('hidden.bs.modal', function () {
+      editDadBtn.disabled = true;
+      document.getElementById('vldt_dias_dad').reset();
     });
   });
 </script>
