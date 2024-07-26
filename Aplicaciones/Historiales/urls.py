@@ -66,4 +66,10 @@ urlpatterns=[
 
     #REPRESENTANTES
     path('doc_inicio/representantesLista/', views.representantesLista, name='representantesLista'),
+    path('doc_inicio/editMadre/<int:id>/', views.editMadre, name='editMadre'),
+    path('doc_inicio/editPadre/<int:id>/', views.editPadre, name='editPadre'),
+    path('doc_inicio/aggMom/', views.aggMom, name='aggMom'),
+    path('doc_inicio/aggDad/', views.aggDad, name='aggDad'),
+    path('doc_inicio/deleteMadre/<int:id>/', views.deleteMadre, name='deleteMadre'),
+    path('doc_inicio/deletePadre/<int:id>/', views.deletePadre, name='deletePadre'),
 ]

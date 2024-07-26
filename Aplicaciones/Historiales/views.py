@@ -901,6 +901,94 @@ def representantesLista(request):
 
     return render(request, 'rep/parents.html', {'pacientes': patbdd, 'madres': mombdd, 'padres': dadbdd})
 
+@login_required
+@custom_login_required
+def editMadre(request, id):
+    madre = get_object_or_404(MadreCita, id=id)
+    if request.method == 'POST':
+        madre.nom_mom = request.POST['nom_mom']
+        madre.ape_mom = request.POST['ape_mom']
+        madre.es_cimom = request.POST['es_cimom']
+        madre.age_mom = request.POST['age_mom']
+        madre.hij_mom = request.POST['hij_mom']
+        madre.act_mom = request.POST['act_mom']
+        madre.correo_mom = request.POST['correo_mom']
+        madre.save()
+        messages.success(request, 'Información de la madre actualizada correctamente.')
+        return redirect('representantesLista')
+    else:
+        return redirect('error_p')
 
+@login_required
+@custom_login_required
+def editPadre(request, id):
+    padre = get_object_or_404(PadreCita, id=id)
+    if request.method == 'POST':
+        padre.nom_fat = request.POST['nom_fat']
+        padre.ape_fat = request.POST['ape_fat']
+        padre.act_fat = request.POST['act_fat']
+        padre.age_fat = request.POST['age_fat']
+        padre.save()
+        messages.success(request, 'Información del padre actualizada correctamente.')
+        return redirect('representantesLista')
+    else:
+        return redirect('error_p')
+
+@login_required
+@custom_login_required
+def aggMom(request):
+    if request.method == 'POST':
+        nom_mom = request.POST['nom_mom']
+        ape_mom = request.POST['ape_mom']
+        age_mom = request.POST['age_mom']
+        hij_mom = request.POST['hij_mom']
+        act_mom = request.POST['act_mom']
+        correo_mom = request.POST['correo_mom']
+        es_cimom = request.POST['es_cimom']
+
+        new_mom = MadreCita.objects.create(
+            nom_mom=nom_mom,
+            ape_mom=ape_mom,
+            age_mom=age_mom,
+            hij_mom=hij_mom,
+            act_mom=act_mom,
+            correo_mom=correo_mom,
+            es_cimom=es_cimom,
+        )
+        messages.success(request, 'Representante agregado correctamente')
+        return redirect('representantesLista')
+@login_required
+@custom_login_required
+def aggDad(request):
+    if request.method == 'POST':
+        nom_fat = request.POST['nom_fat']
+        ape_fat = request.POST['ape_fat']
+        age_fat = request.POST['age_fat']
+        act_fat = request.POST['act_fat']
+
+        new_mom = PadreCita.objects.create(
+            nom_fat=nom_fat,
+            ape_fat=ape_fat,
+            age_fat=age_fat,
+            act_fat = act_fat
+        )
+        messages.success(request,'Representante agregado correctamente')
+        return redirect('representantesLista')
+
+@login_required
+@custom_login_required
+def deleteMadre(request, id):
+    madre = get_object_or_404(MadreCita, id=id)
+    madre.delete()
+    messages.success(request, 'Información de la madre eliminada correctamente.')
+    return redirect('representantesLista')
+
+@login_required
+@custom_login_required
+def deletePadre(request, id):
+    padre = get_object_or_404(PadreCita, id=id)
+    padre.delete()
+    messages.success(request, 'Información del padre eliminada correctamente.')
+    return redirect('representantesLista')
 
 #PÁGINA REPRESENTANTES FINAL

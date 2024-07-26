@@ -11,7 +11,7 @@
       </button>
     </div>
     <br>
-    <form action="" method="POST" id="vldt_dias">
+    <form action="{% url 'aggMom' %}" method="POST" id="vldt_dias">
       {% csrf_token %}
       <div class="row">
         <div class="col-md-6">
@@ -139,7 +139,7 @@
                   data-age="{{ madre.age_mom|date:'Y-m-d' }}" data-hij="{{ madre.hij_mom }}" data-act="{{ madre.act_mom }}" data-correo="{{ madre.correo_mom }}">
                   <i class="fas fa-edit"></i>
                 </button>
-                <a href="javascript:void(0)" onclick="delete_adci('/delete_adci/{{ madre.id }}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
+                <a href="javascript:void(0)" onclick="deleteMadre('{% url 'deleteMadre' madre.id %}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
               </td>
             </tr>
           {% endfor %}
@@ -240,7 +240,8 @@
   document.addEventListener('DOMContentLoaded', function() {
     var editMomModal = document.getElementById('editMomModal');
     var editMomBtn = document.getElementById('editMomBtn');
-    var formElements = document.querySelectorAll('#vldt_dias_mom input, #vldt_dias_mom select');
+    var form = document.getElementById('vldt_dias_mom');
+    var formElements = form.querySelectorAll('input, select');
 
     editMomModal.addEventListener('show.bs.modal', function (event) {
       var button = event.relatedTarget; // Botón que activó el modal
@@ -263,19 +264,11 @@
       modal.querySelector('#act_mom').value = act;
       modal.querySelector('#correo_mom').value = correo;
 
+      // Establecer la acción del formulario dinámicamente
+      form.action = `{% url 'editMadre' 0 %}`.replace('0', id);
+
       // Deshabilitar el botón de edición al mostrar el modal
       editMomBtn.disabled = true;
-
-      // Si necesitas usar el ID en el formulario, por ejemplo, en una acción de actualización, puedes agregar un campo oculto
-      var idField = modal.querySelector('#mom_id');
-      if (!idField) {
-        idField = document.createElement('input');
-        idField.type = 'hidden';
-        idField.id = 'mom_id';
-        idField.name = 'mom_id';
-        modal.querySelector('form').appendChild(idField);
-      }
-      idField.value = id;
     });
 
     // Habilitar el botón de edición cuando se detecta un cambio en los campos del formulario
@@ -288,7 +281,7 @@
     // Restablecer el estado del formulario y el botón al cerrar el modal
     editMomModal.addEventListener('hidden.bs.modal', function () {
       editMomBtn.disabled = true;
-      document.getElementById('vldt_dias_mom').reset();
+      form.reset();
     });
   });
 </script>
@@ -303,7 +296,7 @@
       </button>
     </div>
     <br>
-    <form action="" method="POST" id="vldt_dias">
+    <form action="{% url 'aggDad' %}" method="POST" id="vldt_dias">
       {% csrf_token %}
       <div class="row">
         <div class="col-md-6">
@@ -388,7 +381,7 @@
                   data-age="{{ padre.age_fat|date:'Y-m-d' }}">
                   <i class="fas fa-edit"></i>
                 </button>
-                <a href="javascript:void(0)" onclick="delete_adci('/delete_adci/{{ padre.id }}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
+                <a href="javascript:void(0)" onclick="deletePadre('{% url 'deletePadre' padre.id %}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
               </td>
             </tr>
           {% endfor %}
@@ -458,7 +451,8 @@
   document.addEventListener('DOMContentLoaded', function() {
     var editDadModal = document.getElementById('editdadModal');
     var editDadBtn = document.getElementById('editDadBtn');
-    var formElements = document.querySelectorAll('#vldt_dias_dad input');
+    var form = document.getElementById('vldt_dias_dad');
+    var formElements = form.querySelectorAll('input');
 
     editDadModal.addEventListener('show.bs.modal', function (event) {
       var button = event.relatedTarget; // Botón que activó el modal
@@ -475,19 +469,11 @@
       modal.querySelector('#act_fat').value = act;
       modal.querySelector('#age_fat').value = age;
 
+      // Establecer la acción del formulario dinámicamente
+      form.action = `{% url 'editPadre' 0 %}`.replace('0', id);
+
       // Deshabilitar el botón de edición al mostrar el modal
       editDadBtn.disabled = true;
-
-      // Si necesitas usar el ID en el formulario, por ejemplo, en una acción de actualización, puedes agregar un campo oculto
-      var idField = modal.querySelector('#fat_id');
-      if (!idField) {
-        idField = document.createElement('input');
-        idField.type = 'hidden';
-        idField.id = 'fat_id';
-        idField.name = 'fat_id';
-        modal.querySelector('form').appendChild(idField);
-      }
-      idField.value = id;
     });
 
     // Habilitar el botón de edición cuando se detecta un cambio en los campos del formulario
@@ -500,9 +486,60 @@
     // Restablecer el estado del formulario y el botón al cerrar el modal
     editDadModal.addEventListener('hidden.bs.modal', function () {
       editDadBtn.disabled = true;
-      document.getElementById('vldt_dias_dad').reset();
+      form.reset();
     });
   });
+</script>
+
+<!-- MENSAJE DE CONFIRMACIÓN ELIMINAR MADRE -->
+<script type="text/javascript">
+        function deleteMadre(url){
+          iziToast.question({
+              timeout: 15000,
+              close: true,
+              overlay: true,
+              displayMode: 'once',
+              id: 'question',
+              zindex: 999,
+              title: 'CONFIRMACIÓN',
+              message: '¿Está seguro de eliminar la <b>cita </b> seleccionada?',
+              position: 'center',
+              buttons: [
+                  ['<button><b>SI</b></button>', function (instance, toast) {
+                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                      window.location.href=url;
+                  }, true],
+                  ['<button>NO</button>', function (instance, toast) {
+                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                  }],
+              ]
+          });
+        }
+</script>
+<!-- MENSAJE DE CONFIRMACIÓN ELIMINAR padre -->
+<script type="text/javascript">
+        function deletePadre(url){
+          iziToast.question({
+              timeout: 15000,
+              close: true,
+              overlay: true,
+              displayMode: 'once',
+              id: 'question',
+              zindex: 999,
+              title: 'CONFIRMACIÓN',
+              message: '¿Está seguro de eliminar la <b>cita </b> seleccionada?',
+              position: 'center',
+              buttons: [
+                  ['<button><b>SI</b></button>', function (instance, toast) {
+                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                      window.location.href=url;
+                  }, true],
+                  ['<button>NO</button>', function (instance, toast) {
+                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                  }],
+              ]
+          });
+        }
 </script>
 
 {% endblock %}
