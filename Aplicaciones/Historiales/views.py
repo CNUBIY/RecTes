@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from Aplicaciones.Citas.middleware import login_required as custom_login_required
-from .models import Patient, Gender, MadreCita, PadreCita, Alergia, PatAler, InfoMom, observaciones, Cie10, medicina, Diagnostico, Receta
+from .models import Patient, Gender, MadreCita, PadreCita, Alergia, PatAler, InfoMom, observaciones, Cie10, medicina, Diagnostico, Receta, EstaturasRep, Curvas
 from django.views.decorators.http import require_POST
 from dateutil.relativedelta import relativedelta
 from num2words import num2words
@@ -83,6 +83,8 @@ def doc_patient(request, idPat):
     dadbdd = PadreCita.objects.all()
     alerbdd = Alergia.objects.all()
     alerpatbdd = PatAler.objects.filter(paciente=idPat)
+    estrepbdd = EstaturasRep.objects.filter(paciente=idPat).first()
+    curvabdd = Curvas.objects.filter(paciente = idPat)
 
     # Utilizar filter para obtener InfoMom
     obsmom_qs = InfoMom.objects.filter(patient=idPat)
@@ -98,7 +100,9 @@ def doc_patient(request, idPat):
         'alergias': alerbdd,
         'misalergias': alerpatbdd,
         'infomom': obsmom,
-        'observaciones': obsbdd
+        'observaciones': obsbdd,
+        'estaturas': estrepbdd,
+        'curvas' : curvabdd
     })
 
 
@@ -301,7 +305,23 @@ def editPagosPapa(request, idPat):
         messages.error(request,'No se pudo guardar la información')
         return redirect('doc_patient', idPat=idPat)
 
-
+@login_required
+@custom_login_required
+def aggEstatura(request,idPat):
+    if request.method == 'POST':
+        paciente  = Patient.objects.get(idPat=idPat)
+        estatura_mom=request.POST['estatura_mom']
+        estatura_dad=request.POST['estatura_dad']
+        newEstatura = EstaturasRep.objects.create(
+            paciente = paciente,
+            estatura_mom = estatura_mom,
+            estatura_dad = estatura_dad
+        )
+        messages.success(request,'Información agregada correctamente')
+        return redirect('doc_patient', idPat=idPat)
+    else:
+        messages.error(request, 'No se pudo agregar la información')
+        return redirect('doc_patient', idPat=idPat)
 #Página PACIENTES FINAL
 
 
@@ -309,7 +329,6 @@ def editPagosPapa(request, idPat):
 #Página CREAR PACIENTE INICIO
 @login_required
 @custom_login_required
-
 def new_patient(request):
     patbdd = Patient.objects.all()
     genbdd = Gender.objects.all()

@@ -1016,8 +1016,6 @@
   </div>
 </div>
 
-
-
 <!-- Modal de Añadir Alergias -->
 <div class="modal fade" id="addAlModal" tabindex="-1" aria-labelledby="addAlModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -1168,259 +1166,138 @@
   </div>
 </div>
 
-
-
-  <div class="row">
-    <div class="col-lg-4 d-flex align-items-stretch">
-      <div class="card w-100">
-        <div class="card-body p-4">
-          <div class="mb-4">
-            <h5 class="card-title fw-semibold">Recent Transactions</h5>
-          </div>
-          <ul class="timeline-widget mb-0 position-relative mb-n5">
-            <li class="timeline-item d-flex position-relative overflow-hidden">
-              <div class="timeline-time text-dark flex-shrink-0 text-end">09:30</div>
-              <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                <span class="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
-                <span class="timeline-badge-border d-block flex-shrink-0"></span>
-              </div>
-              <div class="timeline-desc fs-3 text-dark mt-n1">Payment received from John Doe of $385.90</div>
-            </li>
-            <li class="timeline-item d-flex position-relative overflow-hidden">
-              <div class="timeline-time text-dark flex-shrink-0 text-end">10:00 am</div>
-              <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                <span class="timeline-badge border-2 border border-info flex-shrink-0 my-8"></span>
-                <span class="timeline-badge-border d-block flex-shrink-0"></span>
-              </div>
-              <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">New sale recorded <a
-                  href="javascript:void(0)" class="text-primary d-block fw-normal">#ML-3467</a>
-              </div>
-            </li>
-            <li class="timeline-item d-flex position-relative overflow-hidden">
-              <div class="timeline-time text-dark flex-shrink-0 text-end">12:00 am</div>
-              <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                <span class="timeline-badge border-2 border border-success flex-shrink-0 my-8"></span>
-                <span class="timeline-badge-border d-block flex-shrink-0"></span>
-              </div>
-              <div class="timeline-desc fs-3 text-dark mt-n1">Payment was made of $64.95 to Michael</div>
-            </li>
-            <li class="timeline-item d-flex position-relative overflow-hidden">
-              <div class="timeline-time text-dark flex-shrink-0 text-end">09:30 am</div>
-              <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                <span class="timeline-badge border-2 border border-warning flex-shrink-0 my-8"></span>
-                <span class="timeline-badge-border d-block flex-shrink-0"></span>
-              </div>
-              <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">New sale recorded <a
-                  href="javascript:void(0)" class="text-primary d-block fw-normal">#ML-3467</a>
-              </div>
-            </li>
-            <li class="timeline-item d-flex position-relative overflow-hidden">
-              <div class="timeline-time text-dark flex-shrink-0 text-end">09:30 am</div>
-              <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                <span class="timeline-badge border-2 border border-danger flex-shrink-0 my-8"></span>
-                <span class="timeline-badge-border d-block flex-shrink-0"></span>
-              </div>
-              <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">New arrival recorded
-              </div>
-            </li>
-            <li class="timeline-item d-flex position-relative overflow-hidden">
-              <div class="timeline-time text-dark flex-shrink-0 text-end">12:00 am</div>
-              <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                <span class="timeline-badge border-2 border border-success flex-shrink-0 my-8"></span>
-              </div>
-              <div class="timeline-desc fs-3 text-dark mt-n1">Payment Done</div>
-            </li>
-          </ul>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card w-100">
+      <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-9 fw-semibold">Curvas de Crecimiento</h5>
+          <button type="button" class="btn btn-outline-success rounded-pill" data-bs-toggle="modal" data-bs-target="#obsModal" title="Añadir Observación">
+            <i class="fa-solid fa-plus"></i>
+          </button>
         </div>
-      </div>
-    </div>
-    <div class="col-lg-8 d-flex align-items-stretch">
-      <div class="card w-100">
-        <div class="card-body p-4">
-          <h5 class="card-title fw-semibold mb-4">Recent Transactions</h5>
-          <div class="table-responsive">
-            <table class="table text-nowrap mb-0 align-middle">
-              <thead class="text-dark fs-4">
-                <tr>
-                  <th class="border-bottom-0">
-                    <h6 class="fw-semibold mb-0">Id</h6>
-                  </th>
-                  <th class="border-bottom-0">
-                    <h6 class="fw-semibold mb-0">Assigned</h6>
-                  </th>
-                  <th class="border-bottom-0">
-                    <h6 class="fw-semibold mb-0">Name</h6>
-                  </th>
-                  <th class="border-bottom-0">
-                    <h6 class="fw-semibold mb-0">Priority</h6>
-                  </th>
-                  <th class="border-bottom-0">
-                    <h6 class="fw-semibold mb-0">Budget</h6>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="border-bottom-0"><h6 class="fw-semibold mb-0">1</h6></td>
-                  <td class="border-bottom-0">
-                      <h6 class="fw-semibold mb-1">Sunil Joshi</h6>
-                      <span class="fw-normal">Web Designer</span>
-                  </td>
-                  <td class="border-bottom-0">
-                    <p class="mb-0 fw-normal">Elite Admin</p>
-                  </td>
-                  <td class="border-bottom-0">
-                    <div class="d-flex align-items-center gap-2">
-                      <span class="badge bg-primary rounded-3 fw-semibold">Low</span>
-                    </div>
-                  </td>
-                  <td class="border-bottom-0">
-                    <h6 class="fw-semibold mb-0 fs-4">$3.9</h6>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="border-bottom-0"><h6 class="fw-semibold mb-0">2</h6></td>
-                  <td class="border-bottom-0">
-                      <h6 class="fw-semibold mb-1">Andrew McDownland</h6>
-                      <span class="fw-normal">Project Manager</span>
-                  </td>
-                  <td class="border-bottom-0">
-                    <p class="mb-0 fw-normal">Real Homes WP Theme</p>
-                  </td>
-                  <td class="border-bottom-0">
-                    <div class="d-flex align-items-center gap-2">
-                      <span class="badge bg-secondary rounded-3 fw-semibold">Medium</span>
-                    </div>
-                  </td>
-                  <td class="border-bottom-0">
-                    <h6 class="fw-semibold mb-0 fs-4">$24.5k</h6>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="border-bottom-0"><h6 class="fw-semibold mb-0">3</h6></td>
-                  <td class="border-bottom-0">
-                      <h6 class="fw-semibold mb-1">Christopher Jamil</h6>
-                      <span class="fw-normal">Project Manager</span>
-                  </td>
-                  <td class="border-bottom-0">
-                    <p class="mb-0 fw-normal">MedicalPro WP Theme</p>
-                  </td>
-                  <td class="border-bottom-0">
-                    <div class="d-flex align-items-center gap-2">
-                      <span class="badge bg-danger rounded-3 fw-semibold">High</span>
-                    </div>
-                  </td>
-                  <td class="border-bottom-0">
-                    <h6 class="fw-semibold mb-0 fs-4">$12.8k</h6>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="border-bottom-0"><h6 class="fw-semibold mb-0">4</h6></td>
-                  <td class="border-bottom-0">
-                      <h6 class="fw-semibold mb-1">Nirav Joshi</h6>
-                      <span class="fw-normal">Frontend Engineer</span>
-                  </td>
-                  <td class="border-bottom-0">
-                    <p class="mb-0 fw-normal">Hosting Press HTML</p>
-                  </td>
-                  <td class="border-bottom-0">
-                    <div class="d-flex align-items-center gap-2">
-                      <span class="badge bg-success rounded-3 fw-semibold">Critical</span>
-                    </div>
-                  </td>
-                  <td class="border-bottom-0">
-                    <h6 class="fw-semibold mb-0 fs-4">$2.4k</h6>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+        <div class="">
+          {% if estaturas %}
+            <p>Estatura de la madre: {{estaturas.estatura_mom}}</p>
+            <p>Estatura del padre: {{estaturas.estatura_dad}}</p>
+          {% else %}
+            <div class="text-center">
+              <h6>Sin datos</h6>
+              <button type="button" class="btn btn-outline-success rounded-pill" data-bs-toggle="modal" data-bs-target="#estrepModal" title="Añadir Observación">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+          {% endif  %}
         </div>
+        <br>
+        <h5>Datos del paciente</h5>
+        {% if curvas %}
+        <div class="table-responsive">
+          <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
+            <thead class="text-dark fs-4">
+              <tr>
+                <th class="border-bottom-0"><h6 class="fw-semibold mb-0">#</h6></th>
+                <th class="border-bottom-0"><h6 class="fw-semibold mb-0">Fecha de Creación</h6></th>
+                <th class="border-bottom-0"><h6 class="fw-semibold mb-0">Tipo</h6></th>
+                <th class="border-bottom-0"><h6 class="fw-semibold mb-0">Edad Actual</h6></th>
+                <th class="border-bottom-0"><h6 class="fw-semibold mb-0">Acciones</h6></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for obs in observaciones %}
+              <tr>
+                <td>{{ obs.id }}</td>
+                <td>{{ obs.creation }}</td>
+                <td>
+                  {% if obs.cortesia %}
+                  <span class="text-danger">Cita de cortesía</span>
+                  {% else %}
+                  <span class="text-info">Cita normal</span>
+                  {% endif %}
+                </td>
+                <td>{{ obs.new_age }}</td>
+                <td>
+                  {% if obs.cortesia %}
+                  <a href="#" class="btn btn-outline-danger rounded-pill m-2" title="Vista Previa"><i class="fa-regular fa-eye"></i></a>
+                  {% else %}
+                  <a href="{% url 'viewobs' id=obs.id %}" class="btn btn-outline-info rounded-pill m-2" title="Vista Previa"><i class="fa-regular fa-eye"></i></a>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="text-center">
+          <p><b>Sin datos registrados.</b></p>
+        </div>
+        {% endif %}
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-sm-6 col-xl-3">
-      <div class="card overflow-hidden rounded-2">
-        <div class="position-relative">
-          <a href="javascript:void(0)"><img src="../assets/images/products/s4.jpg" class="card-img-top rounded-0" alt="..."></a>
-          <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>                      </div>
-        <div class="card-body pt-3 p-4">
-          <h6 class="fw-semibold fs-4">Boat Headphone</h6>
-          <div class="d-flex align-items-center justify-content-between">
-            <h6 class="fw-semibold fs-4 mb-0">$50 <span class="ms-2 fw-normal text-muted fs-3"><del>$65</del></span></h6>
-            <ul class="list-unstyled d-flex align-items-center mb-0">
-              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-              <li><a class="" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-            </ul>
-          </div>
-        </div>
+</div>
+
+<!-- Modal añadir estaturas padre y madre -->
+<div class="modal fade" id="estrepModal" tabindex="-1" aria-labelledby="estrepModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="estrepModalLabel">Añadir información</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-    </div>
-    <div class="col-sm-6 col-xl-3">
-      <div class="card overflow-hidden rounded-2">
-        <div class="position-relative">
-          <a href="javascript:void(0)"><img src="../assets/images/products/s5.jpg" class="card-img-top rounded-0" alt="..."></a>
-          <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>                      </div>
-        <div class="card-body pt-3 p-4">
-          <h6 class="fw-semibold fs-4">MacBook Air Pro</h6>
-          <div class="d-flex align-items-center justify-content-between">
-            <h6 class="fw-semibold fs-4 mb-0">$650 <span class="ms-2 fw-normal text-muted fs-3"><del>$900</del></span></h6>
-            <ul class="list-unstyled d-flex align-items-center mb-0">
-              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-              <li><a class="" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-            </ul>
+      <div class="modal-body">
+        <form action="{% url 'aggEstatura' idPat=pacientes.idPat %}" method="post">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" name="estatura_mom" id="estatura_mom" class="form-control" placeholder="Estatura de la madre" required>
+                <label for="estatura_mom">Estatura de la madre</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" name="estatura_dad" id="estatura_dad" class="form-control" placeholder="Estatura del Padre" required>
+                <label for="estatura_dad">Estatura del Padre</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-6 col-xl-3">
-      <div class="card overflow-hidden rounded-2">
-        <div class="position-relative">
-          <a href="javascript:void(0)"><img src="../assets/images/products/s7.jpg" class="card-img-top rounded-0" alt="..."></a>
-          <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>                      </div>
-        <div class="card-body pt-3 p-4">
-          <h6 class="fw-semibold fs-4">Red Valvet Dress</h6>
-          <div class="d-flex align-items-center justify-content-between">
-            <h6 class="fw-semibold fs-4 mb-0">$150 <span class="ms-2 fw-normal text-muted fs-3"><del>$200</del></span></h6>
-            <ul class="list-unstyled d-flex align-items-center mb-0">
-              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-              <li><a class="" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-            </ul>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-outline-success" id="saveChangesButton"><i class="fa-solid fa-floppy-disk"></i></button>
           </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-6 col-xl-3">
-      <div class="card overflow-hidden rounded-2">
-        <div class="position-relative">
-          <a href="javascript:void(0)"><img src="../assets/images/products/s11.jpg" class="card-img-top rounded-0" alt="..."></a>
-          <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>                      </div>
-        <div class="card-body pt-3 p-4">
-          <h6 class="fw-semibold fs-4">Cute Soft Teddybear</h6>
-          <div class="d-flex align-items-center justify-content-between">
-            <h6 class="fw-semibold fs-4 mb-0">$285 <span class="ms-2 fw-normal text-muted fs-3"><del>$345</del></span></h6>
-            <ul class="list-unstyled d-flex align-items-center mb-0">
-              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-              <li><a class="" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-            </ul>
-          </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var numericFields = document.querySelectorAll('#estatura_mom, #estatura_dad');
+
+      numericFields.forEach(function (field) {
+        field.addEventListener('keypress', function (event) {
+          var charCode = (event.which) ? event.which : event.keyCode;
+          if ((charCode >= 48 && charCode <= 57) || charCode == 46) {
+            return true;
+          }
+          event.preventDefault();
+          return false;
+        });
+
+        field.addEventListener('input', function (event) {
+          var value = field.value;
+          if (value.split('.').length > 2) {
+            field.value = value.substring(0, value.length - 1);
+          }
+        });
+      });
+    });
+  </script>
+
 </div>
 
 

@@ -31,6 +31,9 @@ urlpatterns=[
     path('doc_inicio/doc_patient/<int:idPat>/agg_mompat/', views.agg_mompat, name='agg_mompat'),
     path('doc_inicio/doc_patient/<int:idPat>/agg_dadpat/', views.agg_dadpat, name='agg_dadpat'),
 
+    #ESTATURAS PADRE Y MADRE
+    path('doc_inicio/doc_patient/<int:idPat>/aggEstatura', views.aggEstatura, name='aggEstatura'),
+
     #OBSERVACIONES
     path('doc_inicio/viewobs/<int:id>/', views.viewobs, name='viewobs'),
     path('doc_inicio/viewobs/<int:id>/edit_obs', views.edit_obs, name='edit_obs'),

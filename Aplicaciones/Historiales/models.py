@@ -154,12 +154,17 @@ class Receta(models.Model):
     def __str__(self):
         return f"{self.obsmed} -> {self.medicamento}"
 
+class EstaturasRep(models.Model):
+    idest = models.AutoField(primary_key=True)
+    paciente = models.OneToOneField(Patient, null=True, blank=True, on_delete=models.CASCADE)
+    creation = models.DateField(default=datetime.date.today)
+    estatura_mom = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
+    estatura_dad = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
+
 class Curvas(models.Model):
     idcur = models.AutoField(primary_key=True)
     creation = models.DateField(default=datetime.date.today)
     paciente = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    estatura_mom = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
-    estatura_dad = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
     age_pat = models.DecimalField(max_digits=4, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
     peso = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
     estatura_pat = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
