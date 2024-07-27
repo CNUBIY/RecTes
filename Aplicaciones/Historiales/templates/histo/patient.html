@@ -1244,20 +1244,24 @@
     </div>
   </div>
 </div>
-<h1>Curva de Crecimiento del Paciente</h1>
-<div>
-    {% if weight_chart %}
-        <img src="data:image/png;base64,{{ weight_chart }}" alt="Curva de Crecimiento (Peso para la Edad)"/>
-    {% else %}
-        <p>No se pudo generar la gráfica de peso para la edad.</p>
-    {% endif %}
-</div>
-<div>
-    {% if height_chart %}
-        <img src="data:image/png;base64,{{ height_chart }}" alt="Curva de Crecimiento (Altura para la Edad)"/>
-    {% else %}
-        <p>No se pudo generar la gráfica de altura para la edad.</p>
-    {% endif %}
+<div class="container">
+    <h1>Curva de Crecimiento del Paciente</h1>
+    <div class="row">
+        <div class="col-12 mb-4">
+            {% if weight_chart %}
+                <img src="data:image/png;base64,{{ weight_chart }}" alt="Curva de Crecimiento (Peso para la Edad)" class="img-fluid"/>
+            {% else %}
+                <p>No se pudo generar la gráfica de peso para la edad.</p>
+            {% endif %}
+        </div>
+        <div class="col-12 mb-4">
+            {% if height_chart %}
+                <img src="data:image/png;base64,{{ height_chart }}" alt="Curva de Crecimiento (Altura para la Edad)" class="img-fluid"/>
+            {% else %}
+                <p>No se pudo generar la gráfica de altura para la edad.</p>
+            {% endif %}
+        </div>
+    </div>
 </div>
 <!-- Modal añadir estaturas padre y madre -->
 <div class="modal fade" id="estrepModal" tabindex="-1" aria-labelledby="estrepModalLabel" aria-hidden="true">
