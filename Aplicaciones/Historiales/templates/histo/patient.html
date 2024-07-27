@@ -1244,7 +1244,21 @@
     </div>
   </div>
 </div>
-
+<h1>Curva de Crecimiento del Paciente</h1>
+<div>
+    {% if weight_chart %}
+        <img src="data:image/png;base64,{{ weight_chart }}" alt="Curva de Crecimiento (Peso para la Edad)"/>
+    {% else %}
+        <p>No se pudo generar la gráfica de peso para la edad.</p>
+    {% endif %}
+</div>
+<div>
+    {% if height_chart %}
+        <img src="data:image/png;base64,{{ height_chart }}" alt="Curva de Crecimiento (Altura para la Edad)"/>
+    {% else %}
+        <p>No se pudo generar la gráfica de altura para la edad.</p>
+    {% endif %}
+</div>
 <!-- Modal añadir estaturas padre y madre -->
 <div class="modal fade" id="estrepModal" tabindex="-1" aria-labelledby="estrepModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -1397,6 +1411,7 @@
     </div>
   </div>
 </div>
+
 
 <!-- Script para calcular IMC y ajustar el campo de perímetro cefálico -->
 <script>

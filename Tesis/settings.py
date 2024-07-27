@@ -160,16 +160,21 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
 import os
-#Para uso de Archivos CSS, JS, IMG, ETC
+
+# URL para servir archivos estáticos
 STATIC_URL = 'static/'
-STATICFILES_DIRS =(os.path.join(BASE_DIR,'Tesis/static'),)
+
+# Directorio donde se recopilarán los archivos estáticos en producción
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Directorios adicionales donde buscar archivos estáticos
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'Tesis/static'),
+)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
