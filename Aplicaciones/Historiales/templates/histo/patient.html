@@ -1244,39 +1244,52 @@
     </div>
   </div>
 </div>
+
+<!-- GRAFICAS NIÑOS 0-5 AÑOS -->
 <div class="container">
     <h1>Curva de Crecimiento del Paciente</h1>
     <div class="row">
-        <div class="col-12 mb-4">
-            {% if weight_chart %}
-                <img src="data:image/png;base64,{{ weight_chart }}" alt="Curva de Crecimiento (Peso para la Edad)" class="img-fluid"/>
-            {% else %}
-                <p>No se pudo generar la gráfica de peso para la edad.</p>
-            {% endif %}
-        </div>
-        <div class="col-12 mb-4">
-            {% if height_chart %}
-                <img src="data:image/png;base64,{{ height_chart }}" alt="Curva de Crecimiento (Altura para la Edad)" class="img-fluid"/>
-            {% else %}
-                <p>No se pudo generar la gráfica de altura para la edad.</p>
-            {% endif %}
-        </div>
-        <div class="col-12 mb-4">
-            {% if head_circumference_chart %}
-                <img src="data:image/png;base64,{{ head_circumference_chart }}" alt="Curva de Crecimiento (Perímetro Cefálico para la Edad)" class="img-fluid"/>
-            {% else %}
-                <p>No se pudo generar la gráfica de perímetro cefálico para la edad.</p>
-            {% endif %}
-        </div>
-        <div class="col-12 mb-4">
-            {% if head_circumference_chart %}
-                <img src="data:image/png;base64,{{ bmi_chart }}" alt="Curva de Crecimiento (IMC para la Edad)" class="img-fluid"/>
-            {% else %}
-                <p>No se pudo generar la gráfica de perímetro cefálico para la edad.</p>
-            {% endif %}
-        </div>
+        {% if pacientes.genPat.nombreGen == "Masculino" %}
+            <div class="col-12 mb-4 male-chart text-center">
+                {% if weight_chart %}
+                    <img src="data:image/png;base64,{{ weight_chart }}" alt="Curva de Crecimiento (Peso para la Edad)" class="img-fluid mx-auto d-block"/>
+                {% else %}
+                    <p>No se pudo generar la gráfica de peso para la edad.</p>
+                {% endif %}
+            </div>
+            <div class="col-12 mb-4 male-chart text-center">
+                {% if height_chart %}
+                    <img src="data:image/png;base64,{{ height_chart }}" alt="Curva de Crecimiento (Altura para la Edad)" class="img-fluid mx-auto d-block"/>
+                {% else %}
+                    <p>No se pudo generar la gráfica de altura para la edad.</p>
+                {% endif %}
+            </div>
+            <div class="col-12 mb-4 male-chart text-center">
+                {% if head_circumference_chart %}
+                    <img src="data:image/png;base64,{{ head_circumference_chart }}" alt="Curva de Crecimiento (Perímetro Cefálico para la Edad)" class="img-fluid mx-auto d-block"/>
+                {% else %}
+                    <p>No se pudo generar la gráfica de perímetro cefálico para la edad.</p>
+                {% endif %}
+            </div>
+            <div class="col-12 mb-4 male-chart text-center">
+                {% if bmi_chart %}
+                    <img src="data:image/png;base64,{{ bmi_chart }}" alt="Curva de Crecimiento (IMC para la Edad)" class="img-fluid mx-auto d-block"/>
+                {% else %}
+                    <p>No se pudo generar la gráfica de IMC para la edad.</p>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="col-12 mb-4 female-chart text-center">
+                {% if weight_chart_girls %}
+                    <img src="data:image/png;base64,{{ weight_chart_girls }}" alt="Curva de Crecimiento (Peso para la Edad)" class="img-fluid mx-auto d-block"/>
+                {% else %}
+                    <p>No se pudo generar la gráfica de peso para la edad (niñas).</p>
+                {% endif %}
+            </div>
+        {% endif %}
     </div>
 </div>
+
 <!-- Modal añadir estaturas padre y madre -->
 <div class="modal fade" id="estrepModal" tabindex="-1" aria-labelledby="estrepModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -1502,4 +1515,17 @@
     }
 </script>
 
+<style media="screen">
+  .male-chart {
+    background-color: #d0e7ff; /* Un celeste suave */
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.female-chart {
+    background-color: #ffe0f0; /* Un rosa suave */
+    padding: 15px;
+    border-radius: 5px;
+}
+</style>
 {% endblock %}
