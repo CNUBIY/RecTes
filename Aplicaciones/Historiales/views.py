@@ -615,6 +615,91 @@ def generate_height_chart_girls(request, idPat):
         return None
 
 @login_required
+def generate_head_circumference_chart_girls(request, idPat):
+    try:
+        # Ruta relativa al archivo Excel en la carpeta static
+        file_path = os.path.join(settings.BASE_DIR, 'Tesis/static/curvas/craneo_girls0_5.xlsx')
+        df = pd.read_excel(file_path, sheet_name='tab_hcfa_girls_p_0_5')  # Ajusta el nombre de la hoja si es necesario
+
+        # Definir edades en meses
+        ages = df['Month'].values
+
+        # Definir percentiles
+        percentile_3 = df['P3'].values
+        percentile_15 = df['P15'].values
+        percentile_50 = df['P50'].values
+        percentile_85 = df['P85'].values
+        percentile_97 = df['P97'].values
+
+        curvabdd = Curvas.objects.filter(paciente=idPat)
+
+        # Crear el gráfico
+        fig, ax = plt.subplots(figsize=(10, 8))
+
+        # Crear splines para suavizar las curvas
+        spline_3 = make_interp_spline(ages, percentile_3, k=3)
+        spline_15 = make_interp_spline(ages, percentile_15, k=3)
+        spline_50 = make_interp_spline(ages, percentile_50, k=3)
+        spline_85 = make_interp_spline(ages, percentile_85, k=3)
+        spline_97 = make_interp_spline(ages, percentile_97, k=3)
+
+        # Definir nuevas edades para la interpolación
+        ages_new = np.linspace(ages.min(), ages.max(), 300)
+
+        # Graficar los percentiles
+        ax.plot(ages_new, spline_3(ages_new), 'r--', label='Percentil 3')
+        ax.plot(ages_new, spline_15(ages_new), 'orange', label='Percentil 15')
+        ax.plot(ages_new, spline_50(ages_new), 'g-', label='Percentil 50')
+        ax.plot(ages_new, spline_85(ages_new), 'orange', label='Percentil 85')
+        ax.plot(ages_new, spline_97(ages_new), 'r--', label='Percentil 97')
+
+        # Graficar los datos del paciente
+        edades = [float(curva.age_pat) for curva in curvabdd]
+        perimetros = [float(curva.per_enc) for curva in curvabdd]
+        ax.plot(edades, perimetros, 'o-', label='Perímetro cefálico del paciente')
+
+        # Configurar etiquetas y título
+        ax.set_xlabel('Edad (meses)')
+        ax.set_ylabel('Perímetro Cefálico (cm)')
+        ax.set_title('Curvas de Crecimiento OMS - Perímetro Cefálico para la Edad (0-5 años) - Niñas')
+
+        # Ajustar los ticks del eje X
+        xticks = list(range(0, 61, 2))  # Ticks cada 2 meses hasta 60 meses (5 años)
+        xticklabels = ['Nac.', '2', '4', '6', '8', '10',
+                       '1 año', '2', '4', '6', '8', '10',
+                       '2 años', '2', '4', '6', '8', '10',
+                       '3 años', '2', '4', '6', '8', '10',
+                       '4 años', '2', '4', '6', '8', '10',
+                       '5 años']
+        ax.set_xticks(xticks)
+        ax.set_xticklabels(xticklabels, rotation=45, ha='right')
+
+        # Ajustar los ticks del eje Y
+        yticks = list(range(32, 55, 2))  # Ticks cada 2 cm desde 32 cm hasta 54 cm
+        ax.set_yticks(yticks)
+
+        # Añadir la cuadrícula
+        ax.grid(True)
+
+        # Agregar leyenda
+        ax.legend()
+
+        # Guardar gráfico en memoria
+        buffer = BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+        image_png = buffer.getvalue()
+        buffer.close()
+        head_circumference_chart_girls = base64.b64encode(image_png).decode('utf-8')
+
+        return head_circumference_chart_girls
+
+    except Exception as e:
+        print(f"Error en generate_head_circumference_chart_girls: {e}")
+        return None
+
+
+@login_required
 def doc_patient(request, idPat):
     patbdd = Patient.objects.get(idPat=idPat)
     genbdd = Gender.objects.all()
@@ -643,6 +728,7 @@ def doc_patient(request, idPat):
     bmi_chart = generate_bmi_chart(request, idPat)
     weight_chart_girls = generate_growth_chart_girls(request, idPat)
     height_chart_girls = generate_height_chart_girls(request, idPat)
+    head_circumference_chart_girls = generate_head_circumference_chart_girls(request, idPat)
 
     return render(request, 'histo/patient.html', {
         'pacientes': patbdd,
@@ -660,7 +746,8 @@ def doc_patient(request, idPat):
         'head_circumference_chart': head_circumference_chart if head_circumference_chart else "No se pudo generar la gráfica de perímetro cefálico para la edad.",
         'bmi_chart': bmi_chart if bmi_chart else "No se pudo generar la gráfica de IMC para la edad.",
         'weight_chart_girls': weight_chart_girls if weight_chart_girls else "No se pudo generar la gráfica de peso para la edad (niñas).",
-        'height_chart_girls': height_chart_girls if height_chart_girls else "No se pudo generar la gráfica de peso para la edad (niñas)."
+        'height_chart_girls': height_chart_girls if height_chart_girls else "No se pudo generar la gráfica de altura para la edad (niñas).",
+        'head_circumference_chart_girls': head_circumference_chart_girls if head_circumference_chart_girls else "No se pudo generar la gráfica de perímetro cefálico para la edad (niñas)."
     })
 
 
