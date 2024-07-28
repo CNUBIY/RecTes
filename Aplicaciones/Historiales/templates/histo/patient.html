@@ -1300,6 +1300,13 @@
                     <p>No se pudo generar la gráfica de peso para la edad (niñas).</p>
                 {% endif %}
             </div>
+            <div class="col-12 mb-4 female-chart text-center">
+                {% if bmi_chart_girls %}
+                    <img src="data:image/png;base64,{{ bmi_chart_girls }}" alt="Curva de Crecimiento (Altura/longitud para la Edad)" class="img-fluid mx-auto d-block"/>
+                {% else %}
+                    <p>No se pudo generar la gráfica de peso para la edad (niñas).</p>
+                {% endif %}
+            </div>
         {% endif %}
     </div>
 </div>
