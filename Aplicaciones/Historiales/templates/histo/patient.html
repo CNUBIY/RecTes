@@ -1261,6 +1261,20 @@
                 <p>No se pudo generar la gráfica de altura para la edad.</p>
             {% endif %}
         </div>
+        <div class="col-12 mb-4">
+            {% if head_circumference_chart %}
+                <img src="data:image/png;base64,{{ head_circumference_chart }}" alt="Curva de Crecimiento (Perímetro Cefálico para la Edad)" class="img-fluid"/>
+            {% else %}
+                <p>No se pudo generar la gráfica de perímetro cefálico para la edad.</p>
+            {% endif %}
+        </div>
+        <div class="col-12 mb-4">
+            {% if head_circumference_chart %}
+                <img src="data:image/png;base64,{{ bmi_chart }}" alt="Curva de Crecimiento (IMC para la Edad)" class="img-fluid"/>
+            {% else %}
+                <p>No se pudo generar la gráfica de perímetro cefálico para la edad.</p>
+            {% endif %}
+        </div>
     </div>
 </div>
 <!-- Modal añadir estaturas padre y madre -->

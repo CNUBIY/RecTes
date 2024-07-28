@@ -227,10 +227,10 @@ def generate_height_chart(request, idPat):
         # Ajustar los ticks del eje X
         xticks = list(range(0, 61, 2))  # Ticks cada 2 meses hasta 60 meses (5 años)
         xticklabels = ['Nac.', '2', '4', '6', '8', '10',
-                       '1 año', '14', '16', '18', '20', '22',
-                       '2 años', '26', '28', '30', '32', '34',
-                       '3 años', '38', '40', '42', '44', '46',
-                       '4 años', '50', '52', '54', '56', '58',
+                       '1 año', '2', '4', '6', '8', '10',
+                       '2 años', '2', '4', '6', '8', '10',
+                       '3 años', '2', '4', '6', '8', '10',
+                       '4 años', '2', '4', '6', '8', '10',
                        '5 años']
         ax.set_xticks(xticks)
         ax.set_xticklabels(xticklabels, rotation=45, ha='right')
@@ -259,6 +259,182 @@ def generate_height_chart(request, idPat):
         print(f"Error en generate_height_chart: {e}")
         return None
 
+@login_required
+def generate_head_circumference_chart(request, idPat):
+    try:
+        # Ruta relativa al archivo Excel en la carpeta static
+        file_path = os.path.join(settings.BASE_DIR, 'Tesis/static/curvas/craneo_boys2_5.xlsx')
+        df = pd.read_excel(file_path, sheet_name='tab_hcfa_boys_p_0_5')
+
+        # Definir edades en meses
+        ages = df['Month'].values
+
+        # Definir percentiles
+        percentile_3 = df['P3'].values
+        percentile_15 = df['P15'].values
+        percentile_50 = df['P50'].values
+        percentile_85 = df['P85'].values
+        percentile_97 = df['P97'].values
+
+        curvabdd = Curvas.objects.filter(paciente=idPat)
+
+        # Crear el gráfico
+        fig, ax = plt.subplots(figsize=(10, 8))
+
+        # Crear splines para suavizar las curvas
+        spline_3 = make_interp_spline(ages, percentile_3, k=3)
+        spline_15 = make_interp_spline(ages, percentile_15, k=3)
+        spline_50 = make_interp_spline(ages, percentile_50, k=3)
+        spline_85 = make_interp_spline(ages, percentile_85, k=3)
+        spline_97 = make_interp_spline(ages, percentile_97, k=3)
+
+        # Definir nuevas edades para la interpolación
+        ages_new = np.linspace(ages.min(), ages.max(), 300)
+
+        # Graficar los percentiles
+        ax.plot(ages_new, spline_3(ages_new), 'r--', label='Percentil 3')
+        ax.plot(ages_new, spline_15(ages_new), 'orange', label='Percentil 15')
+        ax.plot(ages_new, spline_50(ages_new), 'g-', label='Percentil 50')
+        ax.plot(ages_new, spline_85(ages_new), 'orange', label='Percentil 85')
+        ax.plot(ages_new, spline_97(ages_new), 'r--', label='Percentil 97')
+
+        # Graficar los datos del paciente
+        edades = [float(curva.age_pat) for curva in curvabdd]
+        perimetros = [float(curva.perimetro_cefalico) for curva in curvabdd]
+        ax.plot(edades, perimetros, 'o-', label='Perímetro cefálico del paciente')
+
+        # Configurar etiquetas y título
+        ax.set_xlabel('Edad (meses)')
+        ax.set_ylabel('Perímetro Cefálico (cm)')
+        ax.set_title('Curvas de Crecimiento OMS - Perímetro Cefálico para la Edad (0-5 años)')
+
+        # Ajustar los ticks del eje X
+        xticks = list(range(0, 61, 2))  # Ticks cada 2 meses hasta 60 meses (5 años)
+        xticklabels = ['Nac.', '2', '4', '6', '8', '10',
+                       '1 año', '2', '4', '6', '8', '10',
+                       '2 años', '2', '4', '6', '8', '10',
+                       '3 años', '2', '4', '6', '8', '10',
+                       '4 años', '2', '4', '6', '8', '10',
+                       '5 años']
+        ax.set_xticks(xticks)
+        ax.set_xticklabels(xticklabels, rotation=45, ha='right')
+
+        # Ajustar los ticks del eje Y
+        yticks = list(range(32, 55, 2))  # Ticks cada 2 cm desde 32 cm hasta 54 cm
+        ax.set_yticks(yticks)
+
+        # Añadir la cuadrícula
+        ax.grid(True)
+
+        # Agregar leyenda
+        ax.legend()
+
+        # Guardar gráfico en memoria
+        buffer = BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+        image_png = buffer.getvalue()
+        buffer.close()
+        head_circumference_chart = base64.b64encode(image_png).decode('utf-8')
+
+        return head_circumference_chart
+
+    except Exception as e:
+        print(f"Error en generate_head_circumference_chart: {e}")
+        return None
+
+@login_required
+def generate_bmi_chart(request, idPat):
+    try:
+        # Rutas relativas a los archivos Excel en la carpeta static
+        file_path_0_2 = os.path.join(settings.BASE_DIR, 'Tesis/static/curvas/imc_boy0_2.xlsx')
+        file_path_2_5 = os.path.join(settings.BASE_DIR, 'Tesis/static/curvas/imc_boy2_5.xlsx')
+
+        # Leer datos de los archivos Excel
+        df_0_2 = pd.read_excel(file_path_0_2, sheet_name='tab_bmi_boys_p_0_2')  # Ajusta el nombre de la hoja según corresponda
+        df_2_5 = pd.read_excel(file_path_2_5, sheet_name='tab_bmi_boys_p_2_5')  # Ajusta el nombre de la hoja según corresponda
+
+        # Definir edades en meses
+        ages_0_2 = df_0_2.index
+        ages_2_5 = df_2_5.index + len(ages_0_2)
+
+        # Concatenar los datos
+        ages = list(ages_0_2) + list(ages_2_5)
+        df = pd.concat([df_0_2, df_2_5])
+
+        # Definir percentiles
+        percentile_3 = list(df_0_2['P3'].values) + list(df_2_5['P3'].values)
+        percentile_15 = list(df_0_2['P15'].values) + list(df_2_5['P15'].values)
+        percentile_50 = list(df_0_2['P50'].values) + list(df_2_5['P50'].values)
+        percentile_85 = list(df_0_2['P85'].values) + list(df_2_5['P85'].values)
+        percentile_97 = list(df_0_2['P97'].values) + list(df_2_5['P97'].values)
+
+        curvabdd = Curvas.objects.filter(paciente=idPat)
+
+        # Crear el gráfico
+        fig, ax = plt.subplots(figsize=(10, 8))
+
+        # Crear splines para suavizar las curvas
+        spline_3 = make_interp_spline(ages, percentile_3, k=3)
+        spline_15 = make_interp_spline(ages, percentile_15, k=3)
+        spline_50 = make_interp_spline(ages, percentile_50, k=3)
+        spline_85 = make_interp_spline(ages, percentile_85, k=3)
+        spline_97 = make_interp_spline(ages, percentile_97, k=3)
+
+        # Definir nuevas edades para la interpolación
+        ages_new = np.linspace(min(ages), max(ages), 300)
+
+        # Graficar los percentiles
+        ax.plot(ages_new, spline_3(ages_new), 'r--', label='Percentil 3')
+        ax.plot(ages_new, spline_15(ages_new), 'orange', label='Percentil 15')
+        ax.plot(ages_new, spline_50(ages_new), 'g-', label='Percentil 50')
+        ax.plot(ages_new, spline_85(ages_new), 'orange', label='Percentil 85')
+        ax.plot(ages_new, spline_97(ages_new), 'r--', label='Percentil 97')
+
+        # Graficar los datos del paciente
+        edades = [float(curva.age_pat) for curva in curvabdd]
+        imcs = [float(curva.IMC) for curva in curvabdd]
+        ax.plot(edades, imcs, 'o-', label='IMC del paciente')
+
+        # Configurar etiquetas y título
+        ax.set_xlabel('Edad (meses)')
+        ax.set_ylabel('IMC (kg/m²)')
+        ax.set_title('Curvas de Crecimiento OMS - IMC para la Edad (0-5 años)')
+
+        # Ajustar los ticks del eje X
+        xticks = list(range(0, 61, 2))  # Ticks cada 2 meses hasta 60 meses (5 años)
+        xticklabels = ['Nac.', '2', '4', '6', '8', '10',
+                       '1 año', '2', '4', '6', '8', '10',
+                       '2 años', '2', '4', '6', '8', '10',
+                       '3 años', '2', '4', '6', '8', '10',
+                       '4 años', '2', '4', '6', '8', '10',
+                       '5 años']
+        ax.set_xticks(xticks)
+        ax.set_xticklabels(xticklabels, rotation=45, ha='right')
+
+        # Ajustar los ticks del eje Y
+        yticks = list(range(10, 21, 1))  # Ticks cada 2 kg/m² desde 10 kg/m² hasta 25 kg/m²
+        ax.set_yticks(yticks)
+
+        # Añadir la cuadrícula
+        ax.grid(True)
+
+        # Agregar leyenda
+        ax.legend()
+
+        # Guardar gráfico en memoria
+        buffer = BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+        image_png = buffer.getvalue()
+        buffer.close()
+        bmi_chart = base64.b64encode(image_png).decode('utf-8')
+
+        return bmi_chart
+
+    except Exception as e:
+        print(f"Error en generate_bmi_chart: {e}")
+        return None
 
 @login_required
 def doc_patient(request, idPat):
@@ -285,6 +461,8 @@ def doc_patient(request, idPat):
     # Generar gráficos de crecimiento
     weight_chart = generate_growth_chart(request, idPat)
     height_chart = generate_height_chart(request, idPat)
+    head_circumference_chart = generate_head_circumference_chart(request, idPat)
+    bmi_chart = generate_bmi_chart(request, idPat)
 
     return render(request, 'histo/patient.html', {
         'pacientes': patbdd,
@@ -298,7 +476,9 @@ def doc_patient(request, idPat):
         'estaturas': estrepbdd,
         'curvas': curvabdd,
         'weight_chart': weight_chart if weight_chart else "No se pudo generar la gráfica de peso para la edad.",
-        'height_chart': height_chart if height_chart else "No se pudo generar la gráfica de altura para la edad."
+        'height_chart': height_chart if height_chart else "No se pudo generar la gráfica de altura para la edad.",
+        'head_circumference_chart': head_circumference_chart if head_circumference_chart else "No se pudo generar la gráfica de perímetro cefálico para la edad.",
+        'bmi_chart': bmi_chart if bmi_chart else "No se pudo generar la gráfica de IMC para la edad."
     })
 
 
