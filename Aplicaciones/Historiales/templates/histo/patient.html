@@ -1278,6 +1278,14 @@
                     <p>No se pudo generar la gráfica de IMC para la edad.</p>
                 {% endif %}
             </div>
+            <div class="col-12 mb-4 male-chart text-center">
+                {% if growth_chart_2_to_20 %}
+                    <img src="data:image/png;base64,{{ growth_chart_2_to_20 }}" alt="Curva de Crecimiento (IMC para la Edad)" class="img-fluid mx-auto d-block"/>
+                {% else %}
+                    <p>No se pudo generar la gráfica de IMC para la edad.</p>
+                {% endif %}
+            </div>
+            <!-- CHICAS OMS GRÁFICOS -->
         {% else %}
             <div class="col-12 mb-4 female-chart text-center">
                 {% if weight_chart_girls %}
