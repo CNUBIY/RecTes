@@ -1315,6 +1315,27 @@
                     <p>No se pudo generar la gráfica de peso para la edad (niñas).</p>
                 {% endif %}
             </div>
+            <div class="col-12 mb-4 female-chart text-center">
+                {% if growth_chart_girls_2_to_20 %}
+                    <img src="data:image/png;base64,{{ growth_chart_girls_2_to_20 }}" alt="Curva de Crecimiento (Altura/longitud para la Edad)" class="img-fluid mx-auto d-block"/>
+                {% else %}
+                    <p>No se pudo generar la gráfica de peso para la edad (niñas).</p>
+                {% endif %}
+            </div>
+            <div class="col-12 mb-4 female-chart text-center">
+                {% if height_chart_girls_2_to_20 %}
+                    <img src="data:image/png;base64,{{ height_chart_girls_2_to_20 }}" alt="Curva de Crecimiento (Altura/longitud para la Edad)" class="img-fluid mx-auto d-block"/>
+                {% else %}
+                    <p>No se pudo generar la gráfica de peso para la edad (niñas).</p>
+                {% endif %}
+            </div>
+            <div class="col-12 mb-4 female-chart text-center">
+                {% if bmi_chart_girls_2_to_20 %}
+                    <img src="data:image/png;base64,{{ bmi_chart_girls_2_to_20 }}" alt="Curva de Crecimiento (Altura/longitud para la Edad)" class="img-fluid mx-auto d-block"/>
+                {% else %}
+                    <p>No se pudo generar la gráfica de peso para la edad (niñas).</p>
+                {% endif %}
+            </div>
         {% endif %}
     </div>
 </div>

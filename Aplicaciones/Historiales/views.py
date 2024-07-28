@@ -1013,6 +1013,228 @@ def generate_bmi_chart_2_to_20(request, idPat):
         print(f"Error en generate_bmi_chart_2_to_20: {e}")
         return None
 
+def generate_growth_chart_girls_2_to_20(request, idPat):
+    try:
+        # Ruta relativa al archivo Excel en la carpeta static
+        file_path = os.path.join(settings.BASE_DIR, 'Tesis/static/curvas/wtagegirls.xlsx')
+        df = pd.read_excel(file_path, sheet_name='wtage')
+
+        # Filtrar los datos para edades de 24 meses (2 años) a 240 meses (20 años)
+        df = df[(df['Agemos'] >= 24) & (df['Agemos'] <= 240)]
+
+        # Definir edades en meses
+        ages = df['Agemos'].values
+
+        # Definir percentiles con colores
+        percentiles = {
+            'P5': ('r-', df['P5'].values),
+            'P10': ('orange', df['P10'].values),
+            'P25': ('yellow', df['P25'].values),
+            'P50': ('g-', df['P50'].values),
+            'P75': ('yellow', df['P75'].values),
+            'P90': ('orange', df['P90'].values),
+            'P95': ('r-', df['P95'].values)
+        }
+
+        curvabdd = Curvas.objects.filter(paciente=idPat)
+
+        # Crear el gráfico
+        fig, ax = plt.subplots(figsize=(10, 8))
+
+        # Crear splines para suavizar las curvas
+        for label, (color, values) in percentiles.items():
+            spline = make_interp_spline(ages, values, k=3)
+            ages_new = np.linspace(ages.min(), ages.max(), 300)
+            ax.plot(ages_new, spline(ages_new), color, label=f'Percentil {label}')
+
+        # Graficar los datos del paciente
+        edades = [float(curva.age_pat) for curva in curvabdd]
+        pesos = [float(curva.peso) for curva in curvabdd]
+        ax.plot(edades, pesos, 'o-', label='Peso de la paciente')
+
+        # Configurar etiquetas y título
+        ax.set_xlabel('Edad (meses)')
+        ax.set_ylabel('Peso (kg)')
+        ax.set_title('Curvas de Crecimiento - Peso para la Edad (2-20 años)')
+
+        # Ajustar los ticks del eje X
+        xticks = list(range(24, 241, 12))  # Ticks cada año
+        xticklabels = [f'{i//12} años' for i in xticks]
+        ax.set_xticks(xticks)
+        ax.set_xticklabels(xticklabels, rotation=45, ha='right')
+
+        # Ajustar los ticks del eje Y
+        yticks = list(range(5, 105, 5))  # Ticks cada 5 kg
+        ax.set_yticks(yticks)
+
+        # Añadir la cuadrícula
+        ax.grid(True)
+
+        # Agregar leyenda
+        ax.legend()
+
+        # Guardar gráfico en memoria
+        buffer = BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+        image_png = buffer.getvalue()
+        buffer.close()
+        graphic = base64.b64encode(image_png).decode('utf-8')
+
+        return graphic
+
+    except Exception as e:
+        print(f"Error en generate_growth_chart_girls_2_to_20: {e}")
+        return None
+
+def generate_height_chart_girls_2_to_20(request, idPat):
+    try:
+        # Ruta relativa al archivo Excel en la carpeta static
+        file_path = os.path.join(settings.BASE_DIR, 'Tesis/static/curvas/statagegirls.xlsx')
+        df = pd.read_excel(file_path, sheet_name='statage')
+
+        # Filtrar los datos para edades de 24 meses (2 años) a 240 meses (20 años)
+        df = df[(df['Agemos'] >= 24) & (df['Agemos'] <= 240)]
+
+        # Definir edades en meses
+        ages = df['Agemos'].values
+
+        # Definir percentiles con colores
+        percentiles = {
+            'P5': ('r-', df['P5'].values),
+            'P10': ('orange', df['P10'].values),
+            'P25': ('yellow', df['P25'].values),
+            'P50': ('g-', df['P50'].values),
+            'P75': ('yellow', df['P75'].values),
+            'P90': ('orange', df['P90'].values),
+            'P95': ('r-', df['P95'].values)
+        }
+
+        curvabdd = Curvas.objects.filter(paciente=idPat)
+
+        # Crear el gráfico
+        fig, ax = plt.subplots(figsize=(10, 8))
+
+        # Crear splines para suavizar las curvas
+        for label, (color, values) in percentiles.items():
+            spline = make_interp_spline(ages, values, k=3)
+            ages_new = np.linspace(ages.min(), ages.max(), 300)
+            ax.plot(ages_new, spline(ages_new), color, label=f'Percentil {label}')
+
+        # Graficar los datos del paciente
+        edades = [float(curva.age_pat) for curva in curvabdd]
+        estaturas = [float(curva.estatura_pat) for curva in curvabdd]
+        ax.plot(edades, estaturas, 'o-', label='Altura de la paciente')
+
+        # Configurar etiquetas y título
+        ax.set_xlabel('Edad (meses)')
+        ax.set_ylabel('Altura (cm)')
+        ax.set_title('Curvas de Crecimiento - Altura para la Edad (2-20 años)')
+
+        # Ajustar los ticks del eje X
+        xticks = list(range(24, 241, 12))  # Ticks cada año
+        xticklabels = [f'{i//12} años' for i in xticks]
+        ax.set_xticks(xticks)
+        ax.set_xticklabels(xticklabels, rotation=45, ha='right')
+
+        # Ajustar los ticks del eje Y
+        yticks = list(range(60, 201, 10))  # Ticks cada 10 cm
+        ax.set_yticks(yticks)
+
+        # Añadir la cuadrícula
+        ax.grid(True)
+
+        # Agregar leyenda
+        ax.legend()
+
+        # Guardar gráfico en memoria
+        buffer = BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+        image_png = buffer.getvalue()
+        buffer.close()
+        graphic = base64.b64encode(image_png).decode('utf-8')
+
+        return graphic
+
+    except Exception as e:
+        print(f"Error en generate_height_chart_girls_2_to_20: {e}")
+        return None
+
+def generate_bmi_chart_girls_2_to_20(request, idPat):
+    try:
+        # Ruta relativa al archivo Excel en la carpeta static
+        file_path = os.path.join(settings.BASE_DIR, 'Tesis/static/curvas/bmiagerevgirls.xlsx')
+        df = pd.read_excel(file_path, sheet_name='bmiage')
+
+        # Filtrar los datos para edades de 24 meses (2 años) a 240 meses (20 años)
+        df = df[(df['Agemos'] >= 24) & (df['Agemos'] <= 240)]
+
+        # Definir edades en meses
+        ages = df['Agemos'].values
+
+        # Definir percentiles con colores
+        percentiles = {
+            'P5': ('r-', df['P5'].values),
+            'P10': ('orange', df['P10'].values),
+            'P25': ('yellow', df['P25'].values),
+            'P50': ('g-', df['P50'].values),
+            'P75': ('yellow', df['P75'].values),
+            'P90': ('orange', df['P90'].values),
+            'P95': ('r-', df['P95'].values)
+        }
+
+        curvabdd = Curvas.objects.filter(paciente=idPat)
+
+        # Crear el gráfico
+        fig, ax = plt.subplots(figsize=(10, 8))
+
+        # Crear splines para suavizar las curvas
+        for label, (color, values) in percentiles.items():
+            spline = make_interp_spline(ages, values, k=3)
+            ages_new = np.linspace(ages.min(), ages.max(), 300)
+            ax.plot(ages_new, spline(ages_new), color, label=f'Percentil {label}')
+
+        # Graficar los datos del paciente
+        edades = [float(curva.age_pat) for curva in curvabdd]
+        imcs = [float(curva.IMC) for curva in curvabdd]
+        ax.plot(edades, imcs, 'o-', label='IMC de la paciente')
+
+        # Configurar etiquetas y título
+        ax.set_xlabel('Edad (meses)')
+        ax.set_ylabel('IMC')
+        ax.set_title('Curvas de Crecimiento - IMC para la Edad (2-20 años)')
+
+        # Ajustar los ticks del eje X
+        xticks = list(range(24, 241, 12))  # Ticks cada año
+        xticklabels = [f'{i//12} años' for i in xticks]
+        ax.set_xticks(xticks)
+        ax.set_xticklabels(xticklabels, rotation=45, ha='right')
+
+        # Ajustar los ticks del eje Y
+        yticks = list(range(10, 40, 2))  # Ticks cada 2 unidades de IMC
+        ax.set_yticks(yticks)
+
+        # Añadir la cuadrícula
+        ax.grid(True)
+
+        # Agregar leyenda
+        ax.legend()
+
+        # Guardar gráfico en memoria
+        buffer = BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+        image_png = buffer.getvalue()
+        buffer.close()
+        graphic = base64.b64encode(image_png).decode('utf-8')
+
+        return graphic
+
+    except Exception as e:
+        print(f"Error en generate_bmi_chart_girls_2_to_20: {e}")
+        return None
+
 @login_required
 def doc_patient(request, idPat):
     patbdd = Patient.objects.get(idPat=idPat)
@@ -1047,6 +1269,9 @@ def doc_patient(request, idPat):
     growth_chart_2_to_20 = generate_growth_chart_2_to_20(request, idPat)
     height_chart_2_to_20 = generate_height_chart_2_to_20(request, idPat)
     bmi_chart_2_to_20 = generate_bmi_chart_2_to_20(request, idPat)
+    growth_chart_girls_2_to_20 = generate_growth_chart_girls_2_to_20(request, idPat)
+    height_chart_girls_2_to_20 = generate_height_chart_girls_2_to_20(request, idPat)
+    bmi_chart_girls_2_to_20 = generate_bmi_chart_girls_2_to_20(request, idPat)
 
     return render(request, 'histo/patient.html', {
         'pacientes': patbdd,
@@ -1069,8 +1294,11 @@ def doc_patient(request, idPat):
         'bmi_chart_girls': bmi_chart_girls if bmi_chart_girls else "No se pudo generar la gráfica de IMC para la edad (niñas).",
         'growth_chart_2_to_20': growth_chart_2_to_20 if growth_chart_2_to_20 else "No se pudo generar la gráfica de crecimiento para la edad (2-20 años).",
         'height_chart_2_to_20': height_chart_2_to_20 if height_chart_2_to_20 else "No se pudo generar la gráfica de altura para la edad (2-20 años).",
-        'bmi_chart_2_to_20': bmi_chart_2_to_20 if bmi_chart_2_to_20 else "No se pudo generar la gráfica de IMC para la edad (2-20 años)."
+        'bmi_chart_2_to_20': bmi_chart_2_to_20 if bmi_chart_2_to_20 else "No se pudo generar la gráfica de IMC para la edad (2-20 años).",
+        'growth_chart_girls_2_to_20': growth_chart_girls_2_to_20 if growth_chart_girls_2_to_20 else "No se pudo generar la gráfica de peso para la edad (2-20 años, niñas).",
+        'bmi_chart_girls_2_to_20': bmi_chart_girls_2_to_20 if bmi_chart_girls_2_to_20 else "No se pudo generar la gráfica de IMC para la edad (2-20 años, niñas)."
     })
+
 
 @login_required
 @custom_login_required
