@@ -165,7 +165,7 @@ class Curvas(models.Model):
     idcur = models.AutoField(primary_key=True)
     creation = models.DateField(default=datetime.date.today)
     paciente = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    age_pat = models.DecimalField(max_digits=4, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
+    age_pat = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
     peso = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
     estatura_pat = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
     IMC = models.DecimalField(max_digits=4, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])

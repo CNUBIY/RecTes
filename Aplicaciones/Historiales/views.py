@@ -1570,7 +1570,12 @@ def editEstatura(request, idPat):
 @custom_login_required
 def aggCurva(request, idPat):
     if request.method == 'POST':
-        paciente = Patient.objects.get(idPat=idPat)
+        try:
+            paciente = Patient.objects.get(idPat=idPat)
+        except Patient.DoesNotExist:
+            messages.error(request, 'Paciente no encontrado.')
+            return redirect('doc_patient', idPat=idPat)
+
         estatura_pat = request.POST.get('estatura_pat')
         peso = request.POST.get('peso')
         IMC = request.POST.get('IMC')
@@ -1589,26 +1594,37 @@ def aggCurva(request, idPat):
             messages.error(request, 'Por favor, ingrese valores válidos para todos los campos.')
             return redirect('doc_patient', idPat=idPat)
 
-        # Calcular la edad del paciente
+        # Calcular la edad del paciente en meses
         birth_date = paciente.birthPat
         today = date.today()
-        age_years = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
 
-        if age_years < 5:
-            months_diff = (today.year - birth_date.year) * 12 + today.month - birth_date.month
-            age_pat = Decimal(f"{age_years}.{months_diff % 12}")
-        else:
-            age_pat = Decimal(age_years)
+        # Calcular la diferencia en años y meses
+        age_years = today.year - birth_date.year
+        age_months = today.month - birth_date.month
 
-        newCurva = Curvas.objects.create(
-            paciente=paciente,
-            estatura_pat=estatura_pat,
-            peso=peso,
-            IMC=IMC,
-            per_enc=per_enc,
-            age_pat=age_pat
-        )
-        messages.success(request, 'Dato registrado correctamente')
+        # Ajustar si el mes de nacimiento es mayor que el mes actual
+        if age_months < 0:
+            age_years -= 1
+            age_months += 12
+
+        total_months = (age_years * 12) + age_months
+
+        # Representar la edad en formato decimal (total meses)
+        age_pat = Decimal(total_months)
+
+        try:
+            newCurva = Curvas.objects.create(
+                paciente=paciente,
+                estatura_pat=estatura_pat,
+                peso=peso,
+                IMC=IMC,
+                per_enc=per_enc,
+                age_pat=age_pat
+            )
+            messages.success(request, 'Dato registrado correctamente')
+        except Exception as e:
+            messages.error(request, f'Error al registrar el dato: {e}')
+
         return redirect('doc_patient', idPat=idPat)
     else:
         messages.error(request, 'No se pudo ingresar la información')
