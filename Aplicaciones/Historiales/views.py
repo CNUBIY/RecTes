@@ -875,6 +875,7 @@ def generate_growth_chart_2_to_20(request, idPat):
         print(f"Error en generate_growth_chart_2_to_20: {e}")
         return None
 
+@login_required
 def generate_height_chart_2_to_20(request, idPat):
     try:
         # Ruta relativa al archivo Excel en la carpeta static
@@ -898,7 +899,8 @@ def generate_height_chart_2_to_20(request, idPat):
             'P95': ('r-', df['P95'].values)
         }
 
-        curvabdd = Curvas.objects.filter(paciente=idPat)
+        # Filtrar los puntos del paciente con age_pat entre 24 y 240 meses
+        curvabdd = Curvas.objects.filter(paciente=idPat, age_pat__gte=24, age_pat__lte=240)
 
         # Crear el gráfico
         fig, ax = plt.subplots(figsize=(10, 8))
