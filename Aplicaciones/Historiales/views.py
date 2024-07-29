@@ -278,7 +278,8 @@ def generate_head_circumference_chart(request, idPat):
         percentile_85 = df['P85'].values
         percentile_97 = df['P97'].values
 
-        curvabdd = Curvas.objects.filter(paciente=idPat)
+        # Filtrar los puntos del paciente con age_pat menores a 60 meses y per_enc no nulo
+        curvabdd = Curvas.objects.filter(paciente=idPat, age_pat__lt=60).exclude(per_enc__isnull=True)
 
         # Crear el gráfico
         fig, ax = plt.subplots(figsize=(10, 8))
@@ -302,7 +303,7 @@ def generate_head_circumference_chart(request, idPat):
 
         # Graficar los datos del paciente
         edades = [float(curva.age_pat) for curva in curvabdd]
-        perimetros = [float(curva.perimetro_cefalico) for curva in curvabdd]
+        perimetros = [float(curva.per_enc) for curva in curvabdd if curva.per_enc is not None]
         ax.plot(edades, perimetros, 'o-', label='Perímetro cefálico del paciente')
 
         # Configurar etiquetas y título
@@ -371,7 +372,8 @@ def generate_bmi_chart(request, idPat):
         percentile_85 = list(df_0_2['P85'].values) + list(df_2_5['P85'].values)
         percentile_97 = list(df_0_2['P97'].values) + list(df_2_5['P97'].values)
 
-        curvabdd = Curvas.objects.filter(paciente=idPat)
+        # Filtrar los puntos del paciente con age_pat menores a 60 meses
+        curvabdd = Curvas.objects.filter(paciente=idPat, age_pat__lt=60)
 
         # Crear el gráfico
         fig, ax = plt.subplots(figsize=(10, 8))
@@ -415,7 +417,7 @@ def generate_bmi_chart(request, idPat):
         ax.set_xticklabels(xticklabels, rotation=45, ha='right')
 
         # Ajustar los ticks del eje Y
-        yticks = list(range(10, 21, 1))  # Ticks cada 2 kg/m² desde 10 kg/m² hasta 25 kg/m²
+        yticks = list(range(10, 21, 1))  # Ticks cada 1 kg/m² desde 10 kg/m² hasta 20 kg/m²
         ax.set_yticks(yticks)
 
         # Añadir la cuadrícula
@@ -456,7 +458,8 @@ def generate_growth_chart_girls(request, idPat):
         percentile_85 = df['P85'].values
         percentile_97 = df['P97'].values
 
-        curvabdd = Curvas.objects.filter(paciente=idPat)
+        # Filtrar los puntos del paciente con age_pat menores a 60 meses
+        curvabdd = Curvas.objects.filter(paciente=idPat, age_pat__lt=60)
 
         # Crear el gráfico
         fig, ax = plt.subplots(figsize=(10, 8))
