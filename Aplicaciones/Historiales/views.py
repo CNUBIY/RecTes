@@ -19,7 +19,10 @@ from django.conf import settings
 from telegram import Bot
 from asgiref.sync import async_to_sync
 from decimal import Decimal
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from io import BytesIO
 import base64
 import os
@@ -153,13 +156,24 @@ def generate_growth_chart(request, idPat):
         # Agregar leyenda
         ax.legend()
 
-        # Guardar gráfico en memoria
-        buffer = BytesIO()
-        plt.savefig(buffer, format='png')
-        buffer.seek(0)
-        image_png = buffer.getvalue()
-        buffer.close()
-        graphic = base64.b64encode(image_png).decode('utf-8')
+        # Guardar gráfico en el directorio de medios
+        media_dir = settings.MEDIA_ROOT
+        growth_charts_dir = os.path.join(media_dir, 'growth_charts')
+        if not os.path.exists(growth_charts_dir):
+            os.makedirs(growth_charts_dir)
+
+        # Eliminar la imagen anterior si existe
+        image_path = os.path.join(growth_charts_dir, f'growth_chart_{idPat}.png')
+        if os.path.exists(image_path):
+            os.remove(image_path)
+
+        # Guardar la nueva imagen
+        plt.savefig(image_path, format='png')
+        plt.close(fig)  # Cerrar el gráfico para liberar memoria
+
+        # Codificar la imagen en base64 para devolverla como una cadena
+        with open(image_path, "rb") as image_file:
+            graphic = base64.b64encode(image_file.read()).decode('utf-8')
 
         return graphic
 
@@ -247,15 +261,26 @@ def generate_height_chart(request, idPat):
         # Agregar leyenda
         ax.legend()
 
-        # Guardar gráfico en memoria
-        buffer = BytesIO()
-        plt.savefig(buffer, format='png')
-        buffer.seek(0)
-        image_png = buffer.getvalue()
-        buffer.close()
-        height_chart = base64.b64encode(image_png).decode('utf-8')
+        # Guardar gráfico en el directorio de medios
+        media_dir = settings.MEDIA_ROOT
+        height_charts_dir = os.path.join(media_dir, 'height_charts')
+        if not os.path.exists(height_charts_dir):
+            os.makedirs(height_charts_dir)
 
-        return height_chart
+        # Eliminar la imagen anterior si existe
+        image_path = os.path.join(height_charts_dir, f'height_chart_{idPat}.png')
+        if os.path.exists(image_path):
+            os.remove(image_path)
+
+        # Guardar la nueva imagen
+        plt.savefig(image_path, format='png')
+        plt.close(fig)  # Cerrar el gráfico para liberar memoria
+
+        # Codificar la imagen en base64 para devolverla como una cadena
+        with open(image_path, "rb") as image_file:
+            graphic = base64.b64encode(image_file.read()).decode('utf-8')
+
+        return graphic
 
     except Exception as e:
         print(f"Error en generate_height_chart: {e}")
