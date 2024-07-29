@@ -1257,21 +1257,52 @@ def doc_patient(request, idPat):
 
     obsbdd = observaciones.objects.filter(paciente=idPat)
 
-    # Generar gráficos de crecimiento
-    weight_chart = generate_growth_chart(request, idPat)
-    height_chart = generate_height_chart(request, idPat)
-    head_circumference_chart = generate_head_circumference_chart(request, idPat)
-    bmi_chart = generate_bmi_chart(request, idPat)
-    weight_chart_girls = generate_growth_chart_girls(request, idPat)
-    height_chart_girls = generate_height_chart_girls(request, idPat)
-    head_circumference_chart_girls = generate_head_circumference_chart_girls(request, idPat)
-    bmi_chart_girls = generate_bmi_chart_girls(request, idPat)
-    growth_chart_2_to_20 = generate_growth_chart_2_to_20(request, idPat)
-    height_chart_2_to_20 = generate_height_chart_2_to_20(request, idPat)
-    bmi_chart_2_to_20 = generate_bmi_chart_2_to_20(request, idPat)
-    growth_chart_girls_2_to_20 = generate_growth_chart_girls_2_to_20(request, idPat)
-    height_chart_girls_2_to_20 = generate_height_chart_girls_2_to_20(request, idPat)
-    bmi_chart_girls_2_to_20 = generate_bmi_chart_girls_2_to_20(request, idPat)
+    # Generar gráficos según el género del paciente
+    if patbdd.genPat.nombreGen == 'Masculino':
+        weight_chart = generate_growth_chart(request, idPat)
+        height_chart = generate_height_chart(request, idPat)
+        head_circumference_chart = generate_head_circumference_chart(request, idPat)
+        bmi_chart = generate_bmi_chart(request, idPat)
+        weight_chart_girls = None
+        height_chart_girls = None
+        head_circumference_chart_girls = None
+        bmi_chart_girls = None
+        growth_chart_2_to_20 = generate_growth_chart_2_to_20(request, idPat)
+        height_chart_2_to_20 = generate_height_chart_2_to_20(request, idPat)
+        bmi_chart_2_to_20 = generate_bmi_chart_2_to_20(request, idPat)
+        growth_chart_girls_2_to_20 = None
+        height_chart_girls_2_to_20 = None
+        bmi_chart_girls_2_to_20 = None
+    elif patbdd.genPat.nombreGen == 'Femenino':
+        weight_chart = None
+        height_chart = None
+        head_circumference_chart = None
+        bmi_chart = None
+        weight_chart_girls = generate_growth_chart_girls(request, idPat)
+        height_chart_girls = generate_height_chart_girls(request, idPat)
+        head_circumference_chart_girls = generate_head_circumference_chart_girls(request, idPat)
+        bmi_chart_girls = generate_bmi_chart_girls(request, idPat)
+        growth_chart_2_to_20 = None
+        height_chart_2_to_20 = None
+        bmi_chart_2_to_20 = None
+        growth_chart_girls_2_to_20 = generate_growth_chart_girls_2_to_20(request, idPat)
+        height_chart_girls_2_to_20 = generate_height_chart_girls_2_to_20(request, idPat)
+        bmi_chart_girls_2_to_20 = generate_bmi_chart_girls_2_to_20(request, idPat)
+    else:
+        weight_chart = None
+        height_chart = None
+        head_circumference_chart = None
+        bmi_chart = None
+        weight_chart_girls = None
+        height_chart_girls = None
+        head_circumference_chart_girls = None
+        bmi_chart_girls = None
+        growth_chart_2_to_20 = None
+        height_chart_2_to_20 = None
+        bmi_chart_2_to_20 = None
+        growth_chart_girls_2_to_20 = None
+        height_chart_girls_2_to_20 = None
+        bmi_chart_girls_2_to_20 = None
 
     return render(request, 'histo/patient.html', {
         'pacientes': patbdd,
@@ -1296,9 +1327,9 @@ def doc_patient(request, idPat):
         'height_chart_2_to_20': height_chart_2_to_20 if height_chart_2_to_20 else "No se pudo generar la gráfica de altura para la edad (2-20 años).",
         'bmi_chart_2_to_20': bmi_chart_2_to_20 if bmi_chart_2_to_20 else "No se pudo generar la gráfica de IMC para la edad (2-20 años).",
         'growth_chart_girls_2_to_20': growth_chart_girls_2_to_20 if growth_chart_girls_2_to_20 else "No se pudo generar la gráfica de peso para la edad (2-20 años, niñas).",
+        'height_chart_girls_2_to_20': height_chart_girls_2_to_20 if height_chart_girls_2_to_20 else "No se pudo generar la gráfica de altura para la edad (2-20 años, niñas).",
         'bmi_chart_girls_2_to_20': bmi_chart_girls_2_to_20 if bmi_chart_girls_2_to_20 else "No se pudo generar la gráfica de IMC para la edad (2-20 años, niñas)."
     })
-
 
 @login_required
 @custom_login_required
