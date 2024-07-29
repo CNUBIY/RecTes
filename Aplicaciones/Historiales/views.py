@@ -193,7 +193,8 @@ def generate_height_chart(request, idPat):
         percentile_85 = list(df_0_2['P85'].values) + list(df_2_5['P85'].values)
         percentile_97 = list(df_0_2['P97'].values) + list(df_2_5['P97'].values)
 
-        curvabdd = Curvas.objects.filter(paciente=idPat)
+        # Filtrar los puntos del paciente con age_pat menores a 60 meses
+        curvabdd = Curvas.objects.filter(paciente=idPat, age_pat__lt=60)
 
         # Crear el gráfico
         fig, ax = plt.subplots(figsize=(10, 8))
@@ -217,7 +218,7 @@ def generate_height_chart(request, idPat):
 
         # Graficar los datos del paciente
         edades = [float(curva.age_pat) for curva in curvabdd]
-        estaturas = [float(curva.estatura) for curva in curvabdd]
+        estaturas = [float(curva.estatura_pat) for curva in curvabdd]  # Cambiado a estatura_pat
         ax.plot(edades, estaturas, 'o-', label='Estatura del paciente')
 
         # Configurar etiquetas y título
