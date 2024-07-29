@@ -1245,6 +1245,8 @@
   </div>
 </div>
 
+
+{% if curvas %}
 <!-- GRAFICAS NIÑOS 0-5 AÑOS -->
 <div class="container">
     <h1>Curva de Crecimiento del Paciente</h1>
@@ -1452,6 +1454,14 @@
     </div>
 {% endif %}
 </div>
+{% else %}
+<div class="card text-center">
+  <div class="card-body">
+    <p class="card-text"><b>Sin datos para gráficos registrados.</b></p>
+  </div>
+</div>
+{% endif %}
+
 
 
 
