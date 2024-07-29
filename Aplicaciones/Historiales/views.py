@@ -637,7 +637,8 @@ def generate_head_circumference_chart_girls(request, idPat):
         percentile_85 = df['P85'].values
         percentile_97 = df['P97'].values
 
-        curvabdd = Curvas.objects.filter(paciente=idPat)
+        # Filtrar los puntos del paciente con age_pat menores a 60 meses y per_enc no nulos
+        curvabdd = Curvas.objects.filter(paciente=idPat, age_pat__lt=60, per_enc__isnull=False)
 
         # Crear el gráfico
         fig, ax = plt.subplots(figsize=(10, 8))
