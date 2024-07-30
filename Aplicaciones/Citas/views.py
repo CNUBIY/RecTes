@@ -22,6 +22,8 @@ from telegram import Bot
 from asgiref.sync import async_to_sync
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from validate_email_address import validate_email
+from django.core.exceptions import ValidationError
 # Create your views here.
 
 
@@ -32,6 +34,15 @@ async def send_telegram_message(msg, chat_id=my_chat_id, token=my_token):
     bot_instance = Bot(token=token)
     await bot_instance.send_message(chat_id=chat_id, text=msg)
 
+def validate_real_email(email):
+    # Verificar si el correo tiene un formato válido
+    if not validate_email(email):
+        raise ValidationError('Correo electrónico no válido')
+
+    # Verificar si el correo realmente existe
+    if not validate_email(email, verify=True):
+        raise ValidationError('Correo no válido')
+
 # Página Informativa INICIO
 async def index(request):
     return render(request, 'index.html')
@@ -39,6 +50,7 @@ async def index(request):
 
 
 #Página REGISTER usuarios INICIO
+
 @login_required
 @custom_login_required
 def register(request):
@@ -46,10 +58,18 @@ def register(request):
         username = request.POST['username']
         password = request.POST['password']
 
+        # Validar el correo electrónico
+        try:
+            validate_real_email(username)
+        except ValidationError as e:
+            messages.error(request, str(e))
+            return render(request, 'usci_register.html')
+
+        # Verificar si el usuario ya existe
         if User.objects.filter(username=username).exists():
             messages.error(request, 'Este correo ya está registrado')
         else:
-            user = User.objects.create_user(username=username, password=password)  # Añadir el correo electrónico aquí
+            user = User.objects.create_user(username=username, password=password)
             user.save()
             messages.success(request, 'Cuenta creada exitosamente')
             return redirect('/login')

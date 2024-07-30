@@ -17,6 +17,49 @@
   <!-- IziToast -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        .is-invalid {
+            border-color: #dc3545;
+        }
+
+        .text-danger {
+            color: #dc3545;
+        }
+    </style>
+
+    <script>
+        function validateEmail(email) {
+            const emailPattern = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+            return emailPattern.test(email);
+        }
+
+        function checkEmail() {
+            const emailInput = document.getElementById('username');
+            const errorDiv = document.getElementById('emailError');
+            const email = emailInput.value;
+
+            if (!validateEmail(email)) {
+                errorDiv.textContent = 'Correo no válido';
+                emailInput.classList.add('is-invalid');
+                return false;
+            } else {
+                errorDiv.textContent = '';
+                emailInput.classList.remove('is-invalid');
+                return true;
+            }
+        }
+
+        function validateForm(event) {
+            if (!checkEmail()) {
+                event.preventDefault();  // Prevenir el envío del formulario si el correo no es válido
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('reg_val');
+            form.addEventListener('submit', validateForm);
+        });
+    </script>
 
 </head>
 
@@ -37,11 +80,12 @@
                   </a>
                   <p class="text-center">Tu Centro Médico Favorito</p>
                 </div>
-                <form id="reg_val"  method="post">
+                <form id="reg_val" method="post">
                   {% csrf_token %}
                   <div class="mb-3">
                     <label for="username" class="form-label">Correo:</label>
-                    <input type="email" class="form-control" name="username" id="username" aria-describedby="emailHelp">
+                    <input type="email" class="form-control" name="username" id="username" aria-describedby="emailHelp" onblur="checkEmail()">
+                    <div id="emailError" class="text-danger"></div>
                   </div>
                   <div class="mb-4">
                     <label for="password" class="form-label">Contraseña</label>
