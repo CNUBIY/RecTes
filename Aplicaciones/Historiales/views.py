@@ -462,15 +462,26 @@ def generate_bmi_chart(request, idPat):
         # Agregar leyenda
         ax.legend()
 
-        # Guardar gráfico en memoria
-        buffer = BytesIO()
-        plt.savefig(buffer, format='png')
-        buffer.seek(0)
-        image_png = buffer.getvalue()
-        buffer.close()
-        bmi_chart = base64.b64encode(image_png).decode('utf-8')
+        # Guardar gráfico en el directorio de medios
+        media_dir = settings.MEDIA_ROOT
+        bmi_charts_dir = os.path.join(media_dir, 'bmi_charts')
+        if not os.path.exists(bmi_charts_dir):
+            os.makedirs(bmi_charts_dir)
 
-        return bmi_chart
+        # Eliminar la imagen anterior si existe
+        image_path = os.path.join(bmi_charts_dir, f'bmi_chart_{idPat}.png')
+        if os.path.exists(image_path):
+            os.remove(image_path)
+
+        # Guardar la nueva imagen
+        plt.savefig(image_path, format='png')
+        plt.close(fig)  # Cerrar el gráfico para liberar memoria
+
+        # Codificar la imagen en base64 para devolverla como una cadena
+        with open(image_path, "rb") as image_file:
+            graphic = base64.b64encode(image_file.read()).decode('utf-8')
+
+        return graphic
 
     except Exception as e:
         print(f"Error en generate_bmi_chart: {e}")
