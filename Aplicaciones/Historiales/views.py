@@ -664,19 +664,31 @@ def generate_height_chart_girls(request, idPat):
         # Agregar leyenda
         ax.legend()
 
-        # Guardar gráfico en memoria
-        buffer = BytesIO()
-        plt.savefig(buffer, format='png')
-        buffer.seek(0)
-        image_png = buffer.getvalue()
-        buffer.close()
-        height_chart_girls = base64.b64encode(image_png).decode('utf-8')
+        # Guardar gráfico en el directorio de medios
+        media_dir = settings.MEDIA_ROOT
+        height_charts_dir = os.path.join(media_dir, 'height_charts_girls')
+        if not os.path.exists(height_charts_dir):
+            os.makedirs(height_charts_dir)
 
-        return height_chart_girls
+        # Eliminar la imagen anterior si existe
+        image_path = os.path.join(height_charts_dir, f'height_chart_girls_{idPat}.png')
+        if os.path.exists(image_path):
+            os.remove(image_path)
+
+        # Guardar la nueva imagen
+        plt.savefig(image_path, format='png')
+        plt.close(fig)  # Cerrar el gráfico para liberar memoria
+
+        # Codificar la imagen en base64 para devolverla como una cadena
+        with open(image_path, "rb") as image_file:
+            graphic = base64.b64encode(image_file.read()).decode('utf-8')
+
+        return graphic
 
     except Exception as e:
         print(f"Error en generate_height_chart_girls: {e}")
         return None
+
 
 @login_required
 def generate_head_circumference_chart_girls(request, idPat):
