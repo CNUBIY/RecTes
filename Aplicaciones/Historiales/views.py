@@ -1040,13 +1040,24 @@ def generate_height_chart_2_to_20(request, idPat):
         # Agregar leyenda
         ax.legend()
 
-        # Guardar gráfico en memoria
-        buffer = BytesIO()
-        plt.savefig(buffer, format='png')
-        buffer.seek(0)
-        image_png = buffer.getvalue()
-        buffer.close()
-        graphic = base64.b64encode(image_png).decode('utf-8')
+        # Guardar gráfico en el directorio de medios
+        media_dir = settings.MEDIA_ROOT
+        height_charts_2_20_dir = os.path.join(media_dir, 'height_charts_2_to_20')
+        if not os.path.exists(height_charts_2_20_dir):
+            os.makedirs(height_charts_2_20_dir)
+
+        # Eliminar la imagen anterior si existe
+        image_path = os.path.join(height_charts_2_20_dir, f'height_chart_2_to_20_{idPat}.png')
+        if os.path.exists(image_path):
+            os.remove(image_path)
+
+        # Guardar la nueva imagen
+        plt.savefig(image_path, format='png')
+        plt.close(fig)  # Cerrar el gráfico para liberar memoria
+
+        # Codificar la imagen en base64 para devolverla como una cadena
+        with open(image_path, "rb") as image_file:
+            graphic = base64.b64encode(image_file.read()).decode('utf-8')
 
         return graphic
 
