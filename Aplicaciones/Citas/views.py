@@ -72,7 +72,7 @@ def register(request):
                 fail_silently=False,
             )
 
-            messages.success(request, 'Cuenta creada exitosamente. Revisa tu correo para el código de verificación.')
+            messages.success(request, 'Cuenta creada correctamente. Revisa tu correo para el código de verificación.')
             return redirect('verify')
     return render(request, 'usci_register.html')
 

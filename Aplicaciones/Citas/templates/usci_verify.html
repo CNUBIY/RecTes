@@ -8,6 +8,14 @@
   <title>Verificar Correo</title>
   <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
   <link rel="stylesheet" href="{% static 'css/styles.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/estilo_validacion.css' %}" />
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- jQuery Validate -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+  <!-- IziToast -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
@@ -25,13 +33,16 @@
                   </a>
                   <p class="text-center">Verifica tu correo</p>
                 </div>
-                <form method="post">
+                <form id="verify_form" method="post">
                   {% csrf_token %}
                   <div class="mb-3">
                     <label for="code" class="form-label">Código de Verificación</label>
                     <input type="text" class="form-control" name="code" id="code" required>
                   </div>
-                  <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Verificar</button>
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-primary ">Verificar</button>
+                    <a href="{% url 'register' %}" class="btn btn-danger ">Cancelar</a>
+                  </div>
                 </form>
               </div>
             </div>
@@ -41,29 +52,60 @@
     </div>
   </div>
 </body>
+
 {% if messages %}
   {% for mensaje in messages %}
     <script type="text/javascript">
-      {% if "eliminado" in mensaje %}
+      var mensajeTexto = "{{ mensaje|escapejs }}";
+      if (mensajeTexto.includes("no")) {
         iziToast.error({
           title: 'Cancelado',
-          message: '{{ mensaje }}',
+          message: mensajeTexto,
           position: 'topRight',
         });
-      {% elif "guardado" in mensaje %}
+      } else if (mensajeTexto.includes("correctamente")) {
         iziToast.success({
           title: 'Éxito',
-          message: '{{ mensaje }}',
+          message: mensajeTexto,
           position: 'topRight',
         });
-      {% else %}
+      } else {
         iziToast.error({
           title: 'Error',
-          message: '{{ mensaje }}',
+          message: mensajeTexto,
           position: 'topRight',
         });
-      {% endif %}
+      }
     </script>
   {% endfor %}
 {% endif %}
+
+<script>
+  $(document).ready(function() {
+    // Validación del formulario
+    $("#verify_form").validate({
+      rules: {
+        code: {
+          required: true,
+          digits: true
+        }
+      },
+      messages: {
+        code: {
+          required: "El código de verificación es requerido",
+          digits: "Ingrese solo números"
+        }
+      },
+      errorPlacement: function(error, element) {
+        error.insertAfter(element);
+      }
+    });
+
+    // Restringir la entrada a solo números
+    $("#code").on("input", function() {
+      this.value = this.value.replace(/[^0-9]/g, '');
+    });
+  });
+</script>
+
 </html>
