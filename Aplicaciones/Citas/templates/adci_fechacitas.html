@@ -95,6 +95,11 @@
               <input type="text" class="form-control" name="telf_da" id="telf_da" placeholder="Ingrese el número de contacto">
               <div id="create_error_telf_da" class="error-messages"></div>
           </div>
+          <div class="mb-3">
+              <label for="modal_telf_da" class="form-label">Contacto</label>
+              <input type="text" class="form-control" name="correo_da" id="modal_correo_da" placeholder="Ingrese un número de Contacto" required>
+              <div id="edit_error_correo_da" class="error-messages"></div>
+          </div>
           <div class="row">
               <div class="mb-3 col-md-11">
                   <label for="fech_da" class="form-label">Fecha</label>
@@ -255,6 +260,11 @@
                         <input type="text" class="form-control" name="telf_da" id="modal_telf_da" placeholder="Ingrese un número de Contacto" required>
                         <div id="edit_error_telf_da" class="error-messages"></div>
                     </div>
+                    <div class="mb-3">
+                        <label for="modal_telf_da" class="form-label">Contacto</label>
+                        <input type="text" class="form-control" name="correo_da" id="modal_correo_da" placeholder="Ingrese un número de Contacto" required>
+                        <div id="edit_error_correo_da" class="error-messages"></div>
+                    </div>
                     <div class="row">
                         <div class="mb-3 col-md-11">
                             <label for="modal_fech_da" class="form-label">Fecha</label>
@@ -384,6 +394,20 @@
           return this.optional(element) || inputDate >= today;
       }, "Debe ingresar una fecha actual o futura");
 
+      // Añadir método de validación personalizado para fechas muy futuras
+      $.validator.addMethod("notTooFarFuture", function(value, element) {
+          var today = new Date();
+          var maxDate = new Date();
+          maxDate.setFullYear(today.getFullYear() + 1); // Establecer la fecha máxima a un año en el futuro
+          maxDate.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
+
+          var inputDateParts = value.split("-");
+          var inputDate = new Date(inputDateParts[0], inputDateParts[1] - 1, inputDateParts[2]);
+          inputDate.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
+
+          return this.optional(element) || inputDate <= maxDate;
+      }, "Fecha no válida");
+
       // Añadir método de validación personalizado para horarios permitidos
       $.validator.addMethod("validTimeRange", function(value, element) {
           if (this.optional(element)) {
@@ -437,6 +461,13 @@
           return inputDate.getTime() === today.getTime();
       }, "Las citas de cortesía solo se permiten en la fecha actual");
 
+      // Método personalizado para validar dominios de correo comunes
+      $.validator.addMethod("commonDomain", function(value, element) {
+        const commonDomains = ["gmail.com", "gmail.es", "yahoo.com", "yahoo.es", "hotmail.com", "hotmail.es", "outlook.com", "outlook.es", "live.com", "live.es", "icloud.com"];
+        const domain = value.split('@')[1];
+        return this.optional(element) || commonDomains.includes(domain);
+      }, "Ingrese un correo electrónico personal válido");
+
       // Inicializar validación del modal cuando se muestre
       function initializeModalValidation() {
           $("#vldt_edidias").validate({
@@ -447,10 +478,16 @@
                   telf_da: {
                       required: true,
                   },
+                  correo_da: {
+                      required: true,
+                      email: true,
+                      commonDomain: true
+                  },
                   fech_da: {
                       required: true,
                       date: true,
                       noPastDate: true, // Añadir regla personalizada aquí
+                      notTooFarFuture: true, // Añadir regla personalizada aquí también
                       validCortesiaDate: true, // Añadir regla personalizada para citas de cortesía
                   },
                   time_da: {
@@ -466,10 +503,16 @@
                   telf_da: {
                       required: "Debe ingresar el contacto del cliente",
                   },
+                  correo_da: {
+                      required: "Debe ingresar el correo del cliente",
+                      email: "Ingrese un correo válido",
+                      commonDomain: "Ingrese un correo electrónico personal válido"
+                  },
                   fech_da: {
                       required: "Debe ingresar la fecha de la cita",
                       date: "Ingrese una fecha válida",
                       noPastDate: "Debe ingresar una fecha actual o futura",
+                      notTooFarFuture: "Fecha no válida",
                       validCortesiaDate: "Las citas de cortesía solo se permiten en la fecha actual",
                   },
                   time_da: {
@@ -504,10 +547,16 @@
               telf_da: {
                   required: true,
               },
+              correo_da: {
+                  required: true,
+                  email: true,
+                  commonDomain: true
+              },
               fech_da: {
                   required: true,
                   date: true,
                   noPastDate: true, // Añadir regla personalizada aquí también
+                  notTooFarFuture: true, // Añadir regla personalizada aquí también
                   validCortesiaDate: true, // Añadir regla personalizada para citas de cortesía
               },
               time_da: {
@@ -523,10 +572,16 @@
               telf_da: {
                   required: "Debe ingresar el contacto del cliente",
               },
+              correo_da: {
+                  required: "Debe ingresar el correo del cliente",
+                  email: "Ingrese un correo válido",
+                  commonDomain: "Ingrese un correo electrónico personal válido"
+              },
               fech_da: {
                   required: "Debe ingresar la fecha de la cita",
                   date: "Ingrese una fecha válida",
                   noPastDate: "Debe ingresar una fecha actual o futura",
+                  notTooFarFuture: "Fecha no válida",
                   validCortesiaDate: "Las citas de cortesía solo se permiten en la fecha actual",
               },
               time_da: {
