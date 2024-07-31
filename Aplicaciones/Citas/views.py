@@ -123,6 +123,53 @@ def user_login(request):
             messages.error(request, 'Contraseña/Correo Incorrectos')
     return render(request, 'usci_login.html')
 
+def request_reset_password(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+
+        if User.objects.filter(username=email).exists():
+            verification_code = generate_verification_code()
+
+            # Guardar el código de verificación en la sesión
+            request.session['reset_password_code'] = verification_code
+            request.session['reset_email'] = email
+
+            # Enviar correo de verificación
+            send_mail(
+                'Código de Restablecimiento de Contraseña',
+                f'Tu código de restablecimiento de contraseña es: {verification_code}',
+                settings.EMAIL_HOST_USER,
+                [email],
+                fail_silently=False,
+            )
+
+            messages.success(request, 'Revisa tu correo para el código de restablecimiento de contraseña.')
+            return redirect('reset_password')
+        else:
+            messages.error(request, 'Este correo no está registrado.')
+    return render(request, 'usci_requestemail.html')
+
+def reset_password(request):
+    if request.method == 'POST':
+        code = request.POST['code']
+        new_password = request.POST['new_password']
+        email = request.session.get('reset_email')
+        verification_code = request.session.get('reset_password_code')
+
+        if code == verification_code:
+            user = User.objects.get(username=email)
+            user.set_password(new_password)
+            user.save()
+
+            # Limpiar la sesión
+            del request.session['reset_password_code']
+            del request.session['reset_email']
+
+            messages.success(request, 'Contraseña restablecida exitosamente.')
+            return redirect('login')
+        else:
+            messages.error(request, 'Código de verificación incorrecto.')
+    return render(request, 'usci_resetp.html')
 
 def user_logout(request):
     logout (request)

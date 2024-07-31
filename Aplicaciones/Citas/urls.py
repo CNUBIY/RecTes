@@ -10,6 +10,8 @@ urlpatterns=[
     path('register/', views.register, name='register'),
     path('verify/',views.verify_email, name='verify'),
     path('login/', views.user_login, name='login'),
+    path('request_reset_password/', views.request_reset_password, name='request_reset_password'),
+    path('reset_password/', views.reset_password, name='reset_password'),
     path('logout/',views.user_logout, name='logout'),
     #PERFIL ADMIN
     path('adci_inicio/adci_perfil/', views.adci_perfil, name='adci_perfil'),
