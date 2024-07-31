@@ -1728,10 +1728,11 @@
     var editPesoField = document.getElementById('edit_peso');
     var editImcField = document.getElementById('edit_IMC');
     var editPerEncField = document.getElementById('edit_per_enc');
+    var editCurvaForm = document.getElementById('editCurvaForm');
 
     function calculateEditIMC() {
-      var estatura = parseFloat(editEstaturaField.value) / 100; // Convertir cm a metros
-      var peso = parseFloat(editPesoField.value);
+      var estatura = parseFloat(editEstaturaField.value.replace(',', '.')) / 100; // Convertir cm a metros
+      var peso = parseFloat(editPesoField.value.replace(',', '.'));
 
       if (!isNaN(estatura) && !isNaN(peso) && estatura > 0) {
         var imc = peso / (estatura * estatura);
@@ -1744,20 +1745,44 @@
     editEstaturaField.addEventListener('input', calculateEditIMC);
     editPesoField.addEventListener('input', calculateEditIMC);
 
+    editCurvaForm.addEventListener('submit', function (event) {
+      // Reemplazar comas por puntos en todos los campos de entrada
+      editCurvaForm.querySelectorAll('input[type="text"]').forEach(function (input) {
+        input.value = input.value.replace(/,/g, '.');
+      });
+
+      // Manejar caso "None"
+      if (editPerEncField.value === "None") {
+        editPerEncField.value = '';
+      }
+
+      // Imprimir los valores en la consola
+      console.log('Estatura:', editEstaturaField.value);
+      console.log('Peso:', editPesoField.value);
+      console.log('IMC:', editImcField.value);
+      console.log('Perímetro Cefálico:', editPerEncField.value);
+    });
+
     $('#editCurModal').on('show.bs.modal', function (event) {
       var button = $(event.relatedTarget); // Botón que activó el modal
       var idcur = button.data('idcur');
-      var estatura = button.data('estatura');
-      var peso = button.data('peso');
-      var imc = button.data('imc');
+      var estatura = button.data('estatura').replace('.', ',');
+      var peso = button.data('peso').replace('.', ',');
+      var imc = button.data('imc').replace('.', ',');
       var perEnc = button.data('perenc');
+
+      if (perEnc === "None") {
+        perEnc = ''; // Manejar caso "None"
+      } else {
+        perEnc = perEnc.replace('.', ',');
+      }
+
       var birthDate = new Date('{{ pacientes.birthPat|date:"Y-m-d" }}');
       var today = new Date();
       var ageYears = today.getFullYear() - birthDate.getFullYear();
       var ageMonths = today.getMonth() - birthDate.getMonth();
       if (ageMonths < 0 || (ageMonths === 0 && today.getDate() < birthDate.getDate())) {
         ageYears--;
-        ageMonths = (12 + ageMonths) % 12;
       }
 
       // Ajustar el campo de perímetro cefálico en función de la edad
@@ -1778,6 +1803,7 @@
     });
   });
 </script>
+
 <!-- MENSAJE DE CONFIRMACIÓN ELIMINAR DÍA HORARIO -->
 <script type="text/javascript">
     function delete_alergia(url) {

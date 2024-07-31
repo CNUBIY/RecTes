@@ -1834,14 +1834,17 @@ def editCurva(request, idPat, idcur):
             estatura_pat = request.POST["estatura_pat"].replace(',', '.')
             peso = request.POST["peso"].replace(',', '.')
             imc = request.POST["IMC"].replace(',', '.')
-            per_enc = request.POST["per_enc"].replace(',', '.')
+            per_enc = request.POST["per_enc"]
 
             # Validar que los valores sean decimales
             try:
                 estatura_pat = Decimal(estatura_pat)
                 peso = Decimal(peso)
                 imc = Decimal(imc)
-                per_enc = Decimal(per_enc)
+                if per_enc and per_enc != "None":
+                    per_enc = Decimal(per_enc.replace(',', '.'))
+                else:
+                    per_enc = None
             except InvalidOperation:
                 messages.error(request, "Los valores ingresados deben ser números decimales.")
                 return redirect('doc_patient', idPat=idPat)
@@ -1858,6 +1861,7 @@ def editCurva(request, idPat, idcur):
             return redirect('doc_patient', idPat=idPat)
     else:
         return redirect('error_p')
+
 
 #Página PACIENTES FINAL
 
