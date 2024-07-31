@@ -8,8 +8,11 @@
   <title>Restablecer Contraseña</title>
   <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
   <link rel="stylesheet" href="{% static 'css/styles.min.css' %}" />
-  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
@@ -27,11 +30,12 @@
                   </a>
                   <p class="text-center">Restablecer Contraseña</p>
                 </div>
-                <form method="post">
+                <form id="reset_password_form" method="post">
                   {% csrf_token %}
                   <div class="mb-3">
                     <label for="code" class="form-label">Código de Verificación</label>
                     <input type="text" class="form-control" name="code" id="code" required>
+                    <div class="error-message-code text-danger"></div>
                   </div>
                   <div class="mb-3">
                     <label for="new_password" class="form-label">Nueva Contraseña</label>
@@ -41,6 +45,7 @@
                         <i class="far fa-eye"></i>
                       </button>
                     </div>
+                    <div class="error-message-new-password text-danger"></div>
                   </div>
                   <div class="mb-3">
                     <label for="confirm_password" class="form-label">Confirmar Nueva Contraseña</label>
@@ -50,6 +55,7 @@
                         <i class="far fa-eye"></i>
                       </button>
                     </div>
+                    <div class="error-message-confirm-password text-danger"></div>
                   </div>
                   <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Restablecer Contraseña</button>
                 </form>
@@ -60,14 +66,6 @@
       </div>
     </div>
   </div>
-
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <!-- Font Awesome JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-  <!-- IziToast -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   {% if messages %}
     {% for mensaje in messages %}
@@ -98,14 +96,70 @@
 
   <script>
     $(document).ready(function() {
+      // Método personalizado para asegurar una contraseña fuerte
+      $.validator.addMethod("strongPassword", function(value, element) {
+        return this.optional(element) ||
+          value.length >= 8 &&
+          /[a-z]/.test(value) &&
+          /[A-Z]/.test(value) &&
+          /[0-9]/.test(value) &&
+          /[@$!%*?&#]/.test(value);
+      }, "La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un carácter especial.");
+
+      // Validación del formulario
+      $("#reset_password_form").validate({
+        rules: {
+          "code": {
+            required: true,
+            digits: true
+          },
+          "new_password": {
+            required: true,
+            strongPassword: true
+          },
+          "confirm_password": {
+            required: true,
+            equalTo: "#new_password"
+          }
+        },
+        messages: {
+          "code": {
+            required: "El código de verificación es requerido",
+            digits: "Solo se permiten números"
+          },
+          "new_password": {
+            required: "La nueva contraseña es requerida"
+          },
+          "confirm_password": {
+            required: "Debe confirmar su nueva contraseña",
+            equalTo: "Las contraseñas no coinciden"
+          }
+        },
+        errorPlacement: function(error, element) {
+          if (element.attr("name") === "code") {
+            error.appendTo(element.next(".error-message-code"));
+          } else if (element.attr("name") === "new_password") {
+            error.appendTo(element.closest(".input-group").next(".error-message-new-password"));
+          } else if (element.attr("name") === "confirm_password") {
+            error.appendTo(element.closest(".input-group").next(".error-message-confirm-password"));
+          }
+        }
+      });
+
+      // Función para alternar la visibilidad de la contraseña
       $(".toggle-password").click(function() {
         $(this).find("i").toggleClass("fa-eye fa-eye-slash");
-        var input = $($(this).data("toggle"));
+        var input = $($(this).attr("data-toggle"));
         if (input.attr("type") === "password") {
           input.attr("type", "text");
         } else {
           input.attr("type", "password");
         }
+      });
+
+      // Validación de solo números en el campo de código de verificación
+      $('#code').on('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
       });
     });
   </script>
