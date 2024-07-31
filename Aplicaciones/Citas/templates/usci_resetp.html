@@ -8,6 +8,8 @@
   <title>Restablecer Contraseña</title>
   <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
   <link rel="stylesheet" href="{% static 'css/styles.min.css' %}" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 
 <body>
@@ -33,7 +35,12 @@
                   </div>
                   <div class="mb-3">
                     <label for="new_password" class="form-label">Nueva Contraseña</label>
-                    <input type="password" class="form-control" name="new_password" id="new_password" required>
+                    <div class="input-group">
+                      <input type="password" class="form-control" name="new_password" id="new_password" required>
+                      <button type="button" class="btn btn-outline-secondary toggle-password" data-toggle="#new_password">
+                        <i class="far fa-eye"></i>
+                      </button>
+                    </div>
                   </div>
                   <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Restablecer Contraseña</button>
                 </form>
@@ -44,30 +51,54 @@
       </div>
     </div>
   </div>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- Font Awesome JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+  <!-- IziToast -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  {% if messages %}
+    {% for mensaje in messages %}
+      <script type="text/javascript">
+        var mensajeTexto = "{{ mensaje|escapejs }}";
+        if (mensajeTexto.includes("no")) {
+          iziToast.error({
+            title: 'Cancelado',
+            message: mensajeTexto,
+            position: 'topRight',
+          });
+        } else if (mensajeTexto.includes("exitosamente")) {
+          iziToast.success({
+            title: 'Éxito',
+            message: mensajeTexto,
+            position: 'topRight',
+          });
+        } else {
+          iziToast.error({
+            title: 'Error',
+            message: mensajeTexto,
+            position: 'topRight',
+          });
+        }
+      </script>
+    {% endfor %}
+  {% endif %}
+
+  <script>
+    $(document).ready(function() {
+      $(".toggle-password").click(function() {
+        $(this).find("i").toggleClass("fa-eye fa-eye-slash");
+        var input = $($(this).data("toggle"));
+        if (input.attr("type") === "password") {
+          input.attr("type", "text");
+        } else {
+          input.attr("type", "password");
+        }
+      });
+    });
+  </script>
 </body>
-{% if messages %}
-  {% for mensaje in messages %}
-    <script type="text/javascript">
-      {% if "eliminado" in mensaje %}
-        iziToast.error({
-          title: 'Cancelado',
-          message: '{{ mensaje }}',
-          position: 'topRight',
-        });
-      {% elif "guardado" in mensaje %}
-        iziToast.success({
-          title: 'Éxito',
-          message: '{{ mensaje }}',
-          position: 'topRight',
-        });
-      {% else %}
-        iziToast.error({
-          title: 'Error',
-          message: '{{ mensaje }}',
-          position: 'topRight',
-        });
-      {% endif %}
-    </script>
-  {% endfor %}
-{% endif %}
 </html>
