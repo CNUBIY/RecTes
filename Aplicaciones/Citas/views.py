@@ -423,14 +423,16 @@ def aggagenda_adci(request):
         try:
             nom_da = request.POST["nom_da"]
             telf_da = request.POST["telf_da"]
+            correo_da = request.POST["correo_da"]
             fech_da = request.POST["fech_da"]
             time_da = request.POST["time_da"]
             cort_da = request.POST.get("cort_da") == "on"
 
-            # Procesar la creación de la cita si pasa todas las validaciones
+            # Procesar la creación de la cita
             nueva_cita = CitaSol.objects.create(
                 fech_da=fech_da,
                 telf_da=telf_da,
+                correo_da=correo_da,
                 nom_da=nom_da,
                 time_da=time_da,
                 cort_da=cort_da,
@@ -461,34 +463,16 @@ def procesarActualizacionHorario(request, id):
         try:
             nom_da = request.POST["nom_da"]
             telf_da = request.POST["telf_da"]
+            correo_da = request.POST["correo_da"]
             fech_da = request.POST["fech_da"]
             time_da = request.POST["time_da"]
             cort_da = request.POST.get("cort_da") == "on"
-
-            # Verificar si la fecha y hora ya están registradas en otra cita
-            citas_existentes = CitaSol.objects.exclude(pk=id).filter(fech_da=fech_da, time_da=time_da)
-            if citas_existentes.exists():
-                # Mostrar mensaje de error si la cita ya existe
-                messages.error(request, "No puede seleccionar una fecha y hora ya registrada.")
-                return redirect('/adci_fechacitas')
-
-            # Validar que la hora no sea en el pasado para la fecha actual
-            current_datetime = datetime.now()
-            selected_datetime = datetime.strptime(f"{fech_da} {time_da}", "%Y-%m-%d %H:%M")
-            if fech_da == current_datetime.strftime("%Y-%m-%d") and selected_datetime.time() < current_datetime.time():
-                messages.error(request, "No puedes seleccionar una hora pasada para la fecha de hoy.")
-                return redirect('/adci_fechacitas')
-
-            # Validar que el horario esté dentro de los rangos permitidos
-            selected_time = selected_datetime.time()
-            if not ((8 <= selected_time.hour < 13) or (16 <= selected_time.hour < 20) or (selected_time.hour == 13 and selected_time.minute == 0) or (selected_time.hour == 20 and selected_time.minute == 0)):
-                messages.error(request, "El horario debe estar entre 8am-1pm o 4pm-8pm.")
-                return redirect('/adci_fechacitas')
 
             # Procesar la actualización de la cita con los valores obtenidos
             cita = get_object_or_404(CitaSol, pk=id)
             cita.nom_da = nom_da
             cita.telf_da = telf_da
+            cita.correo_da = correo_da
             cita.fech_da = fech_da
             cita.time_da = time_da
             cita.cort_da = cort_da
