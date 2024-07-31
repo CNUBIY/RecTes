@@ -8,6 +8,14 @@
   <title>Solicitar Restablecimiento de Contraseña</title>
   <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
   <link rel="stylesheet" href="{% static 'css/styles.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/estilo_validacion.css' %}" />
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- jQuery Validate -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+  <!-- IziToast -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
@@ -25,11 +33,12 @@
                   </a>
                   <p class="text-center">Restablecer Contraseña</p>
                 </div>
-                <form method="post">
+                <form id="request_reset_form" method="post">
                   {% csrf_token %}
                   <div class="mb-3">
                     <label for="email" class="form-label">Correo Electrónico</label>
                     <input type="email" class="form-control" name="email" id="email" required>
+                    <div class="error-message-email text-danger"></div>
                   </div>
                   <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Enviar Código</button>
                 </form>
@@ -41,29 +50,63 @@
     </div>
   </div>
 </body>
+
 {% if messages %}
   {% for mensaje in messages %}
     <script type="text/javascript">
-      {% if "eliminado" in mensaje %}
+      var mensajeTexto = "{{ mensaje|escapejs }}";
+      if (mensajeTexto.includes("eliminado")) {
         iziToast.error({
           title: 'Cancelado',
-          message: '{{ mensaje }}',
+          message: mensajeTexto,
           position: 'topRight',
         });
-      {% elif "guardado" in mensaje %}
+      } else if (mensajeTexto.includes("guardado")) {
         iziToast.success({
           title: 'Éxito',
-          message: '{{ mensaje }}',
+          message: mensajeTexto,
           position: 'topRight',
         });
-      {% else %}
+      } else {
         iziToast.error({
           title: 'Error',
-          message: '{{ mensaje }}',
+          message: mensajeTexto,
           position: 'topRight',
         });
-      {% endif %}
+      }
     </script>
   {% endfor %}
 {% endif %}
+
+<script>
+  $(document).ready(function() {
+    // Método personalizado para validar dominios de correo comunes
+    $.validator.addMethod("commonDomain", function(value, element) {
+      const commonDomains = ["gmail.com", "gmail.es", "yahoo.com", "yahoo.es", "hotmail.com", "hotmail.es", "outlook.com", "outlook.es", "live.com", "live.es", "icloud.com"];
+      const domain = value.split('@')[1];
+      return this.optional(element) || commonDomains.includes(domain);
+    }, "Ingrese un correo electrónico personal válido");
+
+    // Validación del formulario
+    $("#request_reset_form").validate({
+      rules: {
+        email: {
+          required: true,
+          email: true,
+          commonDomain: true
+        }
+      },
+      messages: {
+        email: {
+          required: "El correo electrónico es requerido",
+          email: "Ingrese un correo electrónico válido",
+          commonDomain: "Ingrese un correo electrónico personal válido"
+        }
+      },
+      errorPlacement: function(error, element) {
+        error.appendTo(element.next(".error-message-email"));
+      }
+    });
+  });
+</script>
 </html>

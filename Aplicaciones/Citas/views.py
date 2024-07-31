@@ -147,6 +147,7 @@ def request_reset_password(request):
             return redirect('reset_password')
         else:
             messages.error(request, 'Este correo no está registrado.')
+            return redirect('request_reset_password')
     return render(request, 'usci_requestemail.html')
 
 def reset_password(request):
