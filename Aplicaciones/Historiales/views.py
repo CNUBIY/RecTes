@@ -18,7 +18,7 @@ from num2words import num2words
 from django.conf import settings
 from telegram import Bot
 from asgiref.sync import async_to_sync
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -1811,6 +1811,53 @@ def aggCurva(request, idPat):
     else:
         messages.error(request, 'No se pudo ingresar la información')
         return redirect('doc_patient', idPat=idPat)
+
+def deleteCurva(request, idPat, idcur):
+    curva = get_object_or_404(Curvas, idcur=idcur)
+
+    try:
+        curva.delete()
+        messages.success(request, f'Curva del paciente eliminada correctamente.')
+    except Exception as e:
+        messages.error(request, f'Error al eliminar la curva: {str(e)}')
+
+    return redirect('doc_patient', idPat=idPat)
+
+@login_required
+@custom_login_required
+def editCurva(request, idPat, idcur):
+    if request.method == 'POST':
+        try:
+            curva = get_object_or_404(Curvas, idcur=idcur)
+
+            # Reemplazar comas por puntos en los valores ingresados
+            estatura_pat = request.POST["estatura_pat"].replace(',', '.')
+            peso = request.POST["peso"].replace(',', '.')
+            imc = request.POST["IMC"].replace(',', '.')
+            per_enc = request.POST["per_enc"].replace(',', '.')
+
+            # Validar que los valores sean decimales
+            try:
+                estatura_pat = Decimal(estatura_pat)
+                peso = Decimal(peso)
+                imc = Decimal(imc)
+                per_enc = Decimal(per_enc)
+            except InvalidOperation:
+                messages.error(request, "Los valores ingresados deben ser números decimales.")
+                return redirect('doc_patient', idPat=idPat)
+
+            curva.estatura_pat = estatura_pat
+            curva.peso = peso
+            curva.IMC = imc
+            curva.per_enc = per_enc
+            curva.save()
+            messages.success(request, "Curva editada correctamente.")
+            return redirect('doc_patient', idPat=idPat)
+        except Exception as e:
+            messages.error(request, f"Error al actualizar la curva: {str(e)}")
+            return redirect('doc_patient', idPat=idPat)
+    else:
+        return redirect('error_p')
 
 #Página PACIENTES FINAL
 

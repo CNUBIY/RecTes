@@ -37,6 +37,8 @@ urlpatterns=[
 
     #CURVAS DE CRECIMIENTO
     path('doc_inicio/doc_patient/<int:idPat>/aggCurva', views.aggCurva, name='aggCurva'),
+    path('deleteCurva/<int:idPat>/<int:idcur>/', views.deleteCurva, name='deleteCurva'),
+    path('editCurva/<int:idPat>/<int:idcur>/', views.editCurva, name='editCurva'),
 
     #OBSERVACIONES
     path('doc_inicio/viewobs/<int:id>/', views.viewobs, name='viewobs'),

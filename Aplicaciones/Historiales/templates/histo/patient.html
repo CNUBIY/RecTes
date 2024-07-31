@@ -1228,7 +1228,13 @@
                   {% endif %}
                 </td>
                 <td>
-
+                  <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editCurModal"
+                    data-idcur="{{ curva.idcur }}" data-estatura="{{ curva.estatura_pat }}" data-peso="{{ curva.peso }}" data-imc="{{ curva.IMC }}" data-perenc="{{ curva.per_enc }}">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                  </button>
+                  <button type="button" class="btn btn-danger" onclick="deleteCurva('{% url 'deleteCurva' idPat=pacientes.idPat idcur=curva.idcur %}')">
+                      <i class="fa-solid fa-trash"></i>
+                  </button>
                 </td>
               </tr>
               {% endfor %}
@@ -1662,11 +1668,144 @@
   });
 </script>
 
+<!-- Modal editar puntos de curvas de crecimiento -->
+<div class="modal fade" id="editCurModal" tabindex="-1" aria-labelledby="editCurModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="editCurModalLabel">Editar Información</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editCurvaForm" method="post">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" name="estatura_pat" id="edit_estatura_pat" class="form-control" placeholder="Estatura del paciente" required>
+                <label for="edit_estatura_pat">Estatura del paciente (cm):</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" name="peso" id="edit_peso" class="form-control" placeholder="Peso del paciente" required>
+                <label for="edit_peso">Peso del paciente (kg):</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" name="IMC" id="edit_IMC" class="form-control" placeholder="IMC:" readonly>
+                <label for="edit_IMC">IMC</label>
+                <div id="error-nom_da" class="error-messages"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-floating mb-3">
+              <input type="text" name="per_enc" id="edit_per_enc" class="form-control" placeholder="Perímetro cefálico (Nacimiento - 5 años):" required>
+              <label for="edit_per_enc">Perímetro cefálico (Nacimiento - 5 años):</label>
+              <div id="error-nom_da" class="error-messages"></div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-outline-success" id="editSaveChangesButton"><i class="fa-solid fa-floppy-disk"></i></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- Script para calcular IMC y ajustar el campo de perímetro cefálico en el modal de edición -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var editEstaturaField = document.getElementById('edit_estatura_pat');
+    var editPesoField = document.getElementById('edit_peso');
+    var editImcField = document.getElementById('edit_IMC');
+    var editPerEncField = document.getElementById('edit_per_enc');
 
+    function calculateEditIMC() {
+      var estatura = parseFloat(editEstaturaField.value) / 100; // Convertir cm a metros
+      var peso = parseFloat(editPesoField.value);
+
+      if (!isNaN(estatura) && !isNaN(peso) && estatura > 0) {
+        var imc = peso / (estatura * estatura);
+        editImcField.value = imc.toFixed(2); // Redondear a 2 decimales
+      } else {
+        editImcField.value = '';
+      }
+    }
+
+    editEstaturaField.addEventListener('input', calculateEditIMC);
+    editPesoField.addEventListener('input', calculateEditIMC);
+
+    $('#editCurModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget); // Botón que activó el modal
+      var idcur = button.data('idcur');
+      var estatura = button.data('estatura');
+      var peso = button.data('peso');
+      var imc = button.data('imc');
+      var perEnc = button.data('perenc');
+      var birthDate = new Date('{{ pacientes.birthPat|date:"Y-m-d" }}');
+      var today = new Date();
+      var ageYears = today.getFullYear() - birthDate.getFullYear();
+      var ageMonths = today.getMonth() - birthDate.getMonth();
+      if (ageMonths < 0 || (ageMonths === 0 && today.getDate() < birthDate.getDate())) {
+        ageYears--;
+        ageMonths = (12 + ageMonths) % 12;
+      }
+
+      // Ajustar el campo de perímetro cefálico en función de la edad
+      if (ageYears >= 5) {
+        editPerEncField.readOnly = true;
+        editPerEncField.value = ''; // Limpiar el campo si se desactiva
+      } else {
+        editPerEncField.readOnly = false;
+      }
+
+      var modal = $(this);
+      var actionUrl = '{% url "editCurva" idPat=pacientes.idPat idcur=0 %}'.replace('0', idcur);
+      modal.find('#editCurvaForm').attr('action', actionUrl);
+      modal.find('#edit_estatura_pat').val(estatura);
+      modal.find('#edit_peso').val(peso);
+      modal.find('#edit_IMC').val(imc);
+      modal.find('#edit_per_enc').val(perEnc);
+    });
+  });
+</script>
 <!-- MENSAJE DE CONFIRMACIÓN ELIMINAR DÍA HORARIO -->
 <script type="text/javascript">
     function delete_alergia(url) {
+        iziToast.question({
+            timeout: 15000,
+            close: true,
+            overlay: true,
+            displayMode: 'once',
+            id: 'question',
+            zindex: 999,
+            title: 'CONFIRMACIÓN',
+            message: '¿Está seguro de eliminar la <b>alergia</b> seleccionada?',
+            position: 'center',
+            buttons: [
+                ['<button><b>SI</b></button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                    window.location.href = url;
+                }, true],
+                ['<button>NO</button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                }],
+            ]
+        });
+    }
+</script>
+
+<script type="text/javascript">
+    function deleteCurva(url) {
         iziToast.question({
             timeout: 15000,
             close: true,
