@@ -9,58 +9,14 @@
   <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
   <link rel="stylesheet" href="{% static 'css/styles.min.css' %}" />
   <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
   <!-- jQuery Validate -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
   <link rel="stylesheet" href="{% static 'css/estilo_validacion.css' %}" />
   <!-- IziToast -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <style>
-        .is-invalid {
-            border-color: #dc3545;
-        }
-
-        .text-danger {
-            color: #dc3545;
-        }
-    </style>
-
-    <script>
-        function validateEmail(email) {
-            const emailPattern = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
-            return emailPattern.test(email);
-        }
-
-        function checkEmail() {
-            const emailInput = document.getElementById('username');
-            const errorDiv = document.getElementById('emailError');
-            const email = emailInput.value;
-
-            if (!validateEmail(email)) {
-                errorDiv.textContent = 'Correo no válido';
-                emailInput.classList.add('is-invalid');
-                return false;
-            } else {
-                errorDiv.textContent = '';
-                emailInput.classList.remove('is-invalid');
-                return true;
-            }
-        }
-
-        function validateForm(event) {
-            if (!checkEmail()) {
-                event.preventDefault();  // Prevenir el envío del formulario si el correo no es válido
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('reg_val');
-            form.addEventListener('submit', validateForm);
-        });
-    </script>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 
 <body>
@@ -84,16 +40,28 @@
                   {% csrf_token %}
                   <div class="mb-3">
                     <label for="username" class="form-label">Correo:</label>
-                    <input type="email" class="form-control" name="username" id="username" aria-describedby="emailHelp" onblur="checkEmail()">
-                    <div id="emailError" class="text-danger"></div>
+                    <input type="email" class="form-control" name="username" id="username" aria-describedby="emailHelp">
+                    <div class="error-message-correo text-danger"></div>
                   </div>
                   <div class="mb-4">
                     <label for="password" class="form-label">Contraseña</label>
-                    <input type="password" class="form-control" name="password" id="password">
+                    <div class="input-group">
+                      <input type="password" class="form-control" name="password" id="password">
+                      <button type="button" class="btn btn-outline-secondary toggle-password" data-toggle="#password">
+                        <i class="far fa-eye"></i>
+                      </button>
+                    </div>
+                    <div class="error-message-password text-danger"></div>
                   </div>
                   <div class="mb-4">
                     <label for="confpassword" class="form-label">Confirmar Contraseña</label>
-                    <input type="password" class="form-control" name="confpassword" id="confpassword">
+                    <div class="input-group">
+                      <input type="password" class="form-control" name="confpassword" id="confpassword">
+                      <button type="button" class="btn btn-outline-secondary toggle-password" data-toggle="#confpassword">
+                        <i class="far fa-eye"></i>
+                      </button>
+                    </div>
+                    <div class="error-message-confpassword text-danger"></div>
                   </div>
                   <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" name="button">Registrarse</button>
                   <div class="d-flex align-items-center justify-content-center">
@@ -110,49 +78,78 @@
   </div>
   <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
 </body>
-<script type="text/javascript">
-  // Asegurar contraseña fuerte
-  $.validator.addMethod("strongPassword", function(value, element) {
-    return this.optional(element) ||
-      value.length >= 8 &&
-      /[a-z]/.test(value) &&
-      /[A-Z]/.test(value) &&
-      /[0-9]/.test(value) &&
-      /[@$!%*?&#]/.test(value);
-    }, "La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un carácter especial.");
-
-    $("#reg_val").validate({
-      rules: {
-        "username": {
-          required: true,
-          email: true
-        },
-        "password": {
-          required: true,
-          strongPassword: true
-        },
-        "confpassword": {
-          required: true,
-          equalTo: "#password"
+<script>
+  $(document).ready(function() {
+    // Función para alternar la visibilidad de la contraseña
+    $(".toggle-password").click(function() {
+        $(this).find("i").toggleClass("fa-eye fa-eye-slash");
+        var input = $($(this).data("toggle"));
+        if (input.attr("type") === "password") {
+            input.attr("type", "text");
+        } else {
+            input.attr("type", "password");
         }
-      },
-      messages: {
-        "username": {
-          required: "Debe registrar su correo",
-          email: "Debe ingresar un correo electrónico válido"
-        },
-        "password": {
-          required: "Debe registrar una contraseña"
-        },
-        "confpassword": {
-          required: "Debe confirmar su contraseña",
-          equalTo: "Las contraseñas no coinciden"
-        }
-      }
     });
 
-</script>
+      // Asegurar contraseña fuerte
+      $.validator.addMethod("strongPassword", function(value, element) {
+        return this.optional(element) ||
+          value.length >= 8 &&
+          /[a-z]/.test(value) &&
+          /[A-Z]/.test(value) &&
+          /[0-9]/.test(value) &&
+          /[@$!%*?&#]/.test(value);
+        }, "La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un carácter especial.");
 
+      // Método personalizado para validar dominios de correo comunes
+      $.validator.addMethod("commonDomain", function(value, element) {
+        const commonDomains = ["gmail.com", "gmail.es", "yahoo.com", "yahoo.es", "hotmail.com", "hotmail.es", "outlook.com", "outlook.es", "live.com", "live.es", "icloud.com"];
+        const domain = value.split('@')[1];
+        return this.optional(element) || commonDomains.includes(domain);
+      }, "Ingrese un correo electrónico personal válido");
+
+      $("#reg_val").validate({
+        rules: {
+          "username": {
+            required: true,
+            email: true,
+            commonDomain: true // Añadir validación de dominio común
+          },
+          "password": {
+            required: true,
+            strongPassword: true
+          },
+          "confpassword": {
+            required: true,
+            equalTo: "#password"
+          }
+        },
+        messages: {
+          "username": {
+            required: "Debe registrar su correo",
+            email: "Debe ingresar un correo electrónico válido",
+            commonDomain: "Ingrese un correo electrónico personal válido"
+          },
+          "password": {
+            required: "Debe registrar una contraseña"
+          },
+          "confpassword": {
+            required: "Debe confirmar su contraseña",
+            equalTo: "Las contraseñas no coinciden"
+          }
+        },
+        errorPlacement: function(error, element) {
+          if (element.attr("name") === "username") {
+              error.appendTo(element.next(".error-message-correo"));
+          } else if (element.attr("name") === "password") {
+              error.appendTo(element.closest(".input-group").next(".error-message-password"));
+          } else if (element.attr("name") === "confpassword") {
+              error.appendTo(element.closest(".input-group").next(".error-message-confpassword"));
+          }
+        }
+      });
+  });
+</script>
 
 {% if messages %}
     {% for mensaje in messages %}
