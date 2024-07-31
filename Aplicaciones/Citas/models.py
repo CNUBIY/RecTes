@@ -12,6 +12,7 @@ class CitaSol(models.Model):
     cort_da=models.BooleanField(default=False)
     nom_da=models.CharField(max_length=150)
     telf_da=models.CharField(max_length=10)
+    correo_da=models.CharField(null=True, blank=True, max_length=250)
     est_da=models.BooleanField(default=False)
     notificacion_enviada = models.BooleanField(default=False)
 
