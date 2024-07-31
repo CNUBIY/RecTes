@@ -22,7 +22,9 @@ from telegram import Bot
 from asgiref.sync import async_to_sync
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
-
+import random
+import string
+from django.core.mail import send_mail
 # Create your views here.
 
 
@@ -41,6 +43,9 @@ async def index(request):
 
 #Página REGISTER usuarios INICIO
 
+def generate_verification_code():
+    return ''.join(random.choices(string.digits, k=6))
+
 @login_required
 @custom_login_required
 def register(request):
@@ -48,17 +53,54 @@ def register(request):
         username = request.POST['username']
         password = request.POST['password']
 
-        # Verificar si el usuario ya existe
         if User.objects.filter(username=username).exists():
             messages.error(request, 'Este correo ya está registrado')
-            return redirect('register')
         else:
-            user = User.objects.create_user(username=username, password=password)
-            user.save()
-            messages.success(request, 'Cuenta creada exitosamente')
-            return redirect('/login')
+            verification_code = generate_verification_code()
+
+            # Guardar el código de verificación en la sesión
+            request.session['verification_code'] = verification_code
+            request.session['username'] = username
+            request.session['password'] = password
+
+            # Enviar correo de verificación
+            send_mail(
+                'Código de Verificación',
+                f'Tu código de verificación es: {verification_code}',
+                settings.EMAIL_HOST_USER,
+                [username],
+                fail_silently=False,
+            )
+
+            messages.success(request, 'Cuenta creada exitosamente. Revisa tu correo para el código de verificación.')
+            return redirect('verify')
     return render(request, 'usci_register.html')
 
+@login_required
+@custom_login_required
+def verify_email(request):
+    if request.method == 'POST':
+        code = request.POST['code']
+        username = request.session.get('username')
+        password = request.session.get('password')
+        verification_code = request.session.get('verification_code')
+
+        if code == verification_code:
+            user = User.objects.create_user(username=username, password=password)
+            user.email_verified = True
+            user.save()
+
+            # Limpiar la sesión
+            del request.session['verification_code']
+            del request.session['username']
+            del request.session['password']
+
+            messages.success(request, 'Correo verificado exitosamente.')
+            return redirect('/login/')
+        else:
+            messages.error(request, 'Código de verificación incorrecto.')
+
+    return render(request, 'usci_verify.html')
 
 #Página INICIO usuario FINAL
 

@@ -187,3 +187,11 @@ import sys
 
 # Añade la ruta de la carpeta 'scripts'
 sys.path.append(os.path.join(BASE_DIR, 'scripts'))
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'carlos.colcha1474@utc.edu.ec'
+EMAIL_HOST_PASSWORD = 'yedo hlof gcvk bojz'
+EMAIL_USE_TLS = True
