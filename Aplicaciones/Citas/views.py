@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.hashers import check_password, make_password
-from .models import CitaSol, FactCitas
+from .models import CitaSol, FactCitas, SolCli
 from django.contrib import messages
 from datetime import datetime, timedelta, time
 from django.http import JsonResponse
@@ -36,7 +36,22 @@ async def send_telegram_message(msg, chat_id=my_chat_id, token=my_token):
     await bot_instance.send_message(chat_id=chat_id, text=msg)
 
 # Página Informativa INICIO
-async def index(request):
+def index(request):
+    if request.method == 'POST':
+        nom_da = request.POST['nom_da']
+        telf_da = request.POST['telf_da']
+        correo_da = request.POST['correo_da']
+        comentario = request.POST['comentario']
+
+        SolCli.objects.create(
+            nom_da=nom_da,
+            telf_da=telf_da,
+            correo_da=correo_da,
+            comentario=comentario
+        )
+
+        messages.success(request, 'Su solicitud ha sido enviada correctamente, nos comunicaremos con usted a futuro')
+        return redirect('index')
     return render(request, 'index.html')
 # Página Informativa FINAL
 

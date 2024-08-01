@@ -41,6 +41,6 @@ class SolCli(models.Model):
     nom_da=models.CharField(max_length=150)
     telf_da=models.CharField(max_length=10)
     correo_da=models.CharField(null=True, blank=True, max_length=250)
-
+    comentario=models.TextField(null=True,blank=True)
     def __str__(self):
         return f"{self.creation}-{self.nom_da}"

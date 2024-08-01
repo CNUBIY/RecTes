@@ -27,6 +27,11 @@
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+        <!-- IziToast -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+
 
 <style>
 .navbar-brand .logo {
@@ -1134,25 +1139,31 @@ h5 {
             <div class="col-lg-8 col-12 mx-auto">
                 <div class="booking-form bg-white rounded shadow p-4">
                     <h2 class="text-center mb-4">Agenda tu cita</h2>
-                    <form role="form" action="#booking" method="post" id="bookingForm">
+                    <p class="text-center">Por favor, verifique su información antes de enviar la solicitud.</p>
+                    <form role="form" action="" method="post" id="soli_form">
+                      {% csrf_token %}
                         <div class="row g-3">
                             <div class="col-lg-6 col-md-6">
-                                <input type="text" name="name" id="name" class="form-control form-control-lg" placeholder="Nombres Completos" required>
+                              <label for="">Nombre del cliente:</label>
+                              <input type="text" name="nom_da" id="nom_da" class="form-control form-control-lg" placeholder="Ingrese su nombre" required>
                             </div>
                             <div class="col-lg-6 col-md-6">
-                                <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="Email" required>
+                              <label for="">Correo:</label>
+                              <input type="email" name="correo_da" id="correo_da" class="form-control form-control-lg" placeholder="Ingrese su correo" required>
                             </div>
                             <div class="col-lg-6 col-md-6">
-                                <input type="tel" name="phone" id="phone" class="form-control form-control-lg" placeholder="Teléfono" required>
+                              <label for="">Contacto:</label>
+                              <input type="tel" name="telf_da" id="telf_da" class="form-control form-control-lg" placeholder="Ingrese su número de contacto" required>
                             </div>
                             <div class="col-lg-6 col-md-6">
+                                <label for="">Fecha estimada:</label>
                                 <input type="date" name="date" id="date" class="form-control form-control-lg" required>
                             </div>
                             <div class="col-12">
-                                <textarea class="form-control form-control-lg" rows="5" id="message" name="message" placeholder="Mensaje adicional" required></textarea>
+                                <textarea class="form-control form-control-lg" rows="5" id="comentario" name="comentario" placeholder="Comentario (opcional)" required></textarea>
                             </div>
                             <div class="col-12 text-center">
-                                <button type="submit" class="btn btn-primary btn-lg" id="submit-button">Reservar Ahora</button>
+                                <button type="submit" class="btn btn-primary btn-lg" id="submit-button">Reservar Cita</button>
                             </div>
                         </div>
                     </form>
@@ -1221,5 +1232,33 @@ h5 {
         <script src="{% static 'js/owl.carousel.min.js' %}"></script>
         <script src="{% static 'js/scrollspy.min.js' %}"></script>
         <script src="{% static 'js/custom.js' %}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </body>
+
+    {% if messages %}
+        {% for mensaje in messages %}
+            <script type="text/javascript">
+                var mensajeTexto = "{{ mensaje|escapejs }}";
+                if (mensajeTexto.includes("puede")) {
+                    iziToast.error({
+                        title: 'Cancelado',
+                        message: mensajeTexto,
+                        position: 'topRight',
+                    });
+                } else if (mensajeTexto.includes("correctamente")) {
+                    iziToast.success({
+                        title: 'Éxito',
+                        message: mensajeTexto,
+                        position: 'topRight',
+                    });
+                } else {
+                    iziToast.error({
+                        title: 'Error',
+                        message: mensajeTexto,
+                        position: 'topRight',
+                    });
+                }
+            </script>
+        {% endfor %}
+    {% endif %}
 </html>
