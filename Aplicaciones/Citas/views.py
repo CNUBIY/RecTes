@@ -25,6 +25,8 @@ from django.contrib.auth import update_session_auth_hash
 import random
 import string
 from django.core.mail import send_mail
+from django.db.models.functions import Cast, Substr
+from django.db.models import IntegerField
 # Create your views here.
 
 
@@ -464,7 +466,7 @@ def adci_fechacitas(request):
     solbdd = SolCli.objects.filter(agendado=False)
 
     return render(request, 'adci_fechacitas.html', {'citas': citabdd, 'solicitudes': solbdd})
-    
+
 @login_required
 @custom_login_required
 def verificar_cita(request):
@@ -609,9 +611,58 @@ def cont_inicio(request):
 @login_required
 @custom_login_required
 def addcont_adci(request, id):
-    citabdd=get_object_or_404(CitaSol,id=id)
-    factbdd=FactCitas.objects.all()
-    return render(request,'adci_addcont.html',{'cita':citabdd,'facts':factbdd})
+    citabdd = get_object_or_404(CitaSol, id=id)
+    factbdd = FactCitas.objects.all()
+
+    # Obtener el idfac más alto de la base de datos
+    try:
+        # Convertir idfac a un valor numérico para ordenar correctamente
+        max_idfac = (
+            FactCitas.objects
+            .annotate(
+                numeric_idfac=(
+                    1000000000000 * Cast(Substr('idfac', 1, 3), IntegerField()) +
+                    10000000 * Cast(Substr('idfac', 5, 3), IntegerField()) +
+                    Cast(Substr('idfac', 9, 7), IntegerField())
+                )
+            )
+            .order_by('-numeric_idfac')
+            .first()
+        )
+
+        if max_idfac is not None:
+            last_idfac = max_idfac.idfac
+            next_idfac = increment_idfac(last_idfac)  # Incrementar al siguiente idfac
+        else:
+            next_idfac = "001-001-0000001"  # Valor inicial si no hay registros
+
+    except FactCitas.DoesNotExist:
+        next_idfac = "001-001-0000001"  # Valor inicial si no hay registros
+
+    return render(request, 'adci_addcont.html', {'cita': citabdd, 'facts': factbdd, 'next_idfac': next_idfac})
+
+def increment_idfac(last_idfac):
+    # Separar las partes del ID
+    parts = last_idfac.split('-')
+    first, second, third = map(int, parts)
+
+    # Incrementar la parte derecha primero
+    if third < 9999999:
+        third += 1
+    else:
+        third = 0
+        if second < 999:
+            second += 1
+        else:
+            second = 0
+            if first < 999:
+                first += 1
+            else:
+                raise ValueError("Se alcanzó el límite máximo para idfac.")
+
+    # Formatear de nuevo las partes con ceros a la izquierda
+    return f"{first:03d}-{second:03d}-{third:07d}"
+
 
 @login_required
 @custom_login_required

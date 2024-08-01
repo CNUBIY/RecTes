@@ -24,7 +24,7 @@ class CitaSol(models.Model):
 class FactCitas(models.Model):
     id=models.AutoField(primary_key=True)
     creation = models.DateField(default=datetime.date.today)
-    idfac=models.CharField(max_length=150)
+    idfac=models.CharField(max_length=150, unique=True)
     descfac=models.CharField(max_length=150)
     valfac=models.DecimalField(max_digits=5, decimal_places=2)
     obsfac=models.CharField(max_length=150)

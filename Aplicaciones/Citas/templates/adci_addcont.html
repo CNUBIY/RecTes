@@ -11,14 +11,14 @@
           <div class="row align-items-center">
             <form action="/adci_inicio/aggcont_adci/" method="POST" id="vldt_cont">
               {% csrf_token %}
-              <input type="hidden" name="id_fech" id="id_fech" value="{{cita.id}}">
+              <input type="hidden" name="id_fech" id="id_fech" value="{{ cita.id }}">
               <div class="mb-3">
                 <label for="idfac" class="form-label">ID de Pago</label>
-                <input type="text" class="form-control" name="idfac"id="idfac" placeholder="Ingrese el código de pago">
+                <input type="text" class="form-control" name="idfac" id="idfac" value="{{ next_idfac }}" readonly>
               </div>
               <div class="mb-3">
                 <label for="descfac" class="form-label">Descripción</label>
-                <select class="form-select" name="descfac" id="descfac">
+                <select class="form-select" name="descfac" id="descfac" required>
                   <option value="">Escoga su descripción</option>
                   <option value="Consulta">Consulta</option>
                   <option value="Vacuna">Vacuna</option>
@@ -26,17 +26,17 @@
               </div>
               <div class="mb-3">
                 <label for="valfac" class="form-label">Valor</label>
-                <input type="text" class="form-control" name="valfac"id="valfac" placeholder="$$$">
+                <input type="text" class="form-control" name="valfac" id="valfac" placeholder="$$$" required>
               </div>
               <div class="mb-3">
                 <label for="obsfac" class="form-label">Observación</label>
-                <select class="form-select" name="obsfac" id="obsfac">
+                <select class="form-select" name="obsfac" id="obsfac" required>
                   <option value="">Escoga su observación</option>
                   <option value="Servicios">Servicios</option>
                   <option value="Bienes">Bienes</option>
                 </select>
               </div>
-              <button type="submit" class="btn btn-outline-success  m-2">Guardar</button>
+              <button type="submit" class="btn btn-outline-success m-2">Guardar</button>
               <a href="/adci_inicio/" class="btn btn-outline-danger">Cancelar</a><br><br>
             </form>
           </div>
@@ -46,36 +46,30 @@
   </div>
 </div>
 
-
-
 <!-- MENSAJE DE CONFIRMACIÓN ELIMINAR DIAHORARIO -->
 <script type="text/javascript">
-        function delete_adci(url){
-          iziToast.question({
-              timeout: 15000,
-              close: true,
-              overlay: true,
-              displayMode: 'once',
-              id: 'question',
-              zindex: 999,
-              title: 'CONFIRMACIÓN',
-              message: '¿Está seguro de eliminar la <b>cita </b> seleccionada?',
-              position: 'center',
-              buttons: [
-                  ['<button><b>SI</b></button>', function (instance, toast) {
-                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
-                      window.location.href=url;
-                  }, true],
-                  ['<button>NO</button>', function (instance, toast) {
-
-                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
-
-                  }],
-              ]
-          });
-        }
-
-
+function delete_adci(url) {
+    iziToast.question({
+        timeout: 15000,
+        close: true,
+        overlay: true,
+        displayMode: 'once',
+        id: 'question',
+        zindex: 999,
+        title: 'CONFIRMACIÓN',
+        message: '¿Está seguro de eliminar la <b>cita</b> seleccionada?',
+        position: 'center',
+        buttons: [
+            ['<button><b>SI</b></button>', function (instance, toast) {
+                instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                window.location.href = url;
+            }, true],
+            ['<button>NO</button>', function (instance, toast) {
+                instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+            }],
+        ]
+    });
+}
 {% if messages %}
     {% for message in messages %}
         iziToast.success({
@@ -85,5 +79,73 @@
         });
     {% endfor %}
 {% endif %}
-  </script>
+</script>
+
+<!-- Script de validación y restricciones -->
+<script type="text/javascript">
+  $(document).ready(function() {
+      // Método de validación personalizado para el valor del precio
+      $.validator.addMethod("validPrice", function(value, element) {
+          const regex = /^\d+(\.\d{1,2})?$/;  // Máximo dos decimales
+          const numberValue = parseFloat(value);
+          return this.optional(element) || (regex.test(value) && numberValue >= 0 && numberValue <= 100);
+      }, "Por favor, ingrese un valor válido con hasta dos decimales y no mayor a $100.");
+
+      // Configurar la validación del formulario
+      $("#vldt_cont").validate({
+          rules: {
+              descfac: {
+                  required: true
+              },
+              valfac: {
+                  required: true,
+                  number: true,  // Asegura que el valor sea un número
+                  validPrice: true  // Utiliza el método de validación personalizado
+              },
+              obsfac: {
+                  required: true
+              }
+          },
+          messages: {
+              descfac: {
+                  required: "Por favor, seleccione una descripción."
+              },
+              valfac: {
+                  required: "Por favor, ingrese el valor.",
+                  number: "Por favor, ingrese un número válido.",
+                  validPrice: "Por favor, ingrese un valor válido (0-100) con hasta dos decimales."
+              },
+              obsfac: {
+                  required: "Por favor, seleccione una observación."
+              }
+          },
+          errorPlacement: function(error, element) {
+              error.addClass('text-danger');  // Añadir clase para estilo de error
+              error.insertAfter(element);  // Colocar el mensaje de error después del elemento
+          }
+      });
+
+      // Restringir entrada a solo números y punto para valfac
+      $("#valfac").on("keypress", function(event) {
+          const charCode = event.which;
+          const inputValue = $(this).val();
+          if (charCode !== 46 && (charCode < 48 || charCode > 57)) {
+              event.preventDefault();  // Previene la entrada de caracteres no numéricos ni el punto
+          }
+          // Permitir solo un punto en el campo
+          if (charCode === 46 && inputValue.includes(".")) {
+              event.preventDefault();
+          }
+      });
+
+      // Opcional: Formateo del valor al perder el foco
+      $("#valfac").on("blur", function() {
+          const value = parseFloat($(this).val()).toFixed(2); // Formato de 2 decimales
+          if (!isNaN(value)) {
+              $(this).val(value);
+          }
+      });
+  });
+</script>
+
 {% endblock %}
