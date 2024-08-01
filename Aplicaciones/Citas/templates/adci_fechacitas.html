@@ -341,7 +341,7 @@
         <div class="card-body p-4">
           <h5 class="card-title mb-9 fw-semibold">Solicitud de Citas</h5>
           <div class="row align-items-center table-responsive">
-            <table id="tbl_horarios" class="table text-nowrap mb-0 align-middle">
+            <table id="tbl_solicitudes" class="table text-nowrap mb-0 align-middle">
               <thead class="text-dark fs-4">
                 <tr>
                   <th class="border-bottom-0">
@@ -393,6 +393,20 @@
 <script type="text/javascript">
   $(document).ready(function() {
       $('#tbl_horarios').DataTable( {
+          dom: 'frtip',
+          language: {
+              url: "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+          },
+          initComplete: function () {
+              $('.dataTables_filter input[type="search"]').addClass('form-control');
+          },
+          pageLength: 7,
+          drawCallback: function(settings) {
+              // Aplicar las clases a los botones de paginación después de cada redibujo
+              $('.paginate_button').addClass('btn btn-outline-primary');
+          }
+      });
+      $('#tbl_solicitudes').DataTable( {
           dom: 'frtip',
           language: {
               url: "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"

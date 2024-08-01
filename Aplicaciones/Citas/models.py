@@ -5,8 +5,6 @@ import datetime
 from datetime import date
 
 # Create your models here.
-
-
 class CitaSol(models.Model):
     id=models.AutoField(primary_key=True)
     creation = models.DateField(default=datetime.date.today)
@@ -43,5 +41,6 @@ class SolCli(models.Model):
     fech_da = models.DateField(null=True, blank=True,)
     correo_da=models.CharField(null=True, blank=True, max_length=250)
     comentario=models.TextField(null=True,blank=True)
+    agendado = models.BooleanField(default=False)
     def __str__(self):
         return f"{self.creation}-{self.nom_da}"

@@ -407,19 +407,64 @@ def delete_adciIn(request,id):
 #Página Inicio Administrador-Citas GENERAL FINAL
 
 #PÁGINA SOLICITUDES INICIO
+@login_required
+@custom_login_required
 def solicitudes(request, idCi):
-    solbdd=SolCli.objects.get(idCi=idCi)
-    return render(request, 'solicitud.html',{'solicitudes':solbdd})
+    # Obtener la solicitud específica o devolver un 404 si no existe
+    solbdd = get_object_or_404(SolCli, idCi=idCi)
+
+    if request.method == 'POST':
+        try:
+            # Obtener datos del formulario
+            nom_da = request.POST["nom_da"]
+            telf_da = request.POST["telf_da"]
+            correo_da = request.POST["correo_da"]
+            fech_da = request.POST["fech_da"]
+            time_da = request.POST["time_da"]
+            cort_da = request.POST.get("cort_da") == "on"
+
+            # Crear la nueva cita
+            nueva_cita = CitaSol.objects.create(
+                fech_da=fech_da,
+                telf_da=telf_da,
+                correo_da=correo_da,
+                nom_da=nom_da,
+                time_da=time_da,
+                cort_da=cort_da,
+                est_da=False,
+            )
+
+            # Editar la solicitud existente
+            solbdd.agendado = True
+            solbdd.save()
+
+            # Mensaje de éxito
+            messages.success(request, "Cita registrada y solicitud actualizada exitosamente.")
+            return redirect('/adci_inicio')
+
+        except Exception as e:
+            # Manejar errores
+            print(f"Error al procesar la solicitud: {str(e)}")
+            messages.error(request, "Ha ocurrido un error al procesar la solicitud.")
+            return redirect('/error_p')
+
+    # Renderizar el formulario con los datos de la solicitud actual
+    return render(request, 'solicitud.html', {'solicitudes': solbdd})
 #PÁGINA SOLICITUDES FINAL
 
 #Página HORARIOS Administrador Inicio
 
 @login_required
 @custom_login_required
-def adci_fechacitas (request):
-    citabdd=CitaSol.objects.all()
-    solbdd=SolCli.objects.all()
-    return render(request,'adci_fechacitas.html',{'citas':citabdd, 'solicitudes':solbdd})
+def adci_fechacitas(request):
+    # Obtener todas las citas
+    citabdd = CitaSol.objects.all()
+
+    # Filtrar solo las solicitudes que no están agendadas
+    solbdd = SolCli.objects.filter(agendado=False)
+
+    return render(request, 'adci_fechacitas.html', {'citas': citabdd, 'solicitudes': solbdd})
+    
 @login_required
 @custom_login_required
 def verificar_cita(request):
@@ -466,7 +511,6 @@ def aggagenda_adci(request):
             messages.error(request, "Ha ocurrido un error al procesar la solicitud.")
             return redirect('/error_p')
     else:
-        # Manejar solicitudes GET o cualquier otro método HTTP no permitido
         return redirect('/error_p')
 
 @login_required

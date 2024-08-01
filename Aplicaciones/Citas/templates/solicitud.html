@@ -23,7 +23,7 @@
         <div class="card-body p-4">
           <h5 class="card-title mb-9 fw-semibold">Solicitud de Citas</h5>
           <div class="row align-items-center table-responsive">
-            <form action="/aggagenda_adci/" method="POST" id="vldt_dias">
+            <form action="" method="POST" id="vldt_dias">
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="nom_da" class="form-label">Nombre del Cliente</label>
@@ -42,7 +42,7 @@
                 </div>
                 <div class="row">
                     <div class="mb-3 col-md-11">
-                        <label for="fech_da" class="form-label">Fecha</label>
+                        <label for="fech_da" class="form-label">Fecha solicitada</label>
                         <input type="date" class="form-control" name="fech_da" id="fech_da" aria-describedby="dateHelp" value="{{solicitudes.fech_da|date:'Y-m-d'}}">
                         <div id="create_error_fech_da" class="error-messages"></div>
                     </div>
