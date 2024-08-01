@@ -27,6 +27,17 @@
               <p>{{observaciones.secondsect}}</p>
             </div>
           </div>
+          <br>
+          <div class="row align-items-center">
+            {% if observaciones.prox_ci %}
+              <p><b>Próxima cita:</b> {{observaciones.prox_ci}</p>
+            {% else %}
+              <div class="text-center">
+                <h6>Reservar próxima cita</h6>
+                <a href="#" class="btn btn-outline-info"><i class="fa-solid fa-plus"></i></a>
+              </div>
+            {% endif %}
+          </div>
         </div>
       </div>
     </div>

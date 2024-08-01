@@ -108,6 +108,7 @@ class observaciones(models.Model):
     firstsect= models.TextField()
     secondsect=models.TextField()
     cortesia=models.BooleanField(default=False)
+    prox_ci = models.DateField(null=True, blank=True)
     paciente = models.ForeignKey(Patient,on_delete=models.CASCADE)
     def __str__(self):
         return f"{self.id} ->Observación de: {self.paciente}"
