@@ -2552,3 +2552,45 @@ def deletePadre(request, id):
     return redirect('representantesLista')
 
 #PÁGINA REPRESENTANTES FINAL
+
+
+#PÁGINA REPORTES INICIO
+from django.shortcuts import get_object_or_404
+
+@login_required
+@custom_login_required
+def viewrepDia(request, idobs):
+    try:
+        # Obtener la observación específica con el ID proporcionado
+        obsbdd = get_object_or_404(observaciones, id=idobs)
+
+        # Obtener el paciente asociado a la observación
+        patbdd = obsbdd.paciente
+
+        # Obtener diagnósticos relacionados con la observación
+        diabdd = Diagnostico.objects.filter(obs=obsbdd).prefetch_related('cies')
+
+        # Obtener alergias del paciente
+        alergias = PatAler.objects.filter(paciente=patbdd).select_related('alergia')
+
+        # Obtener recetas relacionadas con la observación
+        recbdd = Receta.objects.filter(obsmed=obsbdd).select_related('medicamento')
+
+        # Convertir los totales de receta a palabras
+        for receta in recbdd:
+            receta.total_words = num2words(receta.total, lang='es')
+
+    except Exception as e:
+        messages.error(request, f"Error al procesar la observación: {e}")
+        return redirect('error_p')
+
+    return render(request, 'reports/reportdiaIn.html', {
+        'observaciones': obsbdd,
+        'pacientes': patbdd,
+        'diagnosticos': diabdd,
+        'alergias': alergias,
+        'recetas': recbdd
+    })
+
+
+#PÁGINA REPORTES FINAL

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico e Indicaciones</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Reducir aún más el tamaño de la fuente y el padding */
+        .table {
+            font-size: 0.8rem; /* Tamaño de fuente más pequeño */
+        }
+
+        .table td,
+        .table th {
+            padding: 0.25rem; /* Menor padding */
+            vertical-align: middle;
+        }
+
+        .card-body {
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row d-flex align-items-stretch">
+            <!-- Columna para Detalles -->
+            <div class="col-lg-6 mb-4 d-flex">
+                <div class="card overflow-hidden w-100">
+                    <div class="card-body p-3 d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p><b>CENTRO MÉDICO "Infanto Juvenil"</b></p>
+                        </div>
+                        <br>
+                        <div class="row align-items-center mb-3 flex-grow-1">
+                            {% if diagnosticos %}
+                            <div class="col-md-12">
+                                {% for diagnostico in diagnosticos %}
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <p><b>#{{ diagnostico.id }}</b></p>
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <p><b>Fecha:</b> {{ diagnostico.creation }}</p>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-md-7">
+                                        <p><b>Nombre:</b> {{ pacientes.namePat }} {{ pacientes.lastnPat }}</p>
+                                    </div>
+                                    <div class="col-md-2 text-end">
+                                        <p><b>Sexo:</b> {{ pacientes.genPat.nombreGen|default:'No especificado' }}</p>
+                                    </div>
+                                    <div class="col-md-3 text-end">
+                                        <p><b>Edad:</b> {{ observaciones.new_age }}</p>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-md-4">
+                                        <p><b>Nacionalidad:</b> {{ pacientes.natiPat|slice:":3"|upper }}</p>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <p><b>Dirección:</b> {{ pacientes.placePat }}</p>
+                                    </div>
+                                    <div class="col-md-3 text-end">
+                                        <p><b>CI:</b> {{ pacientes.ciPat }}</p>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <p><b>Tratamiento:</b> {{ diagnostico.tratamiento }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><b>CIE10:</b>
+                                            {% for cie in diagnostico.cies.all %}
+                                            {{ cie.cod3 }}
+                                            {% if not forloop.last %}, {% endif %}
+                                            {% endfor %}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <p><b>Alergias:</b>
+                                            {% if alergias %}
+                                            {% for alergia in alergias %}
+                                            {{ alergia.alergia.nombreAlergia }}
+                                            {% if not forloop.last %}, {% endif %}
+                                            {% endfor %}
+                                            {% else %}
+                                            No
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><b>Contacto:</b> {{ pacientes.cell }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="mt-auto">
+                                    <h6 class="text-info text-center"><b>RECETA</b></h6>
+                                    {% if recetas %}
+                                    <div class="table-responsive">
+                                        <table class="table table-borderless table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nombre Genérico</th>
+                                                    <th>Nombre Comercial</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for receta in recetas %}
+                                                <tr>
+                                                    <td>{{ receta.medicamento.nombregen_med }} <br> {{ receta.medicamento.tipo_med }}</td>
+                                                    <td>{{ receta.medicamento.nombrecom_med }} <br> {{ receta.total }} ({{ receta.total_words }})</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    {% else %}
+                                    <p>Sin datos</p>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                                <br><br>
+                                <div class="text-center text-primary">
+                                  <p>"Para nuestros hijos siempre lo mejor"</p>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="text-center">
+                                <p>SIN DETALLES</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna para Indicaciones -->
+            <div class="col-lg-6 mb-4 d-flex">
+                <div class="card overflow-hidden w-100">
+                    <div class="card-body p-3 d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-3 fw-semibold">Indicaciones</h5>
+                        </div>
+                        <br>
+                        <div class="row align-items-center flex-grow-1">
+                            {% if recetas %}
+                            {% for diagnostico in diagnosticos %}
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <p><b>#{{ diagnostico.id }}</b></p>
+                                </div>
+                                <div class="col-md-6 text-end">
+                                    <p><b>Fecha:</b> {{ diagnostico.creation }}</p>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-7">
+                                    <p><b>Nombre:</b> {{ pacientes.namePat }} {{ pacientes.lastnPat }}</p>
+                                </div>
+                                <div class="col-md-2 text-end">
+                                    <p><b>Sexo:</b> {{ pacientes.genPat.nombreGen|default:'No especificado' }}</p>
+                                </div>
+                                <div class="col-md-3 text-end">
+                                    <p><b>Edad:</b> {{ observaciones.new_age }}</p>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-4">
+                                    <p><b>Nacionalidad:</b> {{ pacientes.natiPat|slice:":3"|upper }}</p>
+                                </div>
+                                <div class="col-md-5">
+                                    <p><b>Dirección:</b> {{ pacientes.placePat }}</p>
+                                </div>
+                                <div class="col-md-3 text-end">
+                                    <p><b>CI:</b> {{ pacientes.ciPat }}</p>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <p><b>Tratamiento:</b> {{ diagnostico.tratamiento }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><b>CIE10:</b>
+                                        {% for cie in diagnostico.cies.all %}
+                                        {{ cie.cod3 }}
+                                        {% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <p><b>Alergias:</b>
+                                        {% if alergias %}
+                                        {% for alergia in alergias %}
+                                        {{ alergia.alergia.nombreAlergia }}
+                                        {% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                        {% else %}
+                                        No
+                                        {% endif %}
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><b>Contacto:</b> {{ pacientes.cell }}</p>
+                                </div>
+                            </div>
+                            <br><br>
+                            <div class="mt-auto">
+                                <h6 class="text-danger text-center"><b>HOJA DE INDICACIONES</b></h6>
+                                <p>1. <b>Alimentación:</b> {{ diagnostico.alimentacion }} <br> 2. <b>Exámenes:</b> {{ diagnostico.examen }}</p>
+                                {% if recetas %}
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>MEDICAMENTO</th>
+                                                <th>CANTIDAD</th>
+                                                <th>VIA</th>
+                                                <th>FRECUENCIA</th>
+                                                <th>DURACIÓN</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for receta in recetas %}
+                                            <tr>
+                                                <td>{{ receta.medicamento.nombregen_med }} <br> {{ receta.medicamento.nombrecom_med }}</td>
+                                                <td>{{ receta.cantidad }}</td>
+                                                <td>{{ receta.via }}</td>
+                                                <td>{{ receta.frecuencia }}</td>
+                                                <td>{{ receta.duracion }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {% else %}
+                                <p>Sin datos</p>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                            {% else %}
+                            <p>SIN DATOS</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

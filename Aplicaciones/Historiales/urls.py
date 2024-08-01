@@ -82,5 +82,6 @@ urlpatterns=[
     path('doc_inicio/deleteMadre/<int:id>/', views.deleteMadre, name='deleteMadre'),
     path('doc_inicio/deletePadre/<int:id>/', views.deletePadre, name='deletePadre'),
 
-
+    #REPORTES
+    path('doc_inicio/viewrepDia/<int:idobs>/', views.viewrepDia, name='viewrepDia'),
 ]
