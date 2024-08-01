@@ -370,14 +370,14 @@
               <tbody>
                   {% for solicitud in solicitudes %}
                   <tr>
-                      <td>{{ solicitud.creation|date:"y-m-d" }}</td>
+                      <td>{{ solicitud.creation|date:"d-m-y" }}</td>
                       <td>{{ solicitud.nom_da }}</td>
                       <td>{{ solicitud.correo_da }}</td>
                       <td>{{ solicitud.telf_da }}</td>
                       <td>{{ solicitud.fech_da }}</td>
                       <td>{{ solicitud.comentario }}</td>
                       <td>
-                          <a href="#" class="btn btn-success">Agendar Cita</a>
+                          <a href="{% url 'solicitudes' solicitud.idCi %}" class="btn btn-success">Agendar Cita</a>
                       </td>
                   </tr>
                   {% endfor %}

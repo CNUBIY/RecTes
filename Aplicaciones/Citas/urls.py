@@ -23,6 +23,9 @@ urlpatterns=[
     path('adci_inicio/aggin_adci/',views.aggin_adci),
     path('adci_inicio/procesarActualizacionHorarioIn/<int:id>/', views.procesarActualizacionHorarioIn, name='procesarActualizacionHorarioIn'),
     path('delete_adciIn/<id>/',views.delete_adciIn),
+
+    #SOLICITUDES
+    path('adci_inicio/solicitudes/<int:idCi>', views.solicitudes, name='solicitudes'),
     #PAGOSREALIZADOS
     path('adci_inicio/cont_inicio/', views.cont_inicio),
     path('adci_inicio/cont_inicio/cont_int/',views.cont_int, name='cont_int'),
@@ -30,7 +33,7 @@ urlpatterns=[
     path('adci_inicio/aggcont_adci/', views.aggcont_adci, name='aggcont_adci'),
 
     #HORARIOS ADMIN
-    path('adci_fechacitas/',views.adci_fechacitas),
+    path('adci_fechacitas/',views.adci_fechacitas, name='adci_fechacitas'),
     path('verificar_cita/', views.verificar_cita, name='verificar_cita'),
     path('aggagenda_adci/',views.aggagenda_adci),
     path('delete_adci/<id>',views.delete_adci),

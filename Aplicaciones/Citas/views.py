@@ -406,6 +406,11 @@ def delete_adciIn(request,id):
 
 #Página Inicio Administrador-Citas GENERAL FINAL
 
+#PÁGINA SOLICITUDES INICIO
+def solicitudes(request, idCi):
+    solbdd=SolCli.objects.get(idCi=idCi)
+    return render(request, 'solicitud.html',{'solicitudes':solbdd})
+#PÁGINA SOLICITUDES FINAL
 
 #Página HORARIOS Administrador Inicio
 
