@@ -43,13 +43,6 @@ INSTALLED_APPS = [
     'Aplicaciones.Citas',
     'Aplicaciones.Historiales',
 
-    # 'django.contrib.sites',
-    # 'allauth',
-    # 'allauth.account',
-    #
-    # # Optional -- requires install using `django-allauth[socialaccount]`.
-    # 'allauth.socialaccount',
-    # 'allauth.socialaccount.providers.google',
 ]
 
 SESSION_COOKIE_AGE = 3600

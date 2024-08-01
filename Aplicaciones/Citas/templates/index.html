@@ -8,7 +8,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Centro Médico Infantil Juvenil</title>
+        <title>Medic Care Bootstrap 5 CSS Template</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,6 +24,9 @@
         <link href="{% static 'css/owl.theme.default.min.css' %}" rel="stylesheet">
 
         <link href="{% static 'css/templatemo-medic-care.css' %}" rel="stylesheet">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 
 <style>
 .navbar-brand .logo {
@@ -587,6 +590,136 @@ a:hover {
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: 1%;
 }
+/* Estilos para el footer */
+.site-footer {
+    background-color: #f8f9fa;
+    padding: 40px 0;
+    color: #333;
+    border-top: 1px solid #e9ecef;
+}
+
+.site-footer h5 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.site-footer ul {
+    list-style: none;
+    padding: 0;
+}
+
+.site-footer .list-group-item {
+    border: none;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #666;
+}
+
+.site-footer .list-group-item span {
+    margin-left: auto;
+    font-weight: 400;
+    color: #333;
+}
+
+.site-footer a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.site-footer a:hover {
+    text-decoration: underline;
+}
+
+.site-footer .social-icon {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 15px;
+}
+
+.site-footer .social-icon a {
+    color: #333;
+    font-size: 20px;
+    transition: color 0.3s ease;
+}
+
+.site-footer .social-icon a:hover {
+    color: #007bff;
+}
+
+/* Colores específicos para redes sociales */
+.site-footer .social-icon .fa-facebook-f {
+    color: #4267B2;
+}
+
+.site-footer .social-icon .fa-twitter {
+    color: #1DA1F2;
+}
+
+.site-footer .social-icon .fa-instagram {
+    color: #C13584;
+}
+
+.site-footer .social-icon .fa-youtube {
+    color: #FF0000;
+}
+
+.site-footer .social-icon .fa-whatsapp {
+    color: #25D366;
+}
+
+.site-footer .social-icon .fa-linkedin-in {
+    color: #0077B5;
+}
+
+.site-footer .copyright-text {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+@media (max-width: 767px) {
+    .site-footer .col-lg-3, .site-footer .col-lg-2 {
+        margin-bottom: 30px;
+    }
+}
+
+.list-group-item {
+    background-color: #f9f9f9;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.list-group-item:hover {
+    background-color: #f0f8ff;
+    border-color: #cce5ff;
+}
+
+.list-group-item span {
+    color: #007bff;
+    font-weight: bold;
+}
+
+
+h5 {
+    color: #006400
+    border-bottom: 2px solid #d4edda;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.col-lg-5 {
+    background-color: #f0f8ff;
+    padding: 20px;
+    border-radius: 10px;
+}
+
 
  </style>
 </head>
@@ -602,7 +735,6 @@ a:hover {
               <a class="navbar-brand mx-auto d-lg-none" href="/">
                   <img src="{% static 'images/slider/logo.png' %}" alt="Logo Pediatra" class="logo me-2">
                   MediKid
-                  
                   <strong class="d-block">Médico Pediatra</strong>
               </a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -1035,60 +1167,55 @@ a:hover {
         </main>
 
         <footer class="site-footer section-padding" id="contact">
-            <div class="container">
-                <div class="row">
+      <div class="container">
+          <div class="row">
+              <div class="col-lg-5 me-auto col-12">
+                  <h5 class="mb-lg-4 mb-3">Horarios de Atención</h5>
+                  <ul class="list-group list-group-flush">
+                      <li class="list-group-item d-flex justify-content-between">
+                          Domingo: Cerrado
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between">
+                          Lunes, Martes - Viernes
+                          <span>9:00 AM - 7:00 PM</span>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between">
+                          Sábado
+                          <span>09:00 AM - 12:00 PM</span>
+                      </li>
+                  </ul>
+              </div>
+              <div class="col-lg-3 col-md-6 col-12 my-4 my-lg-0">
+                  <h5 class="mb-lg-4 mb-3">Our Clinic</h5>
+                  <p><a href="/login/">Sitio Administrativo Secretaría</a></p>
+                  <p><a href="{% url 'logindoc' %}">Sitio Administrativo Médico</a></p>
+                  <p><a href="mailto:dr_mrojas_pediatra@yahoo.es">dr_mrojas_pediatra@yahoo.es</a></p>
+                  <p> <justify-center>Paseo Quinorte, calle Machala entre Bartolomé Ruiz y Flavio Alfaro </justify-center></p>
+              </div>
+              <div class="col-lg-3 col-md-6 col-12 ms-auto">
+                  <h5 class="mb-lg-4 mb-2">Contacto</h5>
+                  <p class="contact-info">2291452</p>
+                  <p class="contact-info">0961828384</p>
+                  <h5 class="mb-lg-4 mb-2">Redes Sociales</h5>
+                  <ul class="social-icon">
+                      <li><a href="https://facebook.com" class="fab fa-facebook-f" title="Facebook"></a></li>
+                      <li><a href="https://twitter.com" class="fab fa-twitter" title="Twitter"></a></li>
+                      <li><a href="https://instagram.com" class="fab fa-instagram" title="Instagram"></a></li>
+                      <li><a href="https://youtube.com" class="fab fa-youtube" title="YouTube"></a></li>
+                      <li><a href="https://wa.me/" class="fab fa-whatsapp" title="WhatsApp"></a></li>
+                      <li><a href="https://linkedin.com" class="fab fa-linkedin-in" title="LinkedIn"></a></li>
+                  </ul>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-lg-12 text-center mt-4">
+                  <p class="copyright-text">Copyright © Medic Care 2021</p>
+              </div>
+          </div>
+      </div>
+  </footer>
 
-                    <div class="col-lg-5 me-auto col-12">
-                        <h5 class="mb-lg-4 mb-3">Horarios de atencion</h5>
 
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex">
-                                Domingo : Cerrado
-                            </li>
-
-                            <li class="list-group-item d-flex">
-                                Lunes, Martes - Viernes
-                                <span>8:00 AM - 5:30 PM</span>
-                            </li>
-
-                            <li class="list-group-item d-flex">
-                                Sábado
-                                <span>10:30 AM - 5:30 PM</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="col-lg-2 col-md-6 col-12 my-4 my-lg-0">
-                        <h5 class="mb-lg-4 mb-3">Our Clinic</h5>
-                        <p><a href="/login/">Sitio Administrativo Secretaría</a><p>
-                          <p><a href="{% url 'logindoc' %}">Sitio Administrativo Médico</a><p>
-                        <p><a href="mailto:hello@company.co">hello@company.co</a><p>
-
-                        <p>123 Digital Art Street, San Diego, CA 92123</p>
-                    </div>
-
-                    <div class="col-lg-3 col-md-6 col-12 ms-auto">
-                        <h5 class="mb-lg-4 mb-2">Socials</h5>
-
-                        <ul class="social-icon">
-                            <li><a href="#" class="social-icon-link bi-facebook"></a></li>
-
-                            <li><a href="#" class="social-icon-link bi-twitter"></a></li>
-
-                            <li><a href="#" class="social-icon-link bi-instagram"></a></li>
-
-                            <li><a href="#" class="social-icon-link bi-youtube"></a></li>
-                        </ul>
-
-                        <div>
-                            <p class="copyright-text">Copyright © Medic Care 2021
-                            <br><br>Design: <a href="https://templatemo.com" target="_parent">TemplateMo</a></p>
-                            <p class="copyright-text">Distributed By: <a href="https://themewagon.com" target="_parent">Themewagon</a></p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </footer>
         <script src="{% static 'js/jquery.min.js' %}"></script>
         <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
         <script src="{% static 'js/owl.carousel.min.js' %}"></script>

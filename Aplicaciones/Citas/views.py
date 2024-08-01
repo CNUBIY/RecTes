@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.hashers import check_password, make_password
-from .models import DiaHorario,HorasDia, UsuarioCli, CitaSol, FactCitas
+from .models import CitaSol, FactCitas
 from django.contrib import messages
 from datetime import datetime, timedelta, time
 from django.http import JsonResponse
@@ -396,10 +396,8 @@ def delete_adciIn(request,id):
 @login_required
 @custom_login_required
 def adci_fechacitas (request):
-    horariobdd=DiaHorario.objects.all()
-    horabdd=HorasDia.objects.all()
     citabdd=CitaSol.objects.all()
-    return render(request,'adci_fechacitas.html',{'horarios':horariobdd,'horas':horabdd,'citas':citabdd})
+    return render(request,'adci_fechacitas.html',{'citas':citabdd})
 @login_required
 @custom_login_required
 def verificar_cita(request):

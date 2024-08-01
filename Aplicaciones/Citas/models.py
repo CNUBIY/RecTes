@@ -1,12 +1,15 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 from django.contrib.auth.hashers import make_password
+import datetime
+from datetime import date
 
 # Create your models here.
 
 
 class CitaSol(models.Model):
     id=models.AutoField(primary_key=True)
+    creation = models.DateField(default=datetime.date.today)
     fech_da=models.DateField()
     time_da=models.TimeField()
     cort_da=models.BooleanField(default=False)
@@ -22,6 +25,7 @@ class CitaSol(models.Model):
 
 class FactCitas(models.Model):
     id=models.AutoField(primary_key=True)
+    creation = models.DateField(default=datetime.date.today)
     idfac=models.CharField(max_length=150)
     descfac=models.CharField(max_length=150)
     valfac=models.DecimalField(max_digits=5, decimal_places=2)
@@ -31,30 +35,12 @@ class FactCitas(models.Model):
     def __str__(self):
         return f"{self.idfac}-{self.fechfac}"
 
-
-class UsuarioCli(models.Model):
-    id = models.AutoField(primary_key=True)
-    nombre_cli = models.CharField(max_length=150)
-    correo_cli = models.CharField(max_length=150)
-    pass_cli = models.CharField(max_length=300)
-
-    def __str__(self):
-        return f"{self.nombre_cli} - {self.correo_cli}"
-
-
-class HorasDia(models.Model):
-    id=models.AutoField(primary_key=True)
-    horaInicio=models.TimeField()
-    horaFinal=models.TimeField()
+class SolCli(models.Model):
+    idCi = models.AutoField(primary_key=True)
+    creation = models.DateField(default=datetime.date.today)
+    nom_da=models.CharField(max_length=150)
+    telf_da=models.CharField(max_length=10)
+    correo_da=models.CharField(null=True, blank=True, max_length=250)
 
     def __str__(self):
-        return f"{self.horaInicio} - {self.horaFinal} -{self.id}"
-
-class DiaHorario (models.Model):
-    id = models.AutoField(primary_key=True)
-    diaH=models.DateField(null=True, blank=True)
-    horario=models.ForeignKey(HorasDia, null=True, blank=True, on_delete=models.PROTECT)
-    estado = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f"{self.horario} - Disponible: {self.estado} - {self.id} - {self.diaH}"
+        return f"{self.creation}-{self.nom_da}"

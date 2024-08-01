@@ -132,7 +132,7 @@ class Diagnostico(models.Model):
     id = models.AutoField(primary_key=True)
     creation = models.DateField(default=datetime.date.today)
     cies = models.ManyToManyField(Cie10)
-    obs = models.ForeignKey(observaciones, unique=True, on_delete=models.PROTECT)
+    obs = models.ForeignKey(observaciones, on_delete=models.PROTECT)
     tratamiento = models.CharField(max_length=50, choices=[('Agudo', 'Agudo'), ('Crónico', 'Crónico')])
     alimentacion = models.CharField(max_length=150, null=True, blank=True)
     examen = models.CharField(max_length=150, null=True, blank=True)
