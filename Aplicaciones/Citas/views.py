@@ -40,16 +40,17 @@ def index(request):
     if request.method == 'POST':
         nom_da = request.POST['nom_da']
         telf_da = request.POST['telf_da']
+        fech_da = request.POST['fech_da']
         correo_da = request.POST['correo_da']
         comentario = request.POST['comentario']
 
         SolCli.objects.create(
             nom_da=nom_da,
             telf_da=telf_da,
+            fech_da=fech_da,
             correo_da=correo_da,
             comentario=comentario
         )
-
         messages.success(request, 'Su solicitud ha sido enviada correctamente, nos comunicaremos con usted a futuro')
         return redirect('index')
     return render(request, 'index.html')
@@ -412,7 +413,8 @@ def delete_adciIn(request,id):
 @custom_login_required
 def adci_fechacitas (request):
     citabdd=CitaSol.objects.all()
-    return render(request,'adci_fechacitas.html',{'citas':citabdd})
+    solbdd=SolCli.objects.all()
+    return render(request,'adci_fechacitas.html',{'citas':citabdd, 'solicitudes':solbdd})
 @login_required
 @custom_login_required
 def verificar_cita(request):

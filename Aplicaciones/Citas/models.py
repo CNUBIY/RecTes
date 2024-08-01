@@ -40,6 +40,7 @@ class SolCli(models.Model):
     creation = models.DateField(default=datetime.date.today)
     nom_da=models.CharField(max_length=150)
     telf_da=models.CharField(max_length=10)
+    fech_da = models.DateField(null=True, blank=True,)
     correo_da=models.CharField(null=True, blank=True, max_length=250)
     comentario=models.TextField(null=True,blank=True)
     def __str__(self):
