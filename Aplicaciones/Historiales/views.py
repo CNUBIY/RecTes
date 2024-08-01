@@ -29,6 +29,7 @@ import os
 from scipy.interpolate import make_interp_spline
 import pandas as pd
 import numpy as np
+from Aplicaciones.Citas.models import CitaSol
 # Create your views here.
 
 
@@ -2594,3 +2595,78 @@ def viewrepDia(request, idobs):
 
 
 #PÁGINA REPORTES FINAL
+
+#PÁGINA PRÓXIMA CITA INICIO
+@login_required
+@custom_login_required
+def proxCi(request, idobs):
+    try:
+        # Obtener la observación específica con el ID proporcionado
+        obsbdd = get_object_or_404(observaciones, id=idobs)
+
+        # Obtener el paciente asociado a la observación
+        patbdd = obsbdd.paciente
+
+        # Obtener diagnósticos relacionados con la observación
+        diabdd = Diagnostico.objects.filter(obs=obsbdd).prefetch_related('cies')
+
+        # Obtener alergias del paciente
+        alergias = PatAler.objects.filter(paciente=patbdd).select_related('alergia')
+
+        # Obtener recetas relacionadas con la observación
+        recbdd = Receta.objects.filter(obsmed=obsbdd).select_related('medicamento')
+
+        # Convertir los totales de receta a palabras
+        for receta in recbdd:
+            receta.total_words = num2words(receta.total, lang='es')
+
+        if request.method == 'POST':
+            # Obtener los datos del formulario
+            fech_da = request.POST.get('fech_da')
+            time_da = request.POST.get('time_da')
+            nom_da = request.POST.get('nom_da')
+            telf_da = request.POST.get('telf_da')
+            correo_da = request.POST.get('correo_da')
+
+            # Validar la fecha y la hora antes de proceder
+            if fech_da and time_da:
+                try:
+                    fech_da_parsed = datetime.strptime(fech_da, '%Y-%m-%d').date()
+                    time_da_parsed = datetime.strptime(time_da, '%H:%M').time()
+
+                    # Actualizar la fecha de próxima cita en la observación
+                    obsbdd.prox_ci = fech_da_parsed
+                    obsbdd.save()
+
+                    # Crear un nuevo registro en CitaSol
+                    CitaSol.objects.create(
+                        fech_da=fech_da_parsed,
+                        time_da=time_da_parsed,
+                        nom_da=nom_da,
+                        telf_da=telf_da,
+                        correo_da=correo_da,
+                        est_da=False  # o True si deseas marcarla como establecida
+                    )
+
+                    # Mostrar un mensaje de éxito
+                    messages.success(request, "La cita ha sido registrada correctamente.")
+                    return redirect('viewobs', id=idobs)  # Cambia 'success_page' por el nombre de tu página de éxito
+
+                except ValueError as ve:
+                    messages.error(request, f"Error al procesar la fecha o la hora: {ve}")
+
+            else:
+                messages.error(request, "Debe proporcionar una fecha y hora válidas para la cita.")
+
+    except Exception as e:
+        messages.error(request, f"Error al procesar la observación: {e}")
+        return redirect('error_p')
+
+    return render(request, 'proxCita/proxci.html', {
+        'observaciones': obsbdd,
+        'pacientes': patbdd,
+        'diagnosticos': diabdd,
+        'alergias': alergias,
+        'recetas': recbdd
+    })
+#PÁGINA PRÓXIMA CITA FINAL
