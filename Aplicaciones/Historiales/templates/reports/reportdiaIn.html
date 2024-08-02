@@ -31,12 +31,12 @@
             <!-- Columna para Detalles -->
             <div class="col-lg-6 mb-4 d-flex">
                 <div class="card overflow-hidden w-100">
-                    <div class="card-body p-3 d-flex flex-column">
-                        <div class="d-flex justify-content-between align-items-center">
+                    <div class="card-body p-3 d-flex flex-column align-items-start">
+                        <div class="d-flex justify-content-between w-100">
                             <p><b>CENTRO MÉDICO "Infanto Juvenil"</b></p>
                         </div>
                         <br>
-                        <div class="row align-items-center mb-3 flex-grow-1">
+                        <div class="row align-items-start mb-3 flex-grow-1 w-100">
                             {% if diagnosticos %}
                             <div class="col-md-12">
                                 {% for diagnostico in diagnosticos %}
@@ -101,7 +101,7 @@
                                     </div>
                                 </div>
 
-                                <div class="mt-auto">
+                                <div>
                                     <h6 class="text-info text-center"><b>RECETA</b></h6>
                                     {% if recetas %}
                                     <div class="table-responsive">
@@ -127,16 +127,15 @@
                                     {% endif %}
                                 </div>
                                 {% endfor %}
-                                <br><br>
-                                <div class="text-center text-info">
-                                  <p>"Para nuestros hijos siempre lo mejor"</p>
-                                </div>
                             </div>
                             {% else %}
                             <div class="text-center">
                                 <p>SIN DETALLES</p>
                             </div>
                             {% endif %}
+                        </div>
+                        <div class="text-center text-info mt-auto w-100">
+                            <p>"Para nuestros hijos siempre lo mejor"</p>
                         </div>
                     </div>
                 </div>
@@ -145,12 +144,12 @@
             <!-- Columna para Indicaciones -->
             <div class="col-lg-6 mb-4 d-flex">
                 <div class="card overflow-hidden w-100">
-                    <div class="card-body p-3 d-flex flex-column">
-                        <div class="d-flex justify-content-between align-items-center">
+                    <div class="card-body p-3 d-flex flex-column align-items-start">
+                        <div class="d-flex justify-content-between w-100">
                             <h5 class="card-title mb-3 fw-semibold">Indicaciones</h5>
                         </div>
                         <br>
-                        <div class="row align-items-center flex-grow-1">
+                        <div class="row align-items-start flex-grow-1 w-100">
                             {% if recetas %}
                             {% for diagnostico in diagnosticos %}
                             <div class="row mb-2">
@@ -250,49 +249,60 @@
                             {% else %}
                             <p>SIN DATOS</p>
                             {% endif %}
-                            <div class="text-center text-info">
-                              <p>HORARIOS SUGERIDOS PARA LA ADMINISTRACIÓN DE MEDICAMENTOS</p>
+                            <div class="text-center text-info mt-auto w-100">
+                                <p>HORARIOS SUGERIDOS PARA LA ADMINISTRACIÓN DE MEDICAMENTOS</p>
                             </div>
-                            <div class="">
-                              <table class=" table border-info">
-                                <tbody>
-                                  <tr>
-                                    <td>CADA 6 HORAS</td>
-                                    <td>6am</td>
-                                    <td></td>
-                                    <td>12 am</td>
-                                    <td></td>
-                                    <td>6pm</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>12pm</td>
-                                  </tr>
-                                  <tr>
-                                    <td>CADA 8 HORAS</td>
-                                    <td>8am</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>2pm</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>10pm</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>CADA 12 HORAS</td>
-                                    <td></td>
-                                    <td>7am</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>7pm</td>
-                                    <td></td>
-                                    <td></td>
-                                  </tr>
-                                </tbody>
-                              </table>
+                            <div class="w-100">
+                                <table class="table border-info">
+                                    <tbody>
+                                        <tr>
+                                            <td>CADA 6 HORAS</td>
+                                            <td>6am</td>
+                                            <td></td>
+                                            <td>12 am</td>
+                                            <td></td>
+                                            <td>6pm</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>12pm</td>
+                                        </tr>
+                                        <tr>
+                                            <td>CADA 8 HORAS</td>
+                                            <td>8am</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>2pm</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>10pm</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>CADA 12 HORAS</td>
+                                            <td></td>
+                                            <td>7am</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>7pm</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
-
+                            {% if observaciones.prox_ci %}
+                            <div class="w-100">
+                                <p><b>Próxima cita: </b>{{observaciones.prox_ci}}</p>
+                            </div>
+                            {% endif %}
+                            <div class="mt-auto w-100">
+                                <p><b class="text-info">Signos de alarma: </b>Las enfermedades pueden variar en su evolución dependiendo del tipo de enfermedad, inmunidad del paciente, alimentación, hidratación y su entorno. Si en el lapso
+                                    de hasta 72 horas se presentan complicaciones como por ejemplo fiebre persistente, tómele una foto a la hoja de indicaciones y envíe sus novedades por WhatsApp al #<b class="text-info">0999040034</b></p>
+                            </div>
+                            <div class="text-center text-info mt-auto w-100">
+                                <p>"Para nuestros hijos siempre lo mejor"</p>
+                            </div>
                         </div>
                     </div>
                 </div>
