@@ -85,6 +85,7 @@ urlpatterns=[
     #REPORTES
     path('doc_inicio/viewrepDia/<int:idobs>/', views.viewrepDia, name='viewrepDia'),
     path('doc_inicio/viewrepExa/<int:idobs>/', views.viewrepExa, name='viewrepExa'),
+    path('doc_inicio/viewrepCer/<int:idobs>/', views.viewrepCer, name='viewrepCer'),
 
     #PRÓXIMA CITA
     path('doc_inicio/doc_patient/proxCi/<int:idobs>', views.proxCi, name='proxCi'),
