@@ -70,8 +70,27 @@ class Patient(models.Model):
 
     def __str__(self):
         return f"{self.lastnPat} {self.namePat} - {self.ciPat}"
-
-
+    def calcular_edad_anios(self):
+        """
+        Calcula la edad actual del paciente en años.
+        """
+        hoy = date.today()
+        # Calcula la diferencia en años
+        edad = hoy.year - self.birthPat.year
+        # Ajusta si el cumpleaños aún no ha ocurrido este año
+        if (hoy.month, hoy.day) < (self.birthPat.month, self.birthPat.day):
+            edad -= 1
+        return edad
+    def get_genero_abreviado(self):
+        """
+        Devuelve 'M' si el género es Masculino, 'F' si es Femenino.
+        """
+        if self.genPat.nombreGen.lower() == 'masculino':
+            return 'M'
+        elif self.genPat.nombreGen.lower() == 'femenino':
+            return 'F'
+        else:
+            return 'Desconocido'  # Por si acaso hay un valor inesperado
 
 class Alergia(models.Model):
     id=models.AutoField(primary_key=True)

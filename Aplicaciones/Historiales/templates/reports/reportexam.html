@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico e Indicaciones</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilo general de impresión A4 */
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+                /* Sin márgenes para que el contenido ocupe toda la hoja */
+            }
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+                -webkit-print-color-adjust: exact;
+                /* Asegura colores correctos en impresión */
+            }
+
+            .content {
+                width: 100%;
+                height: 100vh;
+                /* Ocupa toda la altura disponible */
+                padding: 10mm; /* Ajustar márgenes de la hoja */
+                box-sizing: border-box;
+                /* Asegura que el padding no afecte el tamaño */
+            }
+
+            .btn,
+            .print-button {
+                display: none;
+                /* No mostrar botones al imprimir */
+            }
+
+            .text-info {
+                color: #003366;
+                /* Azul marino para impresión */
+            }
+        }
+
+        /* Estilos para visualización en pantalla */
+        .table {
+            font-size: 0.7rem;
+            /* Tamaño de fuente más pequeño para caber en la página */
+        }
+
+        .table td,
+        .table th {
+            padding: 0.5rem;
+            /* Reducir padding para que quepan mejor */
+            vertical-align: middle;
+        }
+
+        .header-content {
+            padding: 0.5rem;
+            /* Padding reducido */
+            background-color: #fff8e1;
+            /* Fondo amarillo claro */
+            color: #003366;
+            /* Texto azul marino */
+            max-width: 90%;
+            margin: 0 auto;
+        }
+
+        .header-content h6 {
+            font-size: 0.9rem;
+            /* Tamaño de letra reducido */
+        }
+
+        .header-content p,
+        .header-content .d-flex p {
+            font-size: 0.8rem;
+            /* Tamaño de letra ajustado */
+        }
+
+        .container-md {
+            max-width: 90%;
+            margin: 0 auto;
+        }
+
+        .personal-info .row {
+            margin-bottom: 0.5rem;
+            /* Ajuste de margen inferior */
+        }
+
+        .footer {
+            text-align: center;
+            font-family: 'Times New Roman', Times, serif;
+            /* Fuente Times New Roman */
+            font-size: 0.7rem;
+            /* Tamaño de letra reducido para el footer */
+            color: #003366;
+            /* Color azul marino */
+            position: absolute;
+            bottom: 10mm; /* Posiciona el texto al fondo de la hoja */
+            width: 100%;
+        }
+
+        /* Estilos para listas y secciones */
+        .section-title {
+            font-size: 0.85rem;
+            /* Tamaño de fuente para títulos de secciones */
+            margin: 0;
+            padding: 0;
+        }
+
+        ul {
+            padding-left: 20px;
+            /* Ajustar padding de listas */
+            margin-bottom: 0;
+            /* Reducir espacio inferior de listas */
+            list-style: none;
+            /* Eliminar viñetas predeterminadas */
+        }
+
+        ul li {
+            font-size: 0.7rem;
+            /* Tamaño de fuente para elementos de lista */
+            display: flex;
+            align-items: center;
+            margin-bottom: 2px;
+            /* Reducir margen entre elementos de la lista */
+        }
+
+        ul li input[type="checkbox"] {
+            margin-right: 5px;
+            /* Espacio entre checkbox y texto */
+            transform: scale(0.8);
+            /* Reduce el tamaño del checkbox */
+        }
+
+        /* Estilo para distribuir las columnas lado a lado */
+        .exams-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 5px; /* Espacio entre columnas */
+        }
+
+        .exam-column {
+            flex: 1;
+            min-width: 200px;
+            /* Asegurar un tamaño mínimo para cada columna */
+            max-width: 33%;
+            /* Limitar el ancho máximo de cada columna */
+            box-sizing: border-box;
+            padding: 0 10px;
+        }
+
+        textarea {
+            font-size: 0.7rem;
+            /* Tamaño de letra para textarea */
+        }
+    </style>
+</head>
+
+<body>
+    <button onclick="printPage()" class="btn btn-primary mb-4 print-button">Imprimir</button>
+    <div class="content">
+        <div class="header-content text-center mx-auto my-3" style="font-family: 'Times New Roman', Times, serif;">
+            <h6 class="mb-2"><b>CENTRO MÉDICO "Infanto Juvenil"</b></h6>
+            <p class="mb-1"><strong>Dr. Marco V. Rojas Silva</strong></p>
+            <p class="mb-1"><strong>Pediatra</strong></p>
+
+            <!-- Primera línea alineada a los extremos -->
+            <div class="d-flex justify-content-between">
+                <p class="mb-1">Especialista en recién nacidos, niños y adolescentes</p>
+                <p class="mb-1"><strong>CITAS: 2 29 14 52</strong></p>
+            </div>
+
+            <!-- Segunda línea alineada a los extremos -->
+            <div class="d-flex justify-content-between">
+                <p class="mb-1">Email: dr_mrojas_pediatra@yahoo.es</p>
+                <p class="mb-1"><strong>Celular: 09 61 82 83 84</strong></p>
+            </div>
+
+            <!-- Sección alineada a la izquierda -->
+            <div class="text-start">
+                <p class="mb-1">Teléfono Fijo: 0999 040 034</p>
+                <p class="mb-1">Dirección: Paso Quito norte, calle Machala entre Bartolomé Ruiz y Flavio Alfaro</p>
+                <p class="mb-1">Horario: lunes a viernes de 9am a 12pm y 4pm a 7pm. Sábado de 9am a 12am</p>
+            </div>
+        </div>
+        <br>
+        <div class="container-md">
+            <div class="row mb-2">
+                <div class="col-12">
+                    <p class="mb-1 text-start"><b>Fecha:</b> <span id="fecha-actual"></span></p>
+                </div>
+            </div>
+            <!-- Título de Solicitud de Exámenes -->
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h6 class="mb-1 text-center section-title" style="color: #003366;"><b>Solicitud De Exámenes</b></h6>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+                <p class="mb-1"><b>Paciente:</b> {{pacientes.lastnPat}} {{pacientes.namePat}}</p>
+                <p class="mb-1"><b>Edad:</b> {{edad_paciente}}</p>
+                <p class="mb-1"><b>Sexo:</b> {{genero_paciente}}</p>
+            </div>
+            <div class="exams-container">
+                <div class="exam-column">
+                    <p class="mb-1 text-center section-title"><strong>SANGRE</strong></p>
+                    <ul>
+                        <li><input type="checkbox" id="sangre-1"><label for="sangre-1">Biometría Hemática Completa</label></li>
+                        <li><input type="checkbox" id="sangre-2"><label for="sangre-2">Eritrosedimentación</label></li>
+                        <li><input type="checkbox" id="sangre-3"><label for="sangre-3">Grupo Sanguineo y Factor</label></li>
+                        <li><input type="checkbox" id="sangre-4"><label for="sangre-4">TP</label></li>
+                        <li><input type="checkbox" id="sangre-5"><label for="sangre-5">TTP</label></li>
+                        <li><input type="checkbox" id="sangre-6"><label for="sangre-6">A.S.T.O</label></li>
+                        <li><input type="checkbox" id="sangre-7"><label for="sangre-7">P.C.R</label></li>
+                        <li><input type="checkbox" id="sangre-8"><label for="sangre-8">Aglutinaciones febriles</label></li>
+                        <li><input type="checkbox" id="sangre-9"><label for="sangre-9">Hematozoario</label></li>
+                        <li><input type="checkbox" id="sangre-10"><label for="sangre-10">Glucosa</label></li>
+                        <li><input type="checkbox" id="sangre-11"><label for="sangre-11">Urea</label></li>
+                        <li><input type="checkbox" id="sangre-12"><label for="sangre-12">Creatinina</label></li>
+                        <li><input type="checkbox" id="sangre-13"><label for="sangre-13">Bilirrubinas</label></li>
+                        <li><input type="checkbox" id="sangre-14"><label for="sangre-14">Perfil proteico</label></li>
+                        <li><input type="checkbox" id="sangre-15"><label for="sangre-15">Perfil lipídico</label></li>
+                        <li><input type="checkbox" id="sangre-16"><label for="sangre-16">TGO</label></li>
+                        <li><input type="checkbox" id="sangre-17"><label for="sangre-17">TGP</label></li>
+                        <li><input type="checkbox" id="sangre-18"><label for="sangre-18">Amilasa</label></li>
+                        <li><input type="checkbox" id="sangre-19"><label for="sangre-19">Lipasa</label></li>
+                    </ul>
+                </div>
+                <div class="exam-column">
+                    <ul>
+                        <li><input type="checkbox" id="sangre-20"><label for="sangre-20">Fosfatasa alcalina</label></li>
+                        <li><input type="checkbox" id="sangre-21"><label for="sangre-21">V.D.R.L</label></li>
+                        <li><input type="checkbox" id="sangre-22"><label for="sangre-22">Transferina</label></li>
+                        <li><input type="checkbox" id="sangre-23"><label for="sangre-23">Ferritina</label></li>
+                        <li><input type="checkbox" id="sangre-24"><label for="sangre-24">Serología H. Pilory</label></li>
+                        <li><input type="checkbox" id="sangre-25"><label for="sangre-25">VHA IgM</label></li>
+                        <li><input type="checkbox" id="sangre-26"><label for="sangre-26">HbsAg</label></li>
+                        <li><input type="checkbox" id="sangre-27"><label for="sangre-27">Dengue Ac. IgG - IgM</label></li>
+                        <li><input type="checkbox" id="sangre-28"><label for="sangre-28">Inmunoglobulina E. sérica</label></li>
+                        <li><input type="checkbox" id="sangre-29"><label for="sangre-29">Hemocultivo</label></li>
+                        <li><input type="checkbox" id="sangre-30"><label for="sangre-30">Beta HCG</label></li>
+                        <li><input type="checkbox" id="sangre-31"><label for="sangre-31">T3</label></li>
+                        <li><input type="checkbox" id="sangre-32"><label for="sangre-32">T4</label></li>
+                        <li><input type="checkbox" id="sangre-33"><label for="sangre-33">TSH</label></li>
+                        <li><input type="checkbox" id="sangre-34"><label for="sangre-34">Hormona de crecimiento</label></li>
+                        <li><input type="checkbox" id="sangre-35"><label for="sangre-35"><b>MOCO NASAL</b>: Eosinófilos</label></li>
+                    </ul>
+                    <p class="mb-1 text-center section-title"><strong>ORINA</strong></p>
+                    <ul>
+                        <li><input type="checkbox" id="orina-1"><label for="orina-1">E.M.O</label></li>
+                        <li><input type="checkbox" id="orina-2"><label for="orina-2">Gram de Gota fresca</label></li>
+                        <li><input type="checkbox" id="orina-3"><label for="orina-3">Urocultivo y Antibiograma</label></li>
+                    </ul>
+                </div>
+                <div class="exam-column">
+                    <p class="mb-1 text-center section-title"><strong>HECES</strong></p>
+                    <ul>
+                        <li><input type="checkbox" id="heces-1"><label for="heces-1">Coprológico / Coproparasitario</label></li>
+                        <li><input type="checkbox" id="heces-2"><label for="heces-2">Polimorfonucleares</label></li>
+                        <li><input type="checkbox" id="heces-3"><label for="heces-3">Rotavirus / Adenovirus</label></li>
+                        <li><input type="checkbox" id="heces-4"><label for="heces-4">Coproparasitario por filtración</label></li>
+                        <li><input type="checkbox" id="heces-5"><label for="heces-5">Coproparasitario seriado # 3</label></li>
+                        <li><input type="checkbox" id="heces-6"><label for="heces-6">Sangre oculta</label></li>
+                        <li><input type="checkbox" id="heces-7"><label for="heces-7">Clinitest</label></li>
+                        <li><input type="checkbox" id="heces-8"><label for="heces-8">Coprocultivo</label></li>
+                    </ul>
+                    <p class="mb-1 text-center section-title"><strong>SECRECIÓN VAGINAL</strong></p>
+                    <ul>
+                        <li><input type="checkbox" id="secrecion-1"><label for="secrecion-1">Fresco - Gram - KOH</label></li>
+                        <li><input type="checkbox" id="secrecion-2"><label for="secrecion-2">Cultivo</label></li>
+                    </ul>
+                    <p class="mb-1 text-center section-title"><strong>OTROS EXÁMENES</strong></p>
+                    <textarea name="name" rows="10" class="form-control"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="footer text-info mt-3">
+            <p>"Para nuestros hijos siempre lo mejor"</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        function printPage() {
+            window.print();
+        }
+        function mostrarFechaActual() {
+            const fecha = new Date();
+            const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
+            const fechaFormateada = fecha.toLocaleDateString('es-ES', opciones);
+            document.getElementById('fecha-actual').textContent = fechaFormateada;
+        }
+        window.onload = mostrarFechaActual;
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

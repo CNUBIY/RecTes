@@ -38,6 +38,11 @@
               </div>
             {% endif %}
           </div>
+          <br>
+          <div class="text-end">
+            <a href="{% url 'viewrepExa' idobs=observaciones.id %}" class="btn btn-outline-secondary">Solicitar examen</a>
+            <a href="#" class="btn btn-outline-secondary">Crear certificado</a>
+          </div>
         </div>
       </div>
     </div>
@@ -191,7 +196,7 @@
                                         </tbody>
                                       </table>
                                     </div>
-                                    <a href="{% url 'viewrepDia' idobs=observaciones.id  %}" class="btn btn-outline-primary m-2" target="_blank">Imprimir</a>
+                                    <a href="{% url 'viewrepDia' idobs=observaciones.id  %}" class="btn btn-outline-primary m-2" target="_blank">Vista Previa</a>
                                     {% else %}
                                     <p>Sin datos</p>
                                     {% endif %}

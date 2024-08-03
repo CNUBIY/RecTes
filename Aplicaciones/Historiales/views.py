@@ -2593,6 +2593,50 @@ def viewrepDia(request, idobs):
         'recetas': recbdd
     })
 
+@login_required
+@custom_login_required
+def viewrepExa(request, idobs):
+    try:
+        # Obtener la observación específica con el ID proporcionado
+        obsbdd = get_object_or_404(observaciones, id=idobs)
+
+        # Obtener el paciente asociado a la observación
+        patbdd = obsbdd.paciente
+
+        # Calcular la edad del paciente en años
+        edad_anios = patbdd.calcular_edad_anios()
+
+        # Obtener la abreviatura del género del paciente
+        genero_abreviado = patbdd.get_genero_abreviado()
+
+        # Obtener diagnósticos relacionados con la observación
+        diabdd = Diagnostico.objects.filter(obs=obsbdd).prefetch_related('cies')
+
+        # Obtener alergias del paciente
+        alergias = PatAler.objects.filter(paciente=patbdd).select_related('alergia')
+
+        # Obtener recetas relacionadas con la observación
+        recbdd = Receta.objects.filter(obsmed=obsbdd).select_related('medicamento')
+
+        # Convertir los totales de receta a palabras
+        for receta in recbdd:
+            receta.total_words = num2words(receta.total, lang='es')
+
+    except Exception as e:
+        messages.error(request, f"Error al procesar la observación: {e}")
+        return redirect('error_p')
+
+    return render(request, 'reports/reportexam.html', {
+        'observaciones': obsbdd,
+        'pacientes': patbdd,
+        'diagnosticos': diabdd,
+        'alergias': alergias,
+        'recetas': recbdd,
+        'edad_paciente': f"{edad_anios} años",
+        'genero_paciente': genero_abreviado
+    })
+
+
 
 #PÁGINA REPORTES FINAL
 
