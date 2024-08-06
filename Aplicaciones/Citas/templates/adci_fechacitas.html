@@ -42,6 +42,9 @@
                       </td>
                       <td>{{cita.nom_da}}</td>
                       <td>
+                        {% if cita.cancelado %}
+                          <span class="text-danger">Cancelado</span>
+                        {% else %}
                         {% if cita.cort_da %}
                           <span class="text-success">Cortesía</span>
                         {% else %}
@@ -51,17 +54,22 @@
                             <span class="text-warning">En espera</span>
                           {% endif %}
                         {% endif %}
+                        {% endif %}
                       </td>
                       <td>
-                        {% if cita.est_da %}
-                        <span class="text-center">Sin Acciones</span>
+                        {% if cita.cancelado %}
+                          <span class="text-center">Sin Acciones</span>
                         {% else %}
-                        <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                          data-id="{{ cita.id }}" data-diah="{{ cita.fech_da|date:'Y-m-d' }}" data-horario="{{ cita.time_da|time:'H:i' }}" data-nom="{{cita.nom_da}}" data-telf="{{cita.telf_da}}"
-                          data-cortesia="{{cita.cort_da}}">
-                           <i class="fas fa-edit"></i>
-                        </button>
-                          <a href="javascript:void(0)" onclick="delete_adci('/delete_adci/{{ cita.id }}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
+                          {% if cita.est_da %}
+                          <span class="text-center">Sin Acciones</span>
+                          {% else %}
+                          <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                            data-id="{{ cita.id }}" data-diah="{{ cita.fech_da|date:'Y-m-d' }}" data-horario="{{ cita.time_da|time:'H:i' }}" data-nom="{{cita.nom_da}}" data-telf="{{cita.telf_da}}"
+                            data-cortesia="{{cita.cort_da}}">
+                             <i class="fas fa-edit"></i>
+                          </button>
+                            <a href="javascript:void(0)" onclick="delete_adci('/delete_adci/{{ cita.id }}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
+                          {% endif %}
                         {% endif %}
                       </td>
                   </tr>
