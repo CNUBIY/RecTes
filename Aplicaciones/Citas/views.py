@@ -27,6 +27,7 @@ import string
 from django.core.mail import send_mail
 from django.db.models.functions import Cast, Substr
 from django.db.models import IntegerField
+from django.views.decorators.http import require_POST
 # Create your views here.
 
 
@@ -113,7 +114,7 @@ def verify_email(request):
             del request.session['username']
             del request.session['password']
 
-            messages.success(request, 'Correo verificado exitosamente.')
+            messages.success(request, 'Correo verificado correctamente.')
             return redirect('/login/')
         else:
             messages.error(request, 'Código de verificación incorrecto.')
@@ -184,7 +185,7 @@ def reset_password(request):
             del request.session['reset_password_code']
             del request.session['reset_email']
 
-            messages.success(request, 'Contraseña restablecida exitosamente.')
+            messages.success(request, 'Contraseña restablecida correctamente.')
             return redirect('login')
         else:
             messages.error(request, 'Código de verificación incorrecto.')
@@ -221,7 +222,7 @@ def adci_perfil(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)  # Importante para mantener la sesión después de cambiar la contraseña
-            messages.success(request, '¡Tu contraseña ha sido actualizada exitosamente!')
+            messages.success(request, '¡Tu contraseña ha sido actualizada correctamente!')
             return redirect('adci_perfil')
         else:
             messages.error(request,'Contraseña incorrecta')
@@ -242,7 +243,7 @@ def eliminar_usuario(request, user_id):
         messages.error(request, 'No tienes permiso para eliminar este usuario.')
     else:
         usuario_a_eliminar.delete()
-        messages.success(request, 'Usuario eliminado exitosamente.')
+        messages.success(request, 'Usuario eliminado correctamente.')
 
     return redirect('adci_perfil')
 
@@ -263,7 +264,7 @@ def promote_user_to_admin(request):
                 user_to_promote.is_staff = True
                 user_to_promote.groups.add(admin_group)
                 user_to_promote.save()
-                messages.success(request, f'{user_to_promote.username} ha sido promovido a Administrador exitosamente.')
+                messages.success(request, f'{user_to_promote.username} ha sido promovido a Administrador correctamente.')
             except User.DoesNotExist:
                 messages.error(request, 'Usuario no encontrado.')
             except Group.DoesNotExist:
@@ -283,7 +284,7 @@ def delete_account(request):
         user = authenticate(username=request.user.username, password=delete_password)
         if user is not None and not user.is_superuser:
             user.delete()
-            messages.success(request, 'Tu cuenta ha sido eliminada exitosamente.')
+            messages.success(request, 'Tu cuenta ha sido eliminada correctamente.')
             return redirect('login')  # Redirigir al logout después de eliminar la cuenta
         else:
             messages.error(request, 'Contraseña incorrecta o no puedes eliminar una cuenta de superusuario.')
@@ -387,7 +388,7 @@ def procesarActualizacionHorarioIn(request, id):
             cita.cort_da = cort_da
             cita.save()
 
-            messages.success(request, "Cita actualizada exitosamente.")
+            messages.success(request, "Cita actualizada correctamente.")
             return redirect('/adci_inicio')
         except MultiValueDictKeyError as e:
             # Manejo de error cuando no se encuentra un campo esperado en request.POST
@@ -401,9 +402,21 @@ def procesarActualizacionHorarioIn(request, id):
 
 @login_required
 @custom_login_required
-def delete_adciIn(request,id):
-    eliminarDiaHorario=CitaSol.objects.get(id=id)
-    eliminarDiaHorario.delete()
+@require_POST  # Asegura que esta vista solo responda a solicitudes POST
+def delete_adciIn(request, id):
+    # Obtener el objeto CitaSol correspondiente o devolver un error 404 si no se encuentra
+    cita = get_object_or_404(CitaSol, id=id)
+
+    # Obtener el comentario del POST y actualizar la cita
+    comentario = request.POST.get('comentario', '').strip()
+
+    # Actualizar el estado de cancelación y guardar el comentario
+    cita.cancelado = True
+    cita.comentario = comentario
+    cita.save()
+
+    messages.success(request, 'Cita cancelada correctamente')
+
     return redirect('/adci_inicio')
 
 #Página Inicio Administrador-Citas GENERAL FINAL
@@ -441,7 +454,7 @@ def solicitudes(request, idCi):
             solbdd.save()
 
             # Mensaje de éxito
-            messages.success(request, "Cita registrada y solicitud actualizada exitosamente.")
+            messages.success(request, "Cita registrada y solicitud actualizada correctamente.")
             return redirect('/adci_inicio')
 
         except Exception as e:
@@ -505,7 +518,7 @@ def aggagenda_adci(request):
                 cort_da=cort_da,
                 est_da=False,
             )
-            messages.success(request, "Cita registrada exitosamente.")
+            messages.success(request, "Cita registrada correctamente.")
             return redirect('/adci_inicio')
 
         except Exception as e:
@@ -545,7 +558,7 @@ def procesarActualizacionHorario(request, id):
             cita.save()
 
             # Agregar mensaje de éxito si la actualización fue exitosa
-            messages.success(request, "Cita actualizada exitosamente.")
+            messages.success(request, "Cita actualizada correctamente.")
             return redirect('/adci_fechacitas')
         except MultiValueDictKeyError as e:
             # Manejo de error cuando no se encuentra un campo esperado en request.POST

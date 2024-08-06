@@ -224,56 +224,102 @@
       </div>
       <div class="modal-body">
         <form action="/procesarActualizacionHorario/" method="POST" id="vldt_edidias">
-         {% csrf_token %}
-         <input type="hidden" name="modalId" id="modalId" value="{{horario.id}}">
-         <div class="mb-3">
-           <label for="nom_da_eventModal" class="form-label">Nombre</label>
-           <input type="text" class="form-control" name="nom_da" id="nom_da_eventModal" aria-describedby="dateHelp">
-           <div class="error-message"></div>
-         </div>
-         <div class="mb-3">
-           <label for="telf_da_eventModal" class="form-label">Contacto</label>
-           <input type="text" class="form-control" name="telf_da" id="telf_da_eventModal" aria-describedby="dateHelp">
-           <div class="error-message"></div>
-         </div>
-         <div class="mb-3">
-           <label for="fech_da_eventModal" class="form-label">Fecha</label>
-           <input type="date" class="form-control" name="fech_da" id="fech_da_eventModal" aria-describedby="dateHelp">
-           <div class="error-message"></div>
-         </div>
-         <div class="mb-3">
-           <label for="time_da_eventModal" class="form-label">Horario</label>
-           <input type="time" class="form-control" name="time_da" id="time_da_eventModal" aria-describedby="dateHelp">
-           <div class="error-message"></div>
-         </div>
-         <label for="cort_da_eventModal" class="form-label">¿Cita de Cortesía?</label>
-         <div class="mb-3 form-check">
-           <input type="checkbox" class="form-check-input" name="cort_da" id="cort_da_eventModal">
-           <label class="form-check-label" for="cort_da_eventModal">Confirmar</label>
-         </div>
-         <div class="modal-footer">
-           <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
-           <button type="submit" class="btn btn-outline-warning rounded-pill" id="saveChangesButton2" disabled><i class="fas fa-edit"></i></button>
-           <script type="text/javascript">
-             document.addEventListener("DOMContentLoaded", function() {
-               var form = document.getElementById('vldt_edidias');
-               var editButton = document.getElementById('saveChangesButton2'); // Agrega esta línea para definir editButton
-
-               form.addEventListener('input', function() {
-                   editButton.disabled = false;
-               });
-               $('#eventModal').on('hidden.bs.modal', function () {
-                 editButton.disabled = true;
-               });
-             });
-           </script>
-           <button type="button" class="btn btn-outline-danger rounded-pill" id="deleteDateButton"><i class="fas fa-trash"></i></button>
-         </div>
-       </form>
+          {% csrf_token %}
+          <input type="hidden" name="modalId" id="modalId" value="{{horario.id}}">
+          <div class="mb-3">
+            <label for="nom_da_eventModal" class="form-label">Nombre</label>
+            <input type="text" class="form-control" name="nom_da" id="nom_da_eventModal" aria-describedby="dateHelp">
+            <div class="error-message"></div>
+          </div>
+          <div class="mb-3">
+            <label for="telf_da_eventModal" class="form-label">Contacto</label>
+            <input type="text" class="form-control" name="telf_da" id="telf_da_eventModal" aria-describedby="dateHelp">
+            <div class="error-message"></div>
+          </div>
+          <div class="mb-3">
+            <label for="fech_da_eventModal" class="form-label">Fecha</label>
+            <input type="date" class="form-control" name="fech_da" id="fech_da_eventModal" aria-describedby="dateHelp">
+            <div class="error-message"></div>
+          </div>
+          <div class="mb-3">
+            <label for="time_da_eventModal" class="form-label">Horario</label>
+            <input type="time" class="form-control" name="time_da" id="time_da_eventModal" aria-describedby="dateHelp">
+            <div class="error-message"></div>
+          </div>
+          <label for="cort_da_eventModal" class="form-label">¿Cita de Cortesía?</label>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" name="cort_da" id="cort_da_eventModal">
+            <label class="form-check-label" for="cort_da_eventModal">Confirmar</label>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-outline-warning" id="saveChangesButton2" disabled>
+              <i class="fas fa-edit"></i>
+            </button>
+            <button type="button" class="btn btn-outline-danger" data-bs-target="#deleteCommentModal" data-bs-toggle="modal">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </div>
+
+<!-- MODAL PARA COMENTARIOS DE ELIMINACIÓN -->
+<div class="modal fade" id="deleteCommentModal" aria-hidden="true" aria-labelledby="deleteCommentModalLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteCommentModalLabel">Comentario para Eliminar</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="deleteCommentForm">
+          <div class="mb-3">
+            <label for="deleteComment" class="form-label">Ingrese el motivo de la cancelación de la cita:</label>
+            <textarea class="form-control" id="deleteComment" rows="3" required></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" id="deleteDateButton" class="btn btn-danger">Confirmar Eliminación</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function() {
+    var form = document.getElementById('vldt_edidias');
+    var editButton = document.getElementById('saveChangesButton2'); // Agrega esta línea para definir editButton
+
+    form.addEventListener('input', function() {
+        editButton.disabled = false;
+    });
+
+    $('#eventModal').on('hidden.bs.modal', function () {
+      editButton.disabled = true;
+    });
+
+    // Manejar el formulario de comentarios de eliminación
+    var deleteCommentForm = document.getElementById('deleteCommentForm');
+    deleteCommentForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      var comment = document.getElementById('deleteComment').value;
+
+      // Aquí puedes procesar el comentario y realizar la eliminación
+
+      // Cerrar el modal después de la acción
+      var deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteCommentModal'));
+      deleteModal.hide();
+
+      // Aquí podrías llamar a una función para realizar la eliminación
+      console.log('Comentario para eliminación:', comment);
+    });
+  });
+</script>
 
 
 <!-- MODAL VISTA CALENDAR cita escogida-->
@@ -587,8 +633,18 @@
 </script>
 <!-- MENSAJE DE CONFIRMACIÓN ELIMINAR DIAHORARIO -->
 <script type="text/javascript">
-        function delete_adciIn(url){
-          iziToast.question({
+        function delete_adciIn(url, citaId) {
+          // Mostrar el modal para agregar un comentario antes de cancelar
+          var deleteModal = new bootstrap.Modal(document.getElementById('deleteCommentModal'));
+          deleteModal.show();
+
+          // Manejar el envío del comentario de cancelación
+          document.getElementById('deleteCommentForm').onsubmit = function(event) {
+            event.preventDefault();
+            var comentario = document.getElementById('deleteComment').value;
+
+            // Mostrar el mensaje de confirmación de iziToast después de agregar el comentario
+            iziToast.question({
               timeout: 15000,
               close: true,
               overlay: true,
@@ -596,20 +652,41 @@
               id: 'question',
               zindex: 9999,
               title: 'CONFIRMACIÓN',
-              message: '¿Está seguro de eliminar la <b>cita </b> seleccionada?',
+              message: '¿Está seguro de cancelar la <b>cita </b> seleccionada?',
               position: 'center',
               buttons: [
-                  ['<button><b>SI</b></button>', function (instance, toast) {
-                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
-                      window.location.href=url;
-                  }, true],
-                  ['<button>NO</button>', function (instance, toast) {
+                ['<button><b>SI</b></button>', function (instance, toast) {
+                  instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
 
-                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                  // Enviar la solicitud POST con un formulario oculto para actualizar la página
+                  var form = document.createElement('form');
+                  form.method = 'POST';
+                  form.action = url;
 
-                  }],
+                  // Agregar el CSRF token
+                  var csrfTokenInput = document.createElement('input');
+                  csrfTokenInput.type = 'hidden';
+                  csrfTokenInput.name = 'csrfmiddlewaretoken';
+                  csrfTokenInput.value = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                  form.appendChild(csrfTokenInput);
+
+                  // Agregar el comentario
+                  var comentarioInput = document.createElement('input');
+                  comentarioInput.type = 'hidden';
+                  comentarioInput.name = 'comentario';
+                  comentarioInput.value = comentario;
+                  form.appendChild(comentarioInput);
+
+                  // Agregar el formulario al cuerpo del documento y enviarlo
+                  document.body.appendChild(form);
+                  form.submit();
+                }, true],
+                ['<button>NO</button>', function (instance, toast) {
+                  instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                }],
               ]
-          });
+            });
+          };
         }
         function procesarActualizacionHorarioIn(url){
           iziToast.question({
