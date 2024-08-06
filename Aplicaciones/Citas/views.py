@@ -305,8 +305,16 @@ def adci_inicio(request):
     else:
         mañana = hoy + timedelta(days=1)
 
-    # Eliminar las citas no confirmadas y no cortas para fechas pasadas
-    CitaSol.objects.filter(est_da=False, cort_da=False, fech_da__lt=hoy).delete()
+    # Calcula la fecha límite para eliminar citas (hace 7 días)
+    hace_siete_dias = hoy - timedelta(days=7)
+
+    # Eliminar las citas no confirmadas, no cortas y no canceladas para fechas pasadas hace más de 7 días
+    CitaSol.objects.filter(
+        est_da=False,
+        cort_da=False,
+        cancelado=False,
+        fech_da__lt=hace_siete_dias
+    ).delete()
 
     # Ordenar las citas por el campo 'time_da'
     citas_hoy = CitaSol.objects.filter(fech_da=hoy, cort_da=False).order_by('time_da')
