@@ -322,7 +322,7 @@
 </script>
 
 
-<!-- MODAL VISTA CALENDAR cita escogida-->
+<!-- MODAL VISTA CALENDAR cita escogida -->
 <div class="modal fade" id="eventModalocu" tabindex="-1" aria-labelledby="eventModalLabelOcu" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -331,28 +331,33 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
       <div class="modal-body">
-        <form action="/procesarActualizacionHorario/" method="POST" id="vldt_edidias_ocu">
+        <form id="vldt_edidias_ocu">
           {% csrf_token %}
           <input type="hidden" name="modalId" id="modalIdOcu" value="">
           <div class="mb-3">
             <label for="nom_da_eventModalOcu" class="form-label">Nombre</label>
-            <input type="text" class="form-control" name="nom_da" id="nom_da_eventModalOcu" aria-describedby="dateHelp" readonly>
+            <input type="text" class="form-control" name="nom_da" id="nom_da_eventModalOcu" readonly>
           </div>
           <div class="mb-3">
             <label for="telf_da_eventModalOcu" class="form-label">Contacto</label>
-            <input type="text" class="form-control" name="telf_da" id="telf_da_eventModalOcu" aria-describedby="dateHelp" readonly>
+            <input type="text" class="form-control" name="telf_da" id="telf_da_eventModalOcu" readonly>
           </div>
           <div class="mb-3">
             <label for="fech_da_eventModalOcu" class="form-label">Fecha</label>
-            <input type="date" class="form-control" name="fech_da" id="fech_da_eventModalOcu" aria-describedby="dateHelp" readonly>
+            <input type="date" class="form-control" name="fech_da" id="fech_da_eventModalOcu" readonly>
           </div>
           <div class="mb-3">
             <label for="time_da_eventModalOcu" class="form-label">Horario</label>
-            <input type="time" class="form-control" name="time_da" id="time_da_eventModalOcu" aria-describedby="dateHelp" readonly>
+            <input type="time" class="form-control" name="time_da" id="time_da_eventModalOcu" readonly>
           </div>
           <div class="mb-3 form-check">
             <input type="checkbox" class="form-check-input" name="cort_da" id="cort_da_eventModalOcu" disabled>
             <label class="form-check-label" for="cort_da_eventModalOcu">¿Cita de Cortesía?</label>
+          </div>
+          <!-- Campo de comentario de cancelación -->
+          <div class="mb-3" id="comment-container" style="display: none;">
+            <label for="comment_da_eventModalOcu" class="form-label">Comentario de Cancelación</label>
+            <textarea class="form-control" id="comment_da_eventModalOcu" rows="3" readonly></textarea>
           </div>
         </form>
       </div>
@@ -362,6 +367,8 @@
     </div>
   </div>
 </div>
+
+
 <style>
   .custom-day-header {
     color: black !important;
@@ -384,6 +391,10 @@
     background-color: #ec5b3b !important; /* Rojo de Bootstrap */
     border-color: #ec5b3b !important; /* Borde Rojo de Bootstrap */
   }
+  .event-cancelled {
+  background-color: #808080 !important; /* Gris para citas canceladas */
+  border-color: #808080 !important;
+}
 </style>
 <!-- CALENDARIO -->
 <script>
@@ -393,37 +404,43 @@
     var citasMañanaList = document.querySelector("#citas-mañana-list");
 
     if (citasHoyTable && citasMañanaList) {
-    // Obtener la altura de la tabla de citas de hoy
-    var tableHeight = citasHoyTable.offsetHeight;
-    // Ajustar la altura máxima de la lista de citas de mañana
-    citasMañanaList.style.maxHeight = tableHeight + 85+ "px";
+      // Obtener la altura de la tabla de citas de hoy
+      var tableHeight = citasHoyTable.offsetHeight;
+      // Ajustar la altura máxima de la lista de citas de mañana
+      citasMañanaList.style.maxHeight = tableHeight + 85 + "px";
     }
+
     // Agregar un listener de clic a todos los enlaces con clase 'cita-link'
-       var citaLinks = document.querySelectorAll('.cita-link');
+    var citaLinks = document.querySelectorAll('.cita-link');
 
-       citaLinks.forEach(function (link) {
-           link.addEventListener('click', function (event) {
-               event.preventDefault(); // Evitar que el enlace se siga al hacer clic
+    citaLinks.forEach(function(link) {
+      link.addEventListener('click', function(event) {
+        event.preventDefault(); // Evitar que el enlace se siga al hacer clic
 
-               var nom = this.getAttribute('data-nom');
-               var telf = this.getAttribute('data-telf');
-               var hora = this.getAttribute('data-hora');
+        var nom = this.getAttribute('data-nom');
+        var telf = this.getAttribute('data-telf');
+        var hora = this.getAttribute('data-hora');
 
-               // Mostrar el mensaje de iziToast con la información de la cita
-               iziToast.info({
-                   title: 'Recordatorio de cita',
-                   message: 'Mañana tienes una cita con ' + nom + ' - ' + telf + ' a las ' + hora,
-                   position: 'topRight',
-                   timeout: 180000
-               });
-           });
-       });
+        // Mostrar el mensaje de iziToast con la información de la cita
+        iziToast.info({
+          title: 'Recordatorio de cita',
+          message: 'Mañana tienes una cita con ' + nom + ' - ' + telf + ' a las ' + hora,
+          position: 'topRight',
+          timeout: 180000
+        });
+      });
+    });
 
     var hoy = new Date();
     var mañana = new Date(hoy);
     mañana.setDate(hoy.getDate() + 1);
 
-    var opcionesFecha = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    var opcionesFecha = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    };
     var fechaSiguiente = mañana.toLocaleDateString('es-ES', opcionesFecha);
 
     document.getElementById('fecha-siguiente').textContent = fechaSiguiente;
@@ -447,25 +464,29 @@
       allDaySlot: false,
       hiddenDays: [0],
       dayHeaderContent: function(arg) {
-        return { html: '<span class="custom-day-header">' + arg.text + '</span>' };
+        return {
+          html: '<span class="custom-day-header">' + arg.text + '</span>'
+        };
       },
       events: [
         {% for cita in citas %}
-          {
-            title: "{{ cita.nom_da }}",
-            start: "{{ cita.fech_da|date:'Y-m-d' }}T{{ cita.time_da|time:'H:i:s' }}",
-            end: "{{ cita.fech_da|date:'Y-m-d' }}T{{ cita.time_da|time:'H:i:s' }}",
-            classNames: getEventClass("{{ cita.cort_da }}", "{{ cita.est_da }}"),
-            extendedProps: {
-              id: "{{ cita.id }}",
-              diaH: "{{ cita.fech_da|date:'Y-m-d' }}",
-              nom_da: "{{ cita.nom_da }}",
-              time_da: "{{ cita.time_da }}",
-              telf_da: "{{ cita.telf_da }}",
-              cortesia: "{{ cita.cort_da }}",
-              estado: "{{ cita.est_da }}"
-            }
-          },
+        {
+          title: "{{ cita.nom_da }}",
+          start: "{{ cita.fech_da|date:'Y-m-d' }}T{{ cita.time_da|time:'H:i:s' }}",
+          end: "{{ cita.fech_da|date:'Y-m-d' }}T{{ cita.time_da|time:'H:i:s' }}",
+          classNames: getEventClass("{{ cita.cort_da }}", "{{ cita.est_da }}", "{{ cita.cancelado }}"),
+          extendedProps: {
+            id: "{{ cita.id }}",
+            diaH: "{{ cita.fech_da|date:'Y-m-d' }}",
+            nom_da: "{{ cita.nom_da }}",
+            time_da: "{{ cita.time_da }}",
+            telf_da: "{{ cita.telf_da }}",
+            cortesia: "{{ cita.cort_da }}",
+            estado: "{{ cita.est_da }}",
+            cancelado: "{{ cita.cancelado }}",
+            comentario: "{{ cita.comentario }}"
+          }
+        },
         {% endfor %}
         {
           title: "Sin servicio",
@@ -484,7 +505,10 @@
 
         var estado = info.event.extendedProps.estado === "True";
         var cortesia = info.event.extendedProps.cortesia === "True";
-        if (estado || cortesia) {
+        var cancelado = info.event.extendedProps.cancelado === "True";
+
+        if (estado || cortesia || cancelado) {
+          // Modal para citas realizadas, de cortesía, o canceladas
           $('#eventModalocu').modal('show');
           document.getElementById('modalIdOcu').value = info.event.extendedProps.id;
           document.getElementById('fech_da_eventModalOcu').value = info.event.extendedProps.diaH;
@@ -492,7 +516,17 @@
           document.getElementById('time_da_eventModalOcu').value = info.event.extendedProps.time_da;
           document.getElementById('telf_da_eventModalOcu').value = info.event.extendedProps.telf_da;
           document.getElementById('cort_da_eventModalOcu').checked = cortesia;
+
+          if (cancelado && info.event.extendedProps.comentario) {
+            // Mostrar el comentario solo si está cancelado y hay un comentario
+            document.getElementById('comment-container').style.display = 'block';
+            document.getElementById('comment_da_eventModalOcu').value = info.event.extendedProps.comentario;
+          } else {
+            // Ocultar el campo de comentario si no es cancelado
+            document.getElementById('comment-container').style.display = 'none';
+          }
         } else {
+          // Modal para edición de citas
           $('#eventModal').modal('show');
           document.getElementById('modalId').value = info.event.extendedProps.id;
           document.getElementById('fech_da_eventModal').value = info.event.extendedProps.diaH;
@@ -515,8 +549,10 @@
 
     calendar.render();
 
-    function getEventClass(cortesia, estado) {
-      if (cortesia === "True") {
+    function getEventClass(cortesia, estado, cancelado) {
+      if (cancelado === "True") {
+        return "event-cancelled";
+      } else if (cortesia === "True") {
         return "event-cort";
       } else if (estado === "True") {
         return "";
@@ -549,7 +585,7 @@
       editButton.disabled = !validateForm();
     });
 
-    $('#eventModal').on('hidden.bs.modal', function () {
+    $('#eventModal').on('hidden.bs.modal', function() {
       editButton.disabled = true;
     });
 
@@ -652,7 +688,7 @@
               id: 'question',
               zindex: 9999,
               title: 'CONFIRMACIÓN',
-              message: '¿Está seguro de cancelar la <b>cita </b> seleccionada?',
+              message: '¿Está seguro que desea cancelar la <b>cita </b> seleccionada?',
               position: 'center',
               buttons: [
                 ['<button><b>SI</b></button>', function (instance, toast) {
