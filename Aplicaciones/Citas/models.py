@@ -31,6 +31,7 @@ class FactCitas(models.Model):
     obsfac=models.CharField(max_length=150)
     fechfac=models.ForeignKey(CitaSol,null=True, blank=True, on_delete=models.PROTECT)
     cancelado=models.BooleanField(default=False)
+    comentario=models.TextField(null=True, blank=True)
     def __str__(self):
         return f"{self.idfac}-{self.fechfac}"
 
