@@ -63,7 +63,7 @@
                   <td>{{ fact.valfac }} $</td>
                   <td>{{ fact.obsfac }}</td>
                   <td>
-                    <a href="#" class="btn btn-outline-warning">
+                    <a href="{% url 'cont_edit' fact.id %}" class="btn btn-outline-warning">
                       <i class="fa-regular fa-pen-to-square"></i>
                     </a>
                     <button type="button" class="btn btn-outline-danger" onclick="cont_delete({{ fact.id }})">

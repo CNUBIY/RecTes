@@ -7,33 +7,33 @@
       <!-- TABLA -->
       <div class="card overflow-hidden">
         <div class="card-body p-4">
-          <h5 class="card-title mb-9 fw-semibold">Proceso de Comprobante</h5><br>
+          <h5 class="card-title mb-9 fw-semibold">Editar Comprobante</h5><br>
           <div class="row align-items-center">
-            <form action="/adci_inicio/aggcont_adci/" method="POST" id="vldt_cont">
+            <form action="" method="POST" id="vldt_cont">
               {% csrf_token %}
-              <input type="hidden" name="id_fech" id="id_fech" value="{{ cita.id }}">
+              <input type="hidden" name="id" id="id" value="{{ comprobante.id }}">
               <div class="mb-3">
                 <label for="idfac" class="form-label">ID de Pago</label>
-                <input type="text" class="form-control" name="idfac" id="idfac" value="{{ next_idfac }}" readonly>
+                <input type="text" class="form-control" name="idfac" id="idfac" value="{{ comprobante.idfac }}" readonly>
               </div>
               <div class="mb-3">
                 <label for="descfac" class="form-label">Descripción</label>
                 <select class="form-select" name="descfac" id="descfac" required>
                   <option value="">Escoga su descripción</option>
-                  <option value="Consulta">Consulta</option>
-                  <option value="Vacuna">Vacuna</option>
+                  <option value="Consulta" {% if comprobante.descfac == "Consulta" %}selected{% endif %}>Consulta</option>
+                  <option value="Vacuna" {% if comprobante.descfac == "Vacuna" %}selected{% endif %}>Vacuna</option>
                 </select>
               </div>
               <div class="mb-3">
                 <label for="valfac" class="form-label">Valor</label>
-                <input type="text" class="form-control" name="valfac" id="valfac" placeholder="$$$" required>
+                <input type="text" class="form-control" name="valfac" id="valfac" value="{{ formatted_valfac }}" placeholder="$$$" required>
               </div>
               <div class="mb-3">
                 <label for="obsfac" class="form-label">Observación</label>
-                <select class="form-select" name="obsfac" id="obsfac" disabled required readonly>
+                <select class="form-select" name="obsfac" id="obsfac" required readonly>
                   <option value="">Escoga su observación</option>
-                  <option value="Servicios">Servicios</option>
-                  <option value="Bienes">Bienes</option>
+                  <option value="Servicios" {% if comprobante.obsfac == "Servicios" %}selected{% endif %}>Servicios</option>
+                  <option value="Bienes" {% if comprobante.obsfac == "Bienes" %}selected{% endif %}>Bienes</option>
                 </select>
               </div>
               <button type="submit" class="btn btn-outline-success m-2">Guardar</button>

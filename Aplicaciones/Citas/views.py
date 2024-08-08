@@ -790,7 +790,22 @@ def cont_delete(request, id):
     return redirect('cont_inicio')
 
 
+@login_required
+@custom_login_required
+def cont_edit(request, id):
+    factbdd = FactCitas.objects.get(id=id)
+    if request.method == 'POST':
+        factbdd.descfac = request.POST.get('descfac')
+        factbdd.valfac = request.POST.get('valfac')
+        factbdd.obsfac = request.POST.get('obsfac')
+        factbdd.save()
+        messages.success(request, 'Comprobante actualizado correctamente.')
+        return redirect('cont_inicio')
 
+    # Formatear valfac para que use un punto decimal en lugar de una coma
+    formatted_valfac = str(factbdd.valfac).replace(',', '.')
+
+    return render(request, 'cont_edit.html', {'comprobante': factbdd, 'formatted_valfac': formatted_valfac})
 
 
 #Página CONTABILIDAD Administrador FINAl|
