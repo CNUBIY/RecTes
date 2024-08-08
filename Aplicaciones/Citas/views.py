@@ -774,32 +774,24 @@ def aggcont_adci(request):
 
 @login_required
 @custom_login_required
-def cont_vac(request):
-    factbdd=FactCitas.objects.all()
-    return render(request,'add_vac.html')
-
-
-@login_required
-@custom_login_required
-def aggcont_vac(request):
-    if request.method == "POST":
-        idfac = request.POST.get("idfac")
-        descfac = request.POST.get("descfac")
-        valfac = request.POST.get("valfac")
-        obsfac = request.POST.get("obsfac")
-
-        if idfac and descfac and valfac and obsfac:
-            nueva_vacuna = FactCitas.objects.create(
-                idfac=idfac,
-                descfac=descfac,
-                valfac=valfac,
-                obsfac=obsfac,
-            )
-            return redirect('/adci_inicio/cont_inicio/')
-        else:
-            message.error(request,"Faltan datos")
+def cont_delete(request, id):
+    if request.method == 'POST':
+        comentario = request.POST['deleteComment']
+        try:
+            editFact = FactCitas.objects.get(id=id)
+            editFact.comentario = comentario
+            editFact.cancelado = True
+            editFact.save()
+            messages.success(request, 'Comprobante cancelado correctamente')
+        except FactCitas.DoesNotExist:
+            messages.error(request, 'No se encontró el comprobante')
     else:
-        redirect('/error_p')
+        messages.error(request, 'Método no permitido')
+    return redirect('cont_inicio')
+
+
+
+
 
 #Página CONTABILIDAD Administrador FINAl|
 

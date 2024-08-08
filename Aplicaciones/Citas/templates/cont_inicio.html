@@ -66,7 +66,9 @@
                     <a href="#" class="btn btn-outline-warning">
                       <i class="fa-regular fa-pen-to-square"></i>
                     </a>
-                    <button type="button" name="button" class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+                    <button type="button" class="btn btn-outline-danger" onclick="cont_delete({{ fact.id }})">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
                   </td>
                 </tr>
               {% endfor %}
@@ -77,6 +79,32 @@
     </div>
   </div>
 </div>
+
+<!-- MODAL PARA COMENTARIOS DE ELIMINACIÓN -->
+<div class="modal fade" id="exampleModal" aria-hidden="true" aria-labelledby="exampleModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Eliminar comprobante</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="deleteCommentForm" method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="deleteComment" class="form-label">Ingrese el motivo de la cancelación de la cita:</label>
+            <textarea class="form-control" id="deleteComment" name="deleteComment" rows="3" required></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" id="deleteDateButton" class="btn btn-danger">Confirmar Eliminación</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <style>
     /* Agregar espacio entre el buscador y la tabla */
     .dataTables_filter {
@@ -95,6 +123,47 @@
 <!-- CONFIGURACCIÓN DE TABLA -->
 <script type="text/javascript">
   $(document).ready(function() {
+    $(document).ready(function() {
+        function cont_delete(id) {
+            // Mostrar el modal
+            $('#exampleModal').modal('show');
+
+            // Ajustar el action del formulario para incluir el ID de la factura
+            var url = "{% url 'cont_delete' id=0 %}".replace('0', id);
+            $('#deleteCommentForm').attr('action', url);
+        }
+
+        // Manejar la confirmación dentro del modal
+        $('#deleteDateButton').off('click').on('click', function(e) {
+            e.preventDefault();
+
+            iziToast.question({
+                timeout: 15000,
+                close: true,
+                overlay: true,
+                displayMode: 'once',
+                id: 'question',
+                zindex: 9999,
+                title: 'CONFIRMACIÓN',
+                message: '¿Está seguro de cancelar la cita seleccionada (Por favor verifique la información)?',
+                position: 'center',
+                buttons: [
+                    ['<button><b>SI</b></button>', function (instance, toast) {
+                        instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+
+                        // Enviar el formulario
+                        $('#deleteCommentForm').submit();
+                    }, true],
+                    ['<button>NO</button>', function (instance, toast) {
+                        instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                    }],
+                ]
+            });
+        });
+
+        // Exponer la función cont_delete globalmente
+        window.cont_delete = cont_delete;
+    });
       $('#tbl_cont').DataTable( {
           dom: 'Bfrtip',
           buttons: [

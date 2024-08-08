@@ -27,11 +27,11 @@ urlpatterns=[
     #SOLICITUDES
     path('adci_inicio/solicitudes/<int:idCi>', views.solicitudes, name='solicitudes'),
     #PAGOSREALIZADOS
-    path('adci_inicio/cont_inicio/', views.cont_inicio),
+    path('adci_inicio/cont_inicio/', views.cont_inicio, name='cont_inicio'),
     path('adci_inicio/cont_inicio/cont_int/',views.cont_int, name='cont_int'),
     path('adci_inicio/addcont_adci/<id>',views.addcont_adci, name='addcont_adci'),
     path('adci_inicio/aggcont_adci/', views.aggcont_adci, name='aggcont_adci'),
-
+    path('adci_inicio/cont_delete/<int:id>', views.cont_delete, name='cont_delete'),
     #HORARIOS ADMIN
     path('adci_fechacitas/',views.adci_fechacitas, name='adci_fechacitas'),
     path('verificar_cita/', views.verificar_cita, name='verificar_cita'),
