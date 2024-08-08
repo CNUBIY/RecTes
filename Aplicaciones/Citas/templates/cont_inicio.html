@@ -123,7 +123,6 @@
 <!-- CONFIGURACCIÓN DE TABLA -->
 <script type="text/javascript">
   $(document).ready(function() {
-    $(document).ready(function() {
         function cont_delete(id) {
             // Mostrar el modal
             $('#exampleModal').modal('show');
@@ -163,38 +162,43 @@
 
         // Exponer la función cont_delete globalmente
         window.cont_delete = cont_delete;
-    });
-      $('#tbl_cont').DataTable( {
-          dom: 'Bfrtip',
-          buttons: [
-              {
-                  extend: 'print',
-                  text: '<i class="fa-solid fa-print"></i> Imprimir',
-                  className: 'btn btn-outline-info',
-                  messageTop: 'REPORTE DE MEDIKID',
-                  title:'Comprobantes realizados',
-                  messageBottom:'"Para nuestros hijos siempre lo mejor"'
-              },
-              {
-                  extend: 'csv',
-                  text: '<i class="fa-solid fa-file-csv"></i> Exportar a CSV',
-                  className: 'btn btn-outline-info',
-                  messageTop: 'Comprobantes realizados',
-                  title:'REPORTE DE MEDIKID'
-              }
-          ],
-          language: {
-              url: "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
-          },
-          initComplete: function() {
-              $('.dataTables_filter input').addClass('form-control');
-          },
-          pageLength: 6,
-          drawCallback: function(settings) {
-              // Aplicar las clases a los botones de paginación después de cada redibujo
-              $('.paginate_button').addClass('btn btn-outline-primary');
-          }
-      } );
+        $('#tbl_cont').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'print',
+                        text: '<i class="fa-solid fa-print"></i> Imprimir',
+                        className: 'btn btn-outline-info',
+                        messageTop: 'REPORTE DE MEDIKID',
+                        title: 'Comprobantes realizados',
+                        messageBottom: '"Para nuestros hijos siempre lo mejor"',
+                        exportOptions: {
+                            columns: ':not(:last-child)'  // Excluir la última columna (Acciones)
+                        }
+                    },
+                    {
+                        extend: 'csv',
+                        text: '<i class="fa-solid fa-file-csv"></i> Exportar a CSV',
+                        className: 'btn btn-outline-info',
+                        messageTop: 'Comprobantes realizados',
+                        title: 'REPORTE DE MEDIKID',
+                        exportOptions: {
+                            columns: ':not(:last-child)'  // Excluir la última columna (Acciones)
+                        }
+                    }
+                ],
+                language: {
+                    url: "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+                },
+                initComplete: function() {
+                    $('.dataTables_filter input').addClass('form-control');
+                },
+                pageLength: 6,
+                drawCallback: function(settings) {
+                    // Aplicar las clases a los botones de paginación después de cada redibujo
+                    $('.paginate_button').addClass('btn btn-outline-primary');
+                }
+            });
   } );
 </script>
 {% endblock %}
