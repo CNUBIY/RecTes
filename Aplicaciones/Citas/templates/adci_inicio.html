@@ -595,6 +595,30 @@
       return this.optional(element) || commonDomains.includes(domain);
     }, "Ingrese un correo electrónico personal válido");
 
+    // Método personalizado para validar nombres solo con letras, tildes y espacios
+    $.validator.addMethod("lettersonly", function(value, element) {
+      return this.optional(element) || /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(value);
+    }, "El nombre solo puede contener letras, tildes y espacios");
+
+    // Método personalizado para validar teléfonos fijos ecuatorianos y celulares
+    $.validator.addMethod("ecuadorianPhone", function(value, element) {
+      return this.optional(element) || /^(?:0\d{1}-\d{7}|09\d{8})$/.test(value); // Teléfono fijo con guión o celular
+    }, "Ingrese un número de teléfono válido (ej: 02-1234567 o 0991234567)");
+
+    // Método personalizado para limitar la selección de fechas a un máximo de 4 meses en el futuro
+    $.validator.addMethod("notTooFarFuture", function(value, element) {
+      var today = new Date();
+      var maxDate = new Date();
+      maxDate.setMonth(today.getMonth() + 4);
+      maxDate.setHours(0, 0, 0, 0);
+
+      var inputDateParts = value.split("-");
+      var inputDate = new Date(inputDateParts[0], inputDateParts[1] - 1, inputDateParts[2]);
+      inputDate.setHours(0, 0, 0, 0);
+
+      return this.optional(element) || inputDate <= maxDate;
+    }, "La fecha no debe ser mayor a 4 meses");
+
     function setMinDate(input) {
       var today = new Date();
       var day = String(today.getDate()).padStart(2, '0');
@@ -607,6 +631,7 @@
     }
 
     setMinDate(document.getElementById('eventModal').querySelector('#fech_da_eventModal'));
+
     // Validación para el formulario de edición (modal)
     // Función para inicializar la validación del modal cuando se muestra
     function initializeModalValidation() {
@@ -614,9 +639,11 @@
         rules: {
           nom_da: {
             required: true,
+            lettersonly: true, // Validación de solo letras, tildes y espacios
           },
           telf_da: {
             required: true,
+            ecuadorianPhone: true, // Validación de teléfono fijo o celular
           },
           correo_da: {
             required: true,
@@ -625,7 +652,8 @@
           },
           fech_da: {
             required: true,
-            date:true,
+            date: true,
+            notTooFarFuture: true // Validación de no más de 4 meses en el futuro
           },
           time_da: {
             required: true,
@@ -634,9 +662,11 @@
         messages: {
           nom_da: {
             required: "Debe ingresar el nombre del cliente",
+            lettersonly: "El nombre solo puede contener letras, tildes y espacios", // Mensaje personalizado
           },
           telf_da: {
             required: "Debe ingresar el contacto del cliente",
+            ecuadorianPhone: "Ingrese un número de teléfono válido (ej: 02-1234567 o 0991234567)", // Mensaje personalizado
           },
           correo_da: {
             required: "Debe ingresar el correo del cliente",
@@ -645,7 +675,8 @@
           },
           fech_da: {
             required: "Debe ingresar la fecha de la cita",
-            date:"Ingrese una fecha válida"
+            date: "Ingrese una fecha válida",
+            notTooFarFuture: "La fecha no debe ser mayor a 4 meses" // Mensaje personalizado
           },
           time_da: {
             required: "Debe ingresar el horario de la cita",
@@ -750,7 +781,7 @@
                       instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
                       window.location.href=url;
                   }, true],
-                  ['<button>NO</button>', function (instance, toast) {
+                  ['<button>NO</b></button>', function (instance, toast) {
 
                       instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
 
