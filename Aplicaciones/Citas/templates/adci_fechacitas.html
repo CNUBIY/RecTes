@@ -147,6 +147,34 @@
 }
 </style>
 <script>
+  // Validación de solo letras, tildes y espacios para el campo de nombre
+  document.getElementById('nom_da').addEventListener('input', function (event) {
+    var input = event.target;
+    var value = input.value;
+
+    // Regex para permitir solo letras (incluyendo tildes) y espacios
+    var regex = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]*$/;
+
+    if (!regex.test(value)) {
+      // Elimina el último carácter ingresado si no coincide con el regex
+      input.value = value.slice(0, -1);
+    }
+  });
+
+  // Validación de solo números para el campo de contacto
+  document.getElementById('telf_da').addEventListener('input', function (event) {
+    var input = event.target;
+    var value = input.value;
+
+    // Regex para permitir solo números
+    var regex = /^[0-9]*$/;
+
+    if (!regex.test(value)) {
+      // Elimina el último carácter ingresado si no coincide con el regex
+      input.value = value.slice(0, -1);
+    }
+  });
+
   $(document).ready(function() {
       // Función para verificar la disponibilidad de la cita
       function verificarDisponibilidad(fecha, hora, idCita, formType) {
