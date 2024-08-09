@@ -329,6 +329,24 @@
         $(".mensaje-error-" + id).html(error);
       }
     });
+
+    // Validación del formulario de eliminación de cuenta
+    $("#deleteAccountForm").validate({
+      rules: {
+        "delete_password": {
+          required: true
+        }
+      },
+      messages: {
+        "delete_password": {
+          required: "Debe ingresar su contraseña para confirmar la eliminación"
+        }
+      },
+      errorPlacement: function(error, element) {
+        var id = element.attr("id");
+        $(".mensaje-error-" + id).html(error);
+      }
+    });
   });
 </script>
 

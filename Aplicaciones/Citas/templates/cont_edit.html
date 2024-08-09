@@ -30,7 +30,7 @@
               </div>
               <div class="mb-3">
                 <label for="obsfac" class="form-label">Observación</label>
-                <select class="form-select" name="obsfac" id="obsfac" required readonly>
+                <select class="form-select" name="obsfac" id="obsfac" disabled required readonly>
                   <option value="">Escoga su observación</option>
                   <option value="Servicios" {% if comprobante.obsfac == "Servicios" %}selected{% endif %}>Servicios</option>
                   <option value="Bienes" {% if comprobante.obsfac == "Bienes" %}selected{% endif %}>Bienes</option>
