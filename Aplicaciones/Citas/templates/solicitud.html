@@ -156,7 +156,7 @@
                   required: true,
                   date: true,
                   noPastDate: true,
-                  notTooFarFuture: true
+                  notTooFarFuture: true // Aquí se aplica la nueva validación de 4 meses
               },
               time_da: {
                   required: true,
@@ -182,7 +182,7 @@
                   required: "Debe ingresar la fecha de la cita",
                   date: "Ingrese una fecha válida",
                   noPastDate: "Debe ingresar una fecha actual o futura",
-                  notTooFarFuture: "Fecha no válida"
+                  notTooFarFuture: "La fecha no debe ser mayor a 4 meses" // Mensaje de error para la nueva validación
               },
               time_da: {
                   required: "Debe ingresar el horario de la cita",
@@ -214,11 +214,11 @@
           return this.optional(element) || inputDate >= today;
       }, "Debe ingresar una fecha actual o futura");
 
-      // Añadir método de validación personalizado para fechas muy futuras
+      // Añadir método de validación personalizado para fechas muy futuras (máximo 4 meses)
       $.validator.addMethod("notTooFarFuture", function(value, element) {
           var today = new Date();
           var maxDate = new Date();
-          maxDate.setFullYear(today.getFullYear() + 1); // Establecer la fecha máxima a un año en el futuro
+          maxDate.setMonth(today.getMonth() + 4); // Establecer la fecha máxima a 4 meses en el futuro
           maxDate.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
 
           var inputDateParts = value.split("-");
@@ -226,7 +226,7 @@
           inputDate.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
 
           return this.optional(element) || inputDate <= maxDate;
-      }, "Fecha no válida");
+      }, "La fecha no debe ser mayor a 4 meses");
 
       // Añadir método de validación personalizado para horarios permitidos
       $.validator.addMethod("validTimeRange", function(value, element) {

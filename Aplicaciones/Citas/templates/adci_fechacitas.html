@@ -64,9 +64,10 @@
                           <span class="text-center">Sin Acciones</span>
                           {% else %}
                           <button type="button" class="btn btn-outline-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                            data-id="{{ cita.id }}" data-diah="{{ cita.fech_da|date:'Y-m-d' }}" data-horario="{{ cita.time_da|time:'H:i' }}" data-nom="{{cita.nom_da}}" data-telf="{{cita.telf_da}}"
-                            data-cortesia="{{cita.cort_da}}">
-                             <i class="fas fa-edit"></i>
+                              data-id="{{ cita.id }}" data-diah="{{ cita.fech_da|date:'Y-m-d' }}" data-horario="{{ cita.time_da|time:'H:i' }}"
+                              data-nom="{{cita.nom_da}}" data-telf="{{cita.telf_da}}" data-correo="{{cita.correo_da}}"
+                              data-cortesia="{{cita.cort_da}}">
+                              <i class="fas fa-edit"></i>
                           </button>
                             <a href="javascript:void(0)" onclick="delete_adci('/delete_adci/{{ cita.id }}');" class="btn btn-outline-danger rounded-pill"><i class="fa fa-trash"></i></a>
                           {% endif %}
@@ -269,8 +270,8 @@
                         <div id="edit_error_telf_da" class="error-messages"></div>
                     </div>
                     <div class="mb-3">
-                        <label for="modal_telf_da" class="form-label">Correo</label>
-                        <input type="text" class="form-control" name="correo_da" id="modal_correo_da" placeholder="Ingrese el correo del cliente" required>
+                        <label for="modal_correo_da" class="form-label">Correo</label>
+                        <input type="email" class="form-control" name="correo_da" id="modal_correo_da" placeholder="Ingrese el correo del cliente" required>
                         <div id="edit_error_correo_da" class="error-messages"></div>
                     </div>
                     <div class="row">
@@ -318,6 +319,7 @@
     var horario = button.getAttribute('data-horario');
     var nomDa = button.getAttribute('data-nom');
     var telfDa = button.getAttribute('data-telf');
+    var correoDa = button.getAttribute('data-correo'); // Nuevo: Correo del cliente
     var cortesia = button.getAttribute('data-cortesia') === "True"; // Convierte a booleano
 
     var form = document.getElementById('vldt_edidias');
@@ -327,6 +329,7 @@
     var modalNomDa = exampleModal.querySelector('#modal_nom_da');
     var modalTelfDa = exampleModal.querySelector('#modal_telf_da');
     var modalTimeDa = exampleModal.querySelector('#modal_time_da');
+    var modalCorreoDa = exampleModal.querySelector('#modal_correo_da'); // Nuevo: Campo de correo
     var modalCortDa = exampleModal.querySelector('#modal_cort_da');
 
     modalId.value = id;
@@ -336,6 +339,7 @@
     modalTelfDa.value = telfDa;  // Asignar el teléfono/celular
     modalFechDa.value = fech_da;  // Asignar la fecha al input de tipo date
     modalTimeDa.value = horario; // Asignar el horario al input de tipo time
+    modalCorreoDa.value = correoDa; // Asignar el correo al input de tipo email
     modalCortDa.checked = cortesia; // Marcar o desmarcar el checkbox
   });
 </script>
