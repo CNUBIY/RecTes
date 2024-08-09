@@ -4,20 +4,11 @@
   .fa-calendar-plus {
     font-size: 20px; /* Ajusta el tamaño del ícono */
   }
-  #citas-mañana-list {
+  #citas-manana-list {
     overflow-y: auto;
   }
 </style>
-<!-- <script>
-    {% for cita in citas_proximas %}
-        iziToast.info({
-            title: 'Recordatorio de cita',
-            message: 'Mañana tienes una cita con {{ cita.nom_da }} - {{cita.telf_da}} a las {{ cita.time_da|time:"H:i" }} ',
-            position: 'topRight',
-            timeout: 180000,
-        });
-    {% endfor %}
-</script> -->
+
 <div class="col-lg-9 d-flex align-items-strech">
   <div class="card w-100">
     <div class="card-body">
@@ -27,17 +18,14 @@
         </div>
         <div class="ml-auto">
           <a href="/adci_fechacitas/" class="btn btn-outline-success rounded-pill" title="Añadir Cita"><i class="fa-solid fa-calendar-plus"></i></a>
-          <!-- <button type="button" class="btn btn-outline-success rounded-pill" data-bs-toggle="modal" data-bs-target="#eventModal3" title="Añadir Cita">
-            <i class="fa-solid fa-calendar-plus"></i>
-          </button> -->
         </div>
       </div>
       <div id="calendar" >
-
       </div>
     </div>
   </div>
 </div>
+
 <div class="col-lg-3">
   <div class="row">
     <div class="col-lg-12">
@@ -49,8 +37,7 @@
             <div class="col-8">
               <h4 class="fw-semibold mb-3">$36,358</h4>
               <div class="d-flex align-items-center mb-3">
-                <span
-                  class="me-1 rounded-circle bg-light-success round-20 d-flex align-items-center justify-content-center">
+                <span class="me-1 rounded-circle bg-light-success round-20 d-flex align-items-center justify-content-center">
                   <i class="ti ti-arrow-up-left text-success"></i>
                 </span>
                 <p class="text-dark me-1 fs-3 mb-0">+9%</p>
@@ -80,13 +67,12 @@
       <!-- Monthly Earnings -->
       <div class="card">
         <div class="card-body">
-          <div class="row alig n-items-start">
+          <div class="row align-items-start">
             <div class="col-8">
               <h5 class="card-title mb-9 fw-semibold"> Monthly Earnings </h5>
               <h4 class="fw-semibold mb-3">$6,820</h4>
               <div class="d-flex align-items-center pb-1">
-                <span
-                  class="me-2 rounded-circle bg-light-danger round-20 d-flex align-items-center justify-content-center">
+                <span class="me-2 rounded-circle bg-light-danger round-20 d-flex align-items-center justify-content-center">
                   <i class="ti ti-arrow-down-right text-danger"></i>
                 </span>
                 <p class="text-dark me-1 fs-3 mb-0">+9%</p>
@@ -95,8 +81,7 @@
             </div>
             <div class="col-4">
               <div class="d-flex justify-content-end">
-                <div
-                  class="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
+                <div class="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
                   <i class="ti ti-currency-dollar fs-6"></i>
                 </div>
               </div>
@@ -119,7 +104,7 @@
           <h5 class="card-title fw-semibold">Citas de Mañana</h5>
           <span id="fecha-siguiente">{{ mañana|date:"d/m/Y" }}</span>
         </div>
-        <ul class="timeline-widget mb-0 position-relative mb-n5" id="citas-mañana-list">
+        <ul class="timeline-widget mb-0 position-relative mb-n5" id="citas-manana-list">
           {% if citas_mañana %}
             {% for cita in citas_mañana %}
               <li class="timeline-item d-flex position-relative overflow-hidden">
@@ -211,9 +196,6 @@
   </div>
 </div>
 
-
-
-
 <!-- MODAL VISTA CALENDAR cita no escogida-->
 <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -234,6 +216,11 @@
           <div class="mb-3">
             <label for="telf_da_eventModal" class="form-label">Contacto</label>
             <input type="text" class="form-control" name="telf_da" id="telf_da_eventModal" aria-describedby="dateHelp">
+            <div class="error-message"></div>
+          </div>
+          <div class="mb-3">
+            <label for="correo_da_eventModal" class="form-label">Correo</label>
+            <input type="email" class="form-control" name="correo_da" id="correo_da_eventModal" placeholder="Ingrese el correo del cliente" required>
             <div class="error-message"></div>
           </div>
           <div class="mb-3">
@@ -321,7 +308,6 @@
   });
 </script>
 
-
 <!-- MODAL VISTA CALENDAR cita escogida -->
 <div class="modal fade" id="eventModalocu" tabindex="-1" aria-labelledby="eventModalLabelOcu" aria-hidden="true">
   <div class="modal-dialog">
@@ -341,6 +327,10 @@
           <div class="mb-3">
             <label for="telf_da_eventModalOcu" class="form-label">Contacto</label>
             <input type="text" class="form-control" name="telf_da" id="telf_da_eventModalOcu" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="correo_da_eventModalOcu" class="form-label">Correo</label>
+            <input type="text" class="form-control" name="correo_da" id="correo_da_eventModalOcu" readonly>
           </div>
           <div class="mb-3">
             <label for="fech_da_eventModalOcu" class="form-label">Fecha</label>
@@ -368,7 +358,6 @@
   </div>
 </div>
 
-
 <style>
   .custom-day-header {
     color: black !important;
@@ -385,23 +374,23 @@
   .event-cort {
     background-color: #28a745 !important; /* Verde de Bootstrap */
     border-color: #28a745 !important; /* Cambia también el borde del evento si es necesario */
-
   }
   .sin-servicio {
     background-color: #ec5b3b !important; /* Rojo de Bootstrap */
     border-color: #ec5b3b !important; /* Borde Rojo de Bootstrap */
   }
   .event-cancelled {
-  background-color: #808080 !important; /* Gris para citas canceladas */
-  border-color: #808080 !important;
-}
+    background-color: #808080 !important; /* Gris para citas canceladas */
+    border-color: #808080 !important;
+  }
 </style>
+
 <!-- CALENDARIO -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
 
     var citasHoyTable = document.querySelector("#tbl_horarios");
-    var citasMañanaList = document.querySelector("#citas-mañana-list");
+    var citasMañanaList = document.querySelector("#citas-manana-list");
 
     if (citasHoyTable && citasMañanaList) {
       // Obtener la altura de la tabla de citas de hoy
@@ -481,6 +470,7 @@
             nom_da: "{{ cita.nom_da }}",
             time_da: "{{ cita.time_da }}",
             telf_da: "{{ cita.telf_da }}",
+            correo_da: "{{ cita.correo_da }}", // Nuevo: Correo del cliente
             cortesia: "{{ cita.cort_da }}",
             estado: "{{ cita.est_da }}",
             cancelado: "{{ cita.cancelado }}",
@@ -515,6 +505,7 @@
           document.getElementById('nom_da_eventModalOcu').value = info.event.extendedProps.nom_da;
           document.getElementById('time_da_eventModalOcu').value = info.event.extendedProps.time_da;
           document.getElementById('telf_da_eventModalOcu').value = info.event.extendedProps.telf_da;
+          document.getElementById('correo_da_eventModalOcu').value = info.event.extendedProps.correo_da; // Correo del cliente
           document.getElementById('cort_da_eventModalOcu').checked = cortesia;
 
           if (cancelado && info.event.extendedProps.comentario) {
@@ -533,6 +524,7 @@
           document.getElementById('nom_da_eventModal').value = info.event.extendedProps.nom_da;
           document.getElementById('time_da_eventModal').value = info.event.extendedProps.time_da;
           document.getElementById('telf_da_eventModal').value = info.event.extendedProps.telf_da;
+          document.getElementById('correo_da_eventModal').value = info.event.extendedProps.correo_da; // Nuevo: Asignar el correo al input
           document.getElementById('cort_da_eventModal').checked = false;
 
           document.getElementById('vldt_edidias').action = "procesarActualizacionHorarioIn/" + info.event.extendedProps.id + "/";
@@ -596,6 +588,13 @@
 <script type="text/javascript">
   $(document).ready(function() {
 
+    // Método personalizado para validar dominios de correo comunes
+    $.validator.addMethod("commonDomain", function(value, element) {
+      const commonDomains = ["gmail.com", "gmail.es", "yahoo.com", "yahoo.es", "hotmail.com", "hotmail.es", "outlook.com", "outlook.es", "live.com", "live.es", "icloud.com"];
+      const domain = value.split('@')[1];
+      return this.optional(element) || commonDomains.includes(domain);
+    }, "Ingrese un correo electrónico personal válido");
+
     function setMinDate(input) {
       var today = new Date();
       var day = String(today.getDate()).padStart(2, '0');
@@ -619,6 +618,11 @@
           telf_da: {
             required: true,
           },
+          correo_da: {
+            required: true,
+            email: true,
+            commonDomain: true // Validación de dominio común
+          },
           fech_da: {
             required: true,
             date:true,
@@ -633,6 +637,11 @@
           },
           telf_da: {
             required: "Debe ingresar el contacto del cliente",
+          },
+          correo_da: {
+            required: "Debe ingresar el correo del cliente",
+            email: "Ingrese un correo válido",
+            commonDomain: "Ingrese un correo electrónico personal válido" // Mensaje personalizado
           },
           fech_da: {
             required: "Debe ingresar la fecha de la cita",
@@ -667,6 +676,7 @@
     });
   });
 </script>
+
 <!-- MENSAJE DE CONFIRMACIÓN ELIMINAR DIAHORARIO -->
 <script type="text/javascript">
         function delete_adciIn(url, citaId) {

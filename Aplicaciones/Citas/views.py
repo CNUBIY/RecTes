@@ -367,6 +367,7 @@ def procesarActualizacionHorarioIn(request, id):
             telf_da = request.POST["telf_da"]
             fech_da = request.POST["fech_da"]
             time_da = request.POST["time_da"]
+            correo_da = request.POST["correo_da"]
             cort_da = request.POST.get("cort_da") == "on"
 
             #horarios de servicio
@@ -394,6 +395,7 @@ def procesarActualizacionHorarioIn(request, id):
             cita.fech_da = fech_da
             cita.time_da = time_da
             cita.cort_da = cort_da
+            cita.correo_da = correo_da
             cita.save()
 
             messages.success(request, "Cita actualizada correctamente.")
