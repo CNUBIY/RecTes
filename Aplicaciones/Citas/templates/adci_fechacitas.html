@@ -96,18 +96,18 @@
           {% csrf_token %}
           <div class="mb-3">
               <label for="nom_da" class="form-label">Nombre del Cliente</label>
-              <input type="text" class="form-control" name="nom_da" id="nom_da" placeholder="Ingrese el nombre del representante">
+              <input type="text" class="form-control" name="nom_da" id="nom_da" placeholder="Ingrese el nombre del representante" autocomplete="off">
               <div id="create_error_nom_da" class="error-messages"></div>
           </div>
           <div class="mb-3">
               <label for="telf_da" class="form-label">Telf/Celular</label>
-              <input type="text" class="form-control" name="telf_da" id="telf_da" placeholder="Ingrese el número de contacto">
+              <input type="text" class="form-control" name="telf_da" id="telf_da" placeholder="Ingrese el número de contacto" autocomplete="off">
               <div id="create_error_telf_da" class="error-messages"></div>
           </div>
           <div class="mb-3">
-              <label for="modal_telf_da" class="form-label">Correo</label>
-              <input type="text" class="form-control" name="correo_da" id="modal_correo_da" placeholder="Ingrese el correo del cliente" required>
-              <div id="edit_error_correo_da" class="error-messages"></div>
+              <label for="correo_da" class="form-label">Correo</label>
+              <input type="email" class="form-control" name="correo_da" id="correo_da" placeholder="Ingrese el correo del cliente" required>
+              <div id="create_error_correo_da" class="error-messages"></div>
           </div>
           <div class="row">
               <div class="mb-3 col-md-11">
@@ -140,45 +140,24 @@
     </div>
   </div>
 </div>
+
 <style>
   .input-error {
     border-color: #dc3545;
     box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
 }
 </style>
+
 <script>
-  // Validación de solo letras, tildes y espacios para el campo de nombre
-  document.getElementById('nom_da').addEventListener('input', function (event) {
-    var input = event.target;
-    var value = input.value;
-
-    // Regex para permitir solo letras (incluyendo tildes) y espacios
-    var regex = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]*$/;
-
-    if (!regex.test(value)) {
-      // Elimina el último carácter ingresado si no coincide con el regex
-      input.value = value.slice(0, -1);
-    }
-  });
-
-  // Validación de solo números para el campo de contacto
-  document.getElementById('telf_da').addEventListener('input', function (event) {
-    var input = event.target;
-    var value = input.value;
-
-    // Regex para permitir solo números
-    var regex = /^[0-9]*$/;
-
-    if (!regex.test(value)) {
-      // Elimina el último carácter ingresado si no coincide con el regex
-      input.value = value.slice(0, -1);
-    }
-  });
-
   $(document).ready(function() {
+      // Validación de números de teléfono y celular de Ecuador
+      function validateEcuadorianPhone(value) {
+          var phonePattern = /^(?:0\d{1}-\d{7}|09\d{8})$/;
+          return phonePattern.test(value);
+      }
+
       // Función para verificar la disponibilidad de la cita
       function verificarDisponibilidad(fecha, hora, idCita, formType) {
-          // Reset icons to waiting state
           $('#' + formType + '_fech_da_icon, #' + formType + '_time_da_icon')
               .removeClass('fa-check fa-times text-success text-danger')
               .addClass('fa-spinner fa-spin text-muted')
@@ -186,7 +165,6 @@
               .tooltip('dispose')
               .tooltip();
 
-          // Clear previous error messages and styles
           $('#' + formType + ' .error-messages').text('').removeClass('text-danger');
           $('#' + formType + '_fech_da, #' + formType + '_time_da').removeClass('input-error');
 
@@ -199,15 +177,14 @@
                       'id_cita': idCita
                   },
                   success: function(data) {
-                      $('#' + formType + '_fech_da_icon, #' + formType + '_time_da_icon').tooltip('dispose'); // Destroy existing tooltips
+                      $('#' + formType + '_fech_da_icon, #' + formType + '_time_da_icon').tooltip('dispose');
                       if (data.existe) {
                           $('#' + formType + '_fech_da_icon, #' + formType + '_time_da_icon')
                               .removeClass('fa-spinner fa-spin text-muted')
                               .addClass('fa-times text-danger')
                               .attr('title', 'Cita ya registrada')
-                              .tooltip(); // Initialize new tooltip
+                              .tooltip();
 
-                          // Show error message and apply styles
                           $('#' + formType + '_error_fech_da').text('Fecha no disponible.').addClass('text-danger');
                           $('#' + formType + '_error_time_da').text('Hora no disponible.').addClass('text-danger');
                           $('#' + formType + '_fech_da, #' + formType + '_time_da').addClass('input-error');
@@ -216,30 +193,29 @@
                               .removeClass('fa-spinner fa-spin text-muted')
                               .addClass('fa-check text-success')
                               .attr('title', 'Cita disponible')
-                              .tooltip(); // Initialize new tooltip
+                              .tooltip();
 
-                          // Clear error messages and styles
                           $('#' + formType + '_error_fech_da').text('');
                           $('#' + formType + '_error_time_da').text('');
                           $('#' + formType + '_fech_da, #' + formType + '_time_da').removeClass('input-error');
                       }
                   },
                   error: function() {
-                      $('#' + formType + '_fech_da_icon, #' + formType + '_time_da_icon').tooltip('dispose'); // Destroy existing tooltips
+                      $('#' + formType + '_fech_da_icon, #' + formType + '_time_da_icon').tooltip('dispose');
                       $('#' + formType + '_fech_da_icon, #' + formType + '_time_da_icon')
                           .removeClass('fa-spinner fa-spin text-muted')
                           .addClass('fa-minus text-muted')
                           .attr('title', 'Error al verificar la cita.')
-                          .tooltip(); // Initialize new tooltip
+                          .tooltip();
                   }
               });
           } else {
-              $('#' + formType + '_fech_da_icon, #' + formType + '_time_da_icon').tooltip('dispose'); // Destroy existing tooltips
+              $('#' + formType + '_fech_da_icon, #' + formType + '_time_da_icon').tooltip('dispose');
               $('#' + formType + '_fech_da_icon, #' + formType + '_time_da_icon')
                   .removeClass('fa-spinner fa-spin text-muted')
                   .addClass('fa-minus text-muted')
                   .attr('title', 'Esperando datos...')
-                  .tooltip(); // Initialize new tooltip
+                  .tooltip();
           }
       }
 
@@ -271,9 +247,33 @@
               $('#' + formType + '_fech_da, #' + formType + '_time_da').addClass('input-error');
           }
       });
+
+      // Validación de entrada de número de teléfono
+      $('#telf_da').on('input', function() {
+          var value = $(this).val();
+          if (!validateEcuadorianPhone(value)) {
+              $(this).addClass('input-error');
+              $('#create_error_telf_da').text('Por favor, ingrese un número de teléfono válido.').addClass('text-danger');
+          } else {
+              $(this).removeClass('input-error');
+              $('#create_error_telf_da').text('').removeClass('text-danger');
+          }
+      });
+
+      // Validación de entrada de número de teléfono en el modal de edición
+      $('#modal_telf_da').on('input', function() {
+          var value = $(this).val();
+          if (!validateEcuadorianPhone(value)) {
+              $(this).addClass('input-error');
+              $('#edit_error_telf_da').text('Por favor, ingrese un número de teléfono válido.').addClass('text-danger');
+          } else {
+              $(this).removeClass('input-error');
+              $('#edit_error_telf_da').text('').removeClass('text-danger');
+          }
+      });
+
   });
 </script>
-
 
 <!-- MODAL DE EDICIÓN DE HORARIO -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -347,8 +347,8 @@
     var horario = button.getAttribute('data-horario');
     var nomDa = button.getAttribute('data-nom');
     var telfDa = button.getAttribute('data-telf');
-    var correoDa = button.getAttribute('data-correo'); // Nuevo: Correo del cliente
-    var cortesia = button.getAttribute('data-cortesia') === "True"; // Convierte a booleano
+    var correoDa = button.getAttribute('data-correo');
+    var cortesia = button.getAttribute('data-cortesia') === "True";
 
     var form = document.getElementById('vldt_edidias');
 
@@ -357,18 +357,18 @@
     var modalNomDa = exampleModal.querySelector('#modal_nom_da');
     var modalTelfDa = exampleModal.querySelector('#modal_telf_da');
     var modalTimeDa = exampleModal.querySelector('#modal_time_da');
-    var modalCorreoDa = exampleModal.querySelector('#modal_correo_da'); // Nuevo: Campo de correo
+    var modalCorreoDa = exampleModal.querySelector('#modal_correo_da');
     var modalCortDa = exampleModal.querySelector('#modal_cort_da');
 
     modalId.value = id;
     form.action = "./procesarActualizacionHorario/" + id + "/";
 
-    modalNomDa.value = nomDa;  // Asignar el nombre del cliente
-    modalTelfDa.value = telfDa;  // Asignar el teléfono/celular
-    modalFechDa.value = fech_da;  // Asignar la fecha al input de tipo date
-    modalTimeDa.value = horario; // Asignar el horario al input de tipo time
-    modalCorreoDa.value = correoDa; // Asignar el correo al input de tipo email
-    modalCortDa.checked = cortesia; // Marcar o desmarcar el checkbox
+    modalNomDa.value = nomDa;
+    modalTelfDa.value = telfDa;
+    modalFechDa.value = fech_da;
+    modalTimeDa.value = horario;
+    modalCorreoDa.value = correoDa;
+    modalCortDa.checked = cortesia;
   });
 </script>
 
@@ -442,7 +442,6 @@
           },
           pageLength: 7,
           drawCallback: function(settings) {
-              // Aplicar las clases a los botones de paginación después de cada redibujo
               $('.paginate_button').addClass('btn btn-outline-primary');
           }
       });
@@ -456,7 +455,6 @@
           },
           pageLength: 7,
           drawCallback: function(settings) {
-              // Aplicar las clases a los botones de paginación después de cada redibujo
               $('.paginate_button').addClass('btn btn-outline-primary');
           }
       });
@@ -492,34 +490,30 @@
 <!-- VALIDACIONES -->
 <script type="text/javascript">
   $(document).ready(function() {
-      // Añadir método de validación personalizado para fechas pasadas
       $.validator.addMethod("noPastDate", function(value, element) {
           var today = new Date();
-          today.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
+          today.setHours(0, 0, 0, 0);
 
-          // Asegurarse de que el valor ingresado esté en formato yyyy-mm-dd
           var inputDateParts = value.split("-");
           var inputDate = new Date(inputDateParts[0], inputDateParts[1] - 1, inputDateParts[2]);
-          inputDate.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
+          inputDate.setHours(0, 0, 0, 0);
 
           return this.optional(element) || inputDate >= today;
       }, "Debe ingresar una fecha actual o futura");
 
-      // Añadir método de validación personalizado para fechas muy futuras (máximo 4 meses)
       $.validator.addMethod("notTooFarFuture", function(value, element) {
           var today = new Date();
           var maxDate = new Date();
-          maxDate.setMonth(today.getMonth() + 4); // Establecer la fecha máxima a 4 meses en el futuro
-          maxDate.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
+          maxDate.setMonth(today.getMonth() + 4);
+          maxDate.setHours(0, 0, 0, 0);
 
           var inputDateParts = value.split("-");
           var inputDate = new Date(inputDateParts[0], inputDateParts[1] - 1, inputDateParts[2]);
-          inputDate.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
+          inputDate.setHours(0, 0, 0, 0);
 
           return this.optional(element) || inputDate <= maxDate;
       }, "La fecha no debe ser mayor a 4 meses");
 
-      // Añadir método de validación personalizado para horarios permitidos
       $.validator.addMethod("validTimeRange", function(value, element) {
           if (this.optional(element)) {
               return true;
@@ -527,11 +521,11 @@
           var time = value.split(":");
           var hour = parseInt(time[0]);
           var minutes = parseInt(time[1]);
-          var morningStart = 8 * 60; // 8:00 AM en minutos
-          var morningEnd = 13 * 60; // 1:00 PM en minutos
-          var afternoonStart = 16 * 60; // 4:00 PM en minutos
-          var afternoonEnd = 20 * 60; // 8:00 PM en minutos
-          var inputTime = hour * 60 + minutes; // Convertir la hora ingresada a minutos
+          var morningStart = 8 * 60;
+          var morningEnd = 13 * 60;
+          var afternoonStart = 16 * 60;
+          var afternoonEnd = 20 * 60;
+          var inputTime = hour * 60 + minutes;
           return (inputTime >= morningStart && inputTime < morningEnd) || (inputTime >= afternoonStart && inputTime < afternoonEnd);
       }, "Horario fuera de servicio");
 
@@ -541,7 +535,6 @@
           var inputDateParts = dateField.split("-");
           var inputDate = new Date(inputDateParts[0], inputDateParts[1] - 1, inputDateParts[2]);
 
-          // Si la fecha no es hoy, no hacer nada
           if (inputDate.setHours(0, 0, 0, 0) !== today.setHours(0, 0, 0, 0)) {
               return true;
           }
@@ -551,43 +544,41 @@
           var inputTime = new Date();
           inputTime.setHours(inputTimeParts[0], inputTimeParts[1], 0, 0);
 
-          // Verificar que la hora ingresada no sea menor a la hora actual
           return inputTime >= now;
       }, "La hora ingresada debe ser mayor o igual a la hora actual");
 
-      // Añadir método de validación personalizado para verificar la fecha si el checkbox de cortesía está marcado
       $.validator.addMethod("validCortesiaDate", function(value, element) {
           var isChecked = $(element).closest('form').find('input[name="cort_da"]').is(':checked');
           if (!isChecked) {
-              return true; // Si no está marcado, no hacer nada
+              return true;
           }
 
           var today = new Date();
-          today.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
+          today.setHours(0, 0, 0, 0);
 
           var inputDateParts = value.split("-");
           var inputDate = new Date(inputDateParts[0], inputDateParts[1] - 1, inputDateParts[2]);
-          inputDate.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00
+          inputDate.setHours(0, 0, 0, 0);
 
           return inputDate.getTime() === today.getTime();
       }, "Las citas de cortesía solo se permiten en la fecha actual");
 
-      // Método personalizado para validar dominios de correo comunes
       $.validator.addMethod("commonDomain", function(value, element) {
         const commonDomains = ["gmail.com", "gmail.es", "yahoo.com", "yahoo.es", "hotmail.com", "hotmail.es", "outlook.com", "outlook.es", "live.com", "live.es", "icloud.com"];
         const domain = value.split('@')[1];
         return this.optional(element) || commonDomains.includes(domain);
       }, "Ingrese un correo electrónico personal válido");
 
-      // Inicializar validación del modal cuando se muestre
       function initializeModalValidation() {
           $("#vldt_edidias").validate({
               rules: {
                   nom_da: {
                       required: true,
+                      pattern: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/
                   },
                   telf_da: {
                       required: true,
+                      pattern: /^(?:0\d{1}-\d{7}|09\d{8})$/
                   },
                   correo_da: {
                       required: true,
@@ -597,22 +588,24 @@
                   fech_da: {
                       required: true,
                       date: true,
-                      noPastDate: true, // Añadir regla personalizada aquí
-                      notTooFarFuture: true, // Añadir regla personalizada aquí también
-                      validCortesiaDate: true, // Añadir regla personalizada para citas de cortesía
+                      noPastDate: true,
+                      notTooFarFuture: true,
+                      validCortesiaDate: true,
                   },
                   time_da: {
                       required: true,
-                      validTimeRange: true, // Añadir regla personalizada aquí
+                      validTimeRange: true,
                       validTimeIfToday: true,
                   }
               },
               messages: {
                   nom_da: {
                       required: "Debe ingresar el nombre del cliente",
+                      pattern: "Solo se permiten letras, tildes y espacios"
                   },
                   telf_da: {
                       required: "Debe ingresar el contacto del cliente",
+                      pattern: "Ingrese un número de teléfono válido"
                   },
                   correo_da: {
                       required: "Debe ingresar el correo del cliente",
@@ -644,19 +637,19 @@
           });
       }
 
-      // Inicializar validación del modal cuando se muestre
       $('#exampleModal').on('shown.bs.modal', function() {
           initializeModalValidation();
       });
 
-      // Validación para el formulario de creación
       $("#vldt_dias").validate({
           rules: {
               nom_da: {
                   required: true,
+                  pattern: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/
               },
               telf_da: {
                   required: true,
+                  pattern: /^(?:0\d{1}-\d{7}|09\d{8})$/
               },
               correo_da: {
                   required: true,
@@ -666,22 +659,24 @@
               fech_da: {
                   required: true,
                   date: true,
-                  noPastDate: true, // Añadir regla personalizada aquí también
-                  notTooFarFuture: true, // Añadir regla personalizada aquí también
-                  validCortesiaDate: true, // Añadir regla personalizada para citas de cortesía
+                  noPastDate: true,
+                  notTooFarFuture: true,
+                  validCortesiaDate: true,
               },
               time_da: {
                   required: true,
-                  validTimeRange: true, // Añadir regla personalizada aquí también
+                  validTimeRange: true,
                   validTimeIfToday: true,
               }
           },
           messages: {
               nom_da: {
                   required: "Debe ingresar el nombre del cliente",
+                  pattern: "Solo se permiten letras, tildes y espacios"
               },
               telf_da: {
                   required: "Debe ingresar el contacto del cliente",
+                  pattern: "Ingrese un número de teléfono válido"
               },
               correo_da: {
                   required: "Debe ingresar el correo del cliente",
@@ -713,6 +708,5 @@
       });
   });
 </script>
-
 
 {% endblock %}
